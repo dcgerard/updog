@@ -1,4 +1,4 @@
-name: mupdog
+name: Multivariate Extenstions of updog
 output_dir: "../docs"
 include: [".nojekyll"]
 exclude: ["include"]
@@ -13,7 +13,7 @@ navbar:
       href: license.html
   right:
     - icon: fa-github
-      href: https://github.com/jdblischak/workflowr
+      href: https://github.com/dcgerard/mupdog
 output:
   html_document:
     toc: true
