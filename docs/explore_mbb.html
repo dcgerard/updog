@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="David Gerard" />
+
+<meta name="date" content="2017-11-30" />
+
+<title>Explore New Distribution</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">mupdog</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/dcgerard/mupdog">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Explore New Distribution</h1>
+<h4 class="author"><em>David Gerard</em></h4>
+<h4 class="date"><em>November 30, 2017</em></h4>
+
+</div>
+
+
+<div id="abstract" class="section level1">
+<h1>Abstract</h1>
+<p>Here, I explore my new generalization of the beta-binomial that includes dependence between the counts.</p>
+</div>
+<div id="set-up-od-matrix-and-conditional-means-and-conditional-od-parameters" class="section level1">
+<h1>Set up OD Matrix and conditional means and conditional od parameters</h1>
+<p>Choose a correlation matrix based on AR-1(0.9) covariance matrix</p>
+<pre class="r"><code>mu &lt;- 0.3
+K &lt;- 6 ## Ploidy of species, or number of samples
+rho &lt;- 0.9
+n &lt;- 11
+R &lt;- rho ^ abs(outer(1:n, 1:n, &quot;-&quot;))
+Sigma &lt;- diag(n) + (K - 1) * R</code></pre>
+<p>Functions for conditional mean and conditional OD parameter</p>
+<pre class="r"><code>#&#39; @param x A vector of size n. The observed values.
+#&#39; @param mu A scalar. The allele frequency.
+#&#39; @param Sigma A matrix. The covariance matrix
+#&#39; @param i Which individual to calculate the conditional distribution.
+#&#39; @param K The ploidy
+cond_mean &lt;- function(x, mu, Sigma, i, K) {
+  n &lt;- nrow(Sigma)
+  assertthat::are_equal(ncol(Sigma), n)
+  assertthat::are_equal(length(x), n)
+  assertthat::are_equal(length(i), 1)
+  assertthat::are_equal(length(mu), 1)
+  assertthat::assert_that(K &gt; 1)
+  
+  Sigma12 &lt;- Sigma[i, (1:n)[-i], drop = FALSE]
+  Sigma22 &lt;- Sigma[(1:n)[-i], (1:n)[-i], drop = FALSE]
+  mu + Sigma12 %*% solve(Sigma22) %*% (x[-i] / K - rep(mu, n - 1))
+}
+
+#&#39; @param R The od param matrix
+#&#39; @param K The ploidy.
+#&#39; @param i Which individual to look at
+cond_od_param &lt;- function(R, K, i) {
+  n &lt;- nrow(R)
+  assertthat::are_equal(ncol(R), n)
+  R11 &lt;- R[i, i, drop = FALSE]
+  R12 &lt;- R[i, (1:n)[-i], drop = FALSE]
+  R22 &lt;- R[(1:n)[-i], (1:n)[-i], drop = FALSE]
+  R11 - R12 %*% solve(diag(x = 1 / (K - 1), nrow = n - 1, ncol = n - 1) + R22) %*% t(R12)
+}</code></pre>
+</div>
+<div id="mcmc-to-sample-from-this-distribution" class="section level1">
+<h1>MCMC to sample from this distribution</h1>
+<pre class="r"><code>library(updog) ## for rbetabinom_mu_rho()
+max_iter &lt;- 100000
+thin &lt;- 100
+
+x &lt;- rbinom(n = n, size = K, prob = mu)
+samp_mat &lt;- NULL
+for (iter_index in 1:max_iter) {
+  for (i in 1:n) {
+    mu_cond &lt;- cond_mean(x = x, mu = mu, Sigma = Sigma, i = i, K = K)
+    rho_cond &lt;- cond_od_param(R = R, K = K, i = i)
+    x[i] &lt;- rbetabinom_mu_rho(mu = mu_cond, rho = rho_cond, size = K)
+  }
+  if (iter_index %% thin == 0) {
+    samp_mat &lt;- rbind(samp_mat, x)
+  }
+}</code></pre>
+<p>They all have approximately the correct mean:</p>
+<pre class="r"><code>colMeans(samp_mat) / K</code></pre>
+<pre><code>##  [1] 0.2898 0.2862 0.2960 0.2935 0.2898 0.2893 0.3017 0.3040 0.2998 0.3058
+## [11] 0.3055</code></pre>
+<pre class="r"><code>prop.table(table(samp_mat[, 1]))</code></pre>
+<pre><code>## 
+##     0     1     2     3     4     5     6 
+## 0.486 0.125 0.080 0.073 0.057 0.067 0.112</code></pre>
+<p>Compare to beta binomial dist at MLE estimates</p>
+<pre class="r"><code>negative_ll &lt;- function(mu, rho, xtab, size) {
+  ll &lt;- 0
+  for (index in 0:size) {
+    ll &lt;- ll + xtab[index + 1] * updog:::dbetabinom_mu_rho(x = index, size = size, mu = mu, rho = rho, log = TRUE)
+  }
+  return(-1 * ll)
+}</code></pre>
+<p>The first one</p>
+<pre class="r"><code>xtab &lt;- table(samp_mat[, 1])
+mlout &lt;- stats4::mle(negative_ll, start = list(mu = 0.3, rho = 0.3), fixed = list(xtab = xtab, size = K), method = &quot;L-BFGS-B&quot;, lower = c(0.001, 0.001), upper = c(0.999, 0.999))
+
+muhat &lt;- mlout@coef[1]
+rhohat &lt;- mlout@coef[2]
+
+muhat</code></pre>
+<pre><code>##     mu 
+## 0.2915</code></pre>
+<pre class="r"><code>rhohat</code></pre>
+<pre><code>##    rho 
+## 0.5606</code></pre>
+<pre class="r"><code>expected_proportions &lt;- updog:::dbetabinom_mu_rho(x = 0:K, size = K, mu = muhat, rho = rhohat)
+expected_proportions</code></pre>
+<pre><code>## [1] 0.48733 0.12025 0.08107 0.06776 0.06420 0.06982 0.10956</code></pre>
+<pre class="r"><code>xtab / sum(xtab)</code></pre>
+<pre><code>## 
+##     0     1     2     3     4     5     6 
+## 0.486 0.125 0.080 0.073 0.057 0.067 0.112</code></pre>
+<p>Do chi-squared test to see if the discrepancy is big</p>
+<pre class="r"><code>chisq.test(x = xtab, p = expected_proportions)</code></pre>
+<pre><code>## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 1.6, df = 6, p-value = 1</code></pre>
+<p>Not that big!</p>
+</div>
+<div id="see-if-bb-model-is-marginally-correct-for-other-columns" class="section level1">
+<h1>See if BB model is marginally correct for other columns</h1>
+<pre class="r"><code>muvec &lt;- rep(NA, length = n)
+rhovec &lt;- rep(NA, length = n)
+for (index in 1:n) {
+  xtab &lt;- table(samp_mat[, index])
+  mlout &lt;- stats4::mle(negative_ll, start = list(mu = 0.3, rho = 0.3), fixed = list(xtab = xtab, size = K), method = &quot;L-BFGS-B&quot;, lower = c(0.001, 0.001), upper = c(0.999, 0.999))
+
+  muhat &lt;- mlout@coef[1]
+  rhohat &lt;- mlout@coef[2]
+
+  muvec[index] &lt;- muhat
+  rhovec[index] &lt;- rhohat
+
+  expected_proportions &lt;- updog:::dbetabinom_mu_rho(x = 0:K, size = K, mu = muhat, rho = rhohat)
+  print(chisq.test(x = xtab, p = expected_proportions))
+}</code></pre>
+<pre><code>## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 1.6, df = 6, p-value = 1
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 2.9, df = 6, p-value = 0.8
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 2.7, df = 6, p-value = 0.8
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 7.4, df = 6, p-value = 0.3
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 1.3, df = 6, p-value = 1
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 2.4, df = 6, p-value = 0.9
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 12, df = 6, p-value = 0.05
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 2.1, df = 6, p-value = 0.9
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 8.8, df = 6, p-value = 0.2
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 15, df = 6, p-value = 0.02
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 3.3, df = 6, p-value = 0.8</code></pre>
+<p>Now repeat chi-squared tests given the mean estimates</p>
+<pre class="r"><code>muhat &lt;- mean(muvec)
+rhohat &lt;- mean(rhovec)
+muhat</code></pre>
+<pre><code>## [1] 0.295</code></pre>
+<pre class="r"><code>rhohat</code></pre>
+<pre><code>## [1] 0.5167</code></pre>
+<pre class="r"><code>expected_proportions &lt;- updog:::dbetabinom_mu_rho(x = 0:K, size = K, mu = muhat, rho = rhohat)
+for (index in 1:n) {
+  xtab &lt;- table(samp_mat[, index])
+  print(chisq.test(x = xtab, p = expected_proportions))
+}</code></pre>
+<pre><code>## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 9.3, df = 6, p-value = 0.2
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 4.2, df = 6, p-value = 0.6
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 2.8, df = 6, p-value = 0.8
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 10, df = 6, p-value = 0.1
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 1.4, df = 6, p-value = 1
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 2.9, df = 6, p-value = 0.8
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 13, df = 6, p-value = 0.05
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 7.9, df = 6, p-value = 0.2
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 12, df = 6, p-value = 0.06
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 16, df = 6, p-value = 0.01
+## 
+## 
+##  Chi-squared test for given probabilities
+## 
+## data:  xtab
+## X-squared = 6.3, df = 6, p-value = 0.4</code></pre>
+<p>Only one significant result (even with 1000 samples). So it appears that the counts are  beta binomial. Which is super interesting!</p>
+</div>
+<div id="observed-covariance-between-observations" class="section level1">
+<h1>Observed covariance between observations</h1>
+<p>There is a definite bias in the sample covariance vs the matrix I used to generate points.</p>
+<pre class="r"><code>library(tidyverse)
+sample_cov_mat &lt;- cov(samp_mat)
+dfdat &lt;- data_frame(sample = sample_cov_mat[lower.tri(sample_cov_mat, diag = TRUE)],
+           theoretical = Sigma[lower.tri(Sigma, diag = TRUE)])
+ggplot(data = dfdat, mapping = aes(x = theoretical, y = sample)) +
+  geom_point() +
+  theme_bw() +
+  geom_abline() +
+  ggtitle(&quot;Sample Cov vs &#39;theoretical&#39; Cov&quot;)</code></pre>
+<p><img src="explore_mbb_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>What about correlation?</p>
+<pre class="r"><code>sample_cor_mat &lt;- cor(samp_mat)
+dfdat &lt;- data_frame(sample = sample_cor_mat[lower.tri(sample_cor_mat, diag = TRUE)],
+           theoretical = cov2cor(Sigma)[lower.tri(Sigma, diag = TRUE)])
+ggplot(data = dfdat, mapping = aes(x = theoretical, y = sample)) +
+  geom_point() +
+  theme_bw() +
+  geom_abline() +
+  ggtitle(&quot;Sample Cor vs &#39;theoretical&#39; Cor&quot;)</code></pre>
+<p><img src="explore_mbb_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>Spot on!</p>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>## R version 3.3.2 (2016-10-31)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 16.04.3 LTS
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] dplyr_0.7.4     purrr_0.2.2.2   readr_1.0.0     tidyr_0.6.1    
+## [5] tibble_1.3.3    ggplot2_2.2.1   tidyverse_1.1.1 updog_0.1.0    
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_0.12.13     plyr_1.8.4       bindr_0.1        forcats_0.2.0   
+##  [5] tools_3.3.2      digest_0.6.12    lubridate_1.6.0  jsonlite_1.5    
+##  [9] evaluate_0.10.1  nlme_3.1-131     gtable_0.2.0     lattice_0.20-34 
+## [13] pkgconfig_2.0.1  rlang_0.1.2      psych_1.6.12     yaml_2.1.14     
+## [17] parallel_3.3.2   haven_1.0.0      bindrcpp_0.2     xml2_1.1.1      
+## [21] httr_1.2.1       stringr_1.2.0    knitr_1.16       hms_0.3         
+## [25] stats4_3.3.2     rprojroot_1.2    grid_3.3.2       glue_1.1.1      
+## [29] R6_2.2.2         readxl_0.1.1     foreign_0.8-67   rmarkdown_1.6   
+## [33] modelr_0.1.0     reshape2_1.4.2   magrittr_1.5     backports_1.0.5 
+## [37] scales_0.4.1     codetools_0.2-15 htmltools_0.3.6  rvest_0.3.2     
+## [41] assertthat_0.2.0 mnormt_1.5-5     colorspace_1.3-2 labeling_0.3    
+## [45] stringi_1.1.2    lazyeval_0.2.0   munsell_0.4.3    broom_0.4.2</code></pre>
+</div>
+
+<hr>
+<p>
+    This <a href="http://rmarkdown.rstudio.com">R Markdown</a> site was created with <a href="https://github.com/jdblischak/workflowr">workflowr</a>
+</p>
+<hr>
+
+<!-- To enable disqus, uncomment the section below and provide your disqus_shortname -->
+
+<!-- disqus
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rmarkdown'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+-->
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

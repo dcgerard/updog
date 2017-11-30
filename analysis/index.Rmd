@@ -6,3 +6,4 @@ output:
 ---
 
 * [I think sufficient conditions are that R is psd and has diagonal entries less than or equal to 1.](check_0_1.html)
+* [Exploring a new generalization of the BB to allow for correlation.](explore_mbb.html) The observations appear to be marginally beta-binomial, which is really cool. The sample correlation looks about the same as the "correlation" matrix used in the conditional distributions. 
