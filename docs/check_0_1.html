@@ -9,9 +9,11 @@
 <meta name="generator" content="pandoc" />
 
 
+<meta name="author" content="David Gerard" />
 
+<meta name="date" content="2017-11-29" />
 
-<title>Home</title>
+<title>Mean between 0 and 1</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +21,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-1.1/highlight.js"></script>
@@ -162,6 +167,101 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
 
 
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
@@ -202,14 +302,67 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Home</h1>
+<h1 class="title toc-ignore">Mean between 0 and 1</h1>
+<h4 class="author"><em>David Gerard</em></h4>
+<h4 class="date"><em>November 29, 2017</em></h4>
 
 </div>
 
 
-<ul>
-<li><a href="check_0_1.html">I think sufficient conditions are that R is psd and has diagonal entries less than or equal to 1.</a></li>
-</ul>
+<div id="abstract" class="section level1">
+<h1>Abstract</h1>
+<p>I check if the new overdispersion parameter is always less than 1.</p>
+</div>
+<div id="analysis" class="section level1">
+<h1>Analysis</h1>
+<p>The modified Schur function</p>
+<pre class="r"><code>library(assertthat)
+schur_mod &lt;- function(R, K) {
+  n &lt;- ncol(R)
+  assertthat::are_equal(nrow(R), n)
+  assertthat::assert_that(K &gt; 1)
+  R11 &lt;- R[1, 1, drop = FALSE]
+  R12 &lt;- R[1, 2:n, drop = FALSE]
+  R21 &lt;- R[2:n, 1, drop = FALSE]
+  R22 &lt;- R[2:n, 2:n, drop = FALSE]
+  R11 - R12 %*% solve(diag(x = 1 / (K - 1), nrow = n - 1, ncol = n - 1) + R22) %*% R21
+}</code></pre>
+<p>First, I’ll try out the most extreme R I can think of</p>
+<pre class="r"><code>R &lt;- matrix(1, nrow = 11, ncol = 11)
+schur_mod(R, 2)</code></pre>
+<pre><code>##         [,1]
+## [1,] 0.09091</code></pre>
+<p>However, this R is not less than the identity matrix</p>
+<pre class="r"><code>eigen(R - diag(ncol(R)))$values</code></pre>
+<pre><code>##  [1] 10 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1</code></pre>
+<p>What are the eigenvalues of R?</p>
+<pre class="r"><code>plot(eigen(R)$values)</code></pre>
+<p><img src="check_0_1_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>## R version 3.3.2 (2016-10-31)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 16.04.3 LTS
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] assertthat_0.2.0
+## 
+## loaded via a namespace (and not attached):
+##  [1] backports_1.0.5 magrittr_1.5    rprojroot_1.2   tools_3.3.2    
+##  [5] htmltools_0.3.6 yaml_2.1.14     Rcpp_0.12.13    stringi_1.1.2  
+##  [9] rmarkdown_1.6   knitr_1.16      stringr_1.2.0   digest_0.6.12  
+## [13] evaluate_0.10.1</code></pre>
+</div>
 
 <hr>
 <p>
@@ -237,6 +390,8 @@ $(document).ready(function () {
 -->
 
 
+</div>
+</div>
 
 </div>
 

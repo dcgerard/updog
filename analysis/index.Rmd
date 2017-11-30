@@ -5,4 +5,4 @@ output:
     toc: false
 ---
 
-* See if the new mean is always between 0 and 1.
+* [I think sufficient conditions are that R is psd and has diagonal entries less than or equal to 1.](check_0_1.html)
