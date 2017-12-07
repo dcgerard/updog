@@ -5,7 +5,27 @@
 #'
 #' @param p The allele dosage.
 #' @param eps The sequencing error rate.
+#'
+#' @author David Gerard
+NULL
+
+#' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
+#'
+#' @inheritParams xi_fun
+#'
+#' @author David Gerard
 eta_fun <- function(p, eps) {
     .Call('_mupdog_eta_fun', PACKAGE = 'mupdog', p, eps)
+}
+
+#' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps} and the allele bias \code{h}.
+#'
+#' @param p A vector of allele dosages.
+#' @param eps The sequencing error rate. Must be of length 1.
+#' @param h The allele bias. Must be of length 1.
+#'
+#' @author David Gerard
+xi_fun <- function(p, eps, h) {
+    .Call('_mupdog_xi_fun', PACKAGE = 'mupdog', p, eps, h)
 }
 
