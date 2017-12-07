@@ -1,0 +1,160 @@
+---
+title: "Check BB Integral"
+author: "David Gerard"
+date: "December 7, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Abstract
+
+I verify that my integral calculation is indeed correct.
+
+# Set up function
+
+```{r}
+library(updog)
+library(SuppDists)
+library(gaussquad)
+
+get_alpha <- function(mu, rho) {
+  mu * (1 - rho) / rho
+}
+
+get_beta <- function(mu, rho) {
+  (1 - mu) * (1 - rho) / rho
+}
+
+qbetabinom <- function(p, size, alpha, beta) {
+  qghyper(p = p, a = -alpha, k = size, N = -alpha - beta)
+}
+
+qbetabinom_mu_rho <- function(p, size, mu, rho) {
+  alpha <- get_alpha(mu = mu, rho = rho)
+  beta  <- get_beta(mu = mu, rho = rho)
+  qbetabinom(p = p, size = size, alpha = alpha, beta = beta)
+}
+
+dbetabinom_hyper <- function(x, size, alpha, beta, log = FALSE) {
+  dghyper(x = x, a = -alpha, k = size, N = -alpha - beta, log = log)
+}
+
+dbetabinom_hyper_mu_rho <- function(x, size, mu, rho, log = FALSE) {
+  alpha <- get_alpha(mu = mu, rho = rho)
+  beta  <- get_beta(mu = mu, rho = rho)
+  dbetabinom_hyper(x = x, size = size, alpha = alpha, beta = beta, log = log) 
+}
+
+pbetabinom_hyper <- function(q, size, alpha, beta, log.p = FALSE) {
+  pghyper(q = q, a = -alpha, k = size, N = -alpha - beta, log.p = log.p)
+}
+
+pbetabinom_hyper_mu_rho <- function(q, size, mu, rho, log.p = FALSE) {
+  alpha <- get_alpha(mu = mu, rho = rho)
+  beta  <- get_beta(mu = mu, rho = rho)
+  pbetabinom_hyper(q = q, size = size, alpha = alpha, beta = beta, log.p = log.p)
+}
+
+assertthat::are_equal(dbetabinom_hyper(2, 8, 2, 3), updog::dbetabinom(2, 8, 2, 3))
+
+#' @param prob The allele dosage
+#' @param eps The sequencing error rate.
+eta_fun <- function(prob, eps) {
+  prob * (1 - eps) + eps * (1 - prob)
+}
+
+#' @param eta probability after sequencing error rate
+#' @param h The bias parameter
+xi_fun <- function(eta, h) {
+  eta / (h * (1 - eta) + eta)
+}
+
+#' bb function of z that we are trying to integrate
+#' @param x the number of A allele reads
+#' @param n The number of total reads
+#' @param z The latent variable we are integrating over
+#' @param eps The sequencing error rate
+#' @param h The bias parameter
+#' @param tau The od parameter of the reads
+#' @param alpha The allele frequency
+#' @param rho The inbreeding coefficient of individual i
+#' @param ploidy The ploidy of the species.
+obj <- function(x, n, z, eps, h, tau, alpha, rho, ploidy) {
+  y <- qbetabinom_mu_rho(p = pnorm(z), size = ploidy, mu = alpha, rho = rho)
+  eta <- eta_fun(prob = y / ploidy, eps = eps)  
+  xi <- xi_fun(eta = eta, h = h)  
+  dbetabinom_hyper_mu_rho(x = x, size = n, mu = xi, rho = tau, log = TRUE)
+}
+```
+
+# The supposed integral
+
+```{r}
+intobj <- function(x, n, eps, h, tau, alpha, rho, ploidy, mu, sigma2) {
+   pnormvec <- pnorm((c(-Inf, qnorm(pbetabinom_hyper_mu_rho(q = 0:ploidy, size = ploidy, mu = alpha, rho = rho))) - mu) / sqrt(sigma2))
+   wvec <- pnormvec[2:length(pnormvec)] - pnormvec[1:(length(pnormvec) - 1)]
+   
+   eta <- eta_fun(prob = 0:ploidy / ploidy, eps = eps)
+   xi  <- xi_fun(eta = eta, h = h)
+   ldbetavec <- dbetabinom_hyper_mu_rho(x = x, size = n, mu = xi, rho = tau, log = TRUE)
+   
+   sum(wvec * ldbetavec)
+}
+```
+
+
+# Input some reasonable parameter values
+```{r}
+x      <- 18
+n      <- 100
+z      <- -3
+h      <- 1
+tau    <- 0.01
+alpha  <- 1/6
+rho    <- 0.01
+ploidy <- 6
+sigma2 <- 1
+mu     <- 0
+eps    <- 0.01
+```
+
+
+Compare to stochastic approximation
+```{r}
+library(tidyverse)
+itermax <- 10
+muvec <- rnorm(itermax)
+sigma2vec <- rchisq(n = itermax, df = 1)
+
+dfdat <- matrix(NA, nrow = itermax, ncol = 4)
+for (index in 1:itermax) {
+  mu       <- muvec[index]
+  sigma2   <- sigma2vec[index]
+  zvec     <- rnorm(n = 10000, mean = mu, sd = sqrt(sigma2))
+  objout   <- obj(x = x, n = n, z = zvec, eps = eps, h = h, tau = tau, alpha = alpha, rho = rho, ploidy = ploidy)
+  mean_obj <- mean(objout)
+  lower    <- mean_obj - 2 * sd(objout) / sqrt(length(objout))
+  upper    <- mean_obj + 2 * sd(objout) / sqrt(length(objout))
+  theo_int <- intobj(x = x, n = n, eps = eps, h = h, tau = tau, alpha = alpha, rho = rho, ploidy = ploidy, mu = mu, sigma2 = sigma2)
+  dfdat[index,] <- c(theo_int, mean_obj, lower, upper)
+}
+
+```
+
+```{r}
+dfdat <- as_data_frame(dfdat)
+names(dfdat) <- c("theo", "sim", "lower", "upper")
+ggplot(dfdat, aes(x = theo, y = sim)) +
+  geom_point() +
+  theme_bw() +
+  geom_abline()
+```
+
+
+```{r}
+sessionInfo()
+```
+
