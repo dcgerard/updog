@@ -3,6 +3,8 @@
 mupdog
 ======
 
+[![Travis-CI Build Status](https://travis-ci.org/dcgerard/mupdog.svg?branch=master)](https://travis-ci.org/dcgerard/mupdog)
+
 Mupdog is a multivariate extension of updog.
 
 Installation
