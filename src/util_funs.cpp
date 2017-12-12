@@ -82,3 +82,16 @@ double log_sum_exp(NumericVector x) {
   return lse;
 }
 
+//' The logit function.
+//'
+//' @param x A double between 0 and 1.
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double logit(double x) {
+  if ((x < TOL) | ((1.0 - x) < TOL)) {
+    Rcpp::stop("x must be between 0 and 1.");
+  }
+  double lv = std::log(x / (1.0 - x));
+  return lv;
+}

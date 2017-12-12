@@ -94,6 +94,48 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// post_prob
+double post_prob(int dosage, int ploidy, double mu, double sigma2, double alpha, double rho);
+RcppExport SEXP _mupdog_post_prob(SEXP dosageSEXP, SEXP ploidySEXP, SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP rhoSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type dosage(dosageSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma2(sigma2SEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< double >::type rho(rhoSEXP);
+    rcpp_result_gen = Rcpp::wrap(post_prob(dosage, ploidy, mu, sigma2, alpha, rho));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pen_bias
+double pen_bias(double h, double mu_h, double sigma2_h);
+RcppExport SEXP _mupdog_pen_bias(SEXP hSEXP, SEXP mu_hSEXP, SEXP sigma2_hSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< double >::type mu_h(mu_hSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma2_h(sigma2_hSEXP);
+    rcpp_result_gen = Rcpp::wrap(pen_bias(h, mu_h, sigma2_h));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pen_seq_error
+double pen_seq_error(double eps, double mu_eps, double sigma2_eps);
+RcppExport SEXP _mupdog_pen_seq_error(SEXP epsSEXP, SEXP mu_epsSEXP, SEXP sigma2_epsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    Rcpp::traits::input_parameter< double >::type mu_eps(mu_epsSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma2_eps(sigma2_epsSEXP);
+    rcpp_result_gen = Rcpp::wrap(pen_seq_error(eps, mu_eps, sigma2_eps));
+    return rcpp_result_gen;
+END_RCPP
+}
 // eta_double
 double eta_double(double p, double eps);
 RcppExport SEXP _mupdog_eta_double(SEXP pSEXP, SEXP epsSEXP) {
@@ -142,6 +184,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// logit
+double logit(double x);
+RcppExport SEXP _mupdog_logit(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(logit(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_dbetabinom_alpha_beta_double", (DL_FUNC) &_mupdog_dbetabinom_alpha_beta_double, 5},
@@ -150,10 +203,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_dbetabinom", (DL_FUNC) &_mupdog_dbetabinom, 5},
     {"_mupdog_pbetabinom_double", (DL_FUNC) &_mupdog_pbetabinom_double, 5},
     {"_mupdog_pbetabinom", (DL_FUNC) &_mupdog_pbetabinom, 5},
+    {"_mupdog_post_prob", (DL_FUNC) &_mupdog_post_prob, 6},
+    {"_mupdog_pen_bias", (DL_FUNC) &_mupdog_pen_bias, 3},
+    {"_mupdog_pen_seq_error", (DL_FUNC) &_mupdog_pen_seq_error, 3},
     {"_mupdog_eta_double", (DL_FUNC) &_mupdog_eta_double, 2},
     {"_mupdog_eta_fun", (DL_FUNC) &_mupdog_eta_fun, 2},
     {"_mupdog_xi_fun", (DL_FUNC) &_mupdog_xi_fun, 3},
     {"_mupdog_log_sum_exp", (DL_FUNC) &_mupdog_log_sum_exp, 1},
+    {"_mupdog_logit", (DL_FUNC) &_mupdog_logit, 1},
     {NULL, NULL, 0}
 };
 

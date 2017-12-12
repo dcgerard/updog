@@ -59,6 +59,51 @@ pbetabinom <- function(q, size, mu, rho, log_p) {
     .Call('_mupdog_pbetabinom', PACKAGE = 'mupdog', q, size, mu, rho, log_p)
 }
 
+#' Variational posterior probability of having \code{dosage} A alleles
+#' when the ploidy is \code{ploidy}, the allele frequency is
+#' \code{alpha}, the individual-specific overdispersion parameter is
+#' \code{rho}, the variational mean is \code{mu}, and the variational
+#' variance is \code{sigma2}.
+#'
+#' @param dosage The number of A alleles.
+#' @param ploidy The ploidy of the individual.
+#' @param mu The variational mean.
+#' @param sigma2 The variational variance (not standard devation).
+#' @param alpha The allele frequency.
+#' @param rho The individual's overdispersion parameter.
+#'
+#' @author David
+#'
+post_prob <- function(dosage, ploidy, mu, sigma2, alpha, rho) {
+    .Call('_mupdog_post_prob', PACKAGE = 'mupdog', dosage, ploidy, mu, sigma2, alpha, rho)
+}
+
+#' Penalty on bias parameter.
+#'
+#' @param h The current value of bias parameter. Must be
+#'     greater than 0. A value of 1 means no bias.
+#' @param mu_h The prior mean of the log-bias parameter.
+#' @param sigma2_h The prior variance (not standard deviation)
+#'     of the log-bias parameter.
+#'
+#' @author David Gerard
+pen_bias <- function(h, mu_h, sigma2_h) {
+    .Call('_mupdog_pen_bias', PACKAGE = 'mupdog', h, mu_h, sigma2_h)
+}
+
+#' Penalty on sequencing error rate.
+#'
+#' @param eps The current value of sequencing error rate.
+#'     Must be between 0 and 1.
+#' @param mu_eps The prior mean of the logit sequencing error rate.
+#' @param sigma2_eps The prior variance (not standard deviation)
+#'     of the logit sequencing error rate.
+#'
+#' @author David Gerard
+pen_seq_error <- function(eps, mu_eps, sigma2_eps) {
+    .Call('_mupdog_pen_seq_error', PACKAGE = 'mupdog', eps, mu_eps, sigma2_eps)
+}
+
 #' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
 #'
 #' @param p The allele dosage.
@@ -99,5 +144,14 @@ xi_fun <- function(p, eps, h) {
 #' @author David Gerard
 log_sum_exp <- function(x) {
     .Call('_mupdog_log_sum_exp', PACKAGE = 'mupdog', x)
+}
+
+#' The logit function.
+#'
+#' @param x A double between 0 and 1.
+#'
+#' @author David Gerard
+logit <- function(x) {
+    .Call('_mupdog_logit', PACKAGE = 'mupdog', x)
 }
 
