@@ -61,4 +61,24 @@ NumericVector xi_fun(NumericVector p, double eps, double h) {
 }
 
 
+//' Log-sum-exponential trick.
+//'
+//' @param x A vector to log-sum-exp.
+//'
+//' @return The log of the sum of the exponential
+//'     of the elements in \code{x}.
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double log_sum_exp(NumericVector x) {
+  double max_x = Rcpp::max(x);
+  double lse; // the log-sum-exp
+  if (max_x == R_NegInf) { // if all -Inf, need to treat this special to avoid -Inf + Inf.
+    lse = R_NegInf;
+  }
+  else {
+    lse = max_x + std::log(Rcpp::sum(Rcpp::exp(x - max_x)));
+  }
+  return lse;
+}
 

@@ -35,42 +35,28 @@ dbetabinom_double <- function(x, size, mu, rho, log) {
     .Call('_mupdog_dbetabinom_double', PACKAGE = 'mupdog', x, size, mu, rho, log)
 }
 
-#' Density function for the betabinomial distribution parameterized
-#' by the mean and the overdispersion parameter.
-#'
-#' This is the density function. It handles the corner cases when
-#' rho is 0 or 1 in intelligible ways.
-#'
-#' Let \eqn{\mu} and \eqn{\rho} be the mean and overdispersion paramters.
-#' Let \eqn{\alpha} and \eqn{\beta} be the usual shape parameters of
-#' a beta distribution. Then we have the relation
-#' \deqn{\mu = \alpha/(\alpha + \beta),}
-#' and
-#' \deqn{\rho = 1/(1 + \alpha + \beta).}
-#' This necessarily means that
-#' \deqn{\alpha = \mu (1 - \rho)/\rho,}
-#' and
-#' \deqn{\beta = (1 - \mu) (1 - \rho)/\rho.}
-#'
-#' @param x A vector of quantiles.
-#' @param size A vector of sizes.
-#' @param mu Either a scalar of the mean for each observation,
-#'     or a vector of means of each observation, and thus
-#'     the same length as \code{x} and \code{size}. This must
-#'     be between 0 and 1.
-#' @param rho Either a scalar of the overdispersion parameter
-#'     for each observation, or a vector of overdispersion
-#'     parameters of each observation, and thus the same length as
-#'     \code{x} and \code{size}. This must be between 0 and 1.
-#' @param log A logical vector either of length 1 or the same
-#'     length as \code{x} and \code{size}. This determines whether
-#'     to return the log density for all observations (in the case
-#'     that its length is 1) or for each observation (in the case that
-#'     its length is that of \code{x} and \code{size}).
-#'
-#' @author David Gerard
+#' @describeIn betabinom Density function.
 dbetabinom <- function(x, size, mu, rho, log) {
     .Call('_mupdog_dbetabinom', PACKAGE = 'mupdog', x, size, mu, rho, log)
+}
+
+#' The distribution function of the betabinomial. This is generally
+#' only adviseable if q is relatively small.
+#'
+#' @inheritParams dbetabinom_double
+#' @param q A quantile.
+#' @param log_p A logical. Should return the log-probability
+#'     \code{TRUE} or not \code{FALSE}?
+#'
+#' @author David Gerard
+pbetabinom_double <- function(q, size, mu, rho, log_p) {
+    .Call('_mupdog_pbetabinom_double', PACKAGE = 'mupdog', q, size, mu, rho, log_p)
+}
+
+#' @describeIn betabinom Distribution function.
+#'
+pbetabinom <- function(q, size, mu, rho, log_p) {
+    .Call('_mupdog_pbetabinom', PACKAGE = 'mupdog', q, size, mu, rho, log_p)
 }
 
 #' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
@@ -101,5 +87,17 @@ eta_fun <- function(p, eps) {
 #' @author David Gerard
 xi_fun <- function(p, eps, h) {
     .Call('_mupdog_xi_fun', PACKAGE = 'mupdog', p, eps, h)
+}
+
+#' Log-sum-exponential trick.
+#'
+#' @param x A vector to log-sum-exp.
+#'
+#' @return The log of the sum of the exponential
+#'     of the elements in \code{x}.
+#'
+#' @author David Gerard
+log_sum_exp <- function(x) {
+    .Call('_mupdog_log_sum_exp', PACKAGE = 'mupdog', x)
 }
 

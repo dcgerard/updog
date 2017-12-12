@@ -64,6 +64,36 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// pbetabinom_double
+double pbetabinom_double(int q, int size, double mu, double rho, bool log_p);
+RcppExport SEXP _mupdog_pbetabinom_double(SEXP qSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP, SEXP log_pSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type q(qSEXP);
+    Rcpp::traits::input_parameter< int >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type rho(rhoSEXP);
+    Rcpp::traits::input_parameter< bool >::type log_p(log_pSEXP);
+    rcpp_result_gen = Rcpp::wrap(pbetabinom_double(q, size, mu, rho, log_p));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pbetabinom
+NumericVector pbetabinom(IntegerVector q, IntegerVector size, NumericVector mu, NumericVector rho, LogicalVector log_p);
+RcppExport SEXP _mupdog_pbetabinom(SEXP qSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP, SEXP log_pSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type q(qSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type rho(rhoSEXP);
+    Rcpp::traits::input_parameter< LogicalVector >::type log_p(log_pSEXP);
+    rcpp_result_gen = Rcpp::wrap(pbetabinom(q, size, mu, rho, log_p));
+    return rcpp_result_gen;
+END_RCPP
+}
 // eta_double
 double eta_double(double p, double eps);
 RcppExport SEXP _mupdog_eta_double(SEXP pSEXP, SEXP epsSEXP) {
@@ -101,15 +131,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// log_sum_exp
+double log_sum_exp(NumericVector x);
+RcppExport SEXP _mupdog_log_sum_exp(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_sum_exp(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_dbetabinom_alpha_beta_double", (DL_FUNC) &_mupdog_dbetabinom_alpha_beta_double, 5},
     {"_mupdog_dbernbinom", (DL_FUNC) &_mupdog_dbernbinom, 4},
     {"_mupdog_dbetabinom_double", (DL_FUNC) &_mupdog_dbetabinom_double, 5},
     {"_mupdog_dbetabinom", (DL_FUNC) &_mupdog_dbetabinom, 5},
+    {"_mupdog_pbetabinom_double", (DL_FUNC) &_mupdog_pbetabinom_double, 5},
+    {"_mupdog_pbetabinom", (DL_FUNC) &_mupdog_pbetabinom, 5},
     {"_mupdog_eta_double", (DL_FUNC) &_mupdog_eta_double, 2},
     {"_mupdog_eta_fun", (DL_FUNC) &_mupdog_eta_fun, 2},
     {"_mupdog_xi_fun", (DL_FUNC) &_mupdog_xi_fun, 3},
+    {"_mupdog_log_sum_exp", (DL_FUNC) &_mupdog_log_sum_exp, 1},
     {NULL, NULL, 0}
 };
 

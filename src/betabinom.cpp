@@ -106,40 +106,9 @@ double dbetabinom_double(int x, int size, double mu, double rho, bool log) {
   return dout;
 }
 
-//' Density function for the betabinomial distribution parameterized
-//' by the mean and the overdispersion parameter.
-//'
-//' This is the density function. It handles the corner cases when
-//' rho is 0 or 1 in intelligible ways.
-//'
-//' Let \eqn{\mu} and \eqn{\rho} be the mean and overdispersion paramters.
-//' Let \eqn{\alpha} and \eqn{\beta} be the usual shape parameters of
-//' a beta distribution. Then we have the relation
-//' \deqn{\mu = \alpha/(\alpha + \beta),}
-//' and
-//' \deqn{\rho = 1/(1 + \alpha + \beta).}
-//' This necessarily means that
-//' \deqn{\alpha = \mu (1 - \rho)/\rho,}
-//' and
-//' \deqn{\beta = (1 - \mu) (1 - \rho)/\rho.}
-//'
-//' @param x A vector of quantiles.
-//' @param size A vector of sizes.
-//' @param mu Either a scalar of the mean for each observation,
-//'     or a vector of means of each observation, and thus
-//'     the same length as \code{x} and \code{size}. This must
-//'     be between 0 and 1.
-//' @param rho Either a scalar of the overdispersion parameter
-//'     for each observation, or a vector of overdispersion
-//'     parameters of each observation, and thus the same length as
-//'     \code{x} and \code{size}. This must be between 0 and 1.
-//' @param log A logical vector either of length 1 or the same
-//'     length as \code{x} and \code{size}. This determines whether
-//'     to return the log density for all observations (in the case
-//'     that its length is 1) or for each observation (in the case that
-//'     its length is that of \code{x} and \code{size}).
-//'
-//' @author David Gerard
+
+// documentation in mupdog.R
+//' @describeIn betabinom Density function.
 // [[Rcpp::export]]
 NumericVector dbetabinom(IntegerVector x, IntegerVector size,
                          NumericVector mu, NumericVector rho,
@@ -193,4 +162,101 @@ NumericVector dbetabinom(IntegerVector x, IntegerVector size,
   }
 
   return dout;
+}
+
+
+
+
+//' The distribution function of the betabinomial. This is generally
+//' only adviseable if q is relatively small.
+//'
+//' @inheritParams dbetabinom_double
+//' @param q A quantile.
+//' @param log_p A logical. Should return the log-probability
+//'     \code{TRUE} or not \code{FALSE}?
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double pbetabinom_double(int q, int size, double mu, double rho, bool log_p) {
+
+  double lp; // the log of the cdf.
+  if (q > size) {
+    lp = 0.0;
+  }
+  else if (q < 0) {
+    lp = R_NegInf;
+  }
+  else {
+    NumericVector log_prob_vec(q + 1);
+    for (int i = 0; i <= q; i++) {
+      log_prob_vec(i) = dbetabinom_double(i, size, mu, rho, true);
+    }
+    lp = log_sum_exp(log_prob_vec);
+  }
+
+  if (log_p) {
+    return lp;
+  }
+  else {
+    return std::exp(lp);
+  }
+}
+
+// documentation in mupdog.R
+//' @describeIn betabinom Distribution function.
+//'
+// [[Rcpp::export]]
+NumericVector pbetabinom(IntegerVector q, IntegerVector size,
+                         NumericVector mu, NumericVector rho,
+                         LogicalVector log_p) {
+
+  // Check input ------------------------------------------
+
+  int n = q.length();
+
+  if (n != size.length()) {
+    Rcpp::stop("q and size must be of same length.");
+  }
+  if ((n != mu.length()) & (1 != mu.length())) {
+    Rcpp::stop("mu must either be of length 1 or the same length as q.");
+  }
+  if ((n != rho.length()) & (1 != rho.length())) {
+    Rcpp::stop("rho must either be of length 1 or the same length as q.");
+  }
+  if ((n != log_p.length()) & (1 != log_p.length())) {
+    Rcpp::stop("log_p must either be of length 1 or the same length as q.");
+  }
+
+  // iterate
+  NumericVector pout(n);
+  double current_mu;
+  double current_rho;
+  bool current_log_p;
+  for (int i = 0; i < n; i++) {
+    if (mu.length() == 1) {
+      current_mu = mu(0);
+    }
+    else {
+      current_mu = mu(i);
+    }
+
+    if (rho.length() == 1) {
+      current_rho = rho(0);
+    }
+    else {
+      current_rho = rho(i);
+    }
+
+    if (log_p.length() == 1) {
+      current_log_p = log_p(0);
+    }
+    else {
+      current_log_p = log_p(i);
+    }
+
+    pout(i) = pbetabinom_double(q(i), size(i), current_mu,
+         current_rho, current_log_p);
+  }
+
+  return pout;
 }
