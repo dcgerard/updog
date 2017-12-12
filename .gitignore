@@ -3,3 +3,6 @@
 .RData
 *.Rproj
 *~
+
+src-i386/
+src-x64/

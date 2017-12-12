@@ -5,6 +5,77 @@
 
 using namespace Rcpp;
 
+// dbetabinom_alpha_beta_double
+double dbetabinom_alpha_beta_double(int x, int size, double alpha, double beta, bool log);
+RcppExport SEXP _mupdog_dbetabinom_alpha_beta_double(SEXP xSEXP, SEXP sizeSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP logSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< bool >::type log(logSEXP);
+    rcpp_result_gen = Rcpp::wrap(dbetabinom_alpha_beta_double(x, size, alpha, beta, log));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dbernbinom
+double dbernbinom(int x, int size, double mu, bool log);
+RcppExport SEXP _mupdog_dbernbinom(SEXP xSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP logSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< bool >::type log(logSEXP);
+    rcpp_result_gen = Rcpp::wrap(dbernbinom(x, size, mu, log));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dbetabinom_double
+double dbetabinom_double(int x, int size, double mu, double rho, bool log);
+RcppExport SEXP _mupdog_dbetabinom_double(SEXP xSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP, SEXP logSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type rho(rhoSEXP);
+    Rcpp::traits::input_parameter< bool >::type log(logSEXP);
+    rcpp_result_gen = Rcpp::wrap(dbetabinom_double(x, size, mu, rho, log));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dbetabinom
+NumericVector dbetabinom(IntegerVector x, IntegerVector size, NumericVector mu, NumericVector rho, LogicalVector log);
+RcppExport SEXP _mupdog_dbetabinom(SEXP xSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP, SEXP logSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type rho(rhoSEXP);
+    Rcpp::traits::input_parameter< LogicalVector >::type log(logSEXP);
+    rcpp_result_gen = Rcpp::wrap(dbetabinom(x, size, mu, rho, log));
+    return rcpp_result_gen;
+END_RCPP
+}
+// eta_double
+double eta_double(double p, double eps);
+RcppExport SEXP _mupdog_eta_double(SEXP pSEXP, SEXP epsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type p(pSEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    rcpp_result_gen = Rcpp::wrap(eta_double(p, eps));
+    return rcpp_result_gen;
+END_RCPP
+}
 // eta_fun
 NumericVector eta_fun(NumericVector p, double eps);
 RcppExport SEXP _mupdog_eta_fun(SEXP pSEXP, SEXP epsSEXP) {
@@ -32,6 +103,11 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_mupdog_dbetabinom_alpha_beta_double", (DL_FUNC) &_mupdog_dbetabinom_alpha_beta_double, 5},
+    {"_mupdog_dbernbinom", (DL_FUNC) &_mupdog_dbernbinom, 4},
+    {"_mupdog_dbetabinom_double", (DL_FUNC) &_mupdog_dbetabinom_double, 5},
+    {"_mupdog_dbetabinom", (DL_FUNC) &_mupdog_dbetabinom, 5},
+    {"_mupdog_eta_double", (DL_FUNC) &_mupdog_eta_double, 2},
     {"_mupdog_eta_fun", (DL_FUNC) &_mupdog_eta_fun, 2},
     {"_mupdog_xi_fun", (DL_FUNC) &_mupdog_xi_fun, 3},
     {NULL, NULL, 0}

@@ -1,7 +1,4 @@
-#include <Rcpp.h>
-using namespace Rcpp;
-
-double TOL = DBL_EPSILON;
+#include "mupdog.h"
 
 //' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
 //'
@@ -9,6 +6,7 @@ double TOL = DBL_EPSILON;
 //' @param eps The sequencing error rate.
 //'
 //' @author David Gerard
+// [[Rcpp::export]]
 double eta_double(double p, double eps) {
   if (p < -TOL or p > 1.0 + TOL) {
     Rcpp::stop("p must be between 0 and 1");
@@ -61,3 +59,6 @@ NumericVector xi_fun(NumericVector p, double eps, double h) {
 
   return xi;
 }
+
+
+
