@@ -8,10 +8,10 @@
 //' @author David Gerard
 // [[Rcpp::export]]
 double eta_double(double p, double eps) {
-  if (p < -TOL or p > 1.0 + TOL) {
+  if ((p < -TOL) or (1.0 - p < -TOL)) {
     Rcpp::stop("p must be between 0 and 1");
   }
-  if (eps < -TOL or eps > 1.0 + TOL) {
+  if ((eps < -TOL) or (1.0 - eps < -TOL)) {
     Rcpp::stop("eps must be between 0 and 1");
   }
 
@@ -24,37 +24,87 @@ double eta_double(double p, double eps) {
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
-NumericVector eta_fun(NumericVector p, double eps) {
+NumericVector eta_fun(NumericVector p, NumericVector eps) {
   int n = p.length();
+  if ((eps.length() != n) & (eps.length() != 1)) {
+    Rcpp::stop("eps must either have length 1 or be the same length as p.");
+  }
+
   NumericVector eta(n);
+  double eps_current;
 
   for (int i = 0; i < n; i++) {
-    eta(i) = eta_double(p(i), eps);
+    if (eps.length() == n) {
+      eps_current = eps(i);
+    }
+    else {
+      eps_current = eps(0);
+    }
+
+    eta(i) = eta_double(p(i), eps_current);
   }
 
   return eta;
 }
 
+
+
 //' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps} and the allele bias \code{h}.
 //'
-//' @param p A vector of allele dosages.
-//' @param eps The sequencing error rate. Must be of length 1.
-//' @param h The allele bias. Must be of length 1.
+//' @param p The allele dosage.
+//' @param eps The sequencing error rate.
+//' @param h The allele bias.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
-NumericVector xi_fun(NumericVector p, double eps, double h) {
+double xi_double(double p, double eps, double h) {
   if (h < -TOL) {
     Rcpp::stop("h must be greater than or equal to 0.");
   }
+  double eta = eta_double(p, eps);
+  double xi  = eta / (h * (1.0 - eta) + eta);
+  return xi;
+}
 
-  NumericVector eta_vec = eta_fun(p, eps);
-
+//' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps} and the allele bias \code{h}.
+//'
+//' @param p A vector of allele dosages.
+//' @param eps The sequencing error rate. Must either be of length 1
+//'     or the same length as p.
+//' @param h The allele bias. Must either be of length 1 or the same length
+//'     as p.
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+NumericVector xi_fun(NumericVector p, NumericVector eps, NumericVector h) {
   int n = p.length();
+  if ((eps.length() != n) & (eps.length() != 1)) {
+    Rcpp::stop("eps must either have length 1 or the same length as x.");
+  }
+  if ((h.length() != n) & (h.length() != 1)) {
+    Rcpp::stop("h must either have length 1 or the same length as x.");
+  }
+
   NumericVector xi(n);
+  double eps_current;
+  double h_current;
 
   for (int i = 0; i < n; i++) {
-    xi(i) = eta_vec(i) / (h * (1 - eta_vec(i)) + eta_vec(i));
+    if (eps.length() == n) {
+      eps_current = eps(i);
+    }
+    else {
+      eps_current = eps(0);
+    }
+
+    if (h.length() == n) {
+      h_current = h(i);
+    }
+    else {
+      h_current = h(0);
+    }
+
+    xi(i) = xi_double(p(i), eps_current, h_current);
   }
 
   return xi;

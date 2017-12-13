@@ -125,9 +125,22 @@ eta_fun <- function(p, eps) {
 
 #' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps} and the allele bias \code{h}.
 #'
+#' @param p The allele dosage.
+#' @param eps The sequencing error rate.
+#' @param h The allele bias.
+#'
+#' @author David Gerard
+xi_double <- function(p, eps, h) {
+    .Call('_mupdog_xi_double', PACKAGE = 'mupdog', p, eps, h)
+}
+
+#' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps} and the allele bias \code{h}.
+#'
 #' @param p A vector of allele dosages.
-#' @param eps The sequencing error rate. Must be of length 1.
-#' @param h The allele bias. Must be of length 1.
+#' @param eps The sequencing error rate. Must either be of length 1
+#'     or the same length as p.
+#' @param h The allele bias. Must either be of length 1 or the same length
+#'     as p.
 #'
 #' @author David Gerard
 xi_fun <- function(p, eps, h) {

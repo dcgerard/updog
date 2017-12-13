@@ -1,14 +1,25 @@
 context("util funs")
 
-test_that("xi_fun works", {
+test_that("xi_fun and eta_fun works", {
   p <- seq(0, 1, length = 20)
   eps <- 0.1
   h <- 0.2
-
   eta <- p * (1 - eps) + (1 - p) * eps
+  expect_equal(eta, eta_fun(p, eps))
   xi <- eta / (h * (1 - eta) + eta)
-
   expect_equal(xi_fun(p = p, eps = eps, h = h), xi)
+
+  eps <- seq(0.1, 0.9, length = 20)
+  h   <- seq(0.1, 0.9, length = 20)
+  eta <- p * (1 - eps) + (1 - p) * eps
+  expect_equal(eta, eta_fun(p, eps))
+  xi <- eta / (h * (1 - eta) + eta)
+  expect_equal(xi_fun(p = p, eps = eps, h = h), xi)
+
+  # microbenchmark::microbenchmark(
+  #   p * (1 - eps) + (1 - p) * eps,
+  #   eta_fun(p, eps)
+  # )
 }
 )
 

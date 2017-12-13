@@ -149,26 +149,39 @@ BEGIN_RCPP
 END_RCPP
 }
 // eta_fun
-NumericVector eta_fun(NumericVector p, double eps);
+NumericVector eta_fun(NumericVector p, NumericVector eps);
 RcppExport SEXP _mupdog_eta_fun(SEXP pSEXP, SEXP epsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type p(pSEXP);
-    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type eps(epsSEXP);
     rcpp_result_gen = Rcpp::wrap(eta_fun(p, eps));
     return rcpp_result_gen;
 END_RCPP
 }
+// xi_double
+double xi_double(double p, double eps, double h);
+RcppExport SEXP _mupdog_xi_double(SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type p(pSEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    rcpp_result_gen = Rcpp::wrap(xi_double(p, eps, h));
+    return rcpp_result_gen;
+END_RCPP
+}
 // xi_fun
-NumericVector xi_fun(NumericVector p, double eps, double h);
+NumericVector xi_fun(NumericVector p, NumericVector eps, NumericVector h);
 RcppExport SEXP _mupdog_xi_fun(SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type p(pSEXP);
-    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
-    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type eps(epsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type h(hSEXP);
     rcpp_result_gen = Rcpp::wrap(xi_fun(p, eps, h));
     return rcpp_result_gen;
 END_RCPP
@@ -208,6 +221,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_pen_seq_error", (DL_FUNC) &_mupdog_pen_seq_error, 3},
     {"_mupdog_eta_double", (DL_FUNC) &_mupdog_eta_double, 2},
     {"_mupdog_eta_fun", (DL_FUNC) &_mupdog_eta_fun, 2},
+    {"_mupdog_xi_double", (DL_FUNC) &_mupdog_xi_double, 3},
     {"_mupdog_xi_fun", (DL_FUNC) &_mupdog_xi_fun, 3},
     {"_mupdog_log_sum_exp", (DL_FUNC) &_mupdog_log_sum_exp, 1},
     {"_mupdog_logit", (DL_FUNC) &_mupdog_logit, 1},

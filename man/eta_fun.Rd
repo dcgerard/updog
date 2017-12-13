@@ -9,7 +9,8 @@ eta_fun(p, eps)
 \arguments{
 \item{p}{A vector of allele dosages.}
 
-\item{eps}{The sequencing error rate. Must be of length 1.}
+\item{eps}{The sequencing error rate. Must either be of length 1
+or the same length as p.}
 }
 \description{
 Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
