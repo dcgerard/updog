@@ -104,6 +104,24 @@ pen_seq_error <- function(eps, mu_eps, sigma2_eps) {
     .Call('_mupdog_pen_seq_error', PACKAGE = 'mupdog', eps, mu_eps, sigma2_eps)
 }
 
+#' Objective function when updating a single inbreeding coefficient.
+#'
+#' @param mu A vector of posterior means. The jth element is the
+#'     posterior mean of SNP j for the individual.
+#' @param sigma2 A vector of posterior variances. The jth element
+#'     is the posterior variance of SNP j for the individual.
+#' @param alpha A vector of allele frequencies. The jth element
+#'     is the allele frequency for SNP j.
+#' @param log_bb_dense A matrix of log posterior densities. The
+#'     rows index the dosage and the columns index the SNPs.
+#' @param ploidy The ploidy of the species.
+#'
+#'
+#' @author David Gerard
+obj_for_rho <- function(mu, sigma2, alpha, log_bb_dense, ploidy) {
+    .Call('_mupdog_obj_for_rho', PACKAGE = 'mupdog', mu, sigma2, alpha, log_bb_dense, ploidy)
+}
+
 #' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
 #'
 #' @param p The allele dosage.
@@ -166,5 +184,14 @@ log_sum_exp <- function(x) {
 #' @author David Gerard
 logit <- function(x) {
     .Call('_mupdog_logit', PACKAGE = 'mupdog', x)
+}
+
+#' The expit (logistic) function.
+#'
+#' @param x A double.
+#'
+#' @author David Gerard
+expit <- function(x) {
+    .Call('_mupdog_expit', PACKAGE = 'mupdog', x)
 }
 

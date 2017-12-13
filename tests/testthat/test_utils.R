@@ -39,5 +39,8 @@ test_that("log_sum_exp works", {
 
 test_that("logit works", {
   expect_equal(logit(0.1), log(0.1 / 0.9))
+
+  expect_equal(expit(logit(0.1)), 0.1)
+  expect_equal(logit(expit(-8)), -8)
 }
 )

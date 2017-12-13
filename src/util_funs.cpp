@@ -145,3 +145,14 @@ double logit(double x) {
   double lv = std::log(x / (1.0 - x));
   return lv;
 }
+
+//' The expit (logistic) function.
+//'
+//' @param x A double.
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double expit(double x) {
+  double ev = 1.0 / (1.0 + std::exp(-x));
+  return ev;
+}

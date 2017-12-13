@@ -33,6 +33,7 @@ double post_prob(int dosage, int ploidy, double mu, double sigma2,
   return post_prob;
 }
 
+
 //' Penalty on bias parameter.
 //'
 //' @param h The current value of bias parameter. Must be
@@ -78,3 +79,37 @@ double pen_seq_error(double eps, double mu_eps, double sigma2_eps) {
   double pen = -log(eps * (1.0 - eps)) - std::pow(logit(eps) - mu_eps, 2) / (2.0 * sigma2_eps);
   return pen;
 }
+
+
+//' Objective function when updating a single inbreeding coefficient.
+//'
+//' @param mu A vector of posterior means. The jth element is the
+//'     posterior mean of SNP j for the individual.
+//' @param sigma2 A vector of posterior variances. The jth element
+//'     is the posterior variance of SNP j for the individual.
+//' @param alpha A vector of allele frequencies. The jth element
+//'     is the allele frequency for SNP j.
+//' @param log_bb_dense A matrix of log posterior densities. The
+//'     rows index the dosage and the columns index the SNPs.
+//' @param ploidy The ploidy of the species.
+//'
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double obj_for_rho(NumericVector mu,
+                   NumericVector sigma2,
+                   NumericVector alpha,
+                   NumericMatrix log_bb_dense,
+                   int ploidy) {
+  // check input ---------------------------------------
+
+
+  return 0;
+}
+
+
+
+
+
+
+

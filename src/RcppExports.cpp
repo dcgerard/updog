@@ -136,6 +136,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// obj_for_rho
+double obj_for_rho(NumericVector mu, NumericVector sigma2, NumericVector alpha, NumericMatrix log_bb_dense, int ploidy);
+RcppExport SEXP _mupdog_obj_for_rho(SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP log_bb_denseSEXP, SEXP ploidySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type sigma2(sigma2SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type log_bb_dense(log_bb_denseSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    rcpp_result_gen = Rcpp::wrap(obj_for_rho(mu, sigma2, alpha, log_bb_dense, ploidy));
+    return rcpp_result_gen;
+END_RCPP
+}
 // eta_double
 double eta_double(double p, double eps);
 RcppExport SEXP _mupdog_eta_double(SEXP pSEXP, SEXP epsSEXP) {
@@ -208,6 +223,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// expit
+double expit(double x);
+RcppExport SEXP _mupdog_expit(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(expit(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_dbetabinom_alpha_beta_double", (DL_FUNC) &_mupdog_dbetabinom_alpha_beta_double, 5},
@@ -219,12 +245,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_post_prob", (DL_FUNC) &_mupdog_post_prob, 6},
     {"_mupdog_pen_bias", (DL_FUNC) &_mupdog_pen_bias, 3},
     {"_mupdog_pen_seq_error", (DL_FUNC) &_mupdog_pen_seq_error, 3},
+    {"_mupdog_obj_for_rho", (DL_FUNC) &_mupdog_obj_for_rho, 5},
     {"_mupdog_eta_double", (DL_FUNC) &_mupdog_eta_double, 2},
     {"_mupdog_eta_fun", (DL_FUNC) &_mupdog_eta_fun, 2},
     {"_mupdog_xi_double", (DL_FUNC) &_mupdog_xi_double, 3},
     {"_mupdog_xi_fun", (DL_FUNC) &_mupdog_xi_fun, 3},
     {"_mupdog_log_sum_exp", (DL_FUNC) &_mupdog_log_sum_exp, 1},
     {"_mupdog_logit", (DL_FUNC) &_mupdog_logit, 1},
+    {"_mupdog_expit", (DL_FUNC) &_mupdog_expit, 1},
     {NULL, NULL, 0}
 };
 
