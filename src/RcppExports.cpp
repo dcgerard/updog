@@ -111,6 +111,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// compute_all_post_prob
+arma::Cube<double> compute_all_post_prob(int ploidy, NumericMatrix mu, NumericMatrix sigma2, NumericVector alpha, NumericVector rho);
+RcppExport SEXP _mupdog_compute_all_post_prob(SEXP ploidySEXP, SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP rhoSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type sigma2(sigma2SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type rho(rhoSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_all_post_prob(ploidy, mu, sigma2, alpha, rho));
+    return rcpp_result_gen;
+END_RCPP
+}
 // pen_bias
 double pen_bias(double h, double mu_h, double sigma2_h);
 RcppExport SEXP _mupdog_pen_bias(SEXP hSEXP, SEXP mu_hSEXP, SEXP sigma2_hSEXP) {
@@ -244,6 +259,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_pbetabinom_double", (DL_FUNC) &_mupdog_pbetabinom_double, 5},
     {"_mupdog_pbetabinom", (DL_FUNC) &_mupdog_pbetabinom, 5},
     {"_mupdog_post_prob", (DL_FUNC) &_mupdog_post_prob, 6},
+    {"_mupdog_compute_all_post_prob", (DL_FUNC) &_mupdog_compute_all_post_prob, 5},
     {"_mupdog_pen_bias", (DL_FUNC) &_mupdog_pen_bias, 3},
     {"_mupdog_pen_seq_error", (DL_FUNC) &_mupdog_pen_seq_error, 3},
     {"_mupdog_obj_for_rho", (DL_FUNC) &_mupdog_obj_for_rho, 5},

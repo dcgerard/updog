@@ -198,7 +198,7 @@ double pbetabinom_double(int q, int size, double mu, double rho, bool log_p) {
     return lp;
   }
   else {
-    return std::exp(lp);
+    return std::min(std::exp(lp), 1.0);
   }
 }
 

@@ -33,6 +33,55 @@ double post_prob(int dosage, int ploidy, double mu, double sigma2,
   return post_prob;
 }
 
+//' Computes every posterior probability for each dosage level for
+//' each individual at each SNP.
+//'
+//' @param ploidy The ploidy of the species.
+//' @param mu A matrix of variational posterior means. The rows
+//'     index the individuals and the columns index the SNPs.
+//' @param sigma2 A matrix of variational posterior variances.
+//'     The rows index the individuals and the columns index the SNPs.
+//' @param alpha A vector of allele frequencies for all SNPs.
+//' @param rho A vector of inbreeding coefficients for all individuals.
+//'
+//' @author David Gerard
+//'
+// [[Rcpp::export]]
+arma::Cube<double> compute_all_post_prob(int ploidy,
+                                         NumericMatrix mu,
+                                         NumericMatrix sigma2,
+                                         NumericVector alpha,
+                                         NumericVector rho) {
+  // check input ------------------------------------
+  int nind = mu.nrow();
+  int nsnps = mu.ncol();
+
+  if (sigma2.nrow() != nind) {
+    Rcpp::stop("sigma2 and mu must have the same number of rows.");
+  }
+  if (sigma2.ncol() != nsnps) {
+    Rcpp::stop("sigma2 and mu must have the same number of columns.");
+  }
+  if (alpha.length() != nsnps) {
+    Rcpp::stop("alpha must have the same length as the number of columns in mu.");
+  }
+  if (rho.length() != nind) {
+    Rcpp::stop("rho must have the same length as the number of rows in mu.");
+  }
+
+  // iterate through all i,j,k ----------------------
+  arma::Cube<double> warray(nind, nsnps, ploidy + 1);
+  for (int i = 0; i < nind; i++) {
+    for (int j = 0; j < nsnps; j++) {
+      for (int k = 0; k <= ploidy; k++) {
+        warray(i, j, k) = post_prob(k, ploidy,
+               mu(i, j), sigma2(i, j), alpha(j), rho(i));
+      }
+    }
+  }
+  return warray;
+}
+
 
 //' Penalty on bias parameter.
 //'

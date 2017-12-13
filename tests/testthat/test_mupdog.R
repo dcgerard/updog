@@ -30,5 +30,14 @@ test_that("mupdog works", {
          postmean_init = postmean_init,
          postvar_init = postvar_init)
 
+  warray <- compute_all_post_prob(ploidy = 8, mu = postmean_init,
+                                  sigma2 = postvar_init,
+                                  alpha = allele_freq_init,
+                                  rho = inbreeding_init)
+  expect_equal(sum(warray[10,2,]), 1)
+  expect_true(all(warray > 0))
+  expect_true(!is.nan(post_prob(8, 8, 0, 1, 0.1, 0.001)))
+  expect_true(pbetabinom_double(8, 8, 0.1, 0.001, FALSE) <= 1)
+
 }
 )

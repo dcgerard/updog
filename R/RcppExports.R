@@ -78,6 +78,23 @@ post_prob <- function(dosage, ploidy, mu, sigma2, alpha, rho) {
     .Call('_mupdog_post_prob', PACKAGE = 'mupdog', dosage, ploidy, mu, sigma2, alpha, rho)
 }
 
+#' Computes every posterior probability for each dosage level for
+#' each individual at each SNP.
+#'
+#' @param ploidy The ploidy of the species.
+#' @param mu A matrix of variational posterior means. The rows
+#'     index the individuals and the columns index the SNPs.
+#' @param sigma2 A matrix of variational posterior variances.
+#'     The rows index the individuals and the columns index the SNPs.
+#' @param alpha A vector of allele frequencies for all SNPs.
+#' @param rho A vector of inbreeding coefficients for all individuals.
+#'
+#' @author David Gerard
+#'
+compute_all_post_prob <- function(ploidy, mu, sigma2, alpha, rho) {
+    .Call('_mupdog_compute_all_post_prob', PACKAGE = 'mupdog', ploidy, mu, sigma2, alpha, rho)
+}
+
 #' Penalty on bias parameter.
 #'
 #' @param h The current value of bias parameter. Must be
