@@ -59,6 +59,14 @@ pbetabinom <- function(q, size, mu, rho, log_p) {
     .Call('_mupdog_pbetabinom', PACKAGE = 'mupdog', q, size, mu, rho, log_p)
 }
 
+#' Calculates the log-density for every individual by snp by dosage level.
+#'
+#' @param refmat
+#'
+#'
+#'
+NULL
+
 #' Variational posterior probability of having \code{dosage} A alleles
 #' when the ploidy is \code{ploidy}, the allele frequency is
 #' \code{alpha}, the individual-specific overdispersion parameter is

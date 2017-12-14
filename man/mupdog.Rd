@@ -8,10 +8,9 @@
 \title{\code{mupdog} Multivariate updog.}
 \usage{
 mupdog(refmat, sizemat, ploidy, mean_bias = 0, var_bias = 1,
-  mean_seq = -4.7, var_seq = 1, seq_init = NULL, bias_init = NULL,
-  od_init = NULL, allele_freq_init = NULL, inbreeding_init = NULL,
-  cor_init = NULL, postmean_init = NULL, postvar_init = NULL,
-  update_cor = TRUE)
+  mean_seq = -4.7, var_seq = 1, seq = NULL, bias = NULL, od = NULL,
+  allele_freq = NULL, inbreeding = NULL, cor = NULL, postmean = NULL,
+  postvar = NULL, update_cor = TRUE)
 }
 \arguments{
 \item{refmat}{A matrix of reference counts.
@@ -43,34 +42,34 @@ Defaults to 1. This corresponds to likely values of 0.001 and
 0.06. This upper bound is larger than what we would expect given
 the current state of next-gen-sequencings.}
 
-\item{seq_init}{A vector of initial sequencing errors. Should be
+\item{seq}{A vector of initial sequencing errors. Should be
 the same length as the number of columns of \code{refmat}
 (number of SNPs). Must be between 0 and 1.}
 
-\item{bias_init}{A vector of initial bias paramters. Should be the
+\item{bias}{A vector of initial bias paramters. Should be the
 same length as the number of columns of \code{refmat}
 (number of SNPs). Must be greater than 0.}
 
-\item{od_init}{A vector of initial overdispersion parameters.
+\item{od}{A vector of initial overdispersion parameters.
 Should be the same length as the number of columns of
 \code{refmat} (number of SNPs). Must be between 0 and 1.}
 
-\item{allele_freq_init}{A vector of initial allele frequencies.
+\item{allele_freq}{A vector of initial allele frequencies.
 Should be the same length as the number of columns of
 \code{refmat} (number of SNPs). Must be between 0 and 1.}
 
-\item{inbreeding_init}{A vector of initial individual-specific
+\item{inbreeding}{A vector of initial individual-specific
 inbreeding coefficients.
 Should be the same length as the number of rows of
 \code{refmat} (number of individuals).}
 
-\item{cor_init}{Initial correlation matrix. Should have the same
+\item{cor}{Initial correlation matrix. Should have the same
 number of columns/rows as the number of individuals.}
 
-\item{postmean_init}{Initial variational posterior means. Should
+\item{postmean}{Initial variational posterior means. Should
 have the same dimensions as \code{refmat}.}
 
-\item{postvar_init}{Initial posterior variances. Should have the
+\item{postvar}{Initial posterior variances. Should have the
 same dimensions as \code{refmat}.}
 
 \item{update_cor}{A logical. Should we update the underlying

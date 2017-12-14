@@ -24,27 +24,27 @@
 #'     Defaults to 1. This corresponds to likely values of 0.001 and
 #'     0.06. This upper bound is larger than what we would expect given
 #'     the current state of next-gen-sequencings.
-#' @param seq_init A vector of initial sequencing errors. Should be
+#' @param seq A vector of initial sequencing errors. Should be
 #'     the same length as the number of columns of \code{refmat}
 #'     (number of SNPs). Must be between 0 and 1.
-#' @param bias_init A vector of initial bias paramters. Should be the
+#' @param bias A vector of initial bias paramters. Should be the
 #'     same length as the number of columns of \code{refmat}
 #'     (number of SNPs). Must be greater than 0.
-#' @param od_init A vector of initial overdispersion parameters.
+#' @param od A vector of initial overdispersion parameters.
 #'     Should be the same length as the number of columns of
 #'     \code{refmat} (number of SNPs). Must be between 0 and 1.
-#' @param allele_freq_init A vector of initial allele frequencies.
+#' @param allele_freq A vector of initial allele frequencies.
 #'     Should be the same length as the number of columns of
 #'     \code{refmat} (number of SNPs). Must be between 0 and 1.
-#' @param inbreeding_init A vector of initial individual-specific
+#' @param inbreeding A vector of initial individual-specific
 #'     inbreeding coefficients.
 #'     Should be the same length as the number of rows of
 #'     \code{refmat} (number of individuals).
-#' @param cor_init Initial correlation matrix. Should have the same
+#' @param cor Initial correlation matrix. Should have the same
 #'     number of columns/rows as the number of individuals.
-#' @param postmean_init Initial variational posterior means. Should
+#' @param postmean Initial variational posterior means. Should
 #'     have the same dimensions as \code{refmat}.
-#' @param postvar_init Initial posterior variances. Should have the
+#' @param postvar Initial posterior variances. Should have the
 #'     same dimensions as \code{refmat}.
 #' @param update_cor A logical. Should we update the underlying
 #'     correlation matrix \code{TRUE} or not \code{FALSE}. Will throw
@@ -60,14 +60,14 @@ mupdog <- function(refmat,
                    var_bias         = 1,
                    mean_seq         = -4.7,
                    var_seq          = 1,
-                   seq_init         = NULL,
-                   bias_init        = NULL,
-                   od_init          = NULL,
-                   allele_freq_init = NULL,
-                   inbreeding_init  = NULL,
-                   cor_init         = NULL,
-                   postmean_init    = NULL,
-                   postvar_init     = NULL,
+                   seq         = NULL,
+                   bias        = NULL,
+                   od          = NULL,
+                   allele_freq = NULL,
+                   inbreeding  = NULL,
+                   cor         = NULL,
+                   postmean    = NULL,
+                   postvar     = NULL,
                    update_cor       = TRUE) {
 
   ##########################################################
@@ -87,29 +87,29 @@ mupdog <- function(refmat,
   ###########################################################
   ## Setup Default parameters -------------------------------
   ###########################################################
-  if (is.null(seq_init)) {
-    seq_init <- rep(0.005, length = nsnps)
+  if (is.null(seq)) {
+    seq <- rep(0.005, length = nsnps)
   }
-  if (is.null(bias_init)) {
-    bias_init <- rep(0, length = nsnps)
+  if (is.null(bias)) {
+    bias <- rep(1, length = nsnps)
   }
-  if (is.null(od_init)) {
-    od_init <- rep(0.001, length = nsnps)
+  if (is.null(od)) {
+    od <- rep(0.001, length = nsnps)
   }
-  if (is.null(allele_freq_init)) {
-    allele_freq_init <- colMeans(refmat / sizemat, na.rm = TRUE)
+  if (is.null(allele_freq)) {
+    allele_freq <- colMeans(refmat / sizemat, na.rm = TRUE)
   }
-  if (is.null(inbreeding_init)) {
-    inbreeding_init <- rep(0, length = nind)
+  if (is.null(inbreeding)) {
+    inbreeding <- rep(0, length = nind)
   }
-  if (is.null(cor_init)) {
-    cor_init <- diag(nind)
+  if (is.null(cor)) {
+    cor <- diag(nind)
   }
-  if (is.null(postmean_init)) {
-    postmean_init <- matrix(0, nrow = nind, ncol = nsnps)
+  if (is.null(postmean)) {
+    postmean <- matrix(0, nrow = nind, ncol = nsnps)
   }
-  if (is.null(postvar_init)) {
-    postvar_init <- matrix(1, nrow = nind, ncol = nsnps)
+  if (is.null(postvar)) {
+    postvar <- matrix(1, nrow = nind, ncol = nsnps)
   }
 
   ######################################################
@@ -130,69 +130,75 @@ mupdog <- function(refmat,
   assertthat::are_equal(length(var_seq), 1)
   assertthat::assert_that(var_seq > 0)
 
-  assertthat::assert_that(is.numeric(seq_init))
-  assertthat::are_equal(length(seq_init), nsnps)
-  assertthat::assert_that(all(seq_init >= 0))
-  assertthat::assert_that(all(seq_init <= 1))
+  assertthat::assert_that(is.numeric(seq))
+  assertthat::are_equal(length(seq), nsnps)
+  assertthat::assert_that(all(seq >= 0))
+  assertthat::assert_that(all(seq <= 1))
 
-  assertthat::assert_that(is.numeric(bias_init))
-  assertthat::are_equal(length(bias_init), nsnps)
-  assertthat::assert_that(all(bias_init >= 0))
+  assertthat::assert_that(is.numeric(bias))
+  assertthat::are_equal(length(bias), nsnps)
+  assertthat::assert_that(all(bias >= 0))
 
-  assertthat::assert_that(is.numeric(od_init))
-  assertthat::are_equal(length(od_init), nsnps)
-  assertthat::assert_that(all(od_init >= 0))
-  assertthat::assert_that(all(od_init <= 1))
+  assertthat::assert_that(is.numeric(od))
+  assertthat::are_equal(length(od), nsnps)
+  assertthat::assert_that(all(od >= 0))
+  assertthat::assert_that(all(od <= 1))
 
-  assertthat::assert_that(is.numeric(allele_freq_init))
-  assertthat::are_equal(length(allele_freq_init), nsnps)
-  assertthat::assert_that(all(allele_freq_init >= 0))
-  assertthat::assert_that(all(allele_freq_init <= 1))
+  assertthat::assert_that(is.numeric(allele_freq))
+  assertthat::are_equal(length(allele_freq), nsnps)
+  assertthat::assert_that(all(allele_freq >= 0))
+  assertthat::assert_that(all(allele_freq <= 1))
 
-  assertthat::assert_that(is.numeric(inbreeding_init))
-  assertthat::are_equal(length(inbreeding_init), nind)
-  assertthat::assert_that(all(inbreeding_init >= 0))
-  assertthat::assert_that(all(inbreeding_init <= 1))
+  assertthat::assert_that(is.numeric(inbreeding))
+  assertthat::are_equal(length(inbreeding), nind)
+  assertthat::assert_that(all(inbreeding >= 0))
+  assertthat::assert_that(all(inbreeding <= 1))
 
-  assertthat::assert_that(is.numeric(cor_init))
-  assertthat::assert_that(is.matrix(cor_init))
-  assertthat::are_equal(nrow(cor_init), nind)
-  assertthat::are_equal(ncol(cor_init), nind)
-  assertthat::assert_that(all(cor_init >= 0))
-  assertthat::assert_that(all(cor_init <= 1))
-  assertthat::assert_that(all(diag(cor_init) == 1))
-  eigen_decomposition <- eigen(cor_init, only.values = TRUE)
+  assertthat::assert_that(is.numeric(cor))
+  assertthat::assert_that(is.matrix(cor))
+  assertthat::are_equal(nrow(cor), nind)
+  assertthat::are_equal(ncol(cor), nind)
+  assertthat::assert_that(all(cor >= 0))
+  assertthat::assert_that(all(cor <= 1))
+  assertthat::assert_that(all(diag(cor) == 1))
+  eigen_decomposition <- eigen(cor, only.values = TRUE)
   assertthat::assert_that(all(eigen_decomposition$values > 0))
   if ((nind > nsnps) & update_cor) {
     stop("if there are more individuals than SNPs, update_core must be set to FALSE.")
   }
 
-  assertthat::assert_that(is.numeric(postmean_init))
-  assertthat::assert_that(is.matrix(postmean_init))
-  assertthat::are_equal(dim(postmean_init), dim(refmat))
+  assertthat::assert_that(is.numeric(postmean))
+  assertthat::assert_that(is.matrix(postmean))
+  assertthat::are_equal(dim(postmean), dim(refmat))
 
-  assertthat::assert_that(is.numeric(postvar_init))
-  assertthat::assert_that(is.matrix(postvar_init))
-  assertthat::are_equal(dim(postvar_init), dim(refmat))
-  assertthat::assert_that(all(postvar_init > 0))
+  assertthat::assert_that(is.numeric(postvar))
+  assertthat::assert_that(is.matrix(postvar))
+  assertthat::are_equal(dim(postvar), dim(refmat))
+  assertthat::assert_that(all(postvar > 0))
 
   ############################################################
 
-  postmean    <- postmean_init
-  postvar     <- postvar_init
-  seq_error   <- seq_init
-  bias        <- bias_init
-  od          <- od_init
-  allele_freq <- allele_freq_init
-  inbreeding  <- inbreeding_init
-  cor_mat     <- cor_init
-  postmean    <- postmean_init
-  postvar     <- postvar_init
+  ## Update posterior means, posterior SD, and allele frequencies ----
 
+  ## Update inbreeding coefficients ----------------------------------
 
+  ## Update correlation matrix ---------------------------------------
   if (update_cor) {
     cor_mat <- update_R(postmean = postmean, postvar = postvar)
   }
+
+  ## Update sequencing error rate, bias, and overdispersion ----------
+  warray <- compute_all_post_prob(ploidy = ploidy,
+                                  mu = postmean,
+                                  sigma2 = postvar,
+                                  alpha = allele_freq,
+                                  rho = inbreeding)
+
+
+
+
+
+
 
 
 

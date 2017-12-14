@@ -82,6 +82,18 @@ arma::Cube<double> compute_all_post_prob(int ploidy,
   return warray;
 }
 
+//' Calculates the log-density for every individual by snp by dosage level.
+//'
+//' @param refmat
+//'
+//'
+//'
+// arma::Cube<double> compute_all_log_bb(NumericMatrix refmat, NumericMatrix sizemat,
+// 				      int ploidy, NumericVector eps, NumericVector h, NumericVector tau) {
+
+//   return 0;
+// }
+
 
 //' Penalty on bias parameter.
 //'
@@ -155,10 +167,3 @@ double obj_for_rho(NumericVector mu,
 
   return 0;
 }
-
-
-
-
-
-
-

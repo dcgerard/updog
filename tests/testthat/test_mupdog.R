@@ -12,28 +12,28 @@ test_that("mupdog works", {
                                      each = nind)),
                    nrow = nind, ncol = nsnps)
 
-  seq_init <- rep(0.005, length = nsnps)
-  bias_init <- rep(0, length = nsnps)
-  od_init <- rep(0.001, length = nsnps)
-  allele_freq_init <- colMeans(refmat / sizemat, na.rm = TRUE)
-  inbreeding_init <- rep(0.001, length = nind)
-  cor_init <- diag(nind)
-  postmean_init <- matrix(0, nrow = nind, ncol = nsnps)
-  postvar_init <- matrix(1, nrow = nind, ncol = nsnps)
+  seq <- rep(0.005, length = nsnps)
+  bias <- rep(0, length = nsnps)
+  od <- rep(0.001, length = nsnps)
+  allele_freq <- colMeans(refmat / sizemat, na.rm = TRUE)
+  inbreeding <- rep(0.001, length = nind)
+  cor <- diag(nind)
+  postmean <- matrix(0, nrow = nind, ncol = nsnps)
+  postvar <- matrix(1, nrow = nind, ncol = nsnps)
 
   mupdog(refmat = refmat, sizemat = sizemat, ploidy = 8,
          mean_bias = 0, var_bias = 1, mean_seq = -4.7, var_seq = 1,
-         seq_init = seq_init, bias_init = bias_init, od_init = od_init,
-         allele_freq_init = allele_freq_init,
-         inbreeding_init = inbreeding_init,
-         cor_init = cor_init,
-         postmean_init = postmean_init,
-         postvar_init = postvar_init)
+         seq = seq, bias = bias, od = od,
+         allele_freq = allele_freq,
+         inbreeding = inbreeding,
+         cor = cor,
+         postmean = postmean,
+         postvar = postvar)
 
-  warray <- compute_all_post_prob(ploidy = 8, mu = postmean_init,
-                                  sigma2 = postvar_init,
-                                  alpha = allele_freq_init,
-                                  rho = inbreeding_init)
+  warray <- compute_all_post_prob(ploidy = 8, mu = postmean,
+                                  sigma2 = postvar,
+                                  alpha = allele_freq,
+                                  rho = inbreeding)
   expect_equal(sum(warray[10,2,]), 1)
   expect_true(all(warray > 0))
   expect_true(!is.nan(post_prob(8, 8, 0, 1, 0.1, 0.001)))
