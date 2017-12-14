@@ -9,10 +9,10 @@
 // [[Rcpp::export]]
 double eta_double(double p, double eps) {
   if ((p < -TOL) or (1.0 - p < -TOL)) {
-    Rcpp::stop("p must be between 0 and 1");
+    Rcpp::stop("eta_double: p must be between 0 and 1");
   }
   if ((eps < -TOL) or (1.0 - eps < -TOL)) {
-    Rcpp::stop("eps must be between 0 and 1");
+    Rcpp::stop("eta_double: eps must be between 0 and 1");
   }
 
   return p * (1 - eps) + (1 - p) * eps;
@@ -27,7 +27,7 @@ double eta_double(double p, double eps) {
 NumericVector eta_fun(NumericVector p, NumericVector eps) {
   int n = p.length();
   if ((eps.length() != n) & (eps.length() != 1)) {
-    Rcpp::stop("eps must either have length 1 or be the same length as p.");
+    Rcpp::stop("eta_fun: eps must either have length 1 or be the same length as p.");
   }
 
   NumericVector eta(n);
@@ -59,7 +59,7 @@ NumericVector eta_fun(NumericVector p, NumericVector eps) {
 // [[Rcpp::export]]
 double xi_double(double p, double eps, double h) {
   if (h < -TOL) {
-    Rcpp::stop("h must be greater than or equal to 0.");
+    Rcpp::stop("xi_double: h must be greater than or equal to 0.");
   }
   double eta = eta_double(p, eps);
   double xi  = eta / (h * (1.0 - eta) + eta);
@@ -79,10 +79,10 @@ double xi_double(double p, double eps, double h) {
 NumericVector xi_fun(NumericVector p, NumericVector eps, NumericVector h) {
   int n = p.length();
   if ((eps.length() != n) & (eps.length() != 1)) {
-    Rcpp::stop("eps must either have length 1 or the same length as x.");
+    Rcpp::stop("xi_fun: eps must either have length 1 or the same length as x.");
   }
   if ((h.length() != n) & (h.length() != 1)) {
-    Rcpp::stop("h must either have length 1 or the same length as x.");
+    Rcpp::stop("xi_fun: h must either have length 1 or the same length as x.");
   }
 
   NumericVector xi(n);
@@ -140,7 +140,7 @@ double log_sum_exp(NumericVector x) {
 // [[Rcpp::export]]
 double logit(double x) {
   if ((x < TOL) | ((1.0 - x) < TOL)) {
-    Rcpp::stop("x must be between 0 and 1.");
+    Rcpp::stop("logit: x must be between 0 and 1.");
   }
   double lv = std::log(x / (1.0 - x));
   return lv;

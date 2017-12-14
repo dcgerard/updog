@@ -75,16 +75,20 @@ double dbetabinom_double(int x, int size, double mu, double rho, bool log) {
 
   // check input --------------------------------------------
   if (size < 0) {
-    Rcpp::stop("size must be greater than 0.");
+    Rcpp::Rcout << size << std::endl;
+    Rcpp::stop("dbetabinom_double: size must be greater than 0.");
   }
   if ((x < 0) | (x > size)) {
-    Rcpp::stop("x must be between 0 and size.");
+    Rcpp::Rcout << x << std::endl;
+    Rcpp::stop("dbetabinom_double: x must be between 0 and size.");
   }
   if ((mu < -TOL) | ((1.0 - mu) < -TOL)) {
-    Rcpp::stop("mu must be between 0 and 1.");
+    Rcpp::Rcout << mu << std::endl;
+    Rcpp::stop("dbetabinom_double: mu must be between 0 and 1.");
   }
   if ((rho < -TOL) | ((1.0 - rho) < -TOL)) {
-    Rcpp::stop("rho must be between 0 and 1.");
+    Rcpp::Rcout << rho << std::endl;
+    Rcpp::stop("dbetabinom_double: rho must be between 0 and 1.");
   }
 
   // calculate density.
@@ -118,16 +122,16 @@ NumericVector dbetabinom(IntegerVector x, IntegerVector size,
   int n = x.length();
 
   if (n != size.length()) {
-    Rcpp::stop("x and size must be of same length.");
+    Rcpp::stop("dbetabinom: x and size must be of same length.");
   }
   if ((n != mu.length()) & (1 != mu.length())) {
-    Rcpp::stop("mu must either be of length 1 or the same length as x.");
+    Rcpp::stop("dbetabinom: mu must either be of length 1 or the same length as x.");
   }
   if ((n != rho.length()) & (1 != rho.length())) {
-    Rcpp::stop("rho must either be of length 1 or the same length as x.");
+    Rcpp::stop("dbetabinom: rho must either be of length 1 or the same length as x.");
   }
   if ((n != log.length()) & (1 != log.length())) {
-    Rcpp::stop("log must either be of length 1 or the same length as x.");
+    Rcpp::stop("dbetabinom: log must either be of length 1 or the same length as x.");
   }
 
   // iterate
@@ -179,6 +183,20 @@ NumericVector dbetabinom(IntegerVector x, IntegerVector size,
 // [[Rcpp::export]]
 double pbetabinom_double(int q, int size, double mu, double rho, bool log_p) {
 
+  // Check input ------------------------------------------------------
+  if (size < 0) {
+    Rcpp::Rcout << size << std::endl;
+    Rcpp::stop("pbetabinom_double: size must be greater than 0.");
+  }
+  if ((mu < -TOL) | ((1.0 - mu) < -TOL)) {
+    Rcpp::Rcout << mu << std::endl;
+    Rcpp::stop("pbetabinom_double: mu must be between 0 and 1.");
+  }
+  if ((rho < -TOL) | ((1.0 - rho) < -TOL)) {
+    Rcpp::Rcout << rho << std::endl;
+    Rcpp::stop("pbetabinom_double: rho must be between 0 and 1.");
+  }
+
   double lp; // the log of the cdf.
   if (q > size) {
     lp = 0.0;
@@ -215,16 +233,16 @@ NumericVector pbetabinom(IntegerVector q, IntegerVector size,
   int n = q.length();
 
   if (n != size.length()) {
-    Rcpp::stop("q and size must be of same length.");
+    Rcpp::stop("pbetabinom: q and size must be of same length.");
   }
   if ((n != mu.length()) & (1 != mu.length())) {
-    Rcpp::stop("mu must either be of length 1 or the same length as q.");
+    Rcpp::stop("pbetabinom: mu must either be of length 1 or the same length as q.");
   }
   if ((n != rho.length()) & (1 != rho.length())) {
-    Rcpp::stop("rho must either be of length 1 or the same length as q.");
+    Rcpp::stop("pbetabinom: rho must either be of length 1 or the same length as q.");
   }
   if ((n != log_p.length()) & (1 != log_p.length())) {
-    Rcpp::stop("log_p must either be of length 1 or the same length as q.");
+    Rcpp::stop("pbetabinom: log_p must either be of length 1 or the same length as q.");
   }
 
   // iterate

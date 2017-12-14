@@ -184,6 +184,38 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// obj_for_mu
+double obj_for_mu(arma::Col<double> mu, arma::Col<double> sigma2, double alpha, NumericVector rho, NumericMatrix log_bb_dense, int ploidy, arma::Mat<double> cor_inv);
+RcppExport SEXP _mupdog_obj_for_mu(SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP rhoSEXP, SEXP log_bb_denseSEXP, SEXP ploidySEXP, SEXP cor_invSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::Col<double> >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< arma::Col<double> >::type sigma2(sigma2SEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type rho(rhoSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type log_bb_dense(log_bb_denseSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< arma::Mat<double> >::type cor_inv(cor_invSEXP);
+    rcpp_result_gen = Rcpp::wrap(obj_for_mu(mu, sigma2, alpha, rho, log_bb_dense, ploidy, cor_inv));
+    return rcpp_result_gen;
+END_RCPP
+}
+// obj_for_mu_wrapper
+double obj_for_mu_wrapper(arma::Col<double> muSigma2Alpha, NumericVector rho, NumericMatrix log_bb_dense, int ploidy, arma::Mat<double> cor_inv);
+RcppExport SEXP _mupdog_obj_for_mu_wrapper(SEXP muSigma2AlphaSEXP, SEXP rhoSEXP, SEXP log_bb_denseSEXP, SEXP ploidySEXP, SEXP cor_invSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::Col<double> >::type muSigma2Alpha(muSigma2AlphaSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type rho(rhoSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type log_bb_dense(log_bb_denseSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< arma::Mat<double> >::type cor_inv(cor_invSEXP);
+    rcpp_result_gen = Rcpp::wrap(obj_for_mu_wrapper(muSigma2Alpha, rho, log_bb_dense, ploidy, cor_inv));
+    return rcpp_result_gen;
+END_RCPP
+}
 // eta_double
 double eta_double(double p, double eps);
 RcppExport SEXP _mupdog_eta_double(SEXP pSEXP, SEXP epsSEXP) {
@@ -281,6 +313,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_pen_bias", (DL_FUNC) &_mupdog_pen_bias, 3},
     {"_mupdog_pen_seq_error", (DL_FUNC) &_mupdog_pen_seq_error, 3},
     {"_mupdog_obj_for_rho", (DL_FUNC) &_mupdog_obj_for_rho, 6},
+    {"_mupdog_obj_for_mu", (DL_FUNC) &_mupdog_obj_for_mu, 7},
+    {"_mupdog_obj_for_mu_wrapper", (DL_FUNC) &_mupdog_obj_for_mu_wrapper, 5},
     {"_mupdog_eta_double", (DL_FUNC) &_mupdog_eta_double, 2},
     {"_mupdog_eta_fun", (DL_FUNC) &_mupdog_eta_fun, 2},
     {"_mupdog_xi_double", (DL_FUNC) &_mupdog_xi_double, 3},

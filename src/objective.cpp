@@ -21,6 +21,19 @@
 double post_prob(int dosage, int ploidy, double mu, double sigma2,
                  double alpha, double rho) {
 
+  if ((alpha < -TOL) | ((1.0 - alpha) < -TOL)) {
+    Rcpp::Rcout << alpha << std::endl;
+    Rcpp::stop("post_prob: alpha must be between 0 and 1.");
+  }
+  if ((rho < -TOL) | ((1.0 - rho) < -TOL)) {
+    Rcpp::Rcout << rho << std::endl;
+    Rcpp::stop("post_prob: rho must be between 0 and 1.");
+  }
+  if (sigma2 < -TOL) {
+    Rcpp::Rcout << sigma2 << std::endl;
+    Rcpp::stop("post_prob: sigma2 must be greater than 0.");
+  }
+
   double pk   = pbetabinom_double(dosage, ploidy, alpha, rho, false);
   double pkm1 = pbetabinom_double(dosage - 1, ploidy, alpha, rho, false);
 
@@ -57,16 +70,16 @@ arma::Cube<double> compute_all_post_prob(int ploidy,
   int nsnps = mu.ncol();
 
   if (sigma2.nrow() != nind) {
-    Rcpp::stop("sigma2 and mu must have the same number of rows.");
+    Rcpp::stop("compute_all_post_prob: sigma2 and mu must have the same number of rows.");
   }
   if (sigma2.ncol() != nsnps) {
-    Rcpp::stop("sigma2 and mu must have the same number of columns.");
+    Rcpp::stop("compute_all_post_prob: sigma2 and mu must have the same number of columns.");
   }
   if (alpha.length() != nsnps) {
-    Rcpp::stop("alpha must have the same length as the number of columns in mu.");
+    Rcpp::stop("compute_all_post_prob: alpha must have the same length as the number of columns in mu.");
   }
   if (rho.length() != nind) {
-    Rcpp::stop("rho must have the same length as the number of rows in mu.");
+    Rcpp::stop("compute_all_post_prob: rho must have the same length as the number of rows in mu.");
   }
 
   // iterate through all i,j,k ----------------------
@@ -96,19 +109,19 @@ arma::Cube<double> compute_all_log_bb(NumericMatrix refmat, NumericMatrix sizema
   int nind  = refmat.nrow();
   int nsnps = refmat.ncol();
   if (sizemat.nrow() != nind) {
-    Rcpp::stop("sizemat and refmat must have the same dimensions.");
+    Rcpp::stop("compute_all_log_bb: sizemat and refmat must have the same dimensions.");
   }
   if (sizemat.ncol() != nsnps) {
-    Rcpp::stop("sizemat and refmat must have the same dimensions.");
+    Rcpp::stop("compute_all_log_bb: sizemat and refmat must have the same dimensions.");
   }
   if (seq.length() != nsnps) {
-    Rcpp::stop("seq must have the same length as the number of SNPs.");
+    Rcpp::stop("compute_all_log_bb: seq must have the same length as the number of SNPs.");
   }
   if (bias.length() != nsnps) {
-    Rcpp::stop("bias must have the same length as the number of SNPs.");
+    Rcpp::stop("compute_all_log_bb: bias must have the same length as the number of SNPs.");
   }
   if (od.length() != nsnps) {
-    Rcpp::stop("od must have the same length as the number of SNPs.");
+    Rcpp::stop("compute_all_log_bb: od must have the same length as the number of SNPs.");
   }
 
   arma::Cube<double> logbbdense(nind, nsnps, ploidy + 1);
@@ -145,10 +158,10 @@ arma::Cube<double> compute_all_log_bb(NumericMatrix refmat, NumericMatrix sizema
 double pen_bias(double h, double mu_h, double sigma2_h) {
 
   if (h < TOL) {
-    Rcpp::stop("h must be greater than 0.");
+    Rcpp::stop("pen_bias: h must be greater than 0.");
   }
   if (sigma2_h < TOL) {
-    Rcpp::stop("sigma2_h must be greater tha 0.");
+    Rcpp::stop("pen_bias: sigma2_h must be greater tha 0.");
   }
 
   double pen = -std::log(h) - std::pow(std::log(h) - mu_h, 2) / (2.0 * sigma2_h);
@@ -169,10 +182,10 @@ double pen_bias(double h, double mu_h, double sigma2_h) {
 double pen_seq_error(double eps, double mu_eps, double sigma2_eps) {
 
   if ((eps < TOL) | ((1.0 - eps) < TOL)) {
-    Rcpp::stop("eps must be between 0 and 1.");
+    Rcpp::stop("pen_seq_error: eps must be between 0 and 1.");
   }
   if (sigma2_eps < TOL) {
-    Rcpp::stop("sigma2_eps must be greater tha 0.");
+    Rcpp::stop("pen_seq_error: sigma2_eps must be greater tha 0.");
   }
   double pen = -log(eps * (1.0 - eps)) - std::pow(logit(eps) - mu_eps, 2) / (2.0 * sigma2_eps);
   return pen;
@@ -204,16 +217,16 @@ double obj_for_rho(double rho,
   // check input ---------------------------------------
   int nsnps = log_bb_dense.nrow();
   if (log_bb_dense.ncol() != ploidy + 1) {
-    Rcpp::stop("log_bb_dense must have ploidy+1 columns.");
+    Rcpp::stop("obj_for_rho: log_bb_dense must have ploidy+1 columns.");
   }
   if (mu.length() != nsnps) {
-    Rcpp::stop("mu must have length equal to the number of SNPs");
+    Rcpp::stop("obj_for_rho: mu must have length equal to the number of SNPs");
   }
   if (sigma2.length() != nsnps) {
-    Rcpp::stop("sigma2 must have length equal to the number of SNPs");
+    Rcpp::stop("obj_for_rho: sigma2 must have length equal to the number of SNPs");
   }
   if (alpha.length() != nsnps) {
-    Rcpp::stop("alpha must have length equal to the number of SNPs");
+    Rcpp::stop("obj_for_rho: alpha must have length equal to the number of SNPs");
   }
 
   // calculate objective -------------------------------
@@ -229,6 +242,120 @@ double obj_for_rho(double rho,
       }
     }
   }
+
+  return obj_val;
+}
+
+
+//' Objective function when updating mu, sigma2, and alpha
+//'
+//' @param mu A vector. The ith element is individual i's variational posterior mean at the SNP.
+//' @param sigma2 A vector. The ith element is individual i's variational posterior variance at the SNP.
+//' @param alpha The SNP's allele frequency.
+//' @param rho A vector. The ith element is individuals i's inbreeding coefficient.
+//' @param log_bb_dense A matrix of log-densities of the beta binomial. The rows index the individuals and the columns index the allele dosage.
+//' @param ploidy The ploidy of the species.
+//' @param cor_inv The inverse of the correlation matrix.
+//'
+//'
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double obj_for_mu(arma::Col<double> mu,
+		  arma::Col<double> sigma2,
+		  double alpha,
+		  NumericVector rho,
+		  NumericMatrix log_bb_dense,
+		  int ploidy,
+		  arma::Mat<double> cor_inv) {
+
+  // check input --------------------------------------------------
+  int nind = log_bb_dense.nrow();
+  if (log_bb_dense.ncol() != ploidy + 1) {
+    Rcpp::stop("obj_for_mu: log_bb_dense must have ploidy+1 columns.");
+  }
+  if (mu.n_elem != nind) {
+    Rcpp::stop("obj_for_mu: mu must have length equal to the number of individuals.");
+  }
+  if (sigma2.n_elem != nind) {
+    Rcpp::stop("obj_for_mu: sigma2 must have length equal to the number of individuals.");
+  }
+  if (rho.length() != nind) {
+    Rcpp::stop("obj_for_mu: rho must have length equal to the number of individuals.");
+  }
+  if (cor_inv.n_rows != nind) {
+    Rcpp::stop("obj_for_mu: cor_inv must have nrow equal to the number of individuals.");
+  }
+  if (cor_inv.n_cols != nind) {
+    Rcpp::stop("obj_for_mu: cor_inv must have ncol equal to the number of individuals.");
+  }
+
+  // likelihood integral ----------------------------------------------------
+  double obj_val = 0.0;
+  double w_current;
+  for (int i = 0; i < nind; i++) {
+    for (int k = 0; k <= ploidy; k++) {
+       if (!R_IsNA(log_bb_dense(i, k))) {
+	 w_current = post_prob(k, ploidy, mu(i), sigma2(i), alpha, rho(i));
+	 obj_val = obj_val + w_current * log_bb_dense(i, k);
+       }
+    }
+  }
+
+  // Multivariate normal prior integral -------------------------------------
+  arma::Mat<double> muRmu = mu.t() * cor_inv * mu;
+  arma::Mat<double> trRsigma2 = arma::diagvec(cor_inv).t() * sigma2;
+  obj_val = obj_val - muRmu(0, 0) / 2.0 - trRsigma2(0, 0) / 2.0 + arma::sum(arma::log(sigma2)) / 2.0;
+
+  return obj_val;
+}
+
+
+//' Wrapper for \code{\link{obj_for_mu}}.
+//'
+//' @inheritParams obj_for_mu
+//' @param muSigma2Alpha A vector where the first \code{nsnps} observations are mu,
+//'     the next \code{nsnps} observations are sigma2, and the last observation is \code{alpha}.
+//'
+//'
+//'
+//'
+//'
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double obj_for_mu_wrapper(arma::Col<double> muSigma2Alpha,
+			  NumericVector rho,
+			  NumericMatrix log_bb_dense,
+			  int ploidy,
+			  arma::Mat<double> cor_inv) {
+  int nsnps = log_bb_dense.nrow();
+
+  if (muSigma2Alpha.n_elem != nsnps * 2 + 1) {
+    Rcpp::stop("obj_for_mu_wrapper: muSigma2Alpha must have nrow(log_bb_dense) * 2 + 1 elements");
+  }
+
+  arma::Col<double> mu(nsnps);
+  arma::Col<double> sigma2(nsnps);
+  double alpha;
+
+  for (int i = 0; i < nsnps; i++) {
+    mu(i) = muSigma2Alpha(i);
+  }
+  for (int i = nsnps; i < (2 * nsnps); i++) {
+    sigma2(i - nsnps) = muSigma2Alpha(nsnps);
+  }
+  alpha = muSigma2Alpha(2 * nsnps);
+
+  // Rcpp::Rcout << alpha << std::endl;
+  // if (alpha < 0) {
+  //   Rcpp::Rcout << mu.t() << std::endl << sigma2.t() << std::endl;
+  // }
+
+
+  double obj_val = obj_for_mu(mu, sigma2, alpha, rho, log_bb_dense, ploidy, cor_inv);
+
+  // Rcpp::Rcout << obj_val << std::endl;
 
   return obj_val;
 }

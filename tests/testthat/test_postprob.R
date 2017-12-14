@@ -41,3 +41,6 @@ test_that("compute_all_log_bb returns NA", {
   expect_false(all(is.na(bbdenseout[2, 1, ])))
 }
 )
+
+
+

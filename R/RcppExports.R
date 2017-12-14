@@ -150,6 +150,39 @@ obj_for_rho <- function(rho, mu, sigma2, alpha, log_bb_dense, ploidy) {
     .Call('_mupdog_obj_for_rho', PACKAGE = 'mupdog', rho, mu, sigma2, alpha, log_bb_dense, ploidy)
 }
 
+#' Objective function when updating mu, sigma2, and alpha
+#'
+#' @param mu A vector. The ith element is individual i's variational posterior mean at the SNP.
+#' @param sigma2 A vector. The ith element is individual i's variational posterior variance at the SNP.
+#' @param alpha The SNP's allele frequency.
+#' @param rho A vector. The ith element is individuals i's inbreeding coefficient.
+#' @param log_bb_dense A matrix of log-densities of the beta binomial. The rows index the individuals and the columns index the allele dosage.
+#' @param ploidy The ploidy of the species.
+#' @param cor_inv The inverse of the correlation matrix.
+#'
+#'
+#'
+#' @author David Gerard
+obj_for_mu <- function(mu, sigma2, alpha, rho, log_bb_dense, ploidy, cor_inv) {
+    .Call('_mupdog_obj_for_mu', PACKAGE = 'mupdog', mu, sigma2, alpha, rho, log_bb_dense, ploidy, cor_inv)
+}
+
+#' Wrapper for \code{\link{obj_for_mu}}.
+#'
+#' @inheritParams obj_for_mu
+#' @param muSigma2Alpha A vector where the first \code{nsnps} observations are mu,
+#'     the next \code{nsnps} observations are sigma2, and the last observation is \code{alpha}.
+#'
+#'
+#'
+#'
+#'
+#'
+#' @author David Gerard
+obj_for_mu_wrapper <- function(muSigma2Alpha, rho, log_bb_dense, ploidy, cor_inv) {
+    .Call('_mupdog_obj_for_mu_wrapper', PACKAGE = 'mupdog', muSigma2Alpha, rho, log_bb_dense, ploidy, cor_inv)
+}
+
 #' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
 #'
 #' @param p The allele dosage.

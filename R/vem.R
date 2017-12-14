@@ -166,6 +166,7 @@ mupdog <- function(refmat,
   if ((nind > nsnps) & update_cor) {
     stop("if there are more individuals than SNPs, update_core must be set to FALSE.")
   }
+  cor_inv <- solve(cor)
 
   assertthat::assert_that(is.numeric(postmean))
   assertthat::assert_that(is.matrix(postmean))
@@ -178,7 +179,10 @@ mupdog <- function(refmat,
 
   ############################################################
 
-  ## Update posterior means, posterior SD, and allele frequencies ----
+  ## Permanent bounds ------------------------------------------------
+  lower_vec <- c(rep(-500, nind), rep(10^-6, nind), 10 ^ -6)
+  upper_vec <- c(rep(500, 2 * nind), 1 - 10^-6)
+
   lbeta_array <- compute_all_log_bb(refmat = refmat,
                                     sizemat = sizemat,
                                     ploidy = ploidy,
@@ -186,7 +190,27 @@ mupdog <- function(refmat,
                                     bias = bias,
                                     od = od)
 
-  ## Update inbreeding coefficients ----------------------------------
+  ## Update posterior means, posterior SD, and allele frequencies -----------------------------------------------
+  ## Can parallelize this and also manually calculate gradients for faster computation
+  ## Consider using optimx package --- but optim seems faster
+  for (index in 1:nsnps) {
+    muSigma2Alpha <- c(postmean[, index], postvar[, index], allele_freq[index])
+
+    oout <- stats::optim(par = muSigma2Alpha, fn = obj_for_mu_wrapper, method = "L-BFGS-B",
+                         control = list(fnscale = -1, maxit = 5), lower = lower_vec, upper = upper_vec,
+                         rho = inbreeding, log_bb_dense = lbeta_array[, index, ], ploidy = ploidy,
+                         cor_inv = cor_inv)
+
+    postmean[, index]  <- oout$par[1:nind]
+    postvar[, index]   <- oout$par[(nind + 1):(2 * nind)]
+    allele_freq[index] <- oout$par[2 * nind + 1]
+  }
+
+  # obj_for_mu(mu = postmean[, index], sigma2 = postvar[, index], alpha = allele_freq[index], rho = inbreeding, log_bb_dense = lbeta_array[, index, ], ploidy = ploidy, cor_inv = cor_inv)
+  # postmean[1, index] <- -0.1
+  # obj_for_mu_wrapper(muSigma2Alpha = c(postmean[, index], postvar[, index], allele_freq[index]), rho = inbreeding, log_bb_dense = lbeta_array[, index, ], ploidy = ploidy, cor_inv = cor_inv)
+
+  ## Update inbreeding coefficients ---------------------------------------------------------------------------------------------
   ## Could parallellize this later
   for (index in 1:nind) {
     oout <- stats::optim(par = inbreeding[index], fn = obj_for_rho, method = "Brent", lower = 0, upper = 1,
