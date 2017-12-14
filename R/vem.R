@@ -179,8 +179,22 @@ mupdog <- function(refmat,
   ############################################################
 
   ## Update posterior means, posterior SD, and allele frequencies ----
+  lbeta_array <- compute_all_log_bb(refmat = refmat,
+                                    sizemat = sizemat,
+                                    ploidy = ploidy,
+                                    seq = seq,
+                                    bias = bias,
+                                    od = od)
 
   ## Update inbreeding coefficients ----------------------------------
+  ## Could parallellize this later
+  for (index in 1:nind) {
+    oout <- stats::optim(par = inbreeding[index], fn = obj_for_rho, method = "Brent", lower = 0, upper = 1,
+                         control = list(fnscale = -1),
+                         mu = postmean[index, ], sigma2 = postvar[index, ], alpha = allele_freq,
+                         log_bb_dense = lbeta_array[index, ,], ploidy = ploidy)
+    inbreeding[index] <- oout$par
+  }
 
   ## Update correlation matrix ---------------------------------------
   if (update_cor) {

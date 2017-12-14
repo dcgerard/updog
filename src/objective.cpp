@@ -84,15 +84,52 @@ arma::Cube<double> compute_all_post_prob(int ploidy,
 
 //' Calculates the log-density for every individual by snp by dosage level.
 //'
-//' @param refmat
+//' @inheritParams mupdog
 //'
 //'
 //'
-// arma::Cube<double> compute_all_log_bb(NumericMatrix refmat, NumericMatrix sizemat,
-// 				      int ploidy, NumericVector eps, NumericVector h, NumericVector tau) {
+// [[Rcpp::export]]
+arma::Cube<double> compute_all_log_bb(NumericMatrix refmat, NumericMatrix sizemat,
+				      int ploidy, NumericVector seq, NumericVector bias, NumericVector od) {
 
-//   return 0;
-// }
+  // Check input ---------------------------------------
+  int nind  = refmat.nrow();
+  int nsnps = refmat.ncol();
+  if (sizemat.nrow() != nind) {
+    Rcpp::stop("sizemat and refmat must have the same dimensions.");
+  }
+  if (sizemat.ncol() != nsnps) {
+    Rcpp::stop("sizemat and refmat must have the same dimensions.");
+  }
+  if (seq.length() != nsnps) {
+    Rcpp::stop("seq must have the same length as the number of SNPs.");
+  }
+  if (bias.length() != nsnps) {
+    Rcpp::stop("bias must have the same length as the number of SNPs.");
+  }
+  if (od.length() != nsnps) {
+    Rcpp::stop("od must have the same length as the number of SNPs.");
+  }
+
+  arma::Cube<double> logbbdense(nind, nsnps, ploidy + 1);
+
+  double xi_current;
+  for (int i = 0; i < nind; i++) {
+    for (int j = 0; j < nsnps; j++) {
+      for (int k = 0; k <= ploidy; k++) {
+	if (R_IsNA(refmat(i, j)) | R_IsNA(sizemat(i, j))) {
+	  logbbdense(i, j, k) = NA_REAL;
+	}
+	else {
+	  xi_current = xi_double((double)k / (double)ploidy, seq(j), bias(j));
+	  logbbdense(i, j, k) = dbetabinom_double(refmat(i, j), sizemat(i, j), xi_current, od(j), true);
+	}
+      }
+    }
+  }
+
+  return logbbdense;
+}
 
 
 //' Penalty on bias parameter.
@@ -144,6 +181,7 @@ double pen_seq_error(double eps, double mu_eps, double sigma2_eps) {
 
 //' Objective function when updating a single inbreeding coefficient.
 //'
+//' @param rho The inbreeding coefficient for the individual.
 //' @param mu A vector of posterior means. The jth element is the
 //'     posterior mean of SNP j for the individual.
 //' @param sigma2 A vector of posterior variances. The jth element
@@ -151,19 +189,46 @@ double pen_seq_error(double eps, double mu_eps, double sigma2_eps) {
 //' @param alpha A vector of allele frequencies. The jth element
 //'     is the allele frequency for SNP j.
 //' @param log_bb_dense A matrix of log posterior densities. The
-//'     rows index the dosage and the columns index the SNPs.
+//'     rows index the SNPs and the columns index the dosage.
 //' @param ploidy The ploidy of the species.
 //'
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
-double obj_for_rho(NumericVector mu,
+double obj_for_rho(double rho,
+		   NumericVector mu,
                    NumericVector sigma2,
                    NumericVector alpha,
                    NumericMatrix log_bb_dense,
                    int ploidy) {
   // check input ---------------------------------------
+  int nsnps = log_bb_dense.nrow();
+  if (log_bb_dense.ncol() != ploidy + 1) {
+    Rcpp::stop("log_bb_dense must have ploidy+1 columns.");
+  }
+  if (mu.length() != nsnps) {
+    Rcpp::stop("mu must have length equal to the number of SNPs");
+  }
+  if (sigma2.length() != nsnps) {
+    Rcpp::stop("sigma2 must have length equal to the number of SNPs");
+  }
+  if (alpha.length() != nsnps) {
+    Rcpp::stop("alpha must have length equal to the number of SNPs");
+  }
 
+  // calculate objective -------------------------------
+  double obj_val = 0.0;
 
-  return 0;
+  double w_current;
+  for (int j = 0; j < nsnps; j++) {
+    for (int k = 0; k <= ploidy; k++) {
+      if (!R_IsNA(log_bb_dense(j, k))) {
+	w_current = post_prob(k, ploidy, mu(j), sigma2(j),
+			      alpha(j), rho);
+	obj_val = obj_val + w_current * log_bb_dense(j, k);
+      }
+    }
+  }
+
+  return obj_val;
 }

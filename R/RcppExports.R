@@ -59,14 +59,6 @@ pbetabinom <- function(q, size, mu, rho, log_p) {
     .Call('_mupdog_pbetabinom', PACKAGE = 'mupdog', q, size, mu, rho, log_p)
 }
 
-#' Calculates the log-density for every individual by snp by dosage level.
-#'
-#' @param refmat
-#'
-#'
-#'
-NULL
-
 #' Variational posterior probability of having \code{dosage} A alleles
 #' when the ploidy is \code{ploidy}, the allele frequency is
 #' \code{alpha}, the individual-specific overdispersion parameter is
@@ -103,6 +95,16 @@ compute_all_post_prob <- function(ploidy, mu, sigma2, alpha, rho) {
     .Call('_mupdog_compute_all_post_prob', PACKAGE = 'mupdog', ploidy, mu, sigma2, alpha, rho)
 }
 
+#' Calculates the log-density for every individual by snp by dosage level.
+#'
+#' @inheritParams mupdog
+#'
+#'
+#'
+compute_all_log_bb <- function(refmat, sizemat, ploidy, seq, bias, od) {
+    .Call('_mupdog_compute_all_log_bb', PACKAGE = 'mupdog', refmat, sizemat, ploidy, seq, bias, od)
+}
+
 #' Penalty on bias parameter.
 #'
 #' @param h The current value of bias parameter. Must be
@@ -131,6 +133,7 @@ pen_seq_error <- function(eps, mu_eps, sigma2_eps) {
 
 #' Objective function when updating a single inbreeding coefficient.
 #'
+#' @param rho The inbreeding coefficient for the individual.
 #' @param mu A vector of posterior means. The jth element is the
 #'     posterior mean of SNP j for the individual.
 #' @param sigma2 A vector of posterior variances. The jth element
@@ -138,13 +141,13 @@ pen_seq_error <- function(eps, mu_eps, sigma2_eps) {
 #' @param alpha A vector of allele frequencies. The jth element
 #'     is the allele frequency for SNP j.
 #' @param log_bb_dense A matrix of log posterior densities. The
-#'     rows index the dosage and the columns index the SNPs.
+#'     rows index the SNPs and the columns index the dosage.
 #' @param ploidy The ploidy of the species.
 #'
 #'
 #' @author David Gerard
-obj_for_rho <- function(mu, sigma2, alpha, log_bb_dense, ploidy) {
-    .Call('_mupdog_obj_for_rho', PACKAGE = 'mupdog', mu, sigma2, alpha, log_bb_dense, ploidy)
+obj_for_rho <- function(rho, mu, sigma2, alpha, log_bb_dense, ploidy) {
+    .Call('_mupdog_obj_for_rho', PACKAGE = 'mupdog', rho, mu, sigma2, alpha, log_bb_dense, ploidy)
 }
 
 #' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.

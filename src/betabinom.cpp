@@ -95,7 +95,7 @@ double dbetabinom_double(int x, int size, double mu, double rho, bool log) {
   else if (rho < TOL) {
     dout = R::dbinom(x, size, mu, log);
   }
-  else if (TOL < 1.0 - rho) {
+  else if (TOL < (1.0 - rho)) {
     double alpha = mu * (1.0 - rho) / rho;
     double beta  = (1.0 - mu) * (1.0 - rho) / rho;
     dout = dbetabinom_alpha_beta_double(x, size, alpha, beta, log);

@@ -4,9 +4,11 @@
 \alias{obj_for_rho}
 \title{Objective function when updating a single inbreeding coefficient.}
 \usage{
-obj_for_rho(mu, sigma2, alpha, log_bb_dense, ploidy)
+obj_for_rho(rho, mu, sigma2, alpha, log_bb_dense, ploidy)
 }
 \arguments{
+\item{rho}{The inbreeding coefficient for the individual.}
+
 \item{mu}{A vector of posterior means. The jth element is the
 posterior mean of SNP j for the individual.}
 
@@ -17,7 +19,7 @@ is the posterior variance of SNP j for the individual.}
 is the allele frequency for SNP j.}
 
 \item{log_bb_dense}{A matrix of log posterior densities. The
-rows index the dosage and the columns index the SNPs.}
+rows index the SNPs and the columns index the dosage.}
 
 \item{ploidy}{The ploidy of the species.}
 }

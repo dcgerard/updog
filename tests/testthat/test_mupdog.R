@@ -13,13 +13,15 @@ test_that("mupdog works", {
                    nrow = nind, ncol = nsnps)
 
   seq <- rep(0.005, length = nsnps)
-  bias <- rep(0, length = nsnps)
+  bias <- rep(1, length = nsnps)
   od <- rep(0.001, length = nsnps)
   allele_freq <- colMeans(refmat / sizemat, na.rm = TRUE)
   inbreeding <- rep(0.001, length = nind)
   cor <- diag(nind)
   postmean <- matrix(0, nrow = nind, ncol = nsnps)
   postvar <- matrix(1, nrow = nind, ncol = nsnps)
+
+  refmat[1,1] <- NA
 
   mupdog(refmat = refmat, sizemat = sizemat, ploidy = 8,
          mean_bias = 0, var_bias = 1, mean_seq = -4.7, var_seq = 1,

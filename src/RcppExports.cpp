@@ -126,6 +126,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// compute_all_log_bb
+arma::Cube<double> compute_all_log_bb(NumericMatrix refmat, NumericMatrix sizemat, int ploidy, NumericVector seq, NumericVector bias, NumericVector od);
+RcppExport SEXP _mupdog_compute_all_log_bb(SEXP refmatSEXP, SEXP sizematSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type refmat(refmatSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type sizemat(sizematSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type bias(biasSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type od(odSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_all_log_bb(refmat, sizemat, ploidy, seq, bias, od));
+    return rcpp_result_gen;
+END_RCPP
+}
 // pen_bias
 double pen_bias(double h, double mu_h, double sigma2_h);
 RcppExport SEXP _mupdog_pen_bias(SEXP hSEXP, SEXP mu_hSEXP, SEXP sigma2_hSEXP) {
@@ -153,17 +169,18 @@ BEGIN_RCPP
 END_RCPP
 }
 // obj_for_rho
-double obj_for_rho(NumericVector mu, NumericVector sigma2, NumericVector alpha, NumericMatrix log_bb_dense, int ploidy);
-RcppExport SEXP _mupdog_obj_for_rho(SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP log_bb_denseSEXP, SEXP ploidySEXP) {
+double obj_for_rho(double rho, NumericVector mu, NumericVector sigma2, NumericVector alpha, NumericMatrix log_bb_dense, int ploidy);
+RcppExport SEXP _mupdog_obj_for_rho(SEXP rhoSEXP, SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP log_bb_denseSEXP, SEXP ploidySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type rho(rhoSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type mu(muSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type sigma2(sigma2SEXP);
     Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type log_bb_dense(log_bb_denseSEXP);
     Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
-    rcpp_result_gen = Rcpp::wrap(obj_for_rho(mu, sigma2, alpha, log_bb_dense, ploidy));
+    rcpp_result_gen = Rcpp::wrap(obj_for_rho(rho, mu, sigma2, alpha, log_bb_dense, ploidy));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -260,9 +277,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_pbetabinom", (DL_FUNC) &_mupdog_pbetabinom, 5},
     {"_mupdog_post_prob", (DL_FUNC) &_mupdog_post_prob, 6},
     {"_mupdog_compute_all_post_prob", (DL_FUNC) &_mupdog_compute_all_post_prob, 5},
+    {"_mupdog_compute_all_log_bb", (DL_FUNC) &_mupdog_compute_all_log_bb, 6},
     {"_mupdog_pen_bias", (DL_FUNC) &_mupdog_pen_bias, 3},
     {"_mupdog_pen_seq_error", (DL_FUNC) &_mupdog_pen_seq_error, 3},
-    {"_mupdog_obj_for_rho", (DL_FUNC) &_mupdog_obj_for_rho, 5},
+    {"_mupdog_obj_for_rho", (DL_FUNC) &_mupdog_obj_for_rho, 6},
     {"_mupdog_eta_double", (DL_FUNC) &_mupdog_eta_double, 2},
     {"_mupdog_eta_fun", (DL_FUNC) &_mupdog_eta_fun, 2},
     {"_mupdog_xi_double", (DL_FUNC) &_mupdog_xi_double, 3},
