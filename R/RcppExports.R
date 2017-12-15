@@ -183,6 +183,46 @@ obj_for_mu_wrapper <- function(muSigma2Alpha, rho, log_bb_dense, ploidy, cor_inv
     .Call('_mupdog_obj_for_mu_wrapper', PACKAGE = 'mupdog', muSigma2Alpha, rho, log_bb_dense, ploidy, cor_inv)
 }
 
+#' Objective function for updating sequencing error rate, bias, and overdispersion parameters.
+#'
+#' @param parvec A vector of length three. The first element is the sequencing
+#'     error rate, the second element is the allele bias, and the third element
+#'     is the overdispersion parameter.
+#' @param refvec A vector. The ith element is the reference count for the ith individual in the SNP.
+#' @param sizevec A vector. the ith element is the size count for the ith individual in the SNP/
+#' @param ploidy The ploidy of the species.
+#' @param mean_bias The prior mean of the log-bias.
+#' @param var_bias The prior variance of the log-bias
+#' @param mean_seq The prior mean of the logit sequencing error rate.
+#' @param var_seq The prior variance of the logit sequencing error rate.
+#' @param wmat The matrix of variational posterior probabilities for each dosage.
+#'     The rows index the individuals and the columns index the dosage levels.
+#'
+#' @author David Gerard
+obj_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat) {
+    .Call('_mupdog_obj_for_eps', PACKAGE = 'mupdog', parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat)
+}
+
+#' The evidence lower bound
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+elbo <- function(warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mean_bias, var_bias, mean_seq, var_seq, ploidy) {
+    .Call('_mupdog_elbo', PACKAGE = 'mupdog', warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mean_bias, var_bias, mean_seq, var_seq, ploidy)
+}
+
 #' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
 #'
 #' @param p The allele dosage.

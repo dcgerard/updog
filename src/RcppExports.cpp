@@ -216,6 +216,47 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// obj_for_eps
+double obj_for_eps(NumericVector parvec, NumericVector refvec, NumericVector sizevec, int ploidy, double mean_bias, double var_bias, double mean_seq, double var_seq, NumericMatrix wmat);
+RcppExport SEXP _mupdog_obj_for_eps(SEXP parvecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP wmatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type parvec(parvecSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type refvec(refvecSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type sizevec(sizevecSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< double >::type mean_bias(mean_biasSEXP);
+    Rcpp::traits::input_parameter< double >::type var_bias(var_biasSEXP);
+    Rcpp::traits::input_parameter< double >::type mean_seq(mean_seqSEXP);
+    Rcpp::traits::input_parameter< double >::type var_seq(var_seqSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type wmat(wmatSEXP);
+    rcpp_result_gen = Rcpp::wrap(obj_for_eps(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat));
+    return rcpp_result_gen;
+END_RCPP
+}
+// elbo
+double elbo(arma::Cube<double> warray, arma::Cube<double> lbeta_array, arma::Mat<double> cor_inv, arma::Mat<double> postmean, arma::Mat<double> postvar, NumericVector bias, NumericVector seq, double mean_bias, double var_bias, double mean_seq, double var_seq, int ploidy);
+RcppExport SEXP _mupdog_elbo(SEXP warraySEXP, SEXP lbeta_arraySEXP, SEXP cor_invSEXP, SEXP postmeanSEXP, SEXP postvarSEXP, SEXP biasSEXP, SEXP seqSEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP ploidySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::Cube<double> >::type warray(warraySEXP);
+    Rcpp::traits::input_parameter< arma::Cube<double> >::type lbeta_array(lbeta_arraySEXP);
+    Rcpp::traits::input_parameter< arma::Mat<double> >::type cor_inv(cor_invSEXP);
+    Rcpp::traits::input_parameter< arma::Mat<double> >::type postmean(postmeanSEXP);
+    Rcpp::traits::input_parameter< arma::Mat<double> >::type postvar(postvarSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type bias(biasSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< double >::type mean_bias(mean_biasSEXP);
+    Rcpp::traits::input_parameter< double >::type var_bias(var_biasSEXP);
+    Rcpp::traits::input_parameter< double >::type mean_seq(mean_seqSEXP);
+    Rcpp::traits::input_parameter< double >::type var_seq(var_seqSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    rcpp_result_gen = Rcpp::wrap(elbo(warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mean_bias, var_bias, mean_seq, var_seq, ploidy));
+    return rcpp_result_gen;
+END_RCPP
+}
 // eta_double
 double eta_double(double p, double eps);
 RcppExport SEXP _mupdog_eta_double(SEXP pSEXP, SEXP epsSEXP) {
@@ -315,6 +356,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_obj_for_rho", (DL_FUNC) &_mupdog_obj_for_rho, 6},
     {"_mupdog_obj_for_mu", (DL_FUNC) &_mupdog_obj_for_mu, 7},
     {"_mupdog_obj_for_mu_wrapper", (DL_FUNC) &_mupdog_obj_for_mu_wrapper, 5},
+    {"_mupdog_obj_for_eps", (DL_FUNC) &_mupdog_obj_for_eps, 9},
+    {"_mupdog_elbo", (DL_FUNC) &_mupdog_elbo, 12},
     {"_mupdog_eta_double", (DL_FUNC) &_mupdog_eta_double, 2},
     {"_mupdog_eta_fun", (DL_FUNC) &_mupdog_eta_fun, 2},
     {"_mupdog_xi_double", (DL_FUNC) &_mupdog_xi_double, 3},

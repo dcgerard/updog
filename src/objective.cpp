@@ -305,7 +305,7 @@ double obj_for_mu(arma::Col<double> mu,
   // Multivariate normal prior integral -------------------------------------
   arma::Mat<double> muRmu = mu.t() * cor_inv * mu;
   arma::Mat<double> trRsigma2 = arma::diagvec(cor_inv).t() * sigma2;
-  obj_val = obj_val - muRmu(0, 0) / 2.0 - trRsigma2(0, 0) / 2.0 + arma::sum(arma::log(sigma2)) / 2.0;
+  obj_val = obj_val - muRmu(0, 0) / 2.0 - trRsigma2(0, 0) / 2.0 + arma::accu(arma::log(sigma2)) / 2.0;
 
   return obj_val;
 }
@@ -358,4 +358,141 @@ double obj_for_mu_wrapper(arma::Col<double> muSigma2Alpha,
   // Rcpp::Rcout << obj_val << std::endl;
 
   return obj_val;
+}
+
+
+//' Objective function for updating sequencing error rate, bias, and overdispersion parameters.
+//'
+//' @param parvec A vector of length three. The first element is the sequencing
+//'     error rate, the second element is the allele bias, and the third element
+//'     is the overdispersion parameter.
+//' @param refvec A vector. The ith element is the reference count for the ith individual in the SNP.
+//' @param sizevec A vector. the ith element is the size count for the ith individual in the SNP/
+//' @param ploidy The ploidy of the species.
+//' @param mean_bias The prior mean of the log-bias.
+//' @param var_bias The prior variance of the log-bias
+//' @param mean_seq The prior mean of the logit sequencing error rate.
+//' @param var_seq The prior variance of the logit sequencing error rate.
+//' @param wmat The matrix of variational posterior probabilities for each dosage.
+//'     The rows index the individuals and the columns index the dosage levels.
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double obj_for_eps(NumericVector parvec,
+		   NumericVector refvec,
+		   NumericVector sizevec,
+		   int ploidy,
+		   double mean_bias,
+		   double var_bias,
+		   double mean_seq,
+		   double var_seq,
+		   NumericMatrix wmat) {
+  // Check input -------------------------------------------------------
+  int nind = wmat.nrow();
+
+  if (parvec.length() != 3) {
+    Rcpp::Rcout << parvec.length();
+    Rcpp::stop("obj_for_eps: parvec must have length 3.");
+  }
+  if (refvec.length() != nind) {
+    Rcpp::Rcout << refvec.length();
+    Rcpp::stop("obj_for_eps: refvec needs to have the same length as the number of individuals.");
+  }
+  if (sizevec.length() != nind) {
+    Rcpp::Rcout << sizevec.length();
+    Rcpp::stop("obj_for_eps: sizevec needs to have the same length as the number of individuals.");
+  }
+  if (wmat.ncol() != ploidy + 1) {
+    Rcpp::Rcout << wmat.ncol();
+    Rcpp::stop("obj_for_eps: wmat needs to have ploidy+1 columns.");
+  }
+
+  double eps = parvec(0);
+  double h   = parvec(1);
+  double tau = parvec(2);
+  double xi_current;
+  double obj_val = 0.0;
+
+  for (int i = 0; i < nind; i++) {
+    for (int k = 0; k <= ploidy; k++) {
+      if (!R_IsNA(refvec(i)) & !R_IsNA(sizevec(i))) {
+	xi_current = xi_double((double)k / (double)ploidy, eps, h);
+	obj_val = obj_val + wmat(i, k) * dbetabinom_double(refvec(i), sizevec(i), xi_current, tau, true);
+      }
+    }
+  }
+
+  obj_val = obj_val + pen_bias(h, mean_bias, var_bias) + pen_seq_error(eps, mean_seq, var_seq);
+
+  if (obj_val == R_NegInf) {
+    Rcpp::Rcout << obj_val << std::endl;
+    Rcpp::Rcout << parvec << std::endl;
+  }
+
+  return obj_val;
+}
+
+
+//' The evidence lower bound
+//'
+//'
+//'
+//'
+//'
+//'
+//'
+//'
+//'
+//'
+//'
+//'
+//'
+//'
+//'
+// [[Rcpp::export]]
+double elbo(arma::Cube<double> warray, arma::Cube<double> lbeta_array,
+	    arma::Mat<double> cor_inv, arma::Mat<double> postmean,
+	    arma::Mat<double> postvar,
+	    NumericVector bias, NumericVector seq, double mean_bias,
+	    double var_bias, double mean_seq, double var_seq, int ploidy) {
+  // Check input -------------------------------------------------------
+  int nsnps = warray.n_cols;
+  int nind  = warray.n_rows;
+
+  double obj_val = 0.0;
+
+  // From likelihood
+  for (int i = 0; i < nind; i++) {
+    for (int j = 0; j < nsnps; j++) {
+      for (int k = 0; k <= ploidy; k++) {
+	if (!R_IsNA(lbeta_array(i, j, k))) {
+	  obj_val = obj_val + warray(i, j, k) * lbeta_array(i, j, k);
+	}
+      }
+    }
+  }
+
+  // From prior
+  obj_val = obj_val + arma::log_det(cor_inv).real() * (double)nsnps / 2.0; // add rather than subtract because using inverse correlation matrix.
+  obj_val = obj_val + arma::accu(arma::log(postvar)) / 2.0;
+
+  arma::Col<double> diag_cor_inv = diagvec(cor_inv);
+
+  double mu_cont;
+  double var_cont;
+  for (int j = 0; j < nsnps; j++) {
+    mu_cont = arma::accu(postmean.col(j).t() * cor_inv * postmean.col(j));
+    var_cont = arma::accu(diag_cor_inv % postvar.col(j));
+    obj_val = obj_val - mu_cont / 2.0 - var_cont / 2.0;
+  }
+
+  // from penalties
+
+  for (int j = 0; j < nsnps; j++) {
+    obj_val = obj_val + pen_bias(bias(j), mean_bias, var_bias);
+    obj_val = obj_val + pen_seq_error(seq(j), mean_seq, var_seq);
+  }
+
+  return(obj_val);
+
 }

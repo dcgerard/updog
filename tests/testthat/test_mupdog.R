@@ -23,14 +23,14 @@ test_that("mupdog works", {
 
   refmat[1,1] <- NA
 
-  mupdog(refmat = refmat, sizemat = sizemat, ploidy = 8,
-         mean_bias = 0, var_bias = 1, mean_seq = -4.7, var_seq = 1,
-         seq = seq, bias = bias, od = od,
-         allele_freq = allele_freq,
-         inbreeding = inbreeding,
-         cor = cor,
-         postmean = postmean,
-         postvar = postvar)
+  # mupdog(refmat = refmat, sizemat = sizemat, ploidy = 8,
+  #        mean_bias = 0, var_bias = 1, mean_seq = -4.7, var_seq = 1,
+  #        seq = seq, bias = bias, od = od,
+  #        allele_freq = allele_freq,
+  #        inbreeding = inbreeding,
+  #        cor = cor,
+  #        postmean = postmean,
+  #        postvar = postvar)
 
   warray <- compute_all_post_prob(ploidy = 8, mu = postmean,
                                   sigma2 = postvar,

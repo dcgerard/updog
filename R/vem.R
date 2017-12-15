@@ -40,7 +40,7 @@
 #'     inbreeding coefficients.
 #'     Should be the same length as the number of rows of
 #'     \code{refmat} (number of individuals).
-#' @param cor Initial correlation matrix. Should have the same
+#' @param cor_mat Initial correlation matrix. Should have the same
 #'     number of columns/rows as the number of individuals.
 #' @param postmean Initial variational posterior means. Should
 #'     have the same dimensions as \code{refmat}.
@@ -56,16 +56,16 @@
 mupdog <- function(refmat,
                    sizemat,
                    ploidy,
-                   mean_bias        = 0,
-                   var_bias         = 1,
-                   mean_seq         = -4.7,
-                   var_seq          = 1,
+                   mean_bias   = 0,
+                   var_bias    = 1,
+                   mean_seq    = -4.7,
+                   var_seq     = 1,
                    seq         = NULL,
                    bias        = NULL,
                    od          = NULL,
                    allele_freq = NULL,
                    inbreeding  = NULL,
-                   cor         = NULL,
+                   cor_mat     = NULL,
                    postmean    = NULL,
                    postvar     = NULL,
                    update_cor       = TRUE) {
@@ -102,8 +102,8 @@ mupdog <- function(refmat,
   if (is.null(inbreeding)) {
     inbreeding <- rep(0, length = nind)
   }
-  if (is.null(cor)) {
-    cor <- diag(nind)
+  if (is.null(cor_mat)) {
+    cor_mat <- diag(nind)
   }
   if (is.null(postmean)) {
     postmean <- matrix(0, nrow = nind, ncol = nsnps)
@@ -154,19 +154,19 @@ mupdog <- function(refmat,
   assertthat::assert_that(all(inbreeding >= 0))
   assertthat::assert_that(all(inbreeding <= 1))
 
-  assertthat::assert_that(is.numeric(cor))
-  assertthat::assert_that(is.matrix(cor))
-  assertthat::are_equal(nrow(cor), nind)
-  assertthat::are_equal(ncol(cor), nind)
-  assertthat::assert_that(all(cor >= 0))
-  assertthat::assert_that(all(cor <= 1))
-  assertthat::assert_that(all(diag(cor) == 1))
-  eigen_decomposition <- eigen(cor, only.values = TRUE)
+  assertthat::assert_that(is.numeric(cor_mat))
+  assertthat::assert_that(is.matrix(cor_mat))
+  assertthat::are_equal(nrow(cor_mat), nind)
+  assertthat::are_equal(ncol(cor_mat), nind)
+  assertthat::assert_that(all(cor_mat >= 0))
+  assertthat::assert_that(all(cor_mat <= 1))
+  assertthat::assert_that(all(diag(cor_mat) == 1))
+  eigen_decomposition <- eigen(cor_mat, only.values = TRUE)
   assertthat::assert_that(all(eigen_decomposition$values > 0))
   if ((nind > nsnps) & update_cor) {
     stop("if there are more individuals than SNPs, update_core must be set to FALSE.")
   }
-  cor_inv <- solve(cor)
+  cor_inv <- solve(cor_mat)
 
   assertthat::assert_that(is.numeric(postmean))
   assertthat::assert_that(is.matrix(postmean))
@@ -183,6 +183,7 @@ mupdog <- function(refmat,
   lower_vec <- c(rep(-500, nind), rep(10^-6, nind), 10 ^ -6)
   upper_vec <- c(rep(500, 2 * nind), 1 - 10^-6)
 
+  ## first log-beta array
   lbeta_array <- compute_all_log_bb(refmat = refmat,
                                     sizemat = sizemat,
                                     ploidy = ploidy,
@@ -190,56 +191,96 @@ mupdog <- function(refmat,
                                     bias = bias,
                                     od = od)
 
-  ## Update posterior means, posterior SD, and allele frequencies -----------------------------------------------
-  ## Can parallelize this and also manually calculate gradients for faster computation
-  ## Consider using optimx package --- but optim seems faster
-  for (index in 1:nsnps) {
-    muSigma2Alpha <- c(postmean[, index], postvar[, index], allele_freq[index])
 
-    oout <- stats::optim(par = muSigma2Alpha, fn = obj_for_mu_wrapper, method = "L-BFGS-B",
-                         control = list(fnscale = -1, maxit = 5), lower = lower_vec, upper = upper_vec,
-                         rho = inbreeding, log_bb_dense = lbeta_array[, index, ], ploidy = ploidy,
-                         cor_inv = cor_inv)
+  itermax <- 100
+  obj <- -Inf
+  iter <- 1
+  err <- Inf
+  obj_tol <- 0.01
+  while (iter < itermax & err > obj_tol) {
+    obj_old <- obj
+    ## Update posterior means, posterior SD, and allele frequencies -----------------------------------------------
+    ## Can parallelize this and also manually calculate gradients for faster computation
+    ## Consider using optimx package --- but optim seems faster
+    for (index in 1:nsnps) {
+      muSigma2Alpha <- c(postmean[, index], postvar[, index], allele_freq[index])
 
-    postmean[, index]  <- oout$par[1:nind]
-    postvar[, index]   <- oout$par[(nind + 1):(2 * nind)]
-    allele_freq[index] <- oout$par[2 * nind + 1]
+      oout <- stats::optim(par = muSigma2Alpha, fn = obj_for_mu_wrapper, method = "L-BFGS-B",
+                           control = list(fnscale = -1, maxit = 5), lower = lower_vec, upper = upper_vec,
+                           rho = inbreeding, log_bb_dense = lbeta_array[, index, ], ploidy = ploidy,
+                           cor_inv = cor_inv)
+
+      postmean[, index]  <- oout$par[1:nind]
+      postvar[, index]   <- oout$par[(nind + 1):(2 * nind)]
+      allele_freq[index] <- oout$par[2 * nind + 1]
+    }
+
+    # obj_for_mu(mu = postmean[, index], sigma2 = postvar[, index], alpha = allele_freq[index], rho = inbreeding, log_bb_dense = lbeta_array[, index, ], ploidy = ploidy, cor_inv = cor_inv)
+    # obj_for_mu_wrapper(muSigma2Alpha = c(postmean[, index], postvar[, index], allele_freq[index]), rho = inbreeding, log_bb_dense = lbeta_array[, index, ], ploidy = ploidy, cor_inv = cor_inv)
+
+    ## Update inbreeding coefficients ---------------------------------------------------------------------------------------------
+    ## Could parallellize this later
+    for (index in 1:nind) {
+      oout <- stats::optim(par = inbreeding[index], fn = obj_for_rho, method = "Brent", lower = 0, upper = 1,
+                           control = list(fnscale = -1, maxit = 10),
+                           mu = postmean[index, ], sigma2 = postvar[index, ], alpha = allele_freq,
+                           log_bb_dense = lbeta_array[index, ,], ploidy = ploidy)
+      inbreeding[index] <- oout$par
+    }
+
+    ## Update correlation matrix ---------------------------------------
+    if (update_cor) {
+      cor_mat <- update_R(postmean = postmean, postvar = postvar)
+      cor_inv <- solve(cor_mat)
+    }
+
+    ## Update sequencing error rate, bias, and overdispersion ----------------------------------------------------------------------
+    ## can optimize this by actually calculating gradient and parallellizing -------------------------------------------------------
+    warray <- compute_all_post_prob(ploidy = ploidy,
+                                    mu = postmean,
+                                    sigma2 = postvar,
+                                    alpha = allele_freq,
+                                    rho = inbreeding)
+
+    for (index in 1:nsnps) {
+      oout <- stats::optim(par = c(seq[index], bias[index], od[index]), fn = obj_for_eps,
+                           method = "L-BFGS-B", lower = rep(10^-6, 3), upper = c(1 - 10^-6, Inf, 1 - 10^-6),
+                           control = list(fnscale = -1, maxit = 10),
+                           refvec = refmat[, index], sizevec = sizemat[, index], ploidy = ploidy, mean_bias = mean_bias,
+                           var_bias = var_bias, mean_seq = mean_seq, var_seq = var_seq, wmat = warray[, index, ])
+      seq[index]  <- oout$par[1]
+      bias[index] <- oout$par[2]
+      od[index]   <- oout$par[3]
+    }
+    obj_for_eps(parvec = rep(10 ^ -6, 3),
+                refvec = refmat[, index], sizevec = sizemat[, index], ploidy = ploidy, mean_bias = mean_bias,
+                var_bias = var_bias, mean_seq = mean_seq, var_seq = var_seq, wmat = warray[, index, ])
+
+    lbeta_array <- compute_all_log_bb(refmat = refmat,
+                                      sizemat = sizemat,
+                                      ploidy = ploidy,
+                                      seq = seq,
+                                      bias = bias,
+                                      od = od)
+
+    ## Calculate objective ---------------------------------------------------------------------------------------------------------
+    obj <- elbo(warray = warray, lbeta_array = lbeta_array, cor_inv = cor_inv,
+                postmean = postmean, postvar = postvar, bias = bias,
+                seq = seq, mean_bias = mean_bias, var_bias = var_bias,
+                mean_seq = mean_seq, var_seq = var_seq, ploidy = ploidy)
+
+    ## stopping criteria -----------------------------------------------------------------------------------------------------------
+    iter <- iter + 1
+    err <- abs(obj_old / obj) - 1
+
+    cat(" iteration:", iter, "\n",
+        "objective:", obj, "\n",
+        "      err:", err, "\n")
   }
 
-  # obj_for_mu(mu = postmean[, index], sigma2 = postvar[, index], alpha = allele_freq[index], rho = inbreeding, log_bb_dense = lbeta_array[, index, ], ploidy = ploidy, cor_inv = cor_inv)
-  # postmean[1, index] <- -0.1
-  # obj_for_mu_wrapper(muSigma2Alpha = c(postmean[, index], postvar[, index], allele_freq[index]), rho = inbreeding, log_bb_dense = lbeta_array[, index, ], ploidy = ploidy, cor_inv = cor_inv)
+  map_dosage <- apply(warray, c(1, 2), which.max) - 1
 
-  ## Update inbreeding coefficients ---------------------------------------------------------------------------------------------
-  ## Could parallellize this later
-  for (index in 1:nind) {
-    oout <- stats::optim(par = inbreeding[index], fn = obj_for_rho, method = "Brent", lower = 0, upper = 1,
-                         control = list(fnscale = -1),
-                         mu = postmean[index, ], sigma2 = postvar[index, ], alpha = allele_freq,
-                         log_bb_dense = lbeta_array[index, ,], ploidy = ploidy)
-    inbreeding[index] <- oout$par
-  }
-
-  ## Update correlation matrix ---------------------------------------
-  if (update_cor) {
-    cor_mat <- update_R(postmean = postmean, postvar = postvar)
-  }
-
-  ## Update sequencing error rate, bias, and overdispersion ----------
-  warray <- compute_all_post_prob(ploidy = ploidy,
-                                  mu = postmean,
-                                  sigma2 = postvar,
-                                  alpha = allele_freq,
-                                  rho = inbreeding)
-
-
-
-
-
-
-
-
-
+  return(list(map_dosage = map_dosage, postprob = warray))
 }
 
 #' Update the underlying correlation matrix.

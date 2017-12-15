@@ -9,8 +9,8 @@
 \usage{
 mupdog(refmat, sizemat, ploidy, mean_bias = 0, var_bias = 1,
   mean_seq = -4.7, var_seq = 1, seq = NULL, bias = NULL, od = NULL,
-  allele_freq = NULL, inbreeding = NULL, cor = NULL, postmean = NULL,
-  postvar = NULL, update_cor = TRUE)
+  allele_freq = NULL, inbreeding = NULL, cor_mat = NULL,
+  postmean = NULL, postvar = NULL, update_cor = TRUE)
 }
 \arguments{
 \item{refmat}{A matrix of reference counts.
@@ -63,7 +63,7 @@ inbreeding coefficients.
 Should be the same length as the number of rows of
 \code{refmat} (number of individuals).}
 
-\item{cor}{Initial correlation matrix. Should have the same
+\item{cor_mat}{Initial correlation matrix. Should have the same
 number of columns/rows as the number of individuals.}
 
 \item{postmean}{Initial variational posterior means. Should
