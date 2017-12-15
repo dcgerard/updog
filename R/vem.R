@@ -50,6 +50,8 @@
 #'     correlation matrix \code{TRUE} or not \code{FALSE}. Will throw
 #'     an error if there are more individuals than SNPs and set to
 #'     \code{TRUE}.
+#' @param update_inbreeding A logical. Should we update the inbreeding coefficients \code{TRUE}
+#'     or not \code{FALSE}?
 #' @param verbose Should we print a lot of output \code{TRUE} or not \code{FALSE}?
 #' @param control A list of control paramters (\code{itermax}, \code{obj_tol}).
 #'
@@ -73,6 +75,7 @@ mupdog <- function(refmat,
                    postmean    = NULL,
                    postvar     = NULL,
                    update_cor  = TRUE,
+                   update_inbreeding = TRUE,
                    control = list()) {
 
   ##########################################################
@@ -247,17 +250,20 @@ mupdog <- function(refmat,
 
     ## Update inbreeding coefficients ---------------------------------------------------------------------------------------------
     ## Could parallellize this later
-    if (verbose) {
-      cat("Done updating postmean, postvar, and allele_freq.\n",
-          "Updating inbreeding.\n")
+    if (update_inbreeding) {
+      if (verbose) {
+        cat("Done updating postmean, postvar, and allele_freq.\n",
+            "Updating inbreeding.\n")
+      }
+      for (index in 1:nind) {
+        oout <- stats::optim(par = inbreeding[index], fn = obj_for_rho, method = "Brent", lower = 0, upper = 1,
+                             control = list(fnscale = -1, maxit = 10),
+                             mu = postmean[index, ], sigma2 = postvar[index, ], alpha = allele_freq,
+                             log_bb_dense = lbeta_array[index, ,], ploidy = ploidy)
+        inbreeding[index] <- oout$par
+      }
     }
-    for (index in 1:nind) {
-      oout <- stats::optim(par = inbreeding[index], fn = obj_for_rho, method = "Brent", lower = 0, upper = 1,
-                           control = list(fnscale = -1, maxit = 10),
-                           mu = postmean[index, ], sigma2 = postvar[index, ], alpha = allele_freq,
-                           log_bb_dense = lbeta_array[index, ,], ploidy = ploidy)
-      inbreeding[index] <- oout$par
-    }
+
 
     ## Update correlation matrix ---------------------------------------
     if (update_cor) {
