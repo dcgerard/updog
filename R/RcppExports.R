@@ -205,20 +205,26 @@ obj_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, me
 
 #' The evidence lower bound
 #'
+#' @param warray An three-way array. The (i,j,k)th entry is the variational posterior probability
+#'     that individual i at SNP j has dosage k - 1. See \code{\link{compute_all_post_prob}}.
+#' @param lbeta_array A three-way array. The (i,j,k)th entry is the log-density of the betabinomial
+#'     for individual i at SNP j and dosage k - 1. See \code{\link{compute_all_log_bb}}.
+#' @param cor_inv The inverse of the correlation matrix.
+#' @param postmean A matrix. The (i,j)th entry is the variational posterior mean for individual i
+#'     at SNP j.
+#' @param postvar A matrix. The (i,j)th entry is the variational posterior variance for individual i at SNP j.
+#' @param bias A vector. The jth entry is the allele bias for SNP j.
+#' @param seq A vector. The jth entry is the sequencing error rate at SNP j.
+#' @param mean_bias The prior mean on the log-bias.
+#' @param var_bias The prior variance on the log-bias.
+#' @param mean_seq The prior mean on the logit of the sequencing error rate.
+#' @param var_seq The prior variance on the logit of the sequencing error rate.
+#' @param ploidy The ploidy of the species.
 #'
 #'
 #'
 #'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
+#' @author David Gerard
 elbo <- function(warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mean_bias, var_bias, mean_seq, var_seq, ploidy) {
     .Call('_mupdog_elbo', PACKAGE = 'mupdog', warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mean_bias, var_bias, mean_seq, var_seq, ploidy)
 }

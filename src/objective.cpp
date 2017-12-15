@@ -275,9 +275,11 @@ double obj_for_mu(arma::Col<double> mu,
     Rcpp::stop("obj_for_mu: log_bb_dense must have ploidy+1 columns.");
   }
   if (mu.n_elem != nind) {
+    Rcpp::Rcout << mu.n_elem << std::endl;
     Rcpp::stop("obj_for_mu: mu must have length equal to the number of individuals.");
   }
   if (sigma2.n_elem != nind) {
+    Rcpp::Rcout << sigma2.n_elem << std::endl;
     Rcpp::stop("obj_for_mu: sigma2 must have length equal to the number of individuals.");
   }
   if (rho.length() != nind) {
@@ -301,6 +303,9 @@ double obj_for_mu(arma::Col<double> mu,
        }
     }
   }
+
+  // Rcpp::Rcout << sigma2(10) << std::endl << std::endl;
+
 
   // Multivariate normal prior integral -------------------------------------
   arma::Mat<double> muRmu = mu.t() * cor_inv * mu;
@@ -343,15 +348,19 @@ double obj_for_mu_wrapper(arma::Col<double> muSigma2Alpha,
     mu(i) = muSigma2Alpha(i);
   }
   for (int i = nsnps; i < (2 * nsnps); i++) {
-    sigma2(i - nsnps) = muSigma2Alpha(nsnps);
+    sigma2(i - nsnps) = muSigma2Alpha(i);
   }
   alpha = muSigma2Alpha(2 * nsnps);
+
+  // Rcpp::Rcout << mu.t() << std::endl << sigma2.t() << std::endl;
 
   // Rcpp::Rcout << alpha << std::endl;
   // if (alpha < 0) {
   //   Rcpp::Rcout << mu.t() << std::endl << sigma2.t() << std::endl;
   // }
 
+  // Rcpp::Rcout << muSigma2Alpha(nsnps + 10 - 1) << std::endl;
+  // Rcpp::Rcout << sigma2(10) << std::endl;
 
   double obj_val = obj_for_mu(mu, sigma2, alpha, rho, log_bb_dense, ploidy, cor_inv);
 
@@ -435,20 +444,26 @@ double obj_for_eps(NumericVector parvec,
 
 //' The evidence lower bound
 //'
+//' @param warray An three-way array. The (i,j,k)th entry is the variational posterior probability
+//'     that individual i at SNP j has dosage k - 1. See \code{\link{compute_all_post_prob}}.
+//' @param lbeta_array A three-way array. The (i,j,k)th entry is the log-density of the betabinomial
+//'     for individual i at SNP j and dosage k - 1. See \code{\link{compute_all_log_bb}}.
+//' @param cor_inv The inverse of the correlation matrix.
+//' @param postmean A matrix. The (i,j)th entry is the variational posterior mean for individual i
+//'     at SNP j.
+//' @param postvar A matrix. The (i,j)th entry is the variational posterior variance for individual i at SNP j.
+//' @param bias A vector. The jth entry is the allele bias for SNP j.
+//' @param seq A vector. The jth entry is the sequencing error rate at SNP j.
+//' @param mean_bias The prior mean on the log-bias.
+//' @param var_bias The prior variance on the log-bias.
+//' @param mean_seq The prior mean on the logit of the sequencing error rate.
+//' @param var_seq The prior variance on the logit of the sequencing error rate.
+//' @param ploidy The ploidy of the species.
 //'
 //'
 //'
 //'
-//'
-//'
-//'
-//'
-//'
-//'
-//'
-//'
-//'
-//'
+//' @author David Gerard
 // [[Rcpp::export]]
 double elbo(arma::Cube<double> warray, arma::Cube<double> lbeta_array,
 	    arma::Mat<double> cor_inv, arma::Mat<double> postmean,
@@ -458,6 +473,50 @@ double elbo(arma::Cube<double> warray, arma::Cube<double> lbeta_array,
   // Check input -------------------------------------------------------
   int nsnps = warray.n_cols;
   int nind  = warray.n_rows;
+  if (lbeta_array.n_cols != nsnps) {
+    Rcpp::stop("elbo: lbeta_array must have the same dimension as warray");
+  }
+  if (lbeta_array.n_rows != nind) {
+    Rcpp::stop("elbo: lbeta_array must have the same dimension as warray");
+  }
+  if (lbeta_array.n_slices != (ploidy + 1)) {
+    Rcpp::stop("elbo: lbeta_array must have third-dimension ploidy+1.");
+  }
+  if (warray.n_slices != (ploidy + 1)) {
+    Rcpp::stop("elbo: warray must have third-dimension ploidy+1.");
+  }
+  if (cor_inv.n_rows != nind) {
+    Rcpp::stop("elbo: cor_inv must have the number of rows equal to the number of individuals.");
+  }
+  if (cor_inv.n_cols != nind) {
+    Rcpp::stop("elbo: cor_inv must have the number of columns equal to the number of individuals.");
+  }
+  if (postmean.n_rows != nind) {
+    Rcpp::stop("elbo: postmean must have the number of rows equal to the number of individuals.");
+  }
+  if (postmean.n_cols != nsnps) {
+    Rcpp::stop("elbo: postmean must have the number of columns equal to the number of SNPs.");
+  }
+  if (postvar.n_rows != nind) {
+    Rcpp::stop("elbo: postvar must have the number of rows equal to the number of individuals.");
+  }
+  if (postvar.n_cols != nsnps) {
+    Rcpp::stop("elbo: postvar must have the number of columns equal to the number of SNPs.");
+  }
+  if (bias.length() != nsnps) {
+    Rcpp::stop("elbo: bias must have number of elements equal to the number of SNPs.");
+  }
+  if (seq.length() != nsnps) {
+    Rcpp::stop("elbo: seq must have number of elements equal to the number of SNPs.");
+  }
+  if (var_bias < 0) {
+    Rcpp::stop("elbo: var_bais must be greater than 0.");
+  }
+  if (var_seq < 0) {
+    Rcpp::stop("elbo: var_seq must be greater than 0.");
+  }
+
+  // Objective Function ---------------------------------------------------------------
 
   double obj_val = 0.0;
 

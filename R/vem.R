@@ -50,12 +50,16 @@
 #'     correlation matrix \code{TRUE} or not \code{FALSE}. Will throw
 #'     an error if there are more individuals than SNPs and set to
 #'     \code{TRUE}.
+#' @param verbose Should we print a lot of output \code{TRUE} or not \code{FALSE}?
+#' @param control A list of control paramters (\code{itermax}, \code{obj_tol}).
 #'
+#' @export
 #'
 #' @author David Gerard
 mupdog <- function(refmat,
                    sizemat,
                    ploidy,
+                   verbose     = TRUE,
                    mean_bias   = 0,
                    var_bias    = 1,
                    mean_seq    = -4.7,
@@ -68,7 +72,8 @@ mupdog <- function(refmat,
                    cor_mat     = NULL,
                    postmean    = NULL,
                    postvar     = NULL,
-                   update_cor       = TRUE) {
+                   update_cor  = TRUE,
+                   control = list()) {
 
   ##########################################################
   ## Check refmat and sizemat ------------------------------
@@ -111,6 +116,17 @@ mupdog <- function(refmat,
   if (is.null(postvar)) {
     postvar <- matrix(1, nrow = nind, ncol = nsnps)
   }
+  if (!is.null(control$obj_tol)) {
+    obj_tol <- control$obj_tol
+  } else {
+    obj_tol <- 0.001
+  }
+  if (!is.null(control$itermax)) {
+    itermax <- control$itermax
+  } else {
+    itermax <- 100
+  }
+
 
   ######################################################
   ## Check rest of input -------------------------------
@@ -177,6 +193,9 @@ mupdog <- function(refmat,
   assertthat::are_equal(dim(postvar), dim(refmat))
   assertthat::assert_that(all(postvar > 0))
 
+  assertthat::assert_that(obj_tol > 0)
+  assertthat::assert_that(itermax > 0)
+
   ############################################################
 
   ## Permanent bounds ------------------------------------------------
@@ -192,16 +211,18 @@ mupdog <- function(refmat,
                                     od = od)
 
 
-  itermax <- 100
   obj <- -Inf
   iter <- 1
   err <- Inf
-  obj_tol <- 0.01
   while (iter < itermax & err > obj_tol) {
     obj_old <- obj
     ## Update posterior means, posterior SD, and allele frequencies -----------------------------------------------
     ## Can parallelize this and also manually calculate gradients for faster computation
     ## Consider using optimx package --- but optim seems faster
+    if (verbose) {
+      cat(" Updating postmean, postvar, and allele_freq.\n")
+      pb <- utils::txtProgressBar(min = 1, max = nsnps, style = 3)
+    }
     for (index in 1:nsnps) {
       muSigma2Alpha <- c(postmean[, index], postvar[, index], allele_freq[index])
 
@@ -213,6 +234,12 @@ mupdog <- function(refmat,
       postmean[, index]  <- oout$par[1:nind]
       postvar[, index]   <- oout$par[(nind + 1):(2 * nind)]
       allele_freq[index] <- oout$par[2 * nind + 1]
+      if (verbose) {
+        utils::setTxtProgressBar(pb, index)
+      }
+    }
+    if (verbose) {
+      close(pb)
     }
 
     # obj_for_mu(mu = postmean[, index], sigma2 = postvar[, index], alpha = allele_freq[index], rho = inbreeding, log_bb_dense = lbeta_array[, index, ], ploidy = ploidy, cor_inv = cor_inv)
@@ -220,6 +247,10 @@ mupdog <- function(refmat,
 
     ## Update inbreeding coefficients ---------------------------------------------------------------------------------------------
     ## Could parallellize this later
+    if (verbose) {
+      cat("Done updating postmean, postvar, and allele_freq.\n",
+          "Updating inbreeding.\n")
+    }
     for (index in 1:nind) {
       oout <- stats::optim(par = inbreeding[index], fn = obj_for_rho, method = "Brent", lower = 0, upper = 1,
                            control = list(fnscale = -1, maxit = 10),
@@ -242,6 +273,10 @@ mupdog <- function(refmat,
                                     alpha = allele_freq,
                                     rho = inbreeding)
 
+    if (verbose) {
+      cat("Done updating inbreeding.\n",
+          "Updating seq, bias, and od.\n")
+    }
     for (index in 1:nsnps) {
       oout <- stats::optim(par = c(seq[index], bias[index], od[index]), fn = obj_for_eps,
                            method = "L-BFGS-B", lower = rep(10^-6, 3), upper = c(1 - 10^-6, Inf, 1 - 10^-6),
@@ -263,6 +298,10 @@ mupdog <- function(refmat,
                                       bias = bias,
                                       od = od)
 
+    if (verbose) {
+      cat("Done updating seq, bias, and od.\n\n")
+    }
+
     ## Calculate objective ---------------------------------------------------------------------------------------------------------
     obj <- elbo(warray = warray, lbeta_array = lbeta_array, cor_inv = cor_inv,
                 postmean = postmean, postvar = postvar, bias = bias,
@@ -270,17 +309,30 @@ mupdog <- function(refmat,
                 mean_seq = mean_seq, var_seq = var_seq, ploidy = ploidy)
 
     ## stopping criteria -----------------------------------------------------------------------------------------------------------
-    iter <- iter + 1
     err <- abs(obj_old / obj) - 1
 
     cat(" iteration:", iter, "\n",
         "objective:", obj, "\n",
-        "      err:", err, "\n")
+        "      err:", err, "\n\n")
+
+    iter <- iter + 1
   }
 
   map_dosage <- apply(warray, c(1, 2), which.max) - 1
 
-  return(list(map_dosage = map_dosage, postprob = warray))
+  return_list             <- list()
+  return_list$map_dosage  <- map_dosage
+  return_list$postprob    <- warray
+  return_list$seq         <- seq
+  return_list$bias        <- bias
+  return_list$od          <- od
+  return_list$allele_freq <- allele_freq
+  return_list$inbreeding  <- inbreeding
+  return_list$cor_mat     <- cor_mat
+  return_list$postmean    <- postmean
+  return_list$postvar     <- postvar
+
+  return(return_list)
 }
 
 #' Update the underlying correlation matrix.

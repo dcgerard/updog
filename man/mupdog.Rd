@@ -7,10 +7,10 @@
 \alias{mupdog}
 \title{\code{mupdog} Multivariate updog.}
 \usage{
-mupdog(refmat, sizemat, ploidy, mean_bias = 0, var_bias = 1,
-  mean_seq = -4.7, var_seq = 1, seq = NULL, bias = NULL, od = NULL,
-  allele_freq = NULL, inbreeding = NULL, cor_mat = NULL,
-  postmean = NULL, postvar = NULL, update_cor = TRUE)
+mupdog(refmat, sizemat, ploidy, verbose = TRUE, mean_bias = 0,
+  var_bias = 1, mean_seq = -4.7, var_seq = 1, seq = NULL, bias = NULL,
+  od = NULL, allele_freq = NULL, inbreeding = NULL, cor_mat = NULL,
+  postmean = NULL, postvar = NULL, update_cor = TRUE, control = list())
 }
 \arguments{
 \item{refmat}{A matrix of reference counts.
@@ -23,6 +23,8 @@ The rows index the individuals and the columns index the SNPs.}
 re-run updog at various ploidy levels and choose the one with
 the largest ELBO. This assumes that the ploidy is the same for
 all individuals in the sample.}
+
+\item{verbose}{Should we print a lot of output \code{TRUE} or not \code{FALSE}?}
 
 \item{mean_bias}{The prior mean of the log-bias. Defaults to 0
 (no bias).}
@@ -76,6 +78,8 @@ same dimensions as \code{refmat}.}
 correlation matrix \code{TRUE} or not \code{FALSE}. Will throw
 an error if there are more individuals than SNPs and set to
 \code{TRUE}.}
+
+\item{control}{A list of control paramters (\code{itermax}, \code{obj_tol}).}
 }
 \description{
 \code{mupdog} Multivariate updog.
