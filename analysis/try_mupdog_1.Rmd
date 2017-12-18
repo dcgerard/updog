@@ -1,0 +1,111 @@
+---
+title: "First try at Mupdog"
+author: "David Gerard"
+date: "December 14, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Abstract
+
+I try out an inefficient version of mupdog for the first time.
+
+# Analysis
+
+```{r}
+library(tidyverse)
+library(mupdog)
+refmat <- as.matrix(read.csv("/home/david/Code/reproduce_genotyping/Output/shirasawa_snps/example_refcounts.csv", row.names = 1))
+sizemat <- as.matrix(read.csv("/home/david/Code/reproduce_genotyping/Output/shirasawa_snps/example_readcounts.csv", row.names = 1))
+```
+
+Subset since I think this will be slow
+
+```{r}
+nind <- nrow(refmat)
+nsnps <- 500
+refmat_sub <- refmat[1:nind, 1:nsnps]
+sizemat_sub <- sizemat[1:nind, 1:nsnps]
+```
+
+Try it out!
+```{r, cache = TRUE}
+mout <- mupdog::mupdog(refmat = refmat_sub, sizemat = sizemat_sub, ploidy = 6, verbose = FALSE, 
+                       control = list(obj_tol = 10^-4))
+```
+
+# Look at genotyping
+
+The correlation matrix looks a little different than what I expected --- I expected all of the correlations to be about the same.
+```{r}
+hist(mout$cor_mat[upper.tri(mout$cor_mat)])
+```
+
+```{r}
+hist(mout$seq)
+```
+
+```{r}
+hist(log(mout$bias))
+```
+
+```{r}
+hist(mout$od)
+```
+
+Inbreeding doesn't seem to be too important for these data
+```{r}
+hist(log(mout$inbreeding))
+```
+
+
+The Genotypes all look fantastic.
+```{r}
+for (index in 1:100) {
+  pl <- updog::plot_geno(ocounts = refmat_sub[, index], osize = sizemat_sub[, index], ploidy = 6, 
+                         ogeno = mout$map_dosage[, index], bias_val = mout$bias[index], seq_error = mout$seq[index])
+  print(pl)
+}
+
+```
+
+
+Some EDA
+```{r}
+hist(mout$postmean)
+hist(mout$inbreeding)
+hist(mout$postvar)
+mout$seq
+mout$bias
+mout$od 
+```
+
+```{r}
+mout$cor_mat
+```
+
+
+
+
+
+```{r}
+sessionInfo()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
