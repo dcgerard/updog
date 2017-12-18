@@ -30,7 +30,6 @@ NumericVector grad_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2,
     Rcpp::stop("obj_for_mu_sigma2: cor_inv needs to have the same number of columns as rows.");
   }
 
-
   NumericVector grad(2 * nind); // first n for mu, next nf or sigma2
 
   // contribution by likelihood ------------------------------------------------
@@ -42,21 +41,25 @@ NumericVector grad_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2,
   double d2 = 0.0;
   for (int i = 0; i < nind; i++) {
     for (int k = 0; k <= ploidy; k++) {
-      q1 = (phifk_mat(i, k) - mu(i)) / std::sqrt(sigma2(i));
-      q2 = (phifk_mat(i, k + 1) - mu(i)) / std::sqrt(sigma2(i));
-      d1 = R::dnorm4(q1, 0.0, 1.0, false);
-      d2 = R::dnorm4(q2, 0.0, 1.0, false);
-      current_weight = d1 / std::sqrt(sigma2(i)) - d2 / std::sqrt(sigma2(i));
-      grad(i) = grad(i) + current_weight * log_bb_dense(i, k);
+      if (!R_IsNA(log_bb_dense(i, k))) {
+        q1 = (phifk_mat(i, k) - mu(i)) / std::sqrt(sigma2(i));
+        q2 = (phifk_mat(i, k + 1) - mu(i)) / std::sqrt(sigma2(i));
+        d1 = R::dnorm4(q1, 0.0, 1.0, false);
+        d2 = R::dnorm4(q2, 0.0, 1.0, false);
+        current_weight = d1 / std::sqrt(sigma2(i)) - d2 / std::sqrt(sigma2(i));
+        grad(i) = grad(i) + current_weight * log_bb_dense(i, k);
 
-      if ((k != 0) & (k != ploidy)) {
-        current_sigma_weight = d1 * q1 / (2.0 * sigma2(i)) - d2 * q2 / (2.0 * sigma2(i));
-      } else if (k == 0) {
-        current_sigma_weight = -d2 * q2 / (2.0 * sigma2(i));
-      } else {
-        current_sigma_weight = d1 * q1 / (2.0 * sigma2(i));
+        if ((q1 != R_PosInf) & (q1 != R_NegInf) & (q2 != R_PosInf) & (q2 != R_NegInf)) {
+          current_sigma_weight = d1 * q1 / (2.0 * sigma2(i)) - d2 * q2 / (2.0 * sigma2(i));
+        } else if ((q1 == R_NegInf) & (q2 != R_NegInf) & (q2 != R_PosInf)) {
+          current_sigma_weight = -d2 * q2 / (2.0 * sigma2(i));
+        } else if ((q1 != R_NegInf) & (q1 != R_PosInf) & (q2 == R_PosInf)){
+          current_sigma_weight = d1 * q1 / (2.0 * sigma2(i));
+        } else {
+          current_sigma_weight = 0.0;
+        }
+        grad(i + nind) = grad(i + nind) + current_sigma_weight * log_bb_dense(i, k);
       }
-      grad(i + nind) = grad(i + nind) + current_sigma_weight * log_bb_dense(i, k);
     }
   }
 

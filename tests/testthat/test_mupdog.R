@@ -25,17 +25,25 @@ test_that("mupdog works", {
   mean_bias = 0
   var_seq = 1
   mean_seq = -4.7
+  update_cor = TRUE
+  update_inbreeding = TRUE
+  control <- list()
+  ploidy <- 4
+  verbose <- FALSE
 
   refmat[1,1] <- NA
 
-  # mupdog(refmat = refmat, sizemat = sizemat, ploidy = 8,
-  #        mean_bias = 0, var_bias = 1, mean_seq = -4.7, var_seq = 1,
-  #        seq = seq, bias = bias, od = od,
-  #        allele_freq = allele_freq,
-  #        inbreeding = inbreeding,
-  #        cor = cor,
-  #        postmean = postmean,
-  #        postvar = postvar)
+  trash <- capture.output(
+    mout <- mupdog(refmat = refmat, sizemat = sizemat, ploidy = 8,
+                   mean_bias = 0, var_bias = 1, mean_seq = -4.7, var_seq = 1,
+                   seq = seq, bias = bias, od = od,
+                   allele_freq = allele_freq,
+                   inbreeding = inbreeding,
+                   cor_mat = cor_mat,
+                   postmean = postmean,
+                   postvar = postvar,
+                   control = list(itermax = 2), verbose = FALSE)
+  )
 
   warray <- compute_all_post_prob(ploidy = 8, mu = postmean,
                                   sigma2 = postvar,

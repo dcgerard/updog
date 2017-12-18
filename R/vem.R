@@ -229,8 +229,21 @@ mupdog <- function(refmat,
       cat(" Updating posterior means and variances.\n")
     }
     for (index in 1:nsnps) {
-      obj_for_mu_sigma2(mu = postmean[, index], sigma2 = postvar[, index], phifk_mat = phifk_array[, index, ],
-                        cor_inv = cor_inv, log_bb_dense = lbeta_array[, index, ])
+      oout <- stats::optim(par = c(postmean[, index], postvar[, index]),
+                           fn = obj_for_mu_sigma2_wrapper,
+                           gr = grad_for_mu_sigma2_wrapper,
+                           method = "L-BFGS-B", lower = lower_vec, upper = upper_vec, control = list(fnscale = -1, maxit = 10),
+                           phifk_mat = phifk_array[, index, ],
+                           cor_inv = cor_inv, log_bb_dense = lbeta_array[, index, ])
+
+      postmean[, index] <- oout$par[1:nind]
+      postvar[, index] <- oout$par[(nind + 1):(2 * nind)]
+      obj_for_mu_sigma2_wrapper(muSigma2 = c(postmean[, index], postvar[, index]),
+                                phifk_mat = phifk_array[, index, ],
+                                cor_inv = cor_inv, log_bb_dense = lbeta_array[, index, ])
+      grad_for_mu_sigma2_wrapper(muSigma2 = c(postmean[, index], postvar[, index]),
+                                phifk_mat = phifk_array[, index, ],
+                                cor_inv = cor_inv, log_bb_dense = lbeta_array[, index, ])
     }
 
 
@@ -242,7 +255,7 @@ mupdog <- function(refmat,
     }
     for (index in 1:nsnps) {
       oout <- stats::optim(par = allele_freq[index], fn = obj_for_alpha, method = "Brent",
-                           control = list(fnscale = -1, maxit = 5), lower = 0, upper = 1,
+                           control = list(fnscale = -1, maxit = 10), lower = 0, upper = 1,
                            mu = postmean[, index], sigma2 = postvar[, index],
                            rho = inbreeding, log_bb_dense = lbeta_array[, index, ], ploidy = ploidy)
       allele_freq[index] <- oout$par

@@ -10,7 +10,6 @@ test_that("grad_for_mu_sigma2 is the gradient for obj_for_mu_sigma2", {
   ploidy <- 6
   phifk_mat <- compute_all_phifk(alpha, rho, ploidy)[, 1, ]
   cor_inv <- solve(cov2cor(crossprod(matrix(rnorm(nind ^ 2), nrow = nind))))
-  # cor_inv <- diag(nind)
   log_bb_dense <- matrix(abs(rnorm(nind * (ploidy + 1))), nrow = nind) * -100
 
   obj_for_mu_sigma2(mu = mu, sigma2 = sigma2, phifk_mat = phifk_mat, cor_inv = cor_inv, log_bb_dense = log_bb_dense)
@@ -32,5 +31,24 @@ test_that("grad_for_mu_sigma2 is the gradient for obj_for_mu_sigma2", {
   ## now test if grad_for_mu_sigma2 is the same as grad_for_mu_sigma2_wrapper
   gradvec2 <- grad_for_mu_sigma2_wrapper(muSigma2 = c(mu, sigma2), phifk_mat = phifk_mat, cor_inv = cor_inv, log_bb_dense = log_bb_dense)
   expect_equal(gradvec, gradvec2)
+}
+)
+
+test_that("grad_for_mu_sigma2 doesn't return nan's", {
+  set.seed(1)
+  nind <- 11
+  mu <- rnorm(nind)
+  sigma2 <- abs(rnorm(nind))
+  alpha <- 0.1
+  rho   <- runif(nind)
+  ploidy <- 6
+  phifk_mat <- compute_all_phifk(alpha, rho, ploidy)[, 1, ]
+  cor_inv <- solve(cov2cor(crossprod(matrix(rnorm(nind ^ 2), nrow = nind))))
+  log_bb_dense <- matrix(abs(rnorm(nind * (ploidy + 1))), nrow = nind) * -100
+
+  phifk_mat[, ploidy + 1] <- Inf
+  phifk_mat[, 2] <- -Inf
+
+  expect_false(any(is.nan(grad_for_mu_sigma2_wrapper(muSigma2 = c(mu, sigma2), phifk_mat = phifk_mat, cor_inv = cor_inv, log_bb_dense = log_bb_dense))))
 }
 )
