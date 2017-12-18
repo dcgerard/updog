@@ -20,13 +20,13 @@ test_that("dbetabinom works", {
     # )
   }
 
-  dbetabinom(c(1, 2), c(2, 3), 0.5, 0.2, TRUE)
-  dbetabinom(c(1, 2), c(2, 3), c(0.5, 0.2), 0.2, TRUE)
-  dbetabinom(c(1, 2), c(2, 3), 0.5, c(0.5, 0.2), TRUE)
-  dbetabinom(c(1, 2), c(2, 3), c(0.5, 0.2), c(0.5, 0.2), TRUE)
+  trash <- dbetabinom(c(1, 2), c(2, 3), 0.5, 0.2, TRUE)
+  trash <- dbetabinom(c(1, 2), c(2, 3), c(0.5, 0.2), 0.2, TRUE)
+  trash <- dbetabinom(c(1, 2), c(2, 3), 0.5, c(0.5, 0.2), TRUE)
+  trash <- dbetabinom(c(1, 2), c(2, 3), c(0.5, 0.2), c(0.5, 0.2), TRUE)
 
-  expect_error(dbetabinom(3, 2, 0.5, 0.2, TRUE))
-  expect_error(dbetabinom(-1, 2, 0.5, 0.2, TRUE))
+  trash <- capture.output(expect_error(dbetabinom(3, 2, 0.5, 0.2, TRUE)))
+  trash <- capture.output(expect_error(dbetabinom(-1, 2, 0.5, 0.2, TRUE)))
 
   expect_equal(dbetabinom(0, 2, 0, 0.5, FALSE), 1)
   expect_equal(dbetabinom(2, 2, 1, 0.5, FALSE), 1)
@@ -40,8 +40,8 @@ test_that("dbetabinom works", {
   expect_equal(dbinom(x = 1, size = 2, prob = 0.2, log = FALSE),
                dbetabinom(1, 2, 0.2, 0, FALSE))
 
-  expect_error(dbetabinom(1, 2, -1, 0.3, TRUE))
-  expect_error(dbetabinom(1, 2, 0.5, -1, TRUE))
+  trash <- capture.output(expect_error(dbetabinom(1, 2, -1, 0.3, TRUE)))
+  trash <- capture.output(expect_error(dbetabinom(1, 2, 0.5, -1, TRUE)))
 
 }
 )

@@ -202,8 +202,8 @@ mupdog <- function(refmat,
   ############################################################
 
   ## Permanent bounds ------------------------------------------------
-  lower_vec <- c(rep(-500, nind), rep(10^-6, nind), 10 ^ -6)
-  upper_vec <- c(rep(500, 2 * nind), 1 - 10^-6)
+  lower_vec <- c(rep(-500, nind), rep(10^-6, nind))
+  upper_vec <- c(rep(500, 2 * nind))
 
   ## first log-beta array
   lbeta_array <- compute_all_log_bb(refmat = refmat,
@@ -213,40 +213,41 @@ mupdog <- function(refmat,
                                     bias = bias,
                                     od = od)
 
+  phifk_array <- compute_all_phifk(alpha = allele_freq, rho = inbreeding, ploidy = ploidy)
+
 
   obj <- -Inf
   iter <- 1
   err <- Inf
   while (iter < itermax & err > obj_tol) {
     obj_old <- obj
-    ## Update posterior means, posterior SD, and allele frequencies -----------------------------------------------
-    ## Can parallelize this and also manually calculate gradients for faster computation
-    ## Consider using optimx package --- but optim seems faster
+
+
+    ## Update variational means and variances ---------------------------------
+    ## Can parallelize this
     if (verbose) {
-      cat(" Updating postmean, postvar, and allele_freq.\n")
-      pb <- utils::txtProgressBar(min = 1, max = nsnps, style = 3)
+      cat(" Updating posterior means and variances.\n")
     }
     for (index in 1:nsnps) {
-      muSigma2Alpha <- c(postmean[, index], postvar[, index], allele_freq[index])
-
-      oout <- stats::optim(par = muSigma2Alpha, fn = obj_for_mu_wrapper, method = "L-BFGS-B",
-                           control = list(fnscale = -1, maxit = 5), lower = lower_vec, upper = upper_vec,
-                           rho = inbreeding, log_bb_dense = lbeta_array[, index, ], ploidy = ploidy,
-                           cor_inv = cor_inv)
-
-      postmean[, index]  <- oout$par[1:nind]
-      postvar[, index]   <- oout$par[(nind + 1):(2 * nind)]
-      allele_freq[index] <- oout$par[2 * nind + 1]
-      if (verbose) {
-        utils::setTxtProgressBar(pb, index)
-      }
+      obj_for_mu_sigma2(mu = postmean[, index], sigma2 = postvar[, index], phifk_mat = phifk_array[, index, ],
+                        cor_inv = cor_inv, log_bb_dense = lbeta_array[, index, ])
     }
+
+
+    ## Update allele frequencies -----------------------------------------------
+    ## Can parallelize this
     if (verbose) {
-      close(pb)
+      cat("Done Updating posterior means and variances.\n",
+          "Updating allele_freq.\n")
+    }
+    for (index in 1:nsnps) {
+      oout <- stats::optim(par = allele_freq[index], fn = obj_for_alpha, method = "Brent",
+                           control = list(fnscale = -1, maxit = 5), lower = 0, upper = 1,
+                           mu = postmean[, index], sigma2 = postvar[, index],
+                           rho = inbreeding, log_bb_dense = lbeta_array[, index, ], ploidy = ploidy)
+      allele_freq[index] <- oout$par
     }
 
-    # obj_for_mu(mu = postmean[, index], sigma2 = postvar[, index], alpha = allele_freq[index], rho = inbreeding, log_bb_dense = lbeta_array[, index, ], ploidy = ploidy, cor_inv = cor_inv)
-    # obj_for_mu_wrapper(muSigma2Alpha = c(postmean[, index], postvar[, index], allele_freq[index]), rho = inbreeding, log_bb_dense = lbeta_array[, index, ], ploidy = ploidy, cor_inv = cor_inv)
 
     ## Update inbreeding coefficients ---------------------------------------------------------------------------------------------
     ## Could parallellize this later
@@ -263,6 +264,9 @@ mupdog <- function(refmat,
         inbreeding[index] <- oout$par
       }
     }
+
+    ## Recalculate phifk_array after updating allele_freq and inbreeding ---------------------------------------------------------
+    phifk_array <- compute_all_phifk(alpha = allele_freq, rho = inbreeding, ploidy = ploidy)
 
 
     ## Update correlation matrix ---------------------------------------

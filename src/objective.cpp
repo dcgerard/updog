@@ -130,18 +130,44 @@ arma::Cube<double> compute_all_log_bb(NumericMatrix refmat, NumericMatrix sizema
   for (int i = 0; i < nind; i++) {
     for (int j = 0; j < nsnps; j++) {
       for (int k = 0; k <= ploidy; k++) {
-	if (R_IsNA(refmat(i, j)) | R_IsNA(sizemat(i, j))) {
-	  logbbdense(i, j, k) = NA_REAL;
-	}
-	else {
-	  xi_current = xi_double((double)k / (double)ploidy, seq(j), bias(j));
-	  logbbdense(i, j, k) = dbetabinom_double(refmat(i, j), sizemat(i, j), xi_current, od(j), true);
-	}
+	      if (R_IsNA(refmat(i, j)) | R_IsNA(sizemat(i, j))) {
+	        logbbdense(i, j, k) = NA_REAL;
+	      }
+	      else {
+	        xi_current = xi_double((double)k / (double)ploidy, seq(j), bias(j));
+	        logbbdense(i, j, k) = dbetabinom_double(refmat(i, j), sizemat(i, j), xi_current, od(j), true);
+	      }
       }
     }
   }
 
   return logbbdense;
+}
+
+
+//' Computes \deqn{\Phi^{-1}(F(k|K,\alpha_j,\rho_i))} for all possible (i,j,k).
+//'
+//' @param alpha A vector whose jth element is the allele frequency of SNP j.
+//' @param rho A vector whose ith element is the inbreeding coefficient of individual i.
+//' @param ploidy The ploidy of the species.
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+arma::Cube<double> compute_all_phifk(NumericVector alpha, NumericVector rho, int ploidy) {
+  int nind = rho.length();
+  int nsnps = alpha.length();
+
+  arma::Cube<double> phifk(nind, nsnps, ploidy + 2);
+
+  for (int i = 0; i < nind; i++) {
+    for (int j = 0; j < nsnps; j++) {
+      for (int k = -1; k < ploidy; k++) {
+        phifk(i, j, k + 1) = R::qnorm5(pbetabinom_double(k, ploidy, alpha(j), rho(i), false), 0, 1, true, false);
+      }
+      phifk(i, j, ploidy + 1) = R_PosInf;
+    }
+  }
+  return phifk;
 }
 
 
@@ -236,9 +262,9 @@ double obj_for_rho(double rho,
   for (int j = 0; j < nsnps; j++) {
     for (int k = 0; k <= ploidy; k++) {
       if (!R_IsNA(log_bb_dense(j, k))) {
-	w_current = post_prob(k, ploidy, mu(j), sigma2(j),
-			      alpha(j), rho);
-	obj_val = obj_val + w_current * log_bb_dense(j, k);
+	        w_current = post_prob(k, ploidy, mu(j), sigma2(j),
+			                          alpha(j), rho);
+	        obj_val = obj_val + w_current * log_bb_dense(j, k);
       }
     }
   }
@@ -247,7 +273,7 @@ double obj_for_rho(double rho,
 }
 
 
-//' Objective function when updating mu, sigma2, and alpha
+//' Objective function when updating alpha
 //'
 //' @param mu A vector. The ith element is individual i's variational posterior mean at the SNP.
 //' @param sigma2 A vector. The ith element is individual i's variational posterior variance at the SNP.
@@ -255,41 +281,33 @@ double obj_for_rho(double rho,
 //' @param rho A vector. The ith element is individuals i's inbreeding coefficient.
 //' @param log_bb_dense A matrix of log-densities of the beta binomial. The rows index the individuals and the columns index the allele dosage.
 //' @param ploidy The ploidy of the species.
-//' @param cor_inv The inverse of the correlation matrix.
 //'
 //'
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
-double obj_for_mu(arma::Col<double> mu,
+double obj_for_alpha(arma::Col<double> mu,
 		  arma::Col<double> sigma2,
 		  double alpha,
 		  NumericVector rho,
 		  NumericMatrix log_bb_dense,
-		  int ploidy,
-		  arma::Mat<double> cor_inv) {
+		  int ploidy) {
 
   // check input --------------------------------------------------
   int nind = log_bb_dense.nrow();
   if (log_bb_dense.ncol() != ploidy + 1) {
-    Rcpp::stop("obj_for_mu: log_bb_dense must have ploidy+1 columns.");
+    Rcpp::stop("obj_for_alpha: log_bb_dense must have ploidy+1 columns.");
   }
   if (mu.n_elem != nind) {
     Rcpp::Rcout << mu.n_elem << std::endl;
-    Rcpp::stop("obj_for_mu: mu must have length equal to the number of individuals.");
+    Rcpp::stop("obj_for_alpha: mu must have length equal to the number of individuals.");
   }
   if (sigma2.n_elem != nind) {
     Rcpp::Rcout << sigma2.n_elem << std::endl;
-    Rcpp::stop("obj_for_mu: sigma2 must have length equal to the number of individuals.");
+    Rcpp::stop("obj_for_alpha: sigma2 must have length equal to the number of individuals.");
   }
   if (rho.length() != nind) {
-    Rcpp::stop("obj_for_mu: rho must have length equal to the number of individuals.");
-  }
-  if (cor_inv.n_rows != nind) {
-    Rcpp::stop("obj_for_mu: cor_inv must have nrow equal to the number of individuals.");
-  }
-  if (cor_inv.n_cols != nind) {
-    Rcpp::stop("obj_for_mu: cor_inv must have ncol equal to the number of individuals.");
+    Rcpp::stop("obj_for_alpha: rho must have length equal to the number of individuals.");
   }
 
   // likelihood integral ----------------------------------------------------
@@ -298,73 +316,13 @@ double obj_for_mu(arma::Col<double> mu,
   for (int i = 0; i < nind; i++) {
     for (int k = 0; k <= ploidy; k++) {
        if (!R_IsNA(log_bb_dense(i, k))) {
-	 w_current = post_prob(k, ploidy, mu(i), sigma2(i), alpha, rho(i));
-	 obj_val = obj_val + w_current * log_bb_dense(i, k);
+	        w_current = post_prob(k, ploidy, mu(i), sigma2(i), alpha, rho(i));
+	        obj_val = obj_val + w_current * log_bb_dense(i, k);
        }
     }
   }
 
-  // Rcpp::Rcout << sigma2(10) << std::endl << std::endl;
 
-
-  // Multivariate normal prior integral -------------------------------------
-  arma::Mat<double> muRmu = mu.t() * cor_inv * mu;
-  arma::Mat<double> trRsigma2 = arma::diagvec(cor_inv).t() * sigma2;
-  obj_val = obj_val - muRmu(0, 0) / 2.0 - trRsigma2(0, 0) / 2.0 + arma::accu(arma::log(sigma2)) / 2.0;
-
-  return obj_val;
-}
-
-
-//' Wrapper for \code{\link{obj_for_mu}}.
-//'
-//' @inheritParams obj_for_mu
-//' @param muSigma2Alpha A vector where the first \code{nsnps} observations are mu,
-//'     the next \code{nsnps} observations are sigma2, and the last observation is \code{alpha}.
-//'
-//'
-//'
-//'
-//'
-//'
-//' @author David Gerard
-// [[Rcpp::export]]
-double obj_for_mu_wrapper(arma::Col<double> muSigma2Alpha,
-			  NumericVector rho,
-			  NumericMatrix log_bb_dense,
-			  int ploidy,
-			  arma::Mat<double> cor_inv) {
-  int nsnps = log_bb_dense.nrow();
-
-  if (muSigma2Alpha.n_elem != nsnps * 2 + 1) {
-    Rcpp::stop("obj_for_mu_wrapper: muSigma2Alpha must have nrow(log_bb_dense) * 2 + 1 elements");
-  }
-
-  arma::Col<double> mu(nsnps);
-  arma::Col<double> sigma2(nsnps);
-  double alpha;
-
-  for (int i = 0; i < nsnps; i++) {
-    mu(i) = muSigma2Alpha(i);
-  }
-  for (int i = nsnps; i < (2 * nsnps); i++) {
-    sigma2(i - nsnps) = muSigma2Alpha(i);
-  }
-  alpha = muSigma2Alpha(2 * nsnps);
-
-  // Rcpp::Rcout << mu.t() << std::endl << sigma2.t() << std::endl;
-
-  // Rcpp::Rcout << alpha << std::endl;
-  // if (alpha < 0) {
-  //   Rcpp::Rcout << mu.t() << std::endl << sigma2.t() << std::endl;
-  // }
-
-  // Rcpp::Rcout << muSigma2Alpha(nsnps + 10 - 1) << std::endl;
-  // Rcpp::Rcout << sigma2(10) << std::endl;
-
-  double obj_val = obj_for_mu(mu, sigma2, alpha, rho, log_bb_dense, ploidy, cor_inv);
-
-  // Rcpp::Rcout << obj_val << std::endl;
 
   return obj_val;
 }
@@ -439,6 +397,80 @@ double obj_for_eps(NumericVector parvec,
   }
 
   return obj_val;
+}
+
+
+//' Objective function when updating mu and sigma2.
+//'
+//' @param mu A vector, the ith element is the variational posterior mean of individual i for the SNP.
+//' @param sigma2 A vector, the ith element is the variational posterior variance of individual i for the SNP.
+//' @param phifk_mat A matrix that contains the standard normal quantile of the beta-binomial cdf at dosage k for individual i.
+//'     The rows index the individuals and the columns index the dosages.
+//' @param cor_inv The inverse of the underlying correlation matrix.
+//' @param log_bb_dense A matrix of log-densities of the beta binomial. The rows index the individuals and the columns index the allele dosage.
+//'     Allele dosage goes from -1 to ploidy, so there are ploidy + 2 elements.
+//'
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double obj_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2, NumericMatrix phifk_mat,
+                         arma::Mat<double> cor_inv, NumericMatrix log_bb_dense) {
+  // Check input --------------------------------------------------------------------------------
+  int nind = log_bb_dense.nrow();
+  int ploidy = log_bb_dense.ncol() - 1;
+  if (mu.n_elem != nind) {
+    Rcpp::stop("obj_for_mu_sigma2: mu needs to have the same length as the number of columns in log_bb_dense.");
+  }
+  if (sigma2.n_elem != nind) {
+    Rcpp::stop("obj_for_mu_sigma2: sigma2 needs to have the same length as the number of columns in log_bb_dense.");
+  }
+  if (phifk_mat.nrow() != nind) {
+    Rcpp::stop("obj_for_mu_sigma2: phifk_mat and log_bb_dense needs to have the same dimensions.");
+  }
+  if (phifk_mat.ncol() != ploidy + 2) {
+    Rcpp::stop("obj_for_mu_sigma2: phifk_mat needs to have ploidy+2 columns.");
+  }
+  if (cor_inv.n_cols != nind) {
+    Rcpp::stop("obj_for_mu_sigma2: cor_inv needs to have the same number of rows as log_bb_dense.");
+  }
+  if (cor_inv.n_rows != nind) {
+    Rcpp::stop("obj_for_mu_sigma2: cor_inv needs to have the same number of columns as rows.");
+  }
+
+  double obj_val = 0.0;
+  double current_weight = 0.0;
+  for (int i = 0; i < nind; i++) {
+    for (int k = 0; k <= ploidy; k++) {
+      if (!R_IsNA(log_bb_dense(i, k))) {
+        current_weight = R::pnorm5((phifk_mat(i, k + 1) - mu(i)) / std::sqrt(sigma2(i)), 0.0, 1.0, true, false) -
+          R::pnorm5((phifk_mat(i, k) - mu(i)) / std::sqrt(sigma2(i)), 0.0, 1.0, true, false);
+        obj_val = obj_val + current_weight * log_bb_dense(i, k);
+      }
+    }
+  }
+
+  // Multivariate normal prior integral -------------------------------------
+  double muRmu = arma::accu(mu.t() * cor_inv * mu);
+  double trRsigma2 = arma::accu(arma::diagvec(cor_inv).t() * sigma2);
+  obj_val = obj_val - muRmu / 2.0 - trRsigma2 / 2.0 + arma::accu(arma::log(sigma2)) / 2.0;
+
+  return obj_val;
+}
+
+//' Wrapper for \code{\link{obj_for_mu_sigma2}} so that I can use it in \code{optim}.
+//'
+//' @inheritParams obj_for_mu_sigma2
+//' @param muSigma2 A vector. The first half are mu and the second half are sigma2.
+//'
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double obj_for_mu_sigma2_wrapper(arma::Col<double> muSigma2, NumericMatrix phifk_mat,
+                                 arma::Mat<double> cor_inv, NumericMatrix log_bb_dense) {
+  int nind = muSigma2.n_elem / 2;
+  double obj = obj_for_mu_sigma2(muSigma2.head_rows(nind), muSigma2.tail_rows(nind), phifk_mat,
+                                 cor_inv, log_bb_dense);
+  return obj;
 }
 
 
@@ -524,9 +556,9 @@ double elbo(arma::Cube<double> warray, arma::Cube<double> lbeta_array,
   for (int i = 0; i < nind; i++) {
     for (int j = 0; j < nsnps; j++) {
       for (int k = 0; k <= ploidy; k++) {
-	if (!R_IsNA(lbeta_array(i, j, k))) {
-	  obj_val = obj_val + warray(i, j, k) * lbeta_array(i, j, k);
-	}
+	      if (!R_IsNA(lbeta_array(i, j, k))) {
+	        obj_val = obj_val + warray(i, j, k) * lbeta_array(i, j, k);
+	      }
       }
     }
   }

@@ -59,6 +59,26 @@ pbetabinom <- function(q, size, mu, rho, log_p) {
     .Call('_mupdog_pbetabinom', PACKAGE = 'mupdog', q, size, mu, rho, log_p)
 }
 
+#' Gradient for \code{\link{obj_for_mu_sigma2}} with respect for \code{mu} and \code{sigma2}.
+#'
+#' @inheritParams obj_for_mu_sigma2
+#'
+#' @author David Gerard
+grad_for_mu_sigma2 <- function(mu, sigma2, phifk_mat, cor_inv, log_bb_dense) {
+    .Call('_mupdog_grad_for_mu_sigma2', PACKAGE = 'mupdog', mu, sigma2, phifk_mat, cor_inv, log_bb_dense)
+}
+
+#' Gradient for \code{\link{obj_for_mu_sigma2_wrapper}} with respect for \code{muSigma2}
+#' and a wrapper for \code{\link{grad_for_mu_sigma2}}
+#'
+#' @inheritParams obj_for_mu_sigma2
+#' @param muSigma2 A vector. The first half are mu and the second half are sigma2.
+#'
+#' @author David Gerard
+grad_for_mu_sigma2_wrapper <- function(muSigma2, phifk_mat, cor_inv, log_bb_dense) {
+    .Call('_mupdog_grad_for_mu_sigma2_wrapper', PACKAGE = 'mupdog', muSigma2, phifk_mat, cor_inv, log_bb_dense)
+}
+
 #' Variational posterior probability of having \code{dosage} A alleles
 #' when the ploidy is \code{ploidy}, the allele frequency is
 #' \code{alpha}, the individual-specific overdispersion parameter is
@@ -103,6 +123,17 @@ compute_all_post_prob <- function(ploidy, mu, sigma2, alpha, rho) {
 #'
 compute_all_log_bb <- function(refmat, sizemat, ploidy, seq, bias, od) {
     .Call('_mupdog_compute_all_log_bb', PACKAGE = 'mupdog', refmat, sizemat, ploidy, seq, bias, od)
+}
+
+#' Computes \deqn{\Phi^{-1}(F(k|K,\alpha_j,\rho_i))} for all possible (i,j,k).
+#'
+#' @param alpha A vector whose jth element is the allele frequency of SNP j.
+#' @param rho A vector whose ith element is the inbreeding coefficient of individual i.
+#' @param ploidy The ploidy of the species.
+#'
+#' @author David Gerard
+compute_all_phifk <- function(alpha, rho, ploidy) {
+    .Call('_mupdog_compute_all_phifk', PACKAGE = 'mupdog', alpha, rho, ploidy)
 }
 
 #' Penalty on bias parameter.
@@ -150,7 +181,7 @@ obj_for_rho <- function(rho, mu, sigma2, alpha, log_bb_dense, ploidy) {
     .Call('_mupdog_obj_for_rho', PACKAGE = 'mupdog', rho, mu, sigma2, alpha, log_bb_dense, ploidy)
 }
 
-#' Objective function when updating mu, sigma2, and alpha
+#' Objective function when updating alpha
 #'
 #' @param mu A vector. The ith element is individual i's variational posterior mean at the SNP.
 #' @param sigma2 A vector. The ith element is individual i's variational posterior variance at the SNP.
@@ -158,29 +189,12 @@ obj_for_rho <- function(rho, mu, sigma2, alpha, log_bb_dense, ploidy) {
 #' @param rho A vector. The ith element is individuals i's inbreeding coefficient.
 #' @param log_bb_dense A matrix of log-densities of the beta binomial. The rows index the individuals and the columns index the allele dosage.
 #' @param ploidy The ploidy of the species.
-#' @param cor_inv The inverse of the correlation matrix.
 #'
 #'
 #'
 #' @author David Gerard
-obj_for_mu <- function(mu, sigma2, alpha, rho, log_bb_dense, ploidy, cor_inv) {
-    .Call('_mupdog_obj_for_mu', PACKAGE = 'mupdog', mu, sigma2, alpha, rho, log_bb_dense, ploidy, cor_inv)
-}
-
-#' Wrapper for \code{\link{obj_for_mu}}.
-#'
-#' @inheritParams obj_for_mu
-#' @param muSigma2Alpha A vector where the first \code{nsnps} observations are mu,
-#'     the next \code{nsnps} observations are sigma2, and the last observation is \code{alpha}.
-#'
-#'
-#'
-#'
-#'
-#'
-#' @author David Gerard
-obj_for_mu_wrapper <- function(muSigma2Alpha, rho, log_bb_dense, ploidy, cor_inv) {
-    .Call('_mupdog_obj_for_mu_wrapper', PACKAGE = 'mupdog', muSigma2Alpha, rho, log_bb_dense, ploidy, cor_inv)
+obj_for_alpha <- function(mu, sigma2, alpha, rho, log_bb_dense, ploidy) {
+    .Call('_mupdog_obj_for_alpha', PACKAGE = 'mupdog', mu, sigma2, alpha, rho, log_bb_dense, ploidy)
 }
 
 #' Objective function for updating sequencing error rate, bias, and overdispersion parameters.
@@ -201,6 +215,33 @@ obj_for_mu_wrapper <- function(muSigma2Alpha, rho, log_bb_dense, ploidy, cor_inv
 #' @author David Gerard
 obj_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat) {
     .Call('_mupdog_obj_for_eps', PACKAGE = 'mupdog', parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat)
+}
+
+#' Objective function when updating mu and sigma2.
+#'
+#' @param mu A vector, the ith element is the variational posterior mean of individual i for the SNP.
+#' @param sigma2 A vector, the ith element is the variational posterior variance of individual i for the SNP.
+#' @param phifk_mat A matrix that contains the standard normal quantile of the beta-binomial cdf at dosage k for individual i.
+#'     The rows index the individuals and the columns index the dosages.
+#' @param cor_inv The inverse of the underlying correlation matrix.
+#' @param log_bb_dense A matrix of log-densities of the beta binomial. The rows index the individuals and the columns index the allele dosage.
+#'     Allele dosage goes from -1 to ploidy, so there are ploidy + 2 elements.
+#'
+#'
+#' @author David Gerard
+obj_for_mu_sigma2 <- function(mu, sigma2, phifk_mat, cor_inv, log_bb_dense) {
+    .Call('_mupdog_obj_for_mu_sigma2', PACKAGE = 'mupdog', mu, sigma2, phifk_mat, cor_inv, log_bb_dense)
+}
+
+#' Wrapper for \code{\link{obj_for_mu_sigma2}} so that I can use it in \code{optim}.
+#'
+#' @inheritParams obj_for_mu_sigma2
+#' @param muSigma2 A vector. The first half are mu and the second half are sigma2.
+#'
+#'
+#' @author David Gerard
+obj_for_mu_sigma2_wrapper <- function(muSigma2, phifk_mat, cor_inv, log_bb_dense) {
+    .Call('_mupdog_obj_for_mu_sigma2_wrapper', PACKAGE = 'mupdog', muSigma2, phifk_mat, cor_inv, log_bb_dense)
 }
 
 #' The evidence lower bound

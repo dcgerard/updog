@@ -1,6 +1,7 @@
 context("mupdog")
 
 test_that("mupdog works", {
+  set.seed(1)
   nind <- 11
   nsnps <- 37
 
@@ -17,9 +18,13 @@ test_that("mupdog works", {
   od <- rep(0.001, length = nsnps)
   allele_freq <- colMeans(refmat / sizemat, na.rm = TRUE)
   inbreeding <- rep(0.001, length = nind)
-  cor <- diag(nind)
+  cor_mat <- diag(nind)
   postmean <- matrix(0, nrow = nind, ncol = nsnps)
   postvar <- matrix(1, nrow = nind, ncol = nsnps)
+  var_bias = 1
+  mean_bias = 0
+  var_seq = 1
+  mean_seq = -4.7
 
   refmat[1,1] <- NA
 
