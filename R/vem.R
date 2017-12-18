@@ -197,7 +197,7 @@ mupdog <- function(refmat,
   assertthat::assert_that(all(postvar > 0))
 
   assertthat::assert_that(obj_tol > 0)
-  assertthat::assert_that(itermax > 0)
+  assertthat::assert_that(itermax > 1)
 
   ############################################################
 
