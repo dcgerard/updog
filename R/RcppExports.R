@@ -79,6 +79,35 @@ grad_for_mu_sigma2_wrapper <- function(muSigma2, phifk_mat, cor_inv, log_bb_dens
     .Call('_mupdog_grad_for_mu_sigma2_wrapper', PACKAGE = 'mupdog', muSigma2, phifk_mat, cor_inv, log_bb_dense)
 }
 
+#' Derivative of \deqn{-log(h) - (log(h) - \mu_h)^2 / (2\sigma_h^2)} with respect
+#' to \eqn{h}.
+#'
+#' @param h The current bias parameter.
+#' @param mu_h The mean of the log-bias.
+#' @param sigma2_h The variance of the log-bias.
+#'
+#'
+#' @seealso \code{\link{pen_bias}} which this is a derivative for.
+#'
+#' @author David Gerard
+dpen_dh <- function(h, mu_h, sigma2_h) {
+    .Call('_mupdog_dpen_dh', PACKAGE = 'mupdog', h, mu_h, sigma2_h)
+}
+
+#' Derivative of \deqn{-log(\epsilon(1 - \epsilon)) - (logit(\epsilon) - \mu_{\epsilon})^2 / (2\sigma_{\epsilon}^2)}
+#' with respect to \eqn{\epsilon}.
+#'
+#' @param eps The current sequencing error rate.
+#' @param mu_eps The mean of the logit of the sequencing error rate.
+#' @param sigma2_eps The variance of the logit of the sequencing error rate.
+#'
+#' @seealso \code{\link{pen_seq_error}} which this is a derivative for.
+#'
+#' @author David Gerard
+dpen_deps <- function(eps, mu_eps, sigma2_eps) {
+    .Call('_mupdog_dpen_deps', PACKAGE = 'mupdog', eps, mu_eps, sigma2_eps)
+}
+
 #' Variational posterior probability of having \code{dosage} A alleles
 #' when the ploidy is \code{ploidy}, the allele frequency is
 #' \code{alpha}, the individual-specific overdispersion parameter is

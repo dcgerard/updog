@@ -52,3 +52,39 @@ test_that("grad_for_mu_sigma2 doesn't return nan's", {
   expect_false(any(is.nan(grad_for_mu_sigma2_wrapper(muSigma2 = c(mu, sigma2), phifk_mat = phifk_mat, cor_inv = cor_inv, log_bb_dense = log_bb_dense))))
 }
 )
+
+test_that("dpen_dh works", {
+  h        <- 1.3
+  mu_h     <- 0.5
+  sigma2_h <- 0.4
+
+  dout <- dpen_dh(h = h, mu_h = mu_h, sigma2_h = sigma2_h)
+
+  myenv <- new.env()
+  assign(x = "h", value = h, envir = myenv)
+  assign(x = "mu_h", value = mu_h, envir = myenv)
+  assign(x = "sigma2_h", value = sigma2_h, envir = myenv)
+  nout <- stats::numericDeriv(quote(pen_bias(h = h, mu_h = mu_h, sigma2_h = sigma2_h)), "h", myenv)
+  expect_equal(attr(nout, "gradient")[1], dout)
+}
+)
+
+test_that("dpen_deps works", {
+  eps <- 0.01
+  mu_eps <- -4.7
+  sigma2_eps <- 1
+  dout <- dpen_deps(eps = eps, mu_eps = mu_eps, sigma2_eps = sigma2_eps)
+
+  myenv <- new.env()
+  assign(x = "eps", value = eps, envir = myenv)
+  assign(x = "mu_eps", value = mu_eps, envir = myenv)
+  assign(x = "sigma2_eps", value = sigma2_eps, envir = myenv)
+  nout <- stats::numericDeriv(quote(pen_seq_error(eps = eps, mu_eps = mu_eps, sigma2_eps = sigma2_eps)), "eps", myenv)
+
+  expect_equal(attr(nout, "gradient")[1], dout)
+}
+)
+
+
+
+

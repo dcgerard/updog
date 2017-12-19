@@ -92,3 +92,43 @@ NumericVector grad_for_mu_sigma2_wrapper(arma::Col<double> muSigma2, NumericMatr
 }
 
 
+//' Derivative of \deqn{-log(h) - (log(h) - \mu_h)^2 / (2\sigma_h^2)} with respect
+//' to \eqn{h}.
+//'
+//' @param h The current bias parameter.
+//' @param mu_h The mean of the log-bias.
+//' @param sigma2_h The variance of the log-bias.
+//'
+//'
+//' @seealso \code{\link{pen_bias}} which this is a derivative for.
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double dpen_dh(double h, double mu_h, double sigma2_h) {
+  double deriv = -1.0 * (1.0 + (std::log(h) - mu_h) / sigma2_h) / h;
+  return deriv;
+}
+
+
+//' Derivative of \deqn{-log(\epsilon(1 - \epsilon)) - (logit(\epsilon) - \mu_{\epsilon})^2 / (2\sigma_{\epsilon}^2)}
+//' with respect to \eqn{\epsilon}.
+//'
+//' @param eps The current sequencing error rate.
+//' @param mu_eps The mean of the logit of the sequencing error rate.
+//' @param sigma2_eps The variance of the logit of the sequencing error rate.
+//'
+//' @seealso \code{\link{pen_seq_error}} which this is a derivative for.
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double dpen_deps(double eps, double mu_eps, double sigma2_eps) {
+  double deriv = -1.0 * (1.0 - 2.0 * eps + (logit(eps) - mu_eps) / sigma2_eps) / (eps * (1.0 - eps));
+  return deriv;
+}
+
+
+
+
+
+
+

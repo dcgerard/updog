@@ -124,6 +124,32 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// dpen_dh
+double dpen_dh(double h, double mu_h, double sigma2_h);
+RcppExport SEXP _mupdog_dpen_dh(SEXP hSEXP, SEXP mu_hSEXP, SEXP sigma2_hSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< double >::type mu_h(mu_hSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma2_h(sigma2_hSEXP);
+    rcpp_result_gen = Rcpp::wrap(dpen_dh(h, mu_h, sigma2_h));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dpen_deps
+double dpen_deps(double eps, double mu_eps, double sigma2_eps);
+RcppExport SEXP _mupdog_dpen_deps(SEXP epsSEXP, SEXP mu_epsSEXP, SEXP sigma2_epsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    Rcpp::traits::input_parameter< double >::type mu_eps(mu_epsSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma2_eps(sigma2_epsSEXP);
+    rcpp_result_gen = Rcpp::wrap(dpen_deps(eps, mu_eps, sigma2_eps));
+    return rcpp_result_gen;
+END_RCPP
+}
 // post_prob
 double post_prob(int dosage, int ploidy, double mu, double sigma2, double alpha, double rho);
 RcppExport SEXP _mupdog_post_prob(SEXP dosageSEXP, SEXP ploidySEXP, SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP rhoSEXP) {
@@ -405,6 +431,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_pbetabinom", (DL_FUNC) &_mupdog_pbetabinom, 5},
     {"_mupdog_grad_for_mu_sigma2", (DL_FUNC) &_mupdog_grad_for_mu_sigma2, 5},
     {"_mupdog_grad_for_mu_sigma2_wrapper", (DL_FUNC) &_mupdog_grad_for_mu_sigma2_wrapper, 4},
+    {"_mupdog_dpen_dh", (DL_FUNC) &_mupdog_dpen_dh, 3},
+    {"_mupdog_dpen_deps", (DL_FUNC) &_mupdog_dpen_deps, 3},
     {"_mupdog_post_prob", (DL_FUNC) &_mupdog_post_prob, 6},
     {"_mupdog_compute_all_post_prob", (DL_FUNC) &_mupdog_compute_all_post_prob, 5},
     {"_mupdog_compute_all_log_bb", (DL_FUNC) &_mupdog_compute_all_log_bb, 6},
