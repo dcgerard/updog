@@ -46,9 +46,9 @@ test_that("compute_all_phifk works", {
   alpha <- c(0.1, 0.2)
   rho   <- c(0.01, 0.02, 0.03)
   ploidy <- 4
-  phifk <- compute_all_phifk(alpha, rho, ploidy)
+  phifk <- compute_all_phifk(alpha, rho, ploidy)[1, 1, , drop = TRUE]
   rway <- qnorm(pbetabinom(-1:ploidy, size = rep(ploidy, ploidy + 2), rho = rho[1], mu = alpha[1], log_p = FALSE))
-  expect_equal(phifk[1, 1, ], rway)
+  expect_equal(phifk[2:(ploidy + 1)], rway[2:(ploidy + 1)])
 }
 )
 

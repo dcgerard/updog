@@ -238,12 +238,12 @@ mupdog <- function(refmat,
 
       postmean[, index] <- oout$par[1:nind]
       postvar[, index] <- oout$par[(nind + 1):(2 * nind)]
-      obj_for_mu_sigma2_wrapper(muSigma2 = c(postmean[, index], postvar[, index]),
-                                phifk_mat = phifk_array[, index, ],
-                                cor_inv = cor_inv, log_bb_dense = lbeta_array[, index, ])
-      grad_for_mu_sigma2_wrapper(muSigma2 = c(postmean[, index], postvar[, index]),
-                                phifk_mat = phifk_array[, index, ],
-                                cor_inv = cor_inv, log_bb_dense = lbeta_array[, index, ])
+      # obj_for_mu_sigma2_wrapper(muSigma2 = c(postmean[, index], postvar[, index]),
+      #                           phifk_mat = phifk_array[, index, ],
+      #                           cor_inv = cor_inv, log_bb_dense = lbeta_array[, index, ])
+      # grad_for_mu_sigma2_wrapper(muSigma2 = c(postmean[, index], postvar[, index]),
+      #                           phifk_mat = phifk_array[, index, ],
+      #                           cor_inv = cor_inv, log_bb_dense = lbeta_array[, index, ])
     }
 
 

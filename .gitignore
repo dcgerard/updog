@@ -5,9 +5,6 @@
 .Ruserdata
 .Rapp.history
 .DS_Store
-analysis/figure
-analysis/*html
-analysis/*_cache
 src-i386/
 src-x64/
 *~
