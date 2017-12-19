@@ -2,6 +2,8 @@
 
 #' Multivariate updog
 #'
+#' @importFrom foreach %dopar%
+#'
 #' @param refmat A matrix of reference counts.
 #'     The rows index the individuals and the columns index the SNPs.
 #' @param sizemat A matrix of total counts.
@@ -50,10 +52,16 @@
 #'     correlation matrix \code{TRUE} or not \code{FALSE}. Will throw
 #'     an error if there are more individuals than SNPs and set to
 #'     \code{TRUE}.
-#' @param update_inbreeding A logical. Should we update the inbreeding coefficients \code{TRUE}
+#' @param update_inbreeding A logical. Should we update the
+#'     inbreeding coefficients \code{TRUE}
 #'     or not \code{FALSE}?
-#' @param verbose Should we print a lot of output \code{TRUE} or not \code{FALSE}?
-#' @param control A list of control paramters (\code{itermax}, \code{obj_tol}).
+#' @param verbose Should we print a lot of output \code{TRUE}
+#'     or not \code{FALSE}?
+#' @param control A list of control paramters (\code{itermax},
+#'     \code{obj_tol}).
+#' @param num_clust The number of clusters to use if you want to
+#'     run the optimization steps in parallel. If \code{num_clust = 1},
+#'     then the optimization step will not be run in parallel.
 #'
 #' @export
 #'
@@ -76,6 +84,7 @@ mupdog <- function(refmat,
                    postvar     = NULL,
                    update_cor  = TRUE,
                    update_inbreeding = TRUE,
+                   num_clust   = 1,
                    control = list()) {
 
   ##########################################################
@@ -213,7 +222,9 @@ mupdog <- function(refmat,
                                     bias = bias,
                                     od = od)
 
-  phifk_array <- compute_all_phifk(alpha = allele_freq, rho = inbreeding, ploidy = ploidy)
+  phifk_array <- compute_all_phifk(alpha = allele_freq,
+                                   rho = inbreeding,
+                                   ploidy = ploidy)
 
 
   obj <- -Inf
@@ -224,27 +235,40 @@ mupdog <- function(refmat,
 
 
     ## Update variational means and variances ---------------------------------
-    ## Can parallelize this
     if (verbose) {
       cat(" Updating posterior means and variances.\n")
     }
-    for (index in 1:nsnps) {
+
+    if (num_clust > 1) {
+      cl = parallel::makeCluster(num_clust)
+      doParallel::registerDoParallel(cl = cl)
+      if (foreach::getDoParWorkers() == 1) {
+        warning("num_clust > 1 but only one core registered using doParallel::registerDoParallel.")
+        foreach::registerDoSEQ()
+      }
+    } else {
+      foreach::registerDoSEQ()
+    }
+    fout <- foreach::foreach(index = 1:nsnps, .combine = cbind,
+                             .export = c("obj_for_mu_sigma2_wrapper",
+                                         "grad_for_mu_sigma2_wrapper")) %dopar% {
       oout <- stats::optim(par = c(postmean[, index], postvar[, index]),
                            fn = obj_for_mu_sigma2_wrapper,
                            gr = grad_for_mu_sigma2_wrapper,
-                           method = "L-BFGS-B", lower = lower_vec, upper = upper_vec, control = list(fnscale = -1, maxit = 10),
+                           method = "L-BFGS-B",
+                           lower = lower_vec,
+                           upper = upper_vec,
+                           control = list(fnscale = -1, maxit = 10),
                            phifk_mat = phifk_array[, index, ],
-                           cor_inv = cor_inv, log_bb_dense = lbeta_array[, index, ])
-
-      postmean[, index] <- oout$par[1:nind]
-      postvar[, index] <- oout$par[(nind + 1):(2 * nind)]
-      # obj_for_mu_sigma2_wrapper(muSigma2 = c(postmean[, index], postvar[, index]),
-      #                           phifk_mat = phifk_array[, index, ],
-      #                           cor_inv = cor_inv, log_bb_dense = lbeta_array[, index, ])
-      # grad_for_mu_sigma2_wrapper(muSigma2 = c(postmean[, index], postvar[, index]),
-      #                           phifk_mat = phifk_array[, index, ],
-      #                           cor_inv = cor_inv, log_bb_dense = lbeta_array[, index, ])
+                           cor_inv = cor_inv,
+                           log_bb_dense = lbeta_array[, index, ])
+      oout$par
     }
+    if (num_clust > 1) {
+      parallel::stopCluster(cl)
+    }
+    postmean <- fout[1:nind, ]
+    postvar  <- fout[(nind + 1):(2 * nind), ]
 
 
     ## Update allele frequencies -----------------------------------------------
@@ -289,7 +313,7 @@ mupdog <- function(refmat,
     }
 
     ## Update sequencing error rate, bias, and overdispersion ----------------------------------------------------------------------
-    ## can optimize this by actually calculating gradient and parallellizing -------------------------------------------------------
+    ## can optimize this by actually calculating gradient -------------------------------------------------------
     warray <- compute_all_post_prob(ploidy = ploidy,
                                     mu = postmean,
                                     sigma2 = postvar,
@@ -300,19 +324,31 @@ mupdog <- function(refmat,
       cat("Done updating inbreeding.\n",
           "Updating seq, bias, and od.\n")
     }
-    for (index in 1:nsnps) {
+    if (num_clust > 1) {
+      cl = parallel::makeCluster(num_clust)
+      doParallel::registerDoParallel(cl = cl)
+      if (foreach::getDoParWorkers() == 1) {
+        warning("num_clust > 1 but only one core registered using doParallel::registerDoParallel.")
+        foreach::registerDoSEQ()
+      }
+    } else {
+      foreach::registerDoSEQ()
+    }
+    fout_seq <- foreach::foreach(index = 1:nsnps, .combine = cbind,
+                                 .export = "obj_for_eps") %dopar% {
       oout <- stats::optim(par = c(seq[index], bias[index], od[index]), fn = obj_for_eps,
                            method = "L-BFGS-B", lower = rep(10^-6, 3), upper = c(1 - 10^-6, Inf, 1 - 10^-6),
                            control = list(fnscale = -1, maxit = 10),
                            refvec = refmat[, index], sizevec = sizemat[, index], ploidy = ploidy, mean_bias = mean_bias,
                            var_bias = var_bias, mean_seq = mean_seq, var_seq = var_seq, wmat = warray[, index, ])
-      seq[index]  <- oout$par[1]
-      bias[index] <- oout$par[2]
-      od[index]   <- oout$par[3]
+      oout$par
     }
-    obj_for_eps(parvec = rep(10 ^ -6, 3),
-                refvec = refmat[, index], sizevec = sizemat[, index], ploidy = ploidy, mean_bias = mean_bias,
-                var_bias = var_bias, mean_seq = mean_seq, var_seq = var_seq, wmat = warray[, index, ])
+    if (num_clust > 1) {
+      parallel::stopCluster(cl)
+    }
+    seq  <- fout_seq[1, ]
+    bias <- fout_seq[2, ]
+    od   <- fout_seq[3, ]
 
     lbeta_array <- compute_all_log_bb(refmat = refmat,
                                       sizemat = sizemat,

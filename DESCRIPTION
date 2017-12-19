@@ -14,7 +14,9 @@ LinkingTo: Rcpp,
     RcppArmadillo
 Imports: Rcpp (>= 0.11.0),
     RcppArmadillo,
-    assertthat
+    assertthat,
+    foreach,
+    doParallel
 Suggests: covr,
     testthat,
     SuppDists
