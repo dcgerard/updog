@@ -150,6 +150,45 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// dlbeta_dc
+double dlbeta_dc(int x, int n, double xi, double c);
+RcppExport SEXP _mupdog_dlbeta_dc(SEXP xSEXP, SEXP nSEXP, SEXP xiSEXP, SEXP cSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type xi(xiSEXP);
+    Rcpp::traits::input_parameter< double >::type c(cSEXP);
+    rcpp_result_gen = Rcpp::wrap(dlbeta_dc(x, n, xi, c));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dc_dtau
+double dc_dtau(double tau);
+RcppExport SEXP _mupdog_dc_dtau(SEXP tauSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type tau(tauSEXP);
+    rcpp_result_gen = Rcpp::wrap(dc_dtau(tau));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dlbeta_dtau
+double dlbeta_dtau(int x, int n, double xi, double tau);
+RcppExport SEXP _mupdog_dlbeta_dtau(SEXP xSEXP, SEXP nSEXP, SEXP xiSEXP, SEXP tauSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type xi(xiSEXP);
+    Rcpp::traits::input_parameter< double >::type tau(tauSEXP);
+    rcpp_result_gen = Rcpp::wrap(dlbeta_dtau(x, n, xi, tau));
+    return rcpp_result_gen;
+END_RCPP
+}
 // post_prob
 double post_prob(int dosage, int ploidy, double mu, double sigma2, double alpha, double rho);
 RcppExport SEXP _mupdog_post_prob(SEXP dosageSEXP, SEXP ploidySEXP, SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP rhoSEXP) {
@@ -433,6 +472,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_grad_for_mu_sigma2_wrapper", (DL_FUNC) &_mupdog_grad_for_mu_sigma2_wrapper, 4},
     {"_mupdog_dpen_dh", (DL_FUNC) &_mupdog_dpen_dh, 3},
     {"_mupdog_dpen_deps", (DL_FUNC) &_mupdog_dpen_deps, 3},
+    {"_mupdog_dlbeta_dc", (DL_FUNC) &_mupdog_dlbeta_dc, 4},
+    {"_mupdog_dc_dtau", (DL_FUNC) &_mupdog_dc_dtau, 1},
+    {"_mupdog_dlbeta_dtau", (DL_FUNC) &_mupdog_dlbeta_dtau, 4},
     {"_mupdog_post_prob", (DL_FUNC) &_mupdog_post_prob, 6},
     {"_mupdog_compute_all_post_prob", (DL_FUNC) &_mupdog_compute_all_post_prob, 5},
     {"_mupdog_compute_all_log_bb", (DL_FUNC) &_mupdog_compute_all_log_bb, 6},

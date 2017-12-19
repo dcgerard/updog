@@ -127,6 +127,74 @@ double dpen_deps(double eps, double mu_eps, double sigma2_eps) {
 }
 
 
+//' Derivative of the log-beta density with
+//' respect to c where \eqn{c = (1 - \tau)/\tau}
+//' where \eqn{\tau} is the overdispersion parameter.
+//'
+//' @param x The number of successes observed
+//' @param n The total number of trials observed.
+//' @param xi The mean of the beta-binomial.
+//' @param c \eqn{(1 - \tau)/\tau} where \eqn{\tau}
+//'     is the overdispersion parameter.
+//'
+//'
+//' @seealso \code{\link{dbetabinom_double}}, \code{\link{dlbeta_dtau}},
+//'     \code{\link{dc_dtau}}.
+//' @author David Gerard
+// [[Rcpp::export]]
+double dlbeta_dc(int x, int n, double xi, double c) {
+  double deriv = -1.0 * xi * R::digamma(xi * c) -
+    (1.0 - xi) * R::digamma((1.0 - xi) * c) +
+    R::digamma(c) +
+    xi * R::digamma((double)x + xi * c) +
+    (1.0 - xi) * R::digamma((double)n - (double)x + (1.0 - xi) * c) -
+    R::digamma((double)n + c);
+
+  return(deriv);
+}
+
+
+//' Derivative of \eqn{c = (1 - \tau) / \tau} with respect to \eqn{\tau}.
+//'
+//' @param tau The overdispersion parameter.
+//'
+//' @seealso \code{\link{dlbeta_dc}}, \code{\link{dlbeta_dtau}}
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double dc_dtau(double tau) {
+  double deriv = -1.0 / std::pow(tau, 2.0);
+  return deriv;
+}
+
+//' Derivative of the log-beta-binomial density with respect to the
+//' overdispersion parameter.
+//'
+//' @param x The number of successes.
+//' @param n The number of trials.
+//' @param xi The mean of the beta.
+//' @param tau The overdispersion parameter.
+//'
+//' @seealso \code{\link{dlbeta_dc}}, \code{\link{dc_dtau}},
+//'     \code{\link{dbetabinom_double}}.
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double dlbeta_dtau(int x, int n, double xi, double tau) {
+  double dlbetadc = dlbeta_dc(x, n, xi, (1.0 - tau) / tau);
+  double dcdtau   = dc_dtau(tau);
+  double deriv = dlbetadc * dcdtau;
+  return deriv;
+}
+
+
+
+
+
+
+
+
+
 
 
 

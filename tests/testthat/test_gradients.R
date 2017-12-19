@@ -85,6 +85,25 @@ test_that("dpen_deps works", {
 }
 )
 
+test_that("dlbeta_dtau works", {
+  x <- 4
+  n <- 11
+  xi <- 0.2
+  tau <- 0.1
+
+  dout <- dlbeta_dtau(x = x, n = n, xi = xi, tau = tau)
+
+  myenv <- new.env()
+  assign(x = "x", value = x, envir = myenv)
+  assign(x = "n", value = n, envir = myenv)
+  assign(x = "xi", value = xi, envir = myenv)
+  assign(x = "tau", value = tau, envir = myenv)
+  nout <- stats::numericDeriv(quote(dbetabinom_double(x = x, size = n, mu = xi, rho = tau, log = TRUE)), "tau", myenv)
+
+  expect_equal(dout, attr(nout, "gradient")[1], tol = 10^-5)
+}
+)
+
 
 
 

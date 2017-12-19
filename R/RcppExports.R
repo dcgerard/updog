@@ -108,6 +108,51 @@ dpen_deps <- function(eps, mu_eps, sigma2_eps) {
     .Call('_mupdog_dpen_deps', PACKAGE = 'mupdog', eps, mu_eps, sigma2_eps)
 }
 
+#' Derivative of the log-beta density with
+#' respect to c where \eqn{c = (1 - \tau)/\tau}
+#' where \eqn{\tau} is the overdispersion parameter.
+#'
+#' @param x The number of successes observed
+#' @param n The total number of trials observed.
+#' @param xi The mean of the beta-binomial.
+#' @param c \eqn{(1 - \tau)/\tau} where \eqn{\tau}
+#'     is the overdispersion parameter.
+#'
+#'
+#' @seealso \code{\link{dbetabinom_double}}, \code{\link{dlbeta_dtau}},
+#'     \code{\link{dc_dtau}}.
+#' @author David Gerard
+dlbeta_dc <- function(x, n, xi, c) {
+    .Call('_mupdog_dlbeta_dc', PACKAGE = 'mupdog', x, n, xi, c)
+}
+
+#' Derivative of \eqn{c = (1 - \tau) / \tau} with respect to \eqn{\tau}.
+#'
+#' @param tau The overdispersion parameter.
+#'
+#' @seealso \code{\link{dlbeta_dc}}, \code{\link{dlbeta_dtau}}
+#'
+#' @author David Gerard
+dc_dtau <- function(tau) {
+    .Call('_mupdog_dc_dtau', PACKAGE = 'mupdog', tau)
+}
+
+#' Derivative of the log-beta-binomial density with respect to the
+#' overdispersion parameter.
+#'
+#' @param x The number of successes.
+#' @param n The number of trials.
+#' @param xi The mean of the beta.
+#' @param tau The overdispersion parameter.
+#'
+#' @seealso \code{\link{dlbeta_dc}}, \code{\link{dc_dtau}},
+#'     \code{\link{dbetabinom_double}}.
+#'
+#' @author David Gerard
+dlbeta_dtau <- function(x, n, xi, tau) {
+    .Call('_mupdog_dlbeta_dtau', PACKAGE = 'mupdog', x, n, xi, tau)
+}
+
 #' Variational posterior probability of having \code{dosage} A alleles
 #' when the ploidy is \code{ploidy}, the allele frequency is
 #' \code{alpha}, the individual-specific overdispersion parameter is
