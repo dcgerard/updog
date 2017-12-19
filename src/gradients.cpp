@@ -11,10 +11,10 @@ NumericVector grad_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2,
   // Check input --------------------------------------------------------------------------------
   int nind = log_bb_dense.nrow();
   int ploidy = log_bb_dense.ncol() - 1;
-  if (mu.n_elem != nind) {
+  if (mu.n_elem != (unsigned int)nind) {
     Rcpp::stop("obj_for_mu_sigma2: mu needs to have the same length as the number of columns in log_bb_dense.");
   }
-  if (sigma2.n_elem != nind) {
+  if (sigma2.n_elem != (unsigned int)nind) {
     Rcpp::stop("obj_for_mu_sigma2: sigma2 needs to have the same length as the number of columns in log_bb_dense.");
   }
   if (phifk_mat.nrow() != nind) {
@@ -23,10 +23,10 @@ NumericVector grad_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2,
   if (phifk_mat.ncol() != ploidy + 2) {
     Rcpp::stop("obj_for_mu_sigma2: phifk_mat needs to have ploidy+2 columns.");
   }
-  if (cor_inv.n_cols != nind) {
+  if (cor_inv.n_cols != (unsigned int)nind) {
     Rcpp::stop("obj_for_mu_sigma2: cor_inv needs to have the same number of rows as log_bb_dense.");
   }
-  if (cor_inv.n_rows != nind) {
+  if (cor_inv.n_rows != (unsigned int)nind) {
     Rcpp::stop("obj_for_mu_sigma2: cor_inv needs to have the same number of columns as rows.");
   }
 

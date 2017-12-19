@@ -1,11 +1,16 @@
-#' \code{mupdog} Multivariate updog.
+#' \code{mupdog}: An extenstion of updog to allow for correlation in the
+#'     genotypes between individuals using a Gaussian copula model.
 #'
+#' @section \code{mupdog} Functions:
+#' \itemize{
+#'   \item \code{\link{mupdog}}: The main function in the package that fits the mupdog method.
+#' }
 #'
 #' @useDynLib mupdog
 #' @importFrom Rcpp sourceCpp
 #'
 #' @docType package
-#' @name mupdog
+#' @name mupdog-package
 #'
 #' @author David Gerard
 NULL

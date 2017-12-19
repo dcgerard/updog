@@ -298,11 +298,11 @@ double obj_for_alpha(arma::Col<double> mu,
   if (log_bb_dense.ncol() != ploidy + 1) {
     Rcpp::stop("obj_for_alpha: log_bb_dense must have ploidy+1 columns.");
   }
-  if (mu.n_elem != nind) {
+  if (mu.n_elem != (unsigned int)nind) {
     Rcpp::Rcout << mu.n_elem << std::endl;
     Rcpp::stop("obj_for_alpha: mu must have length equal to the number of individuals.");
   }
-  if (sigma2.n_elem != nind) {
+  if (sigma2.n_elem != (unsigned int)nind) {
     Rcpp::Rcout << sigma2.n_elem << std::endl;
     Rcpp::stop("obj_for_alpha: sigma2 must have length equal to the number of individuals.");
   }
@@ -418,10 +418,10 @@ double obj_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2, Numeric
   // Check input --------------------------------------------------------------------------------
   int nind = log_bb_dense.nrow();
   int ploidy = log_bb_dense.ncol() - 1;
-  if (mu.n_elem != nind) {
+  if (mu.n_elem != (unsigned int)nind) {
     Rcpp::stop("obj_for_mu_sigma2: mu needs to have the same length as the number of columns in log_bb_dense.");
   }
-  if (sigma2.n_elem != nind) {
+  if (sigma2.n_elem != (unsigned int)nind) {
     Rcpp::stop("obj_for_mu_sigma2: sigma2 needs to have the same length as the number of columns in log_bb_dense.");
   }
   if (phifk_mat.nrow() != nind) {
@@ -430,10 +430,10 @@ double obj_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2, Numeric
   if (phifk_mat.ncol() != ploidy + 2) {
     Rcpp::stop("obj_for_mu_sigma2: phifk_mat needs to have ploidy+2 columns.");
   }
-  if (cor_inv.n_cols != nind) {
+  if (cor_inv.n_cols != (unsigned int)nind) {
     Rcpp::stop("obj_for_mu_sigma2: cor_inv needs to have the same number of rows as log_bb_dense.");
   }
-  if (cor_inv.n_rows != nind) {
+  if (cor_inv.n_rows != (unsigned int)nind) {
     Rcpp::stop("obj_for_mu_sigma2: cor_inv needs to have the same number of columns as rows.");
   }
 
@@ -505,34 +505,34 @@ double elbo(arma::Cube<double> warray, arma::Cube<double> lbeta_array,
   // Check input -------------------------------------------------------
   int nsnps = warray.n_cols;
   int nind  = warray.n_rows;
-  if (lbeta_array.n_cols != nsnps) {
+  if (lbeta_array.n_cols != (unsigned int)nsnps) {
     Rcpp::stop("elbo: lbeta_array must have the same dimension as warray");
   }
-  if (lbeta_array.n_rows != nind) {
+  if (lbeta_array.n_rows != (unsigned int)nind) {
     Rcpp::stop("elbo: lbeta_array must have the same dimension as warray");
   }
-  if (lbeta_array.n_slices != (ploidy + 1)) {
+  if (lbeta_array.n_slices != ((unsigned int)ploidy + 1)) {
     Rcpp::stop("elbo: lbeta_array must have third-dimension ploidy+1.");
   }
-  if (warray.n_slices != (ploidy + 1)) {
+  if (warray.n_slices != ((unsigned int)ploidy + 1)) {
     Rcpp::stop("elbo: warray must have third-dimension ploidy+1.");
   }
-  if (cor_inv.n_rows != nind) {
+  if (cor_inv.n_rows != (unsigned int)nind) {
     Rcpp::stop("elbo: cor_inv must have the number of rows equal to the number of individuals.");
   }
-  if (cor_inv.n_cols != nind) {
+  if (cor_inv.n_cols != (unsigned int)nind) {
     Rcpp::stop("elbo: cor_inv must have the number of columns equal to the number of individuals.");
   }
-  if (postmean.n_rows != nind) {
+  if (postmean.n_rows != (unsigned int)nind) {
     Rcpp::stop("elbo: postmean must have the number of rows equal to the number of individuals.");
   }
-  if (postmean.n_cols != nsnps) {
+  if (postmean.n_cols != (unsigned int)nsnps) {
     Rcpp::stop("elbo: postmean must have the number of columns equal to the number of SNPs.");
   }
-  if (postvar.n_rows != nind) {
+  if (postvar.n_rows != (unsigned int)nind) {
     Rcpp::stop("elbo: postvar must have the number of rows equal to the number of individuals.");
   }
-  if (postvar.n_cols != nsnps) {
+  if (postvar.n_cols != (unsigned int)nsnps) {
     Rcpp::stop("elbo: postvar must have the number of columns equal to the number of SNPs.");
   }
   if (bias.length() != nsnps) {
