@@ -8,7 +8,8 @@ mupdog(refmat, sizemat, ploidy, verbose = TRUE, mean_bias = 0,
   var_bias = 1, mean_seq = -4.7, var_seq = 1, seq = NULL, bias = NULL,
   od = NULL, allele_freq = NULL, inbreeding = NULL, cor_mat = NULL,
   postmean = NULL, postvar = NULL, update_cor = TRUE,
-  update_inbreeding = TRUE, num_clust = 1, control = list())
+  update_inbreeding = TRUE, update_allele_freq = TRUE, num_clust = 1,
+  control = list())
 }
 \arguments{
 \item{refmat}{A matrix of reference counts.
@@ -81,6 +82,9 @@ an error if there are more individuals than SNPs and set to
 \item{update_inbreeding}{A logical. Should we update the
 inbreeding coefficients \code{TRUE}
 or not \code{FALSE}?}
+
+\item{update_allele_freq}{A logical. Should we update the
+allele frequencies \code{TRUE} or not \code{FALSE}?}
 
 \item{num_clust}{The number of clusters to use if you want to
 run the optimization steps in parallel. If \code{num_clust = 1},

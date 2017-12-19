@@ -55,6 +55,8 @@
 #' @param update_inbreeding A logical. Should we update the
 #'     inbreeding coefficients \code{TRUE}
 #'     or not \code{FALSE}?
+#' @param update_allele_freq A logical. Should we update the
+#'     allele frequencies \code{TRUE} or not \code{FALSE}?
 #' @param verbose Should we print a lot of output \code{TRUE}
 #'     or not \code{FALSE}?
 #' @param control A list of control paramters (\code{itermax},
@@ -69,23 +71,24 @@
 mupdog <- function(refmat,
                    sizemat,
                    ploidy,
-                   verbose     = TRUE,
-                   mean_bias   = 0,
-                   var_bias    = 1,
-                   mean_seq    = -4.7,
-                   var_seq     = 1,
-                   seq         = NULL,
-                   bias        = NULL,
-                   od          = NULL,
-                   allele_freq = NULL,
-                   inbreeding  = NULL,
-                   cor_mat     = NULL,
-                   postmean    = NULL,
-                   postvar     = NULL,
-                   update_cor  = TRUE,
-                   update_inbreeding = TRUE,
-                   num_clust   = 1,
-                   control = list()) {
+                   verbose            = TRUE,
+                   mean_bias          = 0,
+                   var_bias           = 1,
+                   mean_seq           = -4.7,
+                   var_seq            = 1,
+                   seq                = NULL,
+                   bias               = NULL,
+                   od                 = NULL,
+                   allele_freq        = NULL,
+                   inbreeding         = NULL,
+                   cor_mat            = NULL,
+                   postmean           = NULL,
+                   postvar            = NULL,
+                   update_cor         = TRUE,
+                   update_inbreeding  = TRUE,
+                   update_allele_freq = TRUE,
+                   num_clust          = 1,
+                   control            = list()) {
 
   ##########################################################
   ## Check refmat and sizemat ------------------------------
@@ -207,6 +210,10 @@ mupdog <- function(refmat,
 
   assertthat::assert_that(obj_tol > 0)
   assertthat::assert_that(itermax > 1)
+  assertthat::assert_that(num_clust > 0)
+  assertthat::assert_that(is.logical(update_allele_freq))
+  assertthat::assert_that(is.logical(update_cor))
+  assertthat::assert_that(is.logical(update_inbreeding))
 
   ############################################################
 
@@ -236,7 +243,7 @@ mupdog <- function(refmat,
 
     ## Update variational means and variances ---------------------------------
     if (verbose) {
-      cat(" Updating posterior means and variances.\n")
+      cat("Updating posterior means and variances.\n\n")
     }
 
     if (num_clust > 1) {
@@ -272,38 +279,80 @@ mupdog <- function(refmat,
 
 
     ## Update allele frequencies -----------------------------------------------
-    ## Can parallelize this
-    if (verbose) {
-      cat("Done Updating posterior means and variances.\n",
-          "Updating allele_freq.\n")
+
+    if (update_allele_freq) {
+      if (verbose) {
+        cat("Updating allele_freq.\n\n")
+      }
+      if (num_clust > 1) {
+        cl = parallel::makeCluster(num_clust)
+        doParallel::registerDoParallel(cl = cl)
+        if (foreach::getDoParWorkers() == 1) {
+          warning("num_clust > 1 but only one core registered using doParallel::registerDoParallel.")
+          foreach::registerDoSEQ()
+        }
+      } else {
+        foreach::registerDoSEQ()
+      }
+      allele_freq <- foreach::foreach(index = 1:nsnps, .combine = c,
+                       .export = "obj_for_alpha") %dopar% {
+        oout <- stats::optim(par = allele_freq[index],
+                             fn = obj_for_alpha,
+                             method = "Brent",
+                             control = list(fnscale = -1, maxit = 10),
+                             lower = 0, upper = 1,
+                             mu = postmean[, index],
+                             sigma2 = postvar[, index],
+                             rho = inbreeding,
+                             log_bb_dense = lbeta_array[, index, ],
+                             ploidy = ploidy)
+        oout$par
+        }
+      if (num_clust > 1) {
+        parallel::stopCluster(cl)
+      }
     }
-    for (index in 1:nsnps) {
-      oout <- stats::optim(par = allele_freq[index], fn = obj_for_alpha, method = "Brent",
-                           control = list(fnscale = -1, maxit = 10), lower = 0, upper = 1,
-                           mu = postmean[, index], sigma2 = postvar[, index],
-                           rho = inbreeding, log_bb_dense = lbeta_array[, index, ], ploidy = ploidy)
-      allele_freq[index] <- oout$par
-    }
+
 
 
     ## Update inbreeding coefficients ---------------------------------------------------------------------------------------------
-    ## Could parallellize this later
     if (update_inbreeding) {
       if (verbose) {
-        cat("Done updating postmean, postvar, and allele_freq.\n",
-            "Updating inbreeding.\n")
+        cat("Updating inbreeding.\n\n")
       }
-      for (index in 1:nind) {
-        oout <- stats::optim(par = inbreeding[index], fn = obj_for_rho, method = "Brent", lower = 0, upper = 1,
+      if (num_clust > 1) {
+        cl = parallel::makeCluster(num_clust)
+        doParallel::registerDoParallel(cl = cl)
+        if (foreach::getDoParWorkers() == 1) {
+          warning("num_clust > 1 but only one core registered using doParallel::registerDoParallel.")
+          foreach::registerDoSEQ()
+        }
+      } else {
+        foreach::registerDoSEQ()
+      }
+      inbreeding <- foreach::foreach(index = 1:nind, .combine = c,
+                                     .export = "obj_for_rho") %dopar% {
+        oout <- stats::optim(par = inbreeding[index],
+                             fn = obj_for_rho,
+                             method = "Brent",
+                             lower = 0, upper = 1,
                              control = list(fnscale = -1, maxit = 10),
-                             mu = postmean[index, ], sigma2 = postvar[index, ], alpha = allele_freq,
-                             log_bb_dense = lbeta_array[index, ,], ploidy = ploidy)
-        inbreeding[index] <- oout$par
+                             mu = postmean[index, ],
+                             sigma2 = postvar[index, ],
+                             alpha = allele_freq,
+                             log_bb_dense = lbeta_array[index, ,],
+                             ploidy = ploidy)
+        oout$par
+      }
+      if (num_clust > 1) {
+        parallel::stopCluster(cl)
       }
     }
 
     ## Recalculate phifk_array after updating allele_freq and inbreeding ---------------------------------------------------------
-    phifk_array <- compute_all_phifk(alpha = allele_freq, rho = inbreeding, ploidy = ploidy)
+    phifk_array <- compute_all_phifk(alpha = allele_freq,
+                                     rho = inbreeding,
+                                     ploidy = ploidy)
 
 
     ## Update correlation matrix ---------------------------------------
@@ -321,8 +370,7 @@ mupdog <- function(refmat,
                                     rho = inbreeding)
 
     if (verbose) {
-      cat("Done updating inbreeding.\n",
-          "Updating seq, bias, and od.\n")
+      cat("Updating seq, bias, and od.\n\n")
     }
     if (num_clust > 1) {
       cl = parallel::makeCluster(num_clust)
@@ -336,11 +384,20 @@ mupdog <- function(refmat,
     }
     fout_seq <- foreach::foreach(index = 1:nsnps, .combine = cbind,
                                  .export = "obj_for_eps") %dopar% {
-      oout <- stats::optim(par = c(seq[index], bias[index], od[index]), fn = obj_for_eps,
-                           method = "L-BFGS-B", lower = rep(10^-6, 3), upper = c(1 - 10^-6, Inf, 1 - 10^-6),
+      oout <- stats::optim(par = c(seq[index], bias[index], od[index]),
+                           fn = obj_for_eps,
+                           method = "L-BFGS-B",
+                           lower = rep(10^-6, 3),
+                           upper = c(1 - 10^-6, Inf, 1 - 10^-6),
                            control = list(fnscale = -1, maxit = 10),
-                           refvec = refmat[, index], sizevec = sizemat[, index], ploidy = ploidy, mean_bias = mean_bias,
-                           var_bias = var_bias, mean_seq = mean_seq, var_seq = var_seq, wmat = warray[, index, ])
+                           refvec = refmat[, index],
+                           sizevec = sizemat[, index],
+                           ploidy = ploidy,
+                           mean_bias = mean_bias,
+                           var_bias = var_bias,
+                           mean_seq = mean_seq,
+                           var_seq = var_seq,
+                           wmat = warray[, index, ])
       oout$par
     }
     if (num_clust > 1) {
@@ -356,10 +413,6 @@ mupdog <- function(refmat,
                                       seq = seq,
                                       bias = bias,
                                       od = od)
-
-    if (verbose) {
-      cat("Done updating seq, bias, and od.\n\n")
-    }
 
     ## Calculate objective ---------------------------------------------------------------------------------------------------------
     obj <- elbo(warray = warray, lbeta_array = lbeta_array, cor_inv = cor_inv,
