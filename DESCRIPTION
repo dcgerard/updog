@@ -16,7 +16,10 @@ Imports: Rcpp (>= 0.11.0),
     RcppArmadillo,
     assertthat,
     foreach,
-    doParallel
+    doParallel,
+    updog,
+    ggplot2
 Suggests: covr,
     testthat,
     SuppDists
+Remotes: dcgerard/updog

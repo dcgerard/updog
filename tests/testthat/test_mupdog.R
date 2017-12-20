@@ -32,6 +32,8 @@ test_that("mupdog works", {
   ploidy             <- 4
   verbose            <- FALSE
   num_clust          <- 2
+  itermax            <- 100
+  obj_tol            <- 10 ^ -4
 
   refmat[1,1] <- NA
 

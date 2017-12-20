@@ -359,7 +359,6 @@ mupdog <- function(refmat,
     }
 
     ## Update sequencing error rate, bias, and overdispersion ----------------------------------------------------------------------
-    ## can optimize this by actually calculating gradient -------------------------------------------------------
     warray <- compute_all_post_prob(ploidy = ploidy,
                                     mu = postmean,
                                     sigma2 = postvar,
@@ -378,7 +377,8 @@ mupdog <- function(refmat,
       }
     }
     fout_seq <- foreach::foreach(index = 1:nsnps, .combine = cbind,
-                                 .export = "obj_for_eps") %dopar% {
+                                 .export = c("obj_for_eps",
+                                             "grad_for_eps")) %dopar% {
       oout <- stats::optim(par = c(seq[index], bias[index], od[index]),
                            fn = obj_for_eps,
                            gr = grad_for_eps,
@@ -395,7 +395,7 @@ mupdog <- function(refmat,
                            var_seq = var_seq,
                            wmat = warray[, index, ])
       oout$par
-    }
+      }
     if (num_clust > 1) {
       parallel::stopCluster(cl)
     }
@@ -427,19 +427,25 @@ mupdog <- function(refmat,
   }
 
   map_dosage <- apply(warray, c(1, 2), which.max) - 1
+  maxpostprob <- apply(warray, c(1, 2), max)
 
-  return_list             <- list()
-  return_list$map_dosage  <- map_dosage
-  return_list$postprob    <- warray
-  return_list$seq         <- seq
-  return_list$bias        <- bias
-  return_list$od          <- od
-  return_list$allele_freq <- allele_freq
-  return_list$inbreeding  <- inbreeding
-  return_list$cor_mat     <- cor_mat
-  return_list$postmean    <- postmean
-  return_list$postvar     <- postvar
+  return_list               <- list()
+  return_list$map_dosage    <- map_dosage
+  return_list$maxpostprob   <- maxpostprob
+  return_list$postprob      <- warray
+  return_list$seq           <- seq
+  return_list$bias          <- bias
+  return_list$od            <- od
+  return_list$allele_freq   <- allele_freq
+  return_list$inbreeding    <- inbreeding
+  return_list$cor_mat       <- cor_mat
+  return_list$postmean      <- postmean
+  return_list$postvar       <- postvar
+  return_list$input$refmat  <- refmat
+  return_list$input$sizemat <- sizemat
+  return_list$input$ploidy  <- ploidy
 
+  class(return_list) <- "mupdog"
   return(return_list)
 }
 
@@ -454,5 +460,21 @@ mupdog <- function(refmat,
 update_R <- function(postmean, postvar) {
   stats::cov2cor(tcrossprod(postmean) + diag(rowSums(postvar)))
 }
+
+
+
+#' Tests if its argument is a mupdog object.
+#'
+#' @param x Anything.
+#'
+#' @return A logical. \code{TRUE} if \code{x} is a mupdog object, and \code{FALSE} otherwise.
+#'
+#' @author David Gerard
+#'
+#' @export
+#'
+is.mupdog <- function(x) inherits(x, "mupdog")
+
+
 
 
