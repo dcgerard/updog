@@ -151,6 +151,9 @@ test_that("grad_for_eps works", {
   wmat <- matrix(abs(rnorm(11 * (ploidy + 1))), nrow = 11)
   wmat <- wmat / rowSums(wmat)
 
+  refvec[1]  <- NA
+  sizevec[2] <- NA
+
   dout <- grad_for_eps(parvec = parvec, refvec = refvec, sizevec = sizevec,
                        ploidy = ploidy, mean_bias = mean_bias,
                        var_bias = var_bias, mean_seq = mean_seq,

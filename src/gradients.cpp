@@ -317,11 +317,13 @@ NumericVector grad_for_eps(NumericVector parvec,
 
   double p;
   for (int i = 0; i < nind; i++) {
-    for (int k = 0; k <= ploidy; k++) {
-      p = (double)k / (double)ploidy;
-      grad(0) = grad(0) + wmat(i, k) * dlbeta_deps(refvec(i), sizevec(i), p, eps, h, tau);
-      grad(1) = grad(1) + wmat(i, k) * dlbeta_dh(refvec(i), sizevec(i), p, eps, h, tau);
-      grad(2) = grad(2) + wmat(i, k) * dlbeta_dtau(refvec(i), sizevec(i), p, eps, h, tau);
+    if (!R_IsNA(refvec(i)) & !R_IsNA(sizevec(i))) {
+      for (int k = 0; k <= ploidy; k++) {
+        p = (double)k / (double)ploidy;
+        grad(0) = grad(0) + wmat(i, k) * dlbeta_deps(refvec(i), sizevec(i), p, eps, h, tau);
+        grad(1) = grad(1) + wmat(i, k) * dlbeta_dh(refvec(i), sizevec(i), p, eps, h, tau);
+        grad(2) = grad(2) + wmat(i, k) * dlbeta_dtau(refvec(i), sizevec(i), p, eps, h, tau);
+      }
     }
   }
 
