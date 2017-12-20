@@ -8,6 +8,8 @@
 #' @param x A mupdog object.
 #' @param index The column number of the gene to plot.
 #'
+#' @export
+#'
 #' @author David Gerard
 plot.mupdog <- function(x, index) {
   assertthat::assert_that(is.mupdog(x))
