@@ -7,11 +7,12 @@
 #'
 #' @param x A mupdog object.
 #' @param index The column number of the gene to plot.
+#' @param ... Not used.
 #'
 #' @export
 #'
 #' @author David Gerard
-plot.mupdog <- function(x, index) {
+plot.mupdog <- function(x, index, ...) {
   assertthat::assert_that(is.mupdog(x))
 
   pl <- updog::plot_geno(ocounts = x$input$refmat[, index], osize = x$input$sizemat[, index],

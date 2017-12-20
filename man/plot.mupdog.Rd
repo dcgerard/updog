@@ -4,12 +4,14 @@
 \alias{plot.mupdog}
 \title{Draw a genotype plot from the output of \code{\link{mupdog}}.}
 \usage{
-\method{plot}{mupdog}(x, index)
+\method{plot}{mupdog}(x, index, ...)
 }
 \arguments{
 \item{x}{A mupdog object.}
 
 \item{index}{The column number of the gene to plot.}
+
+\item{...}{Not used.}
 }
 \description{
 Draw a genotype plot from the output of \code{\link{mupdog}}.
