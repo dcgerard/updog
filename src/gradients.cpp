@@ -188,8 +188,52 @@ double dlbeta_dtau(int x, int n, double xi, double tau) {
 }
 
 
+//' Derivative of the log-betabinomial density with respect to the
+//' mean of the underlying beta.
+//'
+//' @inheritParams dlbeta_dtau
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double dlbeta_dxi(int x, int n, double xi, double tau) {
+  double c = (1.0 - tau) / tau;
+  double deriv = c * R::digamma((double)x + xi * c) -
+    c * R::digamma((double)n - (double)x + (1.0 - xi) * c) -
+    c * R::digamma(xi * c) +
+    c * R::digamma((1.0 - xi) * c);
+  return deriv;
+}
 
+//' Derivative of xi-function with respect to bias parameter.
+//'
+//' @param p The dosage (between 0 and 1).
+//' @param eps The sequencing error rate.
+//' @param h The bias parameter.
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double dxi_dh(double p, double eps, double h) {
+  double f = p * (1.0 - eps) + eps * (1.0 - p);
+  double deriv = -1.0 * f * (1.0 - f) / std::pow(h * (1.0 - f) + f, 2.0);
+  return deriv;
+}
 
+//' Derivative of log-betabinomial density with respect to bias parameter.
+//'
+//' @inheritParams dlbeta_dtau
+//' @param p The allele dosage.
+//' @param eps The sequencing error rate
+//' @param h The bias parameter.
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double dlbeta_dh(int x, int n, double p, double eps, double h, double tau) {
+  double xi = xi_double(p, eps, h);
+  double dlbetadxi = dlbeta_dxi(x, n, xi, tau);
+  double dxidh = dxi_dh(p, eps, h);
+  double deriv = dlbetadxi * dxidh;
+  return deriv;
+}
 
 
 

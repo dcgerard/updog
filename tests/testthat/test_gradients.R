@@ -104,6 +104,50 @@ test_that("dlbeta_dtau works", {
 }
 )
 
+test_that("dlbeta_dxi works", {
+  x   <- 3
+  n   <- 13
+  xi  <- 0.3
+  tau <- 0.1
+  dout <- dlbeta_dxi(x = x, n = n, xi = xi, tau = tau)
 
+  myenv <- new.env()
+  assign(x = "x", value = x, envir = myenv)
+  assign(x = "n", value = n, envir = myenv)
+  assign(x = "xi", value = xi, envir = myenv)
+  assign(x = "tau", value = tau, envir = myenv)
+  nout <- stats::numericDeriv(quote(dbetabinom_double(x = x, size = n, mu = xi, rho = tau, log = TRUE)), "xi", myenv)
+
+  expect_equal(attr(nout, "gradient")[1], dout, tol = 10^-6)
+}
+)
+
+test_that("dlbeta_dh works", {
+  x <- 3
+  n <- 13
+  p <- 1/6
+  eps <- 0.02
+  h <- 0.5
+  tau <- 0.01
+
+  dout <- dlbeta_dh(x = x, n = n, p = p, eps = eps, h = h, tau = tau)
+
+  fn <- function(x, n, p, eps, h, tau) {
+    xi <- xi_double(p = p, eps = eps, h = h)
+    dbetabinom_double(x = x, size = n, mu = xi, rho = tau, log = TRUE)
+  }
+
+  myenv <- new.env()
+  assign(x = "x", value = x, envir = myenv)
+  assign(x = "n", value = n, envir = myenv)
+  assign(x = "p", value = p, envir = myenv)
+  assign(x = "eps", value = eps, envir = myenv)
+  assign(x = "h", value = h, envir = myenv)
+  assign(x = "tau", value = tau, envir = myenv)
+  nout <- stats::numericDeriv(quote(fn(x = x, n = n, p = p, eps = eps, h = h, tau = tau)), "h", myenv)
+
+  expect_equal(attr(nout, "gradient")[1], dout, tol = 10 ^ -5)
+}
+)
 
 

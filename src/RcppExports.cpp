@@ -189,6 +189,49 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// dlbeta_dxi
+double dlbeta_dxi(int x, int n, double xi, double tau);
+RcppExport SEXP _mupdog_dlbeta_dxi(SEXP xSEXP, SEXP nSEXP, SEXP xiSEXP, SEXP tauSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type xi(xiSEXP);
+    Rcpp::traits::input_parameter< double >::type tau(tauSEXP);
+    rcpp_result_gen = Rcpp::wrap(dlbeta_dxi(x, n, xi, tau));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dxi_dh
+double dxi_dh(double p, double eps, double h);
+RcppExport SEXP _mupdog_dxi_dh(SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type p(pSEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    rcpp_result_gen = Rcpp::wrap(dxi_dh(p, eps, h));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dlbeta_dh
+double dlbeta_dh(int x, int n, double p, double eps, double h, double tau);
+RcppExport SEXP _mupdog_dlbeta_dh(SEXP xSEXP, SEXP nSEXP, SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP, SEXP tauSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type p(pSEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< double >::type tau(tauSEXP);
+    rcpp_result_gen = Rcpp::wrap(dlbeta_dh(x, n, p, eps, h, tau));
+    return rcpp_result_gen;
+END_RCPP
+}
 // post_prob
 double post_prob(int dosage, int ploidy, double mu, double sigma2, double alpha, double rho);
 RcppExport SEXP _mupdog_post_prob(SEXP dosageSEXP, SEXP ploidySEXP, SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP rhoSEXP) {
@@ -475,6 +518,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_dlbeta_dc", (DL_FUNC) &_mupdog_dlbeta_dc, 4},
     {"_mupdog_dc_dtau", (DL_FUNC) &_mupdog_dc_dtau, 1},
     {"_mupdog_dlbeta_dtau", (DL_FUNC) &_mupdog_dlbeta_dtau, 4},
+    {"_mupdog_dlbeta_dxi", (DL_FUNC) &_mupdog_dlbeta_dxi, 4},
+    {"_mupdog_dxi_dh", (DL_FUNC) &_mupdog_dxi_dh, 3},
+    {"_mupdog_dlbeta_dh", (DL_FUNC) &_mupdog_dlbeta_dh, 6},
     {"_mupdog_post_prob", (DL_FUNC) &_mupdog_post_prob, 6},
     {"_mupdog_compute_all_post_prob", (DL_FUNC) &_mupdog_compute_all_post_prob, 5},
     {"_mupdog_compute_all_log_bb", (DL_FUNC) &_mupdog_compute_all_log_bb, 6},

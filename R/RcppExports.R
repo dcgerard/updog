@@ -153,6 +153,39 @@ dlbeta_dtau <- function(x, n, xi, tau) {
     .Call('_mupdog_dlbeta_dtau', PACKAGE = 'mupdog', x, n, xi, tau)
 }
 
+#' Derivative of the log-betabinomial density with respect to the
+#' mean of the underlying beta.
+#'
+#' @inheritParams dlbeta_dtau
+#'
+#' @author David Gerard
+dlbeta_dxi <- function(x, n, xi, tau) {
+    .Call('_mupdog_dlbeta_dxi', PACKAGE = 'mupdog', x, n, xi, tau)
+}
+
+#' Derivative of xi-function with respect to bias parameter.
+#'
+#' @param p The dosage (between 0 and 1).
+#' @param eps The sequencing error rate.
+#' @param h The bias parameter.
+#'
+#' @author David Gerard
+dxi_dh <- function(p, eps, h) {
+    .Call('_mupdog_dxi_dh', PACKAGE = 'mupdog', p, eps, h)
+}
+
+#' Derivative of log-betabinomial density with respect to bias parameter.
+#'
+#' @inheritParams dlbeta_dtau
+#' @param p The allele dosage.
+#' @param eps The sequencing error rate
+#' @param h The bias parameter.
+#'
+#' @author David Gerard
+dlbeta_dh <- function(x, n, p, eps, h, tau) {
+    .Call('_mupdog_dlbeta_dh', PACKAGE = 'mupdog', x, n, p, eps, h, tau)
+}
+
 #' Variational posterior probability of having \code{dosage} A alleles
 #' when the ploidy is \code{ploidy}, the allele frequency is
 #' \code{alpha}, the individual-specific overdispersion parameter is
