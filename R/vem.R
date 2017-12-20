@@ -210,7 +210,7 @@ mupdog <- function(refmat,
 
   assertthat::assert_that(obj_tol > 0)
   assertthat::assert_that(itermax > 1)
-  assertthat::assert_that(num_clust > 0)
+  assertthat::assert_that(num_clust >= 1)
   assertthat::assert_that(is.logical(update_allele_freq))
   assertthat::assert_that(is.logical(update_cor))
   assertthat::assert_that(is.logical(update_inbreeding))
@@ -237,6 +237,9 @@ mupdog <- function(refmat,
   obj <- -Inf
   iter <- 1
   err <- Inf
+  if (num_clust == 1) { # only need to do this once if no clusters.
+    foreach::registerDoSEQ()
+  }
   while (iter < itermax & err > obj_tol) {
     obj_old <- obj
 
@@ -253,8 +256,6 @@ mupdog <- function(refmat,
         warning("num_clust > 1 but only one core registered using doParallel::registerDoParallel.")
         foreach::registerDoSEQ()
       }
-    } else {
-      foreach::registerDoSEQ()
     }
     fout <- foreach::foreach(index = 1:nsnps, .combine = cbind,
                              .export = c("obj_for_mu_sigma2_wrapper",
@@ -291,8 +292,6 @@ mupdog <- function(refmat,
           warning("num_clust > 1 but only one core registered using doParallel::registerDoParallel.")
           foreach::registerDoSEQ()
         }
-      } else {
-        foreach::registerDoSEQ()
       }
       allele_freq <- foreach::foreach(index = 1:nsnps, .combine = c,
                        .export = "obj_for_alpha") %dopar% {
@@ -327,8 +326,6 @@ mupdog <- function(refmat,
           warning("num_clust > 1 but only one core registered using doParallel::registerDoParallel.")
           foreach::registerDoSEQ()
         }
-      } else {
-        foreach::registerDoSEQ()
       }
       inbreeding <- foreach::foreach(index = 1:nind, .combine = c,
                                      .export = "obj_for_rho") %dopar% {
@@ -379,13 +376,12 @@ mupdog <- function(refmat,
         warning("num_clust > 1 but only one core registered using doParallel::registerDoParallel.")
         foreach::registerDoSEQ()
       }
-    } else {
-      foreach::registerDoSEQ()
     }
     fout_seq <- foreach::foreach(index = 1:nsnps, .combine = cbind,
                                  .export = "obj_for_eps") %dopar% {
       oout <- stats::optim(par = c(seq[index], bias[index], od[index]),
                            fn = obj_for_eps,
+                           gr = grad_for_eps,
                            method = "L-BFGS-B",
                            lower = rep(10^-6, 3),
                            upper = c(1 - 10^-6, Inf, 1 - 10^-6),
