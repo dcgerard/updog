@@ -172,15 +172,18 @@ double dc_dtau(double tau) {
 //'
 //' @param x The number of successes.
 //' @param n The number of trials.
-//' @param xi The mean of the beta.
 //' @param tau The overdispersion parameter.
+//' @param p The allele dosage.
+//' @param eps The sequencing error rate
+//' @param h The bias parameter.
 //'
 //' @seealso \code{\link{dlbeta_dc}}, \code{\link{dc_dtau}},
 //'     \code{\link{dbetabinom_double}}.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
-double dlbeta_dtau(int x, int n, double xi, double tau) {
+double dlbeta_dtau(int x, int n, double p, double eps, double h, double tau) {
+  double xi = xi_double(p, eps, h);
   double dlbetadc = dlbeta_dc(x, n, xi, (1.0 - tau) / tau);
   double dcdtau   = dc_dtau(tau);
   double deriv = dlbetadc * dcdtau;
@@ -192,6 +195,7 @@ double dlbeta_dtau(int x, int n, double xi, double tau) {
 //' mean of the underlying beta.
 //'
 //' @inheritParams dlbeta_dtau
+//' @param xi The mean of the underlying beta.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -221,9 +225,6 @@ double dxi_dh(double p, double eps, double h) {
 //' Derivative of log-betabinomial density with respect to bias parameter.
 //'
 //' @inheritParams dlbeta_dtau
-//' @param p The allele dosage.
-//' @param eps The sequencing error rate
-//' @param h The bias parameter.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -235,10 +236,46 @@ double dlbeta_dh(int x, int n, double p, double eps, double h, double tau) {
   return deriv;
 }
 
+//' Derivative of xi with respect to f.
+//'
+//' @param h The bias parameter.
+//' @param f The post-sequencing error rate adjusted probability of an A.
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double dxi_df(double h, double f) {
+  double deriv = h / std::pow(h * (1.0 - f) + f, 2.0);
+  return deriv;
+}
 
+//' Derivative of f with respect to eps.
+//'
+//' @param p The allele dosage.
+//' @param eps The sequencing error rate.
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double df_deps(double p, double eps) {
+  double deriv = 1.0 - 2.0 * p;
+  return deriv;
+}
 
-
-
+//' Derivative of the log-beta-binomial density with respect to the
+//' sequencing error rate.
+//'
+//' @inheritParams dlbeta_dtau
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double dlbeta_deps(int x, int n, double p, double eps, double h, double tau) {
+  double f = eps * (1.0 - p) + (1.0 - eps) * p;
+  double xi = xi_double(p, eps, h);
+  double dlbetadxi = dlbeta_dxi(x, n, xi, tau);
+  double dxidf = dxi_df(h, f);
+  double dfdeps = df_deps(p, eps);
+  double deriv = dlbetadxi * dxidf * dfdeps;
+  return deriv;
+}
 
 
 

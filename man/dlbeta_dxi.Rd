@@ -12,7 +12,7 @@ dlbeta_dxi(x, n, xi, tau)
 
 \item{n}{The number of trials.}
 
-\item{xi}{The mean of the beta.}
+\item{xi}{The mean of the underlying beta.}
 
 \item{tau}{The overdispersion parameter.}
 }

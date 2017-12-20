@@ -85,25 +85,6 @@ test_that("dpen_deps works", {
 }
 )
 
-test_that("dlbeta_dtau works", {
-  x <- 4
-  n <- 11
-  xi <- 0.2
-  tau <- 0.1
-
-  dout <- dlbeta_dtau(x = x, n = n, xi = xi, tau = tau)
-
-  myenv <- new.env()
-  assign(x = "x", value = x, envir = myenv)
-  assign(x = "n", value = n, envir = myenv)
-  assign(x = "xi", value = xi, envir = myenv)
-  assign(x = "tau", value = tau, envir = myenv)
-  nout <- stats::numericDeriv(quote(dbetabinom_double(x = x, size = n, mu = xi, rho = tau, log = TRUE)), "tau", myenv)
-
-  expect_equal(dout, attr(nout, "gradient")[1], tol = 10^-5)
-}
-)
-
 test_that("dlbeta_dxi works", {
   x   <- 3
   n   <- 13
@@ -122,7 +103,7 @@ test_that("dlbeta_dxi works", {
 }
 )
 
-test_that("dlbeta_dh works", {
+test_that("dlbeta_dh, dlbeta_deps, and dlbeta_dtau work", {
   x <- 3
   n <- 13
   p <- 1/6
@@ -130,7 +111,9 @@ test_that("dlbeta_dh works", {
   h <- 0.5
   tau <- 0.01
 
-  dout <- dlbeta_dh(x = x, n = n, p = p, eps = eps, h = h, tau = tau)
+  dout1 <- dlbeta_dh(x = x, n = n, p = p, eps = eps, h = h, tau = tau)
+  dout2 <- dlbeta_deps(x = x, n = n, p = p, eps = eps, h = h, tau = tau)
+  dout3 <- dlbeta_dtau(x = x, n = n, p = p, eps = eps, h = h, tau = tau)
 
   fn <- function(x, n, p, eps, h, tau) {
     xi <- xi_double(p = p, eps = eps, h = h)
@@ -144,9 +127,13 @@ test_that("dlbeta_dh works", {
   assign(x = "eps", value = eps, envir = myenv)
   assign(x = "h", value = h, envir = myenv)
   assign(x = "tau", value = tau, envir = myenv)
-  nout <- stats::numericDeriv(quote(fn(x = x, n = n, p = p, eps = eps, h = h, tau = tau)), "h", myenv)
+  nout1 <- stats::numericDeriv(quote(fn(x = x, n = n, p = p, eps = eps, h = h, tau = tau)), "h", myenv)
+  nout2 <- stats::numericDeriv(quote(fn(x = x, n = n, p = p, eps = eps, h = h, tau = tau)), "eps", myenv)
+  nout3 <- stats::numericDeriv(quote(fn(x = x, n = n, p = p, eps = eps, h = h, tau = tau)), "tau", myenv)
 
-  expect_equal(attr(nout, "gradient")[1], dout, tol = 10 ^ -5)
+  expect_equal(attr(nout1, "gradient")[1], dout1, tol = 10 ^ -4)
+  expect_equal(attr(nout2, "gradient")[1], dout2, tol = 10 ^ -4)
+  expect_equal(attr(nout3, "gradient")[1], dout3, tol = 10 ^ -4)
 }
 )
 

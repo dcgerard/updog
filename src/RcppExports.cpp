@@ -176,16 +176,18 @@ BEGIN_RCPP
 END_RCPP
 }
 // dlbeta_dtau
-double dlbeta_dtau(int x, int n, double xi, double tau);
-RcppExport SEXP _mupdog_dlbeta_dtau(SEXP xSEXP, SEXP nSEXP, SEXP xiSEXP, SEXP tauSEXP) {
+double dlbeta_dtau(int x, int n, double p, double eps, double h, double tau);
+RcppExport SEXP _mupdog_dlbeta_dtau(SEXP xSEXP, SEXP nSEXP, SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP, SEXP tauSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type x(xSEXP);
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< double >::type xi(xiSEXP);
+    Rcpp::traits::input_parameter< double >::type p(pSEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
     Rcpp::traits::input_parameter< double >::type tau(tauSEXP);
-    rcpp_result_gen = Rcpp::wrap(dlbeta_dtau(x, n, xi, tau));
+    rcpp_result_gen = Rcpp::wrap(dlbeta_dtau(x, n, p, eps, h, tau));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -229,6 +231,46 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
     Rcpp::traits::input_parameter< double >::type tau(tauSEXP);
     rcpp_result_gen = Rcpp::wrap(dlbeta_dh(x, n, p, eps, h, tau));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dxi_df
+double dxi_df(double h, double f);
+RcppExport SEXP _mupdog_dxi_df(SEXP hSEXP, SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< double >::type f(fSEXP);
+    rcpp_result_gen = Rcpp::wrap(dxi_df(h, f));
+    return rcpp_result_gen;
+END_RCPP
+}
+// df_deps
+double df_deps(double p, double eps);
+RcppExport SEXP _mupdog_df_deps(SEXP pSEXP, SEXP epsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type p(pSEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    rcpp_result_gen = Rcpp::wrap(df_deps(p, eps));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dlbeta_deps
+double dlbeta_deps(int x, int n, double p, double eps, double h, double tau);
+RcppExport SEXP _mupdog_dlbeta_deps(SEXP xSEXP, SEXP nSEXP, SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP, SEXP tauSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type p(pSEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< double >::type tau(tauSEXP);
+    rcpp_result_gen = Rcpp::wrap(dlbeta_deps(x, n, p, eps, h, tau));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -517,10 +559,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_dpen_deps", (DL_FUNC) &_mupdog_dpen_deps, 3},
     {"_mupdog_dlbeta_dc", (DL_FUNC) &_mupdog_dlbeta_dc, 4},
     {"_mupdog_dc_dtau", (DL_FUNC) &_mupdog_dc_dtau, 1},
-    {"_mupdog_dlbeta_dtau", (DL_FUNC) &_mupdog_dlbeta_dtau, 4},
+    {"_mupdog_dlbeta_dtau", (DL_FUNC) &_mupdog_dlbeta_dtau, 6},
     {"_mupdog_dlbeta_dxi", (DL_FUNC) &_mupdog_dlbeta_dxi, 4},
     {"_mupdog_dxi_dh", (DL_FUNC) &_mupdog_dxi_dh, 3},
     {"_mupdog_dlbeta_dh", (DL_FUNC) &_mupdog_dlbeta_dh, 6},
+    {"_mupdog_dxi_df", (DL_FUNC) &_mupdog_dxi_df, 2},
+    {"_mupdog_df_deps", (DL_FUNC) &_mupdog_df_deps, 2},
+    {"_mupdog_dlbeta_deps", (DL_FUNC) &_mupdog_dlbeta_deps, 6},
     {"_mupdog_post_prob", (DL_FUNC) &_mupdog_post_prob, 6},
     {"_mupdog_compute_all_post_prob", (DL_FUNC) &_mupdog_compute_all_post_prob, 5},
     {"_mupdog_compute_all_log_bb", (DL_FUNC) &_mupdog_compute_all_log_bb, 6},

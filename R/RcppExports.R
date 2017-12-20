@@ -142,21 +142,24 @@ dc_dtau <- function(tau) {
 #'
 #' @param x The number of successes.
 #' @param n The number of trials.
-#' @param xi The mean of the beta.
 #' @param tau The overdispersion parameter.
+#' @param p The allele dosage.
+#' @param eps The sequencing error rate
+#' @param h The bias parameter.
 #'
 #' @seealso \code{\link{dlbeta_dc}}, \code{\link{dc_dtau}},
 #'     \code{\link{dbetabinom_double}}.
 #'
 #' @author David Gerard
-dlbeta_dtau <- function(x, n, xi, tau) {
-    .Call('_mupdog_dlbeta_dtau', PACKAGE = 'mupdog', x, n, xi, tau)
+dlbeta_dtau <- function(x, n, p, eps, h, tau) {
+    .Call('_mupdog_dlbeta_dtau', PACKAGE = 'mupdog', x, n, p, eps, h, tau)
 }
 
 #' Derivative of the log-betabinomial density with respect to the
 #' mean of the underlying beta.
 #'
 #' @inheritParams dlbeta_dtau
+#' @param xi The mean of the underlying beta.
 #'
 #' @author David Gerard
 dlbeta_dxi <- function(x, n, xi, tau) {
@@ -177,13 +180,40 @@ dxi_dh <- function(p, eps, h) {
 #' Derivative of log-betabinomial density with respect to bias parameter.
 #'
 #' @inheritParams dlbeta_dtau
-#' @param p The allele dosage.
-#' @param eps The sequencing error rate
-#' @param h The bias parameter.
 #'
 #' @author David Gerard
 dlbeta_dh <- function(x, n, p, eps, h, tau) {
     .Call('_mupdog_dlbeta_dh', PACKAGE = 'mupdog', x, n, p, eps, h, tau)
+}
+
+#' Derivative of xi with respect to f.
+#'
+#' @param h The bias parameter.
+#' @param f The post-sequencing error rate adjusted probability of an A.
+#'
+#' @author David Gerard
+dxi_df <- function(h, f) {
+    .Call('_mupdog_dxi_df', PACKAGE = 'mupdog', h, f)
+}
+
+#' Derivative of f with respect to eps.
+#'
+#' @param p The allele dosage.
+#' @param eps The sequencing error rate.
+#'
+#' @author David Gerard
+df_deps <- function(p, eps) {
+    .Call('_mupdog_df_deps', PACKAGE = 'mupdog', p, eps)
+}
+
+#' Derivative of the log-beta-binomial density with respect to the
+#' sequencing error rate.
+#'
+#' @inheritParams dlbeta_dtau
+#'
+#' @author David Gerard
+dlbeta_deps <- function(x, n, p, eps, h, tau) {
+    .Call('_mupdog_dlbeta_deps', PACKAGE = 'mupdog', x, n, p, eps, h, tau)
 }
 
 #' Variational posterior probability of having \code{dosage} A alleles
