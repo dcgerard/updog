@@ -274,6 +274,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// grad_for_eps
+NumericVector grad_for_eps(NumericVector parvec, NumericVector refvec, NumericVector sizevec, int ploidy, double mean_bias, double var_bias, double mean_seq, double var_seq, NumericMatrix wmat);
+RcppExport SEXP _mupdog_grad_for_eps(SEXP parvecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP wmatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type parvec(parvecSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type refvec(refvecSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type sizevec(sizevecSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< double >::type mean_bias(mean_biasSEXP);
+    Rcpp::traits::input_parameter< double >::type var_bias(var_biasSEXP);
+    Rcpp::traits::input_parameter< double >::type mean_seq(mean_seqSEXP);
+    Rcpp::traits::input_parameter< double >::type var_seq(var_seqSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type wmat(wmatSEXP);
+    rcpp_result_gen = Rcpp::wrap(grad_for_eps(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat));
+    return rcpp_result_gen;
+END_RCPP
+}
 // post_prob
 double post_prob(int dosage, int ploidy, double mu, double sigma2, double alpha, double rho);
 RcppExport SEXP _mupdog_post_prob(SEXP dosageSEXP, SEXP ploidySEXP, SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP rhoSEXP) {
@@ -566,6 +585,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_dxi_df", (DL_FUNC) &_mupdog_dxi_df, 2},
     {"_mupdog_df_deps", (DL_FUNC) &_mupdog_df_deps, 2},
     {"_mupdog_dlbeta_deps", (DL_FUNC) &_mupdog_dlbeta_deps, 6},
+    {"_mupdog_grad_for_eps", (DL_FUNC) &_mupdog_grad_for_eps, 9},
     {"_mupdog_post_prob", (DL_FUNC) &_mupdog_post_prob, 6},
     {"_mupdog_compute_all_post_prob", (DL_FUNC) &_mupdog_compute_all_post_prob, 5},
     {"_mupdog_compute_all_log_bb", (DL_FUNC) &_mupdog_compute_all_log_bb, 6},

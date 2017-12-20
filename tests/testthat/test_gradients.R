@@ -138,3 +138,61 @@ test_that("dlbeta_dh, dlbeta_deps, and dlbeta_dtau work", {
 )
 
 
+test_that("grad_for_eps works", {
+  set.seed(1)
+  parvec  <- c(0.02, 1.5, 0.01)
+  sizevec <- rpois(n = 11, lambda = 20)
+  refvec  <- rbinom(n = 11, size = sizevec, prob = 0.4)
+  ploidy <- 4
+  mean_bias <- 0
+  var_bias <- 1
+  mean_seq <- -4.7
+  var_seq <- 1
+  wmat <- matrix(abs(rnorm(11 * (ploidy + 1))), nrow = 11)
+  wmat <- wmat / rowSums(wmat)
+
+  dout <- grad_for_eps(parvec = parvec, refvec = refvec, sizevec = sizevec,
+                       ploidy = ploidy, mean_bias = mean_bias,
+                       var_bias = var_bias, mean_seq = mean_seq,
+                       var_seq = var_seq, wmat = wmat)
+
+  myenv <- new.env()
+  assign(x = "parvec", value = parvec, envir = myenv)
+  assign(x = "refvec", value = refvec, envir = myenv)
+  assign(x = "sizevec", value = sizevec, envir = myenv)
+  assign(x = "ploidy", value = ploidy, envir = myenv)
+  assign(x = "mean_bias", value = mean_bias, envir = myenv)
+  assign(x = "var_bias", value = var_bias, envir = myenv)
+  assign(x = "mean_seq", value = mean_seq, envir = myenv)
+  assign(x = "var_seq", value = var_seq, envir = myenv)
+  assign(x = "wmat", value = wmat, envir = myenv)
+  nout <- stats::numericDeriv(quote(obj_for_eps(parvec = parvec, refvec = refvec, sizevec = sizevec,
+                                                ploidy = ploidy, mean_bias = mean_bias,
+                                                var_bias = var_bias, mean_seq = mean_seq,
+                                                var_seq = var_seq, wmat = wmat)),
+                              "parvec", myenv)
+  expect_equal(c(attr(nout, "gradient")), dout, tol = 10 ^ -4)
+
+  ## About twice as fast.
+  # microbenchmark::microbenchmark(
+  #   dout <- grad_for_eps(parvec = parvec, refvec = refvec, sizevec = sizevec,
+  #                        ploidy = ploidy, mean_bias = mean_bias,
+  #                        var_bias = var_bias, mean_seq = mean_seq,
+  #                        var_seq = var_seq, wmat = wmat),
+  #   nout <- stats::numericDeriv(quote(obj_for_eps(parvec = parvec, refvec = refvec, sizevec = sizevec,
+  #                                                 ploidy = ploidy, mean_bias = mean_bias,
+  #                                                 var_bias = var_bias, mean_seq = mean_seq,
+  #                                                 var_seq = var_seq, wmat = wmat)),
+  #                               "parvec", myenv)
+  # )
+}
+)
+
+
+
+
+
+
+
+
+

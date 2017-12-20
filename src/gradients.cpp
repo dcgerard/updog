@@ -278,6 +278,59 @@ double dlbeta_deps(int x, int n, double p, double eps, double h, double tau) {
 }
 
 
+//' Gradient for \code{\link{obj_for_eps}}.
+//'
+//' @inheritParams obj_for_eps
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+NumericVector grad_for_eps(NumericVector parvec,
+                   NumericVector refvec,
+                   NumericVector sizevec,
+                   int ploidy,
+                   double mean_bias,
+                   double var_bias,
+                   double mean_seq,
+                   double var_seq,
+                   NumericMatrix wmat) {
+  // check input --------------------------------------------------------
+  int nind = refvec.length();
+  if (sizevec.length() != nind) {
+    Rcpp::Rcout << sizevec.length() << std::endl;
+    Rcpp::stop("grad_for_eps: sizevec and refvec must have same length.");
+  }
+  if (wmat.nrow() != nind) {
+    Rcpp::Rcout << wmat.nrow() << std::endl;
+    Rcpp::stop("grad_for_eps: wmat must have the same number of rows as the length of refved.");
+  }
+  if (wmat.ncol() != (ploidy + 1)) {
+    Rcpp::Rcout << wmat.ncol() << std::endl;
+    Rcpp::stop("grad_for_eps: wmat must have ploidy+1 columns.");
+  }
+
+
+  NumericVector grad(3);
+
+  double eps = parvec(0);
+  double h   = parvec(1);
+  double tau = parvec(2);
+
+  double p;
+  for (int i = 0; i < nind; i++) {
+    for (int k = 0; k <= ploidy; k++) {
+      p = (double)k / (double)ploidy;
+      grad(0) = grad(0) + wmat(i, k) * dlbeta_deps(refvec(i), sizevec(i), p, eps, h, tau);
+      grad(1) = grad(1) + wmat(i, k) * dlbeta_dh(refvec(i), sizevec(i), p, eps, h, tau);
+      grad(2) = grad(2) + wmat(i, k) * dlbeta_dtau(refvec(i), sizevec(i), p, eps, h, tau);
+    }
+  }
+
+  // contribution by penalties
+  grad(0) = grad(0) + dpen_deps(eps, mean_seq, var_seq);
+  grad(1) = grad(1) + dpen_dh(h, mean_bias, var_bias);
+
+  return grad;
+}
 
 
 

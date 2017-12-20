@@ -216,6 +216,15 @@ dlbeta_deps <- function(x, n, p, eps, h, tau) {
     .Call('_mupdog_dlbeta_deps', PACKAGE = 'mupdog', x, n, p, eps, h, tau)
 }
 
+#' Gradient for \code{\link{obj_for_eps}}.
+#'
+#' @inheritParams obj_for_eps
+#'
+#' @author David Gerard
+grad_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat) {
+    .Call('_mupdog_grad_for_eps', PACKAGE = 'mupdog', parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat)
+}
+
 #' Variational posterior probability of having \code{dosage} A alleles
 #' when the ploidy is \code{ploidy}, the allele frequency is
 #' \code{alpha}, the individual-specific overdispersion parameter is
