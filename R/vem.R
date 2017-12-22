@@ -444,6 +444,7 @@ mupdog <- function(refmat,
   return_list$input$refmat  <- refmat
   return_list$input$sizemat <- sizemat
   return_list$input$ploidy  <- ploidy
+  return_list$obj           <- obj
 
   class(return_list) <- "mupdog"
   return(return_list)
