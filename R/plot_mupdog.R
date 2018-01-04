@@ -12,6 +12,11 @@
 #' @export
 #'
 #' @author David Gerard
+#'
+#' @examples
+#' data(mupout)
+#' plot(mupout, 4)
+#'
 plot.mupdog <- function(x, index, ...) {
   assertthat::assert_that(is.mupdog(x))
 
@@ -38,6 +43,14 @@ plot.mupdog <- function(x, index, ...) {
 #' @author David Gerard
 #'
 #' @export
+#'
+#' @examples
+#' data(mupout)
+#' msum <- summary(mupout)
+#' msum$freq[, 1:5]
+#' boxplot(msum$mean_dosage ~ mupout$map_dosage,
+#'         xlab = "MAP Dosage", ylab = "Mean Dosage")
+#'
 summary.mupdog <- function(object, ...) {
   assertthat::assert_that(is.mupdog(object))
   p           <- ncol(object$input$refmat)

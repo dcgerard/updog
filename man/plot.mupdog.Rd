@@ -16,6 +16,11 @@
 \description{
 Draw a genotype plot from the output of \code{\link{mupdog}}.
 }
+\examples{
+data(mupout)
+plot(mupout, 4)
+
+}
 \author{
 David Gerard
 }

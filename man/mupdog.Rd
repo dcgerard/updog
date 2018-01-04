@@ -96,6 +96,24 @@ then the optimization step will not be run in parallel.}
 \description{
 Multivariate updog
 }
+\examples{
+\dontrun{
+data(uitdewilligen)
+mout <- mupdog(refmat = uitdewilligen$refmat,
+               sizemat = uitdewilligen$sizemat,
+               ploidy = uitdewilligen$ploidy,
+               verbose = FALSE,
+               control = list(obj_tol = 10^-5))
+plot(mout, 4)
+hist(mout$bias)
+hist(mout$seq)
+hist(mout$od)
+hist(mout$inbreeding)
+hist(mout$allele_freq)
+}
+
+
+}
 \author{
 David Gerard
 }

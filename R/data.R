@@ -26,6 +26,12 @@
 #'
 #' @source The raw data that this was fit to can be found in \code{\link{uitdewilligen}}.
 #'
-#' @seealso \code{\link{uitdewilligen}}, \code{\link{plot.mupdog}}, \code{\link{summary.mupdog}}
+#' @seealso
+#' \describe{
+#' \item{\code{\link{uitdewilligen}}}{The raw data.}
+#' \item{\code{\link{plot.mupdog}}}{A method to plot a \code{\link{mupdog}} object.}
+#' \item{\code{\link{summary.mupdog}}}{Calculate some summaries of a \code{\link{mupdog}} object.}
+#' \item{\code{\link{mupdog}}}{Function used to create this \code{\link{mupdog}} object.}
+#' }
 #'
 "mupout"

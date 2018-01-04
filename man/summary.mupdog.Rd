@@ -21,6 +21,14 @@ A list with the following elements:
 \description{
 Provide some summaries from the output of \code{\link{mupdog}}.
 }
+\examples{
+data(mupout)
+msum <- summary(mupout)
+msum$freq[, 1:5]
+boxplot(msum$mean_dosage ~ mupout$map_dosage,
+        xlab = "MAP Dosage", ylab = "Mean Dosage")
+
+}
 \author{
 David Gerard
 }
