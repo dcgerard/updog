@@ -1,10 +1,10 @@
 Package: mupdog
-Title: Multivariate Extension of the updog Method for Genotyping
-Version: 0.0.0.9000
+Title: Extension of the updog Method for Genotyping Autopolyploids
+Version: 0.0.1
 Authors@R: person("David", "Gerard", email = "dcgerard@uchicago.edu", role = c("aut", "cre"))
-Description: This package accounts for genetic correlation between individuals
-	     in the genotyping procedure. This requires use a variational
-	     approximation.
+Description: This package accounts for correlation between individuals' genotypes
+	     in the genotyping procedure by wielding information across all SNPs.
+	     This requires using a variational approximation.
 Depends: R (>= 3.3.2)
 License: GPL-3 + file LICENSE
 Encoding: UTF-8

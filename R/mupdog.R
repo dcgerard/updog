@@ -1,9 +1,17 @@
-#' \code{mupdog}: An extenstion of updog to allow for correlation in the
+#' \code{mupdog} (multi-SNP updog): an extenstion of updog to allow for correlation in the
 #'     genotypes between individuals using a Gaussian copula model.
 #'
 #' @section \code{mupdog} Functions:
-#' \itemize{
-#'   \item \code{\link{mupdog}}: The main function in the package that fits the mupdog method.
+#' \describe{
+#'   \item{\code{\link{mupdog}}}{The main function in the package that fits the mupdog method.}
+#'   \item{\code{\link{plot.mupdog}}}{Plotting the output of \code{\link{mupdog}}.}
+#'   \item{\code{\link{summary.mupdog}}}{Providing some summaries of the output of \code{\link{mupdog}}.}
+#' }
+#'
+#' @section \code{mupdog} Datasets:
+#' \describe{
+#'   \item{\code{\link{uitdewilligen}}}{A small example dataset.}
+#'   \item{\code{\link{mupout}}}{The output from fitting \code{\link{mupdog}} to \code{\link{uitdewilligen}}.}
 #' }
 #'
 #' @useDynLib mupdog
