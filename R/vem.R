@@ -11,7 +11,7 @@
 #' accounted for common issues in sequencing data ignored by previous researchers.
 #' Mupdog unites and extends these two approaches:
 #' \itemize{
-#' \item{Unite: we account for locus-specific allele-bias, locus-specific sequencing error, and locus-specific overdispersion while marginally assuming a Balding-Nichols generative model on the genotypes.}
+#' \item{Unite: We account for locus-specific allele-bias, locus-specific sequencing error, and locus-specific overdispersion while marginally assuming a Balding-Nichols generative model on the genotypes.}
 #' \item{Extend: We account for underlying correlations between the individuals using a Gaussian copula model.}
 #' }
 #' Mupdog uses a variational Bayes approach to estimate all parameters of interest and
@@ -34,7 +34,7 @@
 #' @param var_bias The prior variance on the log-bias. Defaults to 1.
 #'     This roughly corresponds to likely bias values between 0.14 and
 #'     7.4. This is a far wider interval than what we observe in
-#'     practice, thus making this prior rather uniformative. We usually
+#'     practice, thus making this prior rather uninformative. We usually
 #'     observe bias values somewhere between 0.5 and 2.
 #' @param mean_seq The prior mean of the logit-sequencing-error-rate.
 #'     Defaults to -4.7. This corresponds to a sequencing error rate of
@@ -46,7 +46,7 @@
 #' @param seq A vector of initial sequencing errors. Should be
 #'     the same length as the number of columns of \code{refmat}
 #'     (number of SNPs). Must be between 0 and 1.
-#' @param bias A vector of initial bias paramters. Should be the
+#' @param bias A vector of initial bias parameters. Should be the
 #'     same length as the number of columns of \code{refmat}
 #'     (number of SNPs). Must be greater than 0.
 #' @param od A vector of initial overdispersion parameters.
@@ -76,7 +76,7 @@
 #'     allele frequencies \code{TRUE} or not \code{FALSE}?
 #' @param verbose Should we print a lot of output \code{TRUE}
 #'     or not \code{FALSE}?
-#' @param control A list of control paramters (\code{itermax},
+#' @param control A list of control parameters (\code{itermax},
 #'     \code{obj_tol}).
 #' @param num_core The number of cores to use if you want to
 #'     run the optimization steps in parallel. If \code{num_core = 1},
@@ -542,7 +542,3 @@ update_R <- function(postmean, postvar) {
 #' @export
 #'
 is.mupdog <- function(x) inherits(x, "mupdog")
-
-
-
-

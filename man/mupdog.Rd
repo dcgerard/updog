@@ -33,7 +33,7 @@ or not \code{FALSE}?}
 \item{var_bias}{The prior variance on the log-bias. Defaults to 1.
 This roughly corresponds to likely bias values between 0.14 and
 7.4. This is a far wider interval than what we observe in
-practice, thus making this prior rather uniformative. We usually
+practice, thus making this prior rather uninformative. We usually
 observe bias values somewhere between 0.5 and 2.}
 
 \item{mean_seq}{The prior mean of the logit-sequencing-error-rate.
@@ -49,7 +49,7 @@ the current state of next-gen-sequencing technology.}
 the same length as the number of columns of \code{refmat}
 (number of SNPs). Must be between 0 and 1.}
 
-\item{bias}{A vector of initial bias paramters. Should be the
+\item{bias}{A vector of initial bias parameters. Should be the
 same length as the number of columns of \code{refmat}
 (number of SNPs). Must be greater than 0.}
 
@@ -91,7 +91,7 @@ allele frequencies \code{TRUE} or not \code{FALSE}?}
 run the optimization steps in parallel. If \code{num_core = 1},
 then the optimization step will not be run in parallel.}
 
-\item{control}{A list of control paramters (\code{itermax},
+\item{control}{A list of control parameters (\code{itermax},
 \code{obj_tol}).}
 }
 \description{
@@ -105,7 +105,7 @@ on the genotypes. Using a different generative model, Gerard et al (2018)
 accounted for common issues in sequencing data ignored by previous researchers.
 Mupdog unites and extends these two approaches:
 \itemize{
-\item{Unite: we account for locus-specific allele-bias, locus-specific sequencing error, and locus-specific overdispersion while marginally assuming a Balding-Nichols generative model on the genotypes.}
+\item{Unite: We account for locus-specific allele-bias, locus-specific sequencing error, and locus-specific overdispersion while marginally assuming a Balding-Nichols generative model on the genotypes.}
 \item{Extend: We account for underlying correlations between the individuals using a Gaussian copula model.}
 }
 Mupdog uses a variational Bayes approach to estimate all parameters of interest and

@@ -23,7 +23,7 @@ all individuals in the sample.}
 the same length as the number of columns of \code{refmat}
 (number of SNPs). Must be between 0 and 1.}
 
-\item{bias}{A vector of initial bias paramters. Should be the
+\item{bias}{A vector of initial bias parameters. Should be the
 same length as the number of columns of \code{refmat}
 (number of SNPs). Must be greater than 0.}
 

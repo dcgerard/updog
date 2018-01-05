@@ -5,11 +5,25 @@
 
 #' Draw a genotype plot from the output of \code{\link{mupdog}}.
 #'
+#' A wrapper for \code{\link[updog]{plot_geno}}. This will create a genotype plot for a single SNP.
+#'
+#' On a genotype plot, the x-axis contains the counts of the non-reference allele and the y-axis
+#' contains the counts of the reference allele. The dashed lines are the expected counts (both reference and alternative)
+#' given the sequencing error rate and the allele-bias. The plots are color-coded by the maximum-a-posterior genotypes.
+#' Transparency is proportional to the maximum posterior probability for an
+#' individual's genotype. Thus, we are less certain of the genotype of more transparent individuals.
+#'
 #' @param x A mupdog object.
 #' @param index The column number of the gene to plot.
 #' @param ... Not used.
 #'
 #' @export
+#'
+#' @seealso
+#' \describe{
+#'   \item{\code{\link[updog]{plot_geno}}}{The underlying plotting function.}
+#'   \item{\code{\link{mupdog}}}{Creates a \code{mupdog} object.}
+#' }
 #'
 #' @author David Gerard
 #'
@@ -29,7 +43,10 @@ plot.mupdog <- function(x, index, ...) {
 }
 
 
-#' Provide some summaries from the output of \code{\link{mupdog}}.
+#' Provides some summaries from the output of \code{\link{mupdog}}.
+#'
+#' Returns mean-dosage for each individual at each SNP and the SNP-specific distribution of MAP dosages.
+#' The mean-dosage in particular might be of interest for downstream analyses.
 #'
 #' @param object A mupdog object.
 #' @param ... Not used.

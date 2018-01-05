@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_mupdog.R
 \name{summary.mupdog}
 \alias{summary.mupdog}
-\title{Provide some summaries from the output of \code{\link{mupdog}}.}
+\title{Provides some summaries from the output of \code{\link{mupdog}}.}
 \usage{
 \method{summary}{mupdog}(object, ...)
 }
@@ -19,7 +19,8 @@ A list with the following elements:
 }
 }
 \description{
-Provide some summaries from the output of \code{\link{mupdog}}.
+Returns mean-dosage for each individual at each SNP and the SNP-specific distribution of MAP dosages.
+The mean-dosage in particular might be of interest for downstream analyses.
 }
 \examples{
 data(mupout)
