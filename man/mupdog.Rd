@@ -2,13 +2,13 @@
 % Please edit documentation in R/vem.R
 \name{mupdog}
 \alias{mupdog}
-\title{Multivariate updog}
+\title{Multi-SNP updog.}
 \usage{
 mupdog(refmat, sizemat, ploidy, verbose = TRUE, mean_bias = 0,
   var_bias = 1, mean_seq = -4.7, var_seq = 1, seq = NULL, bias = NULL,
   od = NULL, allele_freq = NULL, inbreeding = NULL, cor_mat = NULL,
   postmean = NULL, postvar = NULL, update_cor = TRUE,
-  update_inbreeding = TRUE, update_allele_freq = TRUE, num_clust = 1,
+  update_inbreeding = TRUE, update_allele_freq = TRUE, num_core = 1,
   control = list())
 }
 \arguments{
@@ -16,7 +16,8 @@ mupdog(refmat, sizemat, ploidy, verbose = TRUE, mean_bias = 0,
 The rows index the individuals and the columns index the SNPs.}
 
 \item{sizemat}{A matrix of total counts.
-The rows index the individuals and the columns index the SNPs.}
+The rows index the individuals and the columns index the SNPs.
+Should have the same dimensions as \code{refmat}.}
 
 \item{ploidy}{The ploidy of the species. To estimate the ploidy,
 re-run updog at various ploidy levels and choose the one with
@@ -42,7 +43,7 @@ Defaults to -4.7. This corresponds to a sequencing error rate of
 \item{var_seq}{The prior variance of the logit-sequencing-error-rate.
 Defaults to 1. This corresponds to likely values of 0.001 and
 0.06. This upper bound is larger than what we would expect given
-the current state of next-gen-sequencings.}
+the current state of next-gen-sequencing technology.}
 
 \item{seq}{A vector of initial sequencing errors. Should be
 the same length as the number of columns of \code{refmat}
@@ -63,7 +64,7 @@ Should be the same length as the number of columns of
 \item{inbreeding}{A vector of initial individual-specific
 inbreeding coefficients.
 Should be the same length as the number of rows of
-\code{refmat} (number of individuals).}
+\code{refmat} (number of individuals). Must be between 0 and 1.}
 
 \item{cor_mat}{Initial correlation matrix. Should have the same
 number of columns/rows as the number of individuals.}
@@ -86,15 +87,29 @@ or not \code{FALSE}?}
 \item{update_allele_freq}{A logical. Should we update the
 allele frequencies \code{TRUE} or not \code{FALSE}?}
 
-\item{num_clust}{The number of clusters to use if you want to
-run the optimization steps in parallel. If \code{num_clust = 1},
+\item{num_core}{The number of cores to use if you want to
+run the optimization steps in parallel. If \code{num_core = 1},
 then the optimization step will not be run in parallel.}
 
 \item{control}{A list of control paramters (\code{itermax},
 \code{obj_tol}).}
 }
 \description{
-Multivariate updog
+A method to genotype autopolyploids using GBS or RAD-seq like data by accounting
+for correlations in the genotype distribution between the individuals.
+}
+\details{
+Blischak et al (2017) developed a genotyping approach for autopolyploids
+that assumes a Balding-Nichols generative model (Balding and Nichols, 1997)
+on the genotypes. Using a different generative model, Gerard et al (2018)
+accounted for common issues in sequencing data ignored by previous researchers.
+Mupdog unites and extends these two approaches:
+\itemize{
+\item{Unite: we account for locus-specific allele-bias, locus-specific sequencing error, and locus-specific overdispersion while marginally assuming a Balding-Nichols generative model on the genotypes.}
+\item{Extend: We account for underlying correlations between the individuals using a Gaussian copula model.}
+}
+Mupdog uses a variational Bayes approach to estimate all parameters of interest and
+the posterior probabilities of the genotypes for each individual at each locus.
 }
 \examples{
 \dontrun{
@@ -138,6 +153,13 @@ plot(x, y, type = "l", xlab = "ploidy", ylab = "objective")
 }
 
 
+}
+\references{
+\itemize{
+\item{David J Balding and Richard A Nichols. \href{http://dx.doi.org/10.1038/sj.hdy.6881750}{Significant genetic correlations among caucasians at forensic DNA loci}. Heredity, 78(6):583–589, 1997. doi: 10.1038/sj.hdy.6881750.}
+\item{Paul D Blischak, Laura S Kubatko, and Andrea D Wolfe. \href{http://dx.doi.org/10.1093/bioinformatics/btx587}{SNP genotyping and parameter estimation in polyploids using low-coverage sequencing data}. Bioinformatics, page btx587, 2017. doi: 10.1093/bioinformatics/btx587.}
+\item{David Gerard, Luis Felipe Ventorim Ferrao, and Matthew Stephens. Harnessing Empirical Bayes and Mendelian Segregation for Genotyping Autopolyploids with Messy Sequencing Data. 2018.}
+}
 }
 \author{
 David Gerard

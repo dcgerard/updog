@@ -31,7 +31,7 @@ test_that("mupdog works", {
   control            <- list()
   ploidy             <- 4
   verbose            <- FALSE
-  num_clust          <- 2
+  num_core           <- 2
   itermax            <- 100
   obj_tol            <- 10 ^ -4
 

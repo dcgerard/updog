@@ -11,7 +11,8 @@ compute_all_log_bb(refmat, sizemat, ploidy, seq, bias, od)
 The rows index the individuals and the columns index the SNPs.}
 
 \item{sizemat}{A matrix of total counts.
-The rows index the individuals and the columns index the SNPs.}
+The rows index the individuals and the columns index the SNPs.
+Should have the same dimensions as \code{refmat}.}
 
 \item{ploidy}{The ploidy of the species. To estimate the ploidy,
 re-run updog at various ploidy levels and choose the one with

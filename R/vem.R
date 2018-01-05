@@ -1,6 +1,22 @@
 ### Code for VEM
 
-#' Multivariate updog
+#' Multi-SNP updog.
+#'
+#' A method to genotype autopolyploids using GBS or RAD-seq like data by accounting
+#' for correlations in the genotype distribution between the individuals.
+#'
+#' Blischak et al (2017) developed a genotyping approach for autopolyploids
+#' that assumes a Balding-Nichols generative model (Balding and Nichols, 1997)
+#' on the genotypes. Using a different generative model, Gerard et al (2018)
+#' accounted for common issues in sequencing data ignored by previous researchers.
+#' Mupdog unites and extends these two approaches:
+#' \itemize{
+#' \item{Unite: we account for locus-specific allele-bias, locus-specific sequencing error, and locus-specific overdispersion while marginally assuming a Balding-Nichols generative model on the genotypes.}
+#' \item{Extend: We account for underlying correlations between the individuals using a Gaussian copula model.}
+#' }
+#' Mupdog uses a variational Bayes approach to estimate all parameters of interest and
+#' the posterior probabilities of the genotypes for each individual at each locus.
+#'
 #'
 #' @importFrom foreach %dopar%
 #'
@@ -8,6 +24,7 @@
 #'     The rows index the individuals and the columns index the SNPs.
 #' @param sizemat A matrix of total counts.
 #'     The rows index the individuals and the columns index the SNPs.
+#'     Should have the same dimensions as \code{refmat}.
 #' @param ploidy The ploidy of the species. To estimate the ploidy,
 #'     re-run updog at various ploidy levels and choose the one with
 #'     the largest ELBO. This assumes that the ploidy is the same for
@@ -25,7 +42,7 @@
 #' @param var_seq The prior variance of the logit-sequencing-error-rate.
 #'     Defaults to 1. This corresponds to likely values of 0.001 and
 #'     0.06. This upper bound is larger than what we would expect given
-#'     the current state of next-gen-sequencings.
+#'     the current state of next-gen-sequencing technology.
 #' @param seq A vector of initial sequencing errors. Should be
 #'     the same length as the number of columns of \code{refmat}
 #'     (number of SNPs). Must be between 0 and 1.
@@ -41,7 +58,7 @@
 #' @param inbreeding A vector of initial individual-specific
 #'     inbreeding coefficients.
 #'     Should be the same length as the number of rows of
-#'     \code{refmat} (number of individuals).
+#'     \code{refmat} (number of individuals). Must be between 0 and 1.
 #' @param cor_mat Initial correlation matrix. Should have the same
 #'     number of columns/rows as the number of individuals.
 #' @param postmean Initial variational posterior means. Should
@@ -61,9 +78,16 @@
 #'     or not \code{FALSE}?
 #' @param control A list of control paramters (\code{itermax},
 #'     \code{obj_tol}).
-#' @param num_clust The number of clusters to use if you want to
-#'     run the optimization steps in parallel. If \code{num_clust = 1},
+#' @param num_core The number of cores to use if you want to
+#'     run the optimization steps in parallel. If \code{num_core = 1},
 #'     then the optimization step will not be run in parallel.
+#'
+#' @references
+#' \itemize{
+#' \item{David J Balding and Richard A Nichols. \href{http://dx.doi.org/10.1038/sj.hdy.6881750}{Significant genetic correlations among caucasians at forensic DNA loci}. Heredity, 78(6):583–589, 1997. doi: 10.1038/sj.hdy.6881750.}
+#' \item{Paul D Blischak, Laura S Kubatko, and Andrea D Wolfe. \href{http://dx.doi.org/10.1093/bioinformatics/btx587}{SNP genotyping and parameter estimation in polyploids using low-coverage sequencing data}. Bioinformatics, page btx587, 2017. doi: 10.1093/bioinformatics/btx587.}
+#' \item{David Gerard, Luis Felipe Ventorim Ferrao, and Matthew Stephens. Harnessing Empirical Bayes and Mendelian Segregation for Genotyping Autopolyploids with Messy Sequencing Data. 2018.}
+#' }
 #'
 #' @export
 #'
@@ -131,7 +155,7 @@ mupdog <- function(refmat,
                    update_cor         = TRUE,
                    update_inbreeding  = TRUE,
                    update_allele_freq = TRUE,
-                   num_clust          = 1,
+                   num_core          = 1,
                    control            = list()) {
 
   ##########################################################
@@ -253,7 +277,7 @@ mupdog <- function(refmat,
 
   assertthat::assert_that(obj_tol > 0)
   assertthat::assert_that(itermax > 1)
-  assertthat::assert_that(num_clust >= 1)
+  assertthat::assert_that(num_core >= 1)
   assertthat::assert_that(is.logical(update_allele_freq))
   assertthat::assert_that(is.logical(update_cor))
   assertthat::assert_that(is.logical(update_inbreeding))
@@ -280,7 +304,7 @@ mupdog <- function(refmat,
   obj <- -Inf
   iter <- 1
   err <- Inf
-  if (num_clust == 1) { # only need to do this once if no clusters.
+  if (num_core == 1) { # only need to do this once if no cores.
     foreach::registerDoSEQ()
   }
   while (iter < itermax & err > obj_tol) {
@@ -292,11 +316,11 @@ mupdog <- function(refmat,
       cat("Updating posterior means and variances.\n\n")
     }
 
-    if (num_clust > 1) {
-      cl = parallel::makeCluster(num_clust)
+    if (num_core > 1) {
+      cl = parallel::makeCluster(num_core)
       doParallel::registerDoParallel(cl = cl)
       if (foreach::getDoParWorkers() == 1) {
-        warning("num_clust > 1 but only one core registered using doParallel::registerDoParallel.")
+        warning("num_core > 1 but only one core registered using foreach::registerDoSEQ.")
         foreach::registerDoSEQ()
       }
     }
@@ -315,7 +339,7 @@ mupdog <- function(refmat,
                            log_bb_dense = lbeta_array[, index, ])
       oout$par
     }
-    if (num_clust > 1) {
+    if (num_core > 1) {
       parallel::stopCluster(cl)
     }
     postmean <- fout[1:nind, ]
@@ -328,11 +352,11 @@ mupdog <- function(refmat,
       if (verbose) {
         cat("Updating allele_freq.\n\n")
       }
-      if (num_clust > 1) {
-        cl = parallel::makeCluster(num_clust)
+      if (num_core > 1) {
+        cl = parallel::makeCluster(num_core)
         doParallel::registerDoParallel(cl = cl)
         if (foreach::getDoParWorkers() == 1) {
-          warning("num_clust > 1 but only one core registered using doParallel::registerDoParallel.")
+          warning("num_core > 1 but only one core registered using foreach::registerDoSEQ.")
           foreach::registerDoSEQ()
         }
       }
@@ -350,7 +374,7 @@ mupdog <- function(refmat,
                              ploidy = ploidy)
         oout$par
         }
-      if (num_clust > 1) {
+      if (num_core > 1) {
         parallel::stopCluster(cl)
       }
     }
@@ -362,11 +386,11 @@ mupdog <- function(refmat,
       if (verbose) {
         cat("Updating inbreeding.\n\n")
       }
-      if (num_clust > 1) {
-        cl = parallel::makeCluster(num_clust)
+      if (num_core > 1) {
+        cl = parallel::makeCluster(num_core)
         doParallel::registerDoParallel(cl = cl)
         if (foreach::getDoParWorkers() == 1) {
-          warning("num_clust > 1 but only one core registered using doParallel::registerDoParallel.")
+          warning("num_core > 1 but only one core registered using foreach::registerDoSEQ.")
           foreach::registerDoSEQ()
         }
       }
@@ -384,7 +408,7 @@ mupdog <- function(refmat,
                              ploidy = ploidy)
         oout$par
       }
-      if (num_clust > 1) {
+      if (num_core > 1) {
         parallel::stopCluster(cl)
       }
     }
@@ -411,11 +435,11 @@ mupdog <- function(refmat,
     if (verbose) {
       cat("Updating seq, bias, and od.\n\n")
     }
-    if (num_clust > 1) {
-      cl = parallel::makeCluster(num_clust)
+    if (num_core > 1) {
+      cl = parallel::makeCluster(num_core)
       doParallel::registerDoParallel(cl = cl)
       if (foreach::getDoParWorkers() == 1) {
-        warning("num_clust > 1 but only one core registered using doParallel::registerDoParallel.")
+        warning("num_core > 1 but only one core registered using foreach::registerDoSEQ.")
         foreach::registerDoSEQ()
       }
     }
@@ -439,7 +463,7 @@ mupdog <- function(refmat,
                            wmat = warray[, index, ])
       oout$par
       }
-    if (num_clust > 1) {
+    if (num_core > 1) {
       parallel::stopCluster(cl)
     }
     seq  <- fout_seq[1, ]
