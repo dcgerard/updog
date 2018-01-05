@@ -9,7 +9,7 @@ mupdog(refmat, sizemat, ploidy, verbose = TRUE, mean_bias = 0,
   od = NULL, allele_freq = NULL, inbreeding = NULL, cor_mat = NULL,
   postmean = NULL, postvar = NULL, update_cor = TRUE,
   update_inbreeding = TRUE, update_allele_freq = TRUE, num_core = 1,
-  control = list())
+  update_method = c("Brent", "L-BFGS-B"), control = list())
 }
 \arguments{
 \item{refmat}{A matrix of reference counts.
@@ -91,6 +91,10 @@ allele frequencies \code{TRUE} or not \code{FALSE}?}
 run the optimization steps in parallel. If \code{num_core = 1},
 then the optimization step will not be run in parallel.}
 
+\item{update_method}{What generic optimizer should we use to update \code{allele_freq}
+and \code{inbreeding}? Options are either \code{"Brent"} or \code{"L-BFGS-B"}.
+See \code{\link[stats]{optim}} for details on these optimizers.}
+
 \item{control}{A list of control parameters (\code{itermax},
 \code{obj_tol}).}
 }
@@ -130,22 +134,22 @@ hist(mout$allele_freq)
 
 ## mupdog can correctly estimate ploidy to be 4
 mout2 <- mupdog(refmat = uitdewilligen$refmat,
-               sizemat = uitdewilligen$sizemat,
-               ploidy = 2,
-               verbose = FALSE,
-               control = list(obj_tol = 10^-4))
+                sizemat = uitdewilligen$sizemat,
+                ploidy = 2,
+                verbose = FALSE,
+                control = list(obj_tol = 10^-4))
 
 mout6 <- mupdog(refmat = uitdewilligen$refmat,
-               sizemat = uitdewilligen$sizemat,
-               ploidy = 6,
-               verbose = FALSE,
-               control = list(obj_tol = 10^-4))
+                sizemat = uitdewilligen$sizemat,
+                ploidy = 6,
+                verbose = FALSE,
+                control = list(obj_tol = 10^-4))
 
 mout8 <- mupdog(refmat = uitdewilligen$refmat,
-               sizemat = uitdewilligen$sizemat,
-               ploidy = 8,
-               verbose = FALSE,
-               control = list(obj_tol = 10^-4))
+                sizemat = uitdewilligen$sizemat,
+                ploidy = 8,
+                verbose = FALSE,
+                control = list(obj_tol = 10^-4))
 
 y <- c(mout2$obj, mout$obj, mout6$obj, mout8$obj)
 x <- seq(2, 8, by = 2)

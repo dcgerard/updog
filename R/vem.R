@@ -78,6 +78,9 @@
 #'     or not \code{FALSE}?
 #' @param control A list of control parameters (\code{itermax},
 #'     \code{obj_tol}).
+#' @param update_method What generic optimizer should we use to update \code{allele_freq}
+#'     and \code{inbreeding}? Options are either \code{"Brent"} or \code{"L-BFGS-B"}.
+#'     See \code{\link[stats]{optim}} for details on these optimizers.
 #' @param num_core The number of cores to use if you want to
 #'     run the optimization steps in parallel. If \code{num_core = 1},
 #'     then the optimization step will not be run in parallel.
@@ -113,22 +116,22 @@
 #'
 #' ## mupdog can correctly estimate ploidy to be 4
 #' mout2 <- mupdog(refmat = uitdewilligen$refmat,
-#'                sizemat = uitdewilligen$sizemat,
-#'                ploidy = 2,
-#'                verbose = FALSE,
-#'                control = list(obj_tol = 10^-4))
+#'                 sizemat = uitdewilligen$sizemat,
+#'                 ploidy = 2,
+#'                 verbose = FALSE,
+#'                 control = list(obj_tol = 10^-4))
 #'
 #' mout6 <- mupdog(refmat = uitdewilligen$refmat,
-#'                sizemat = uitdewilligen$sizemat,
-#'                ploidy = 6,
-#'                verbose = FALSE,
-#'                control = list(obj_tol = 10^-4))
+#'                 sizemat = uitdewilligen$sizemat,
+#'                 ploidy = 6,
+#'                 verbose = FALSE,
+#'                 control = list(obj_tol = 10^-4))
 #'
 #' mout8 <- mupdog(refmat = uitdewilligen$refmat,
-#'                sizemat = uitdewilligen$sizemat,
-#'                ploidy = 8,
-#'                verbose = FALSE,
-#'                control = list(obj_tol = 10^-4))
+#'                 sizemat = uitdewilligen$sizemat,
+#'                 ploidy = 8,
+#'                 verbose = FALSE,
+#'                 control = list(obj_tol = 10^-4))
 #'
 #' y <- c(mout2$obj, mout$obj, mout6$obj, mout8$obj)
 #' x <- seq(2, 8, by = 2)
@@ -155,7 +158,8 @@ mupdog <- function(refmat,
                    update_cor         = TRUE,
                    update_inbreeding  = TRUE,
                    update_allele_freq = TRUE,
-                   num_core          = 1,
+                   num_core           = 1,
+                   update_method      = c("Brent", "L-BFGS-B"),
                    control            = list()) {
 
   ##########################################################
@@ -168,6 +172,8 @@ mupdog <- function(refmat,
   assertthat::are_equal(dim(refmat), dim(sizemat))
   assertthat::assert_that(all(sizemat >= refmat, na.rm = TRUE))
   assertthat::assert_that(all(sizemat >= 0, na.rm = TRUE))
+
+  update_method <- match.arg(update_method)
 
   nind <- nrow(refmat)
   nsnps <- ncol(refmat)
@@ -364,7 +370,7 @@ mupdog <- function(refmat,
                        .export = "obj_for_alpha") %dopar% {
         oout <- stats::optim(par = allele_freq[index],
                              fn = obj_for_alpha,
-                             method = "Brent",
+                             method = update_method,
                              control = list(fnscale = -1, maxit = 10),
                              lower = 0, upper = 1,
                              mu = postmean[, index],
@@ -398,7 +404,7 @@ mupdog <- function(refmat,
                                      .export = "obj_for_rho") %dopar% {
         oout <- stats::optim(par = inbreeding[index],
                              fn = obj_for_rho,
-                             method = "Brent",
+                             method = update_method,
                              lower = 0, upper = 1,
                              control = list(fnscale = -1, maxit = 10),
                              mu = postmean[index, ],
