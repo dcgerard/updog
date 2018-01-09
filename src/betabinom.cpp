@@ -113,6 +113,9 @@ double dbetabinom_double(int x, int size, double mu, double rho, bool log) {
 
 // documentation in mupdog.R
 //' @describeIn betabinom Density function.
+//'
+//' @export
+//'
 // [[Rcpp::export]]
 NumericVector dbetabinom(IntegerVector x, IntegerVector size,
                          NumericVector mu, NumericVector rho,
@@ -231,6 +234,8 @@ double pbetabinom_double(int q, int size, double mu, double rho, bool log_p) {
 // documentation in mupdog.R
 //' @describeIn betabinom Distribution function.
 //'
+//' @export
+//'
 // [[Rcpp::export]]
 NumericVector pbetabinom(IntegerVector q, IntegerVector size,
                          NumericVector mu, NumericVector rho,
@@ -345,6 +350,8 @@ int qbetabinom_double(double p, int size, double mu, double rho) {
 // documentation in mupdog.R
 //' @describeIn betabinom Distribution function.
 //'
+//' @export
+//'
 // [[Rcpp::export]]
 IntegerVector qbetabinom(NumericVector p, IntegerVector size,
                          NumericVector mu, NumericVector rho) {
@@ -414,6 +421,8 @@ int rbetabinom_int(int size, double mu, double rho) {
 
 // documentation in mupdog.R
 //' @describeIn betabinom Distribution function.
+//'
+//' @export
 //'
 // [[Rcpp::export]]
 IntegerVector rbetabinom(int n, IntegerVector size,

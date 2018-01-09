@@ -67,5 +67,4 @@ NULL
 #' @author David Gerard
 #'
 #'
-#'
 NULL

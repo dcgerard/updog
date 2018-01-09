@@ -36,6 +36,9 @@ dbetabinom_double <- function(x, size, mu, rho, log) {
 }
 
 #' @describeIn betabinom Density function.
+#'
+#' @export
+#'
 dbetabinom <- function(x, size, mu, rho, log) {
     .Call('_mupdog_dbetabinom', PACKAGE = 'mupdog', x, size, mu, rho, log)
 }
@@ -55,6 +58,8 @@ pbetabinom_double <- function(q, size, mu, rho, log_p) {
 
 #' @describeIn betabinom Distribution function.
 #'
+#' @export
+#'
 pbetabinom <- function(q, size, mu, rho, log_p) {
     .Call('_mupdog_pbetabinom', PACKAGE = 'mupdog', q, size, mu, rho, log_p)
 }
@@ -72,6 +77,8 @@ qbetabinom_double <- function(p, size, mu, rho) {
 
 #' @describeIn betabinom Distribution function.
 #'
+#' @export
+#'
 qbetabinom <- function(p, size, mu, rho) {
     .Call('_mupdog_qbetabinom', PACKAGE = 'mupdog', p, size, mu, rho)
 }
@@ -87,6 +94,8 @@ rbetabinom_int <- function(size, mu, rho) {
 }
 
 #' @describeIn betabinom Distribution function.
+#'
+#' @export
 #'
 rbetabinom <- function(n, size, mu, rho) {
     .Call('_mupdog_rbetabinom', PACKAGE = 'mupdog', n, size, mu, rho)
