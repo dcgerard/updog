@@ -95,6 +95,61 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// qbetabinom_double
+int qbetabinom_double(double p, int size, double mu, double rho);
+RcppExport SEXP _mupdog_qbetabinom_double(SEXP pSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type p(pSEXP);
+    Rcpp::traits::input_parameter< int >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type rho(rhoSEXP);
+    rcpp_result_gen = Rcpp::wrap(qbetabinom_double(p, size, mu, rho));
+    return rcpp_result_gen;
+END_RCPP
+}
+// qbetabinom
+IntegerVector qbetabinom(NumericVector p, IntegerVector size, NumericVector mu, NumericVector rho);
+RcppExport SEXP _mupdog_qbetabinom(SEXP pSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type p(pSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type rho(rhoSEXP);
+    rcpp_result_gen = Rcpp::wrap(qbetabinom(p, size, mu, rho));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rbetabinom_int
+int rbetabinom_int(int size, double mu, double rho);
+RcppExport SEXP _mupdog_rbetabinom_int(SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type rho(rhoSEXP);
+    rcpp_result_gen = Rcpp::wrap(rbetabinom_int(size, mu, rho));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rbetabinom
+IntegerVector rbetabinom(int n, IntegerVector size, NumericVector mu, NumericVector rho);
+RcppExport SEXP _mupdog_rbetabinom(SEXP nSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type rho(rhoSEXP);
+    rcpp_result_gen = Rcpp::wrap(rbetabinom(n, size, mu, rho));
+    return rcpp_result_gen;
+END_RCPP
+}
 // grad_for_mu_sigma2
 NumericVector grad_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2, NumericMatrix phifk_mat, arma::Mat<double> cor_inv, NumericMatrix log_bb_dense);
 RcppExport SEXP _mupdog_grad_for_mu_sigma2(SEXP muSEXP, SEXP sigma2SEXP, SEXP phifk_matSEXP, SEXP cor_invSEXP, SEXP log_bb_denseSEXP) {
@@ -572,6 +627,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_dbetabinom", (DL_FUNC) &_mupdog_dbetabinom, 5},
     {"_mupdog_pbetabinom_double", (DL_FUNC) &_mupdog_pbetabinom_double, 5},
     {"_mupdog_pbetabinom", (DL_FUNC) &_mupdog_pbetabinom, 5},
+    {"_mupdog_qbetabinom_double", (DL_FUNC) &_mupdog_qbetabinom_double, 4},
+    {"_mupdog_qbetabinom", (DL_FUNC) &_mupdog_qbetabinom, 4},
+    {"_mupdog_rbetabinom_int", (DL_FUNC) &_mupdog_rbetabinom_int, 3},
+    {"_mupdog_rbetabinom", (DL_FUNC) &_mupdog_rbetabinom, 4},
     {"_mupdog_grad_for_mu_sigma2", (DL_FUNC) &_mupdog_grad_for_mu_sigma2, 5},
     {"_mupdog_grad_for_mu_sigma2_wrapper", (DL_FUNC) &_mupdog_grad_for_mu_sigma2_wrapper, 4},
     {"_mupdog_dpen_dh", (DL_FUNC) &_mupdog_dpen_dh, 3},

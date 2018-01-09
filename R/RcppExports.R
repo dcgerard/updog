@@ -59,6 +59,39 @@ pbetabinom <- function(q, size, mu, rho, log_p) {
     .Call('_mupdog_pbetabinom', PACKAGE = 'mupdog', q, size, mu, rho, log_p)
 }
 
+#' The quantile function of the beta-binomial distribution parameterized
+#' by mean and overdispersion parameter.
+#'
+#' @inheritParams dbetabinom_double
+#' @param p The lower tail probability.
+#'
+#' @author David Gerard
+qbetabinom_double <- function(p, size, mu, rho) {
+    .Call('_mupdog_qbetabinom_double', PACKAGE = 'mupdog', p, size, mu, rho)
+}
+
+#' @describeIn betabinom Distribution function.
+#'
+qbetabinom <- function(p, size, mu, rho) {
+    .Call('_mupdog_qbetabinom', PACKAGE = 'mupdog', p, size, mu, rho)
+}
+
+#' One draw from the beta-binomial distribution parameterized
+#' by mean and overdispersion parameter.
+#'
+#' @inheritParams dbetabinom_double
+#'
+#' @author David Gerard
+rbetabinom_int <- function(size, mu, rho) {
+    .Call('_mupdog_rbetabinom_int', PACKAGE = 'mupdog', size, mu, rho)
+}
+
+#' @describeIn betabinom Distribution function.
+#'
+rbetabinom <- function(n, size, mu, rho) {
+    .Call('_mupdog_rbetabinom', PACKAGE = 'mupdog', n, size, mu, rho)
+}
+
 #' Gradient for \code{\link{obj_for_mu_sigma2}} with respect for \code{mu} and \code{sigma2}.
 #'
 #' @inheritParams obj_for_mu_sigma2

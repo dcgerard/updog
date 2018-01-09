@@ -3,12 +3,18 @@
 \name{dbetabinom}
 \alias{dbetabinom}
 \alias{pbetabinom}
+\alias{qbetabinom}
+\alias{rbetabinom}
 \alias{betabinom}
 \title{The Beta-Binomial Distribution}
 \usage{
 dbetabinom(x, size, mu, rho, log)
 
 pbetabinom(q, size, mu, rho, log_p)
+
+qbetabinom(p, size, mu, rho)
+
+rbetabinom(n, size, mu, rho)
 }
 \arguments{
 \item{x, q}{A vector of quantiles.}
@@ -31,10 +37,14 @@ to return the log probabilities for all observations
 (in the case that its length is 1) or for
 each observation (in the case that
 its length is that of \code{x} and \code{size}).}
+
+\item{p}{A vector of probabilities.}
+
+\item{n}{The number of observations.}
 }
 \description{
-Density and distribution functions for the beta-binomial
-distribution when parameterized
+Density, distribution function, quantile function and random generation
+for the beta-binomial distribution when parameterized
 by the mean \code{mu} and the overdispersion parameter \code{rho}
 rather than the typical shape parameters.
 }
@@ -55,6 +65,10 @@ and
 \item \code{dbetabinom}: Density function.
 
 \item \code{pbetabinom}: Distribution function.
+
+\item \code{qbetabinom}: Distribution function.
+
+\item \code{rbetabinom}: Distribution function.
 }}
 
 \author{

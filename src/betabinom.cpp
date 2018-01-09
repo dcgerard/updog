@@ -121,8 +121,8 @@ NumericVector dbetabinom(IntegerVector x, IntegerVector size,
 
   int n = x.length();
 
-  if (n != size.length()) {
-    Rcpp::stop("dbetabinom: x and size must be of same length.");
+  if ((n != size.length()) & (1 != size.length())) {
+    Rcpp::stop("dbetabinom: size must either be of length 1 or the same length as x.");
   }
   if ((n != mu.length()) & (1 != mu.length())) {
     Rcpp::stop("dbetabinom: mu must either be of length 1 or the same length as x.");
@@ -136,10 +136,18 @@ NumericVector dbetabinom(IntegerVector x, IntegerVector size,
 
   // iterate
   NumericVector dout(n);
+  int current_size;
   double current_mu;
   double current_rho;
   bool current_log;
   for (int i = 0; i < n; i++) {
+    if (size.length() == 1) {
+      current_size = size(0);
+    }
+    else {
+      current_size = size(i);
+    }
+
     if (mu.length() == 1) {
       current_mu = mu(0);
     }
@@ -161,7 +169,7 @@ NumericVector dbetabinom(IntegerVector x, IntegerVector size,
       current_log = log(i);
     }
 
-    dout(i) = dbetabinom_double(x(i), size(i), current_mu,
+    dout(i) = dbetabinom_double(x(i), current_size, current_mu,
          current_rho, current_log);
   }
 
@@ -232,8 +240,8 @@ NumericVector pbetabinom(IntegerVector q, IntegerVector size,
 
   int n = q.length();
 
-  if (n != size.length()) {
-    Rcpp::stop("pbetabinom: q and size must be of same length.");
+  if ((n != size.length()) & (1 != size.length())) {
+    Rcpp::stop("pbetabinom: size must either be of length 1 or the same length as q.");
   }
   if ((n != mu.length()) & (1 != mu.length())) {
     Rcpp::stop("pbetabinom: mu must either be of length 1 or the same length as q.");
@@ -247,10 +255,18 @@ NumericVector pbetabinom(IntegerVector q, IntegerVector size,
 
   // iterate
   NumericVector pout(n);
+  int current_size;
   double current_mu;
   double current_rho;
   bool current_log_p;
   for (int i = 0; i < n; i++) {
+    if (size.length() == 1) {
+      current_size = size(0);
+    }
+    else {
+      current_size = size(i);
+    }
+
     if (mu.length() == 1) {
       current_mu = mu(0);
     }
@@ -272,9 +288,184 @@ NumericVector pbetabinom(IntegerVector q, IntegerVector size,
       current_log_p = log_p(i);
     }
 
-    pout(i) = pbetabinom_double(q(i), size(i), current_mu,
+    pout(i) = pbetabinom_double(q(i), current_size, current_mu,
          current_rho, current_log_p);
   }
 
   return pout;
 }
+
+
+//' The quantile function of the beta-binomial distribution parameterized
+//' by mean and overdispersion parameter.
+//'
+//' @inheritParams dbetabinom_double
+//' @param p The lower tail probability.
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+int qbetabinom_double(double p, int size, double mu, double rho) {
+
+  // check input -------------------------------------------------
+  if ((p < 0.0) | (p > 1.0)) {
+    Rcpp::stop("qbetabinom_double: p needs to be between 0 and 1.");
+  }
+  if ((mu < 0.0) | (mu > 1.0)) {
+    Rcpp::stop("qbetabinom_double: mu needs to be between 0 and 1.");
+  }
+  if ((rho < 0.0) | (rho > 1.0)) {
+    Rcpp::stop("qbetabinom_double: rho needs to be between 0 and 1.");
+  }
+  if (size < 0) {
+    Rcpp::stop("qbetabinom_double: size needs to be greater than or equal to 0.");
+  }
+
+
+  double p_current = 0.0;
+  int qfinal = -1;
+
+  if (p > 1.0 - TOL) { // this deals with a couple numerical issues I had during unit tests.
+    qfinal = size;
+  }
+  else {
+    for (int i = 0; i <= size; i++) {
+      p_current = p_current + dbetabinom_double(i, size, mu, rho, false);
+      if (p_current > p - TOL) {
+        qfinal = i;
+        break;
+      }
+    }
+  }
+
+
+  return qfinal;
+}
+
+
+// documentation in mupdog.R
+//' @describeIn betabinom Distribution function.
+//'
+// [[Rcpp::export]]
+IntegerVector qbetabinom(NumericVector p, IntegerVector size,
+                         NumericVector mu, NumericVector rho) {
+  // Check input ------------------------------------------
+  int n = p.length();
+
+  if ((n != size.length()) & (1 != size.length())){
+    Rcpp::stop("qbetabinom: size must be either of lenght 1 or the same length as p.");
+  }
+  if ((n != mu.length()) & (1 != mu.length())) {
+    Rcpp::stop("qbetabinom: mu must either be of length 1 or the same length as p.");
+  }
+  if ((n != rho.length()) & (1 != rho.length())) {
+    Rcpp::stop("qbetabinom: rho must either be of length 1 or the same length as p.");
+  }
+
+  // Fit the qbetabinoms
+  IntegerVector qout(n);
+  int current_size;
+  double current_mu;
+  double current_rho;
+  for (int i = 0; i < n; i++) {
+
+    if (size.length() == 1) {
+      current_size = size(0);
+    }
+    else {
+      current_size = size(i);
+    }
+
+    if (mu.length() == 1) {
+      current_mu = mu(0);
+    }
+    else {
+      current_mu = mu(i);
+    }
+
+    if (rho.length() == 1) {
+      current_rho = rho(0);
+    }
+    else {
+      current_rho = rho(i);
+    }
+
+    qout(i) = qbetabinom_double(p(i), current_size, current_mu, current_rho);
+  }
+
+  return qout;
+}
+
+
+
+//' One draw from the beta-binomial distribution parameterized
+//' by mean and overdispersion parameter.
+//'
+//' @inheritParams dbetabinom_double
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+int rbetabinom_int(int size, double mu, double rho) {
+  double alpha = mu * (1.0 - rho) / rho;
+  double beta = (1.0 - mu) * (1.0 - rho) / rho;
+  double currentp = R::rbeta(alpha, beta);
+  int draw = R::rbinom(size, currentp);
+  return draw;
+}
+
+// documentation in mupdog.R
+//' @describeIn betabinom Distribution function.
+//'
+// [[Rcpp::export]]
+IntegerVector rbetabinom(int n, IntegerVector size,
+                         NumericVector mu, NumericVector rho) {
+  // Check input ------------------------------------------
+  if ((n != size.length()) & (1 != size.length())){
+    Rcpp::stop("qbetabinom: size must be either of length 1 or n.");
+  }
+  if ((n != mu.length()) & (1 != mu.length())) {
+    Rcpp::stop("qbetabinom: mu must either be of length 1 or n.");
+  }
+  if ((n != rho.length()) & (1 != rho.length())) {
+    Rcpp::stop("qbetabinom: rho must either be of length 1 or n.");
+  }
+
+  IntegerVector draws(n);
+  int current_size;
+  double current_mu;
+  double current_rho;
+  for (int i = 0; i < n; i++) {
+    if (size.length() == 1) {
+      current_size = size(0);
+    }
+    else {
+      current_size = size(i);
+    }
+
+    if (mu.length() == 1) {
+      current_mu = mu(0);
+    }
+    else {
+      current_mu = mu(i);
+    }
+
+    if (rho.length() == 1) {
+      current_rho = rho(0);
+    }
+    else {
+      current_rho = rho(i);
+    }
+
+    draws(i) = rbetabinom_int(current_size, current_mu, current_rho);
+  }
+
+  return draws;
+}
+
+
+
+
+
+
+
+
+

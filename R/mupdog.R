@@ -26,8 +26,8 @@ NULL
 
 #' The Beta-Binomial Distribution
 #'
-#' Density and distribution functions for the beta-binomial
-#' distribution when parameterized
+#' Density, distribution function, quantile function and random generation
+#' for the beta-binomial distribution when parameterized
 #' by the mean \code{mu} and the overdispersion parameter \code{rho}
 #' rather than the typical shape parameters.
 #'
@@ -44,6 +44,8 @@ NULL
 #' \deqn{\beta = (1 - \mu) (1 - \rho)/\rho.}
 #'
 #' @param x,q A vector of quantiles.
+#' @param p A vector of probabilities.
+#' @param n The number of observations.
 #' @param size A vector of sizes.
 #' @param mu Either a scalar of the mean for each observation,
 #'     or a vector of means of each observation, and thus
@@ -63,4 +65,7 @@ NULL
 #' @name betabinom
 #'
 #' @author David Gerard
+#'
+#'
+#'
 NULL
