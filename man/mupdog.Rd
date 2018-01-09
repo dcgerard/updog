@@ -76,9 +76,9 @@ have the same dimensions as \code{refmat}.}
 same dimensions as \code{refmat}.}
 
 \item{update_cor}{A logical. Should we update the underlying
-correlation matrix \code{TRUE} or not \code{FALSE}. Will throw
-an error if there are more individuals than SNPs and set to
-\code{TRUE}.}
+correlation matrix \code{TRUE} or not \code{FALSE}. It might be
+unwise to set this to \code{TRUE} if you have more individuals
+than SNPs.}
 
 \item{update_inbreeding}{A logical. Should we update the
 inbreeding coefficients \code{TRUE}

@@ -66,9 +66,9 @@
 #' @param postvar Initial posterior variances. Should have the
 #'     same dimensions as \code{refmat}.
 #' @param update_cor A logical. Should we update the underlying
-#'     correlation matrix \code{TRUE} or not \code{FALSE}. Will throw
-#'     an error if there are more individuals than SNPs and set to
-#'     \code{TRUE}.
+#'     correlation matrix \code{TRUE} or not \code{FALSE}. It might be
+#'     unwise to set this to \code{TRUE} if you have more individuals
+#'     than SNPs.
 #' @param update_inbreeding A logical. Should we update the
 #'     inbreeding coefficients \code{TRUE}
 #'     or not \code{FALSE}?
@@ -263,13 +263,8 @@ mupdog <- function(refmat,
   assertthat::assert_that(is.matrix(cor_mat))
   assertthat::are_equal(nrow(cor_mat), nind)
   assertthat::are_equal(ncol(cor_mat), nind)
-  assertthat::assert_that(all(abs(cor_mat) <= 1))
-  assertthat::assert_that(all(diag(cor_mat) == 1))
   eigen_decomposition <- eigen(cor_mat, only.values = TRUE)
   assertthat::assert_that(all(eigen_decomposition$values > 0))
-  if ((nind > nsnps) & update_cor) {
-    stop("if there are more individuals than SNPs, update_core must be set to FALSE.")
-  }
   cor_inv <- solve(cor_mat)
 
   assertthat::assert_that(is.numeric(postmean))
@@ -532,7 +527,8 @@ mupdog <- function(refmat,
 #'
 #' @author David Gerard
 update_R <- function(postmean, postvar) {
-  stats::cov2cor(tcrossprod(postmean) + diag(rowSums(postvar)))
+  # stats::cov2cor(tcrossprod(postmean) + diag(rowSums(postvar)))
+  (tcrossprod(postmean) + diag(rowSums(postvar))) / ncol(postmean)
 }
 
 
