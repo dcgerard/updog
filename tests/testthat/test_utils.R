@@ -44,3 +44,9 @@ test_that("logit works", {
   expect_equal(logit(expit(-8)), -8)
 }
 )
+
+test_that("log_sum_exp and log_sum_exp_2 are equal", {
+  expect_equal(log_sum_exp(c(0.1, 0.2)),
+               log_sum_exp_2(0.1, 0.2))
+}
+)

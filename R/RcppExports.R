@@ -458,6 +458,34 @@ elbo <- function(warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mea
     .Call('_mupdog_elbo', PACKAGE = 'mupdog', warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mean_bias, var_bias, mean_seq, var_seq, ploidy)
 }
 
+#' Calculate oracle misclassification error.
+#'
+#' Given knowledge of the parameters, we calculate the expected misclassification error,
+#' where the expectation is taken over both the data generation process and the allele-distribution.
+#' This is an ideal level of misclassification error.
+#'
+#' To come up with \code{dist}, you need some additional assumptions.
+#' For example, if the population is in Hardy-Weinberg equilibrium and
+#' the allele frequency is \code{alpha} then you could calculate
+#' \code{dist} using the R code: \code{dbinom(x = 0:ploidy, size = ploidy, prob = alpha)}.
+#' Alternatively, if you know the genotypes of the individual's two parents are, say,
+#' \code{ref_count1} and \code{ref_count2}, then you could use the \code{\link[updog]{get_q_array}}
+#' function from the updog package: \code{updog::get_q_array(ploidy)[ref_count1 + 1, ref_count2 + 1, ]}.
+#'
+#' @param n The read-depth.
+#' @param ploidy The ploidy of the individual.
+#' @param seq The sequencing error rate.
+#' @param bias The allele-bias
+#' @param od The overdispersion parameter.
+#' @param dist The distribution of the alleles.
+#'
+#'
+#' @author David Gerard
+#'
+oracle_miss <- function(n, ploidy, seq, bias, od, dist) {
+    .Call('_mupdog_oracle_miss', PACKAGE = 'mupdog', n, ploidy, seq, bias, od, dist)
+}
+
 #' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
 #'
 #' @param p The allele dosage.
@@ -511,6 +539,19 @@ xi_fun <- function(p, eps, h) {
 #' @author David Gerard
 log_sum_exp <- function(x) {
     .Call('_mupdog_log_sum_exp', PACKAGE = 'mupdog', x)
+}
+
+#' Log-sum-exponential trick using just two doubles.
+#'
+#' @param x A double.
+#' @param y Another double.
+#'
+#' @return The log of the sum of the exponential of x and y.
+#'
+#' @author David Gerard
+#'
+log_sum_exp_2 <- function(x, y) {
+    .Call('_mupdog_log_sum_exp_2', PACKAGE = 'mupdog', x, y)
 }
 
 #' The logit function.

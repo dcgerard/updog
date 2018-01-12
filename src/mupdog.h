@@ -7,6 +7,7 @@ extern double TOL;
 
 // from util_funs.cpp -----------------------------------------------
 double log_sum_exp(Rcpp::NumericVector x);
+double log_sum_exp_2(double x, double y);
 double logit(double x);
 double xi_double(double p, double eps, double h);
 

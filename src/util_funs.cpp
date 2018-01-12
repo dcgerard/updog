@@ -132,6 +132,22 @@ double log_sum_exp(NumericVector x) {
   return lse;
 }
 
+//' Log-sum-exponential trick using just two doubles.
+//'
+//' @param x A double.
+//' @param y Another double.
+//'
+//' @return The log of the sum of the exponential of x and y.
+//'
+//' @author David Gerard
+//'
+// [[Rcpp::export]]
+double log_sum_exp_2(double x, double y) {
+  double z = std::max(x, y);
+  double finalval = std::log(std::exp(x - z) + std::exp(y - z)) + z;
+  return finalval;
+}
+
 //' The logit function.
 //'
 //' @param x A double between 0 and 1.
