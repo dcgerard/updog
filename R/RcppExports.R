@@ -482,6 +482,8 @@ elbo <- function(warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mea
 #'
 #' @author David Gerard
 #'
+#' @export
+#'
 oracle_miss <- function(n, ploidy, seq, bias, od, dist) {
     .Call('_mupdog_oracle_miss', PACKAGE = 'mupdog', n, ploidy, seq, bias, od, dist)
 }

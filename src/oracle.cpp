@@ -26,6 +26,8 @@
 //'
 //' @author David Gerard
 //'
+//' @export
+//'
 // [[Rcpp::export]]
 double oracle_miss(int n, int ploidy, double seq, double bias, double od, NumericVector dist) {
 
