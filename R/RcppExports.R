@@ -484,8 +484,8 @@ elbo <- function(warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mea
 #'
 #' @export
 #'
-oracle_miss <- function(n, ploidy, seq, bias, od, dist) {
-    .Call('_mupdog_oracle_miss', PACKAGE = 'mupdog', n, ploidy, seq, bias, od, dist)
+oracle_mis <- function(n, ploidy, seq, bias, od, dist) {
+    .Call('_mupdog_oracle_mis', PACKAGE = 'mupdog', n, ploidy, seq, bias, od, dist)
 }
 
 #' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.

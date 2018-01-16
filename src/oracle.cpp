@@ -29,7 +29,7 @@
 //' @export
 //'
 // [[Rcpp::export]]
-double oracle_miss(int n, int ploidy, double seq, double bias, double od, NumericVector dist) {
+double oracle_mis(int n, int ploidy, double seq, double bias, double od, NumericVector dist) {
 
   if (std::abs(Rcpp::sum(dist) - 1) > TOL) {
     Rcpp::stop("oracle_miss: elements in dist must sum to one.");

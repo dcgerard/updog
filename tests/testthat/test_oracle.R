@@ -7,7 +7,7 @@ test_that("oracle error rates are correct", {
  bias   <- 0.75
  od     <- 0
  dist   <- dbinom(x = 0:ploidy, size = ploidy, prob = 0.7)
- oracle_miss(n = n, ploidy = ploidy, seq = seq, bias = bias, od = od, dist = dist)
+ oracle_mis(n = n, ploidy = ploidy, seq = seq, bias = bias, od = od, dist = dist)
 
 
  rfun <- function(n, ploidy, seq, bias, od, dist) {
@@ -23,14 +23,14 @@ test_that("oracle error rates are correct", {
  }
 
  rway <- rfun(n = n, ploidy = ploidy, seq = seq, bias = bias, od = od, dist = dist)
- myway <- oracle_miss(n = n, ploidy = ploidy, seq = seq, bias = bias, od = od, dist = dist)
+ myway <- oracle_mis(n = n, ploidy = ploidy, seq = seq, bias = bias, od = od, dist = dist)
 
  expect_equal(rway, myway)
 
  # ## 7 times faster!
  # microbenchmark::microbenchmark(
  #   rfun(n = n, ploidy = ploidy, seq = seq, bias = bias, od = od, dist = dist),
- #   oracle_miss(n = n, ploidy = ploidy, seq = seq, bias = bias, od = od, dist = dist)
+ #   oracle_mis(n = n, ploidy = ploidy, seq = seq, bias = bias, od = od, dist = dist)
  # )
 
 }

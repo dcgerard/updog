@@ -536,9 +536,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// oracle_miss
-double oracle_miss(int n, int ploidy, double seq, double bias, double od, NumericVector dist);
-RcppExport SEXP _mupdog_oracle_miss(SEXP nSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP distSEXP) {
+// oracle_mis
+double oracle_mis(int n, int ploidy, double seq, double bias, double od, NumericVector dist);
+RcppExport SEXP _mupdog_oracle_mis(SEXP nSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP distSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -548,7 +548,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type bias(biasSEXP);
     Rcpp::traits::input_parameter< double >::type od(odSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type dist(distSEXP);
-    rcpp_result_gen = Rcpp::wrap(oracle_miss(n, ploidy, seq, bias, od, dist));
+    rcpp_result_gen = Rcpp::wrap(oracle_mis(n, ploidy, seq, bias, od, dist));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -685,7 +685,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_obj_for_mu_sigma2", (DL_FUNC) &_mupdog_obj_for_mu_sigma2, 5},
     {"_mupdog_obj_for_mu_sigma2_wrapper", (DL_FUNC) &_mupdog_obj_for_mu_sigma2_wrapper, 4},
     {"_mupdog_elbo", (DL_FUNC) &_mupdog_elbo, 12},
-    {"_mupdog_oracle_miss", (DL_FUNC) &_mupdog_oracle_miss, 6},
+    {"_mupdog_oracle_mis", (DL_FUNC) &_mupdog_oracle_mis, 6},
     {"_mupdog_eta_double", (DL_FUNC) &_mupdog_eta_double, 2},
     {"_mupdog_eta_fun", (DL_FUNC) &_mupdog_eta_fun, 2},
     {"_mupdog_xi_double", (DL_FUNC) &_mupdog_xi_double, 3},
