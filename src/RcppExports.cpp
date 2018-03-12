@@ -163,6 +163,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// get_inner_weights
+NumericMatrix get_inner_weights(int ploidy, double mode);
+RcppExport SEXP _mupdog_get_inner_weights(SEXP ploidySEXP, SEXP modeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< double >::type mode(modeSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_inner_weights(ploidy, mode));
+    return rcpp_result_gen;
+END_RCPP
+}
 // get_wik_mat
 NumericMatrix get_wik_mat(NumericVector probk_vec, NumericVector refvec, NumericVector sizevec, int ploidy, double seq, double bias, double od);
 RcppExport SEXP _mupdog_get_wik_mat(SEXP probk_vecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP) {
@@ -690,6 +702,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_rbetabinom_int", (DL_FUNC) &_mupdog_rbetabinom_int, 3},
     {"_mupdog_rbetabinom", (DL_FUNC) &_mupdog_rbetabinom, 4},
     {"_mupdog_get_probk_vec", (DL_FUNC) &_mupdog_get_probk_vec, 3},
+    {"_mupdog_get_inner_weights", (DL_FUNC) &_mupdog_get_inner_weights, 2},
     {"_mupdog_get_wik_mat", (DL_FUNC) &_mupdog_get_wik_mat, 7},
     {"_mupdog_grad_for_mu_sigma2", (DL_FUNC) &_mupdog_grad_for_mu_sigma2, 5},
     {"_mupdog_grad_for_mu_sigma2_wrapper", (DL_FUNC) &_mupdog_grad_for_mu_sigma2_wrapper, 4},

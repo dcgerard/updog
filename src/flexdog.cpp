@@ -43,6 +43,37 @@ NumericVector get_probk_vec(NumericVector pivec, std::string model, double mode)
   return probk_vec;
 }
 
+//' Compute inner weights for updating the mixing proportions when using ash model.
+//'
+//' The (i,k)th element is \eqn{1(k \in F(a, i)) / |F(a,i)|}.
+//'
+//' @inheritParams flexdog
+//'
+//' @author David Gerard
+//'
+// [[Rcpp::export]]
+NumericMatrix get_inner_weights(int ploidy, double mode) {
+  NumericMatrix inner_weights(ploidy + 1, ploidy + 1);
+  double denom;
+  for (int i = 0; i <= ploidy; i++) {
+    if (std::abs((double)i - mode) < TOL) {
+      inner_weights(i, i) = 1.0;
+    } else if (i < mode) {
+      denom = (double)(std::floor(mode) - i + 1);
+      for (int j = i; j <= mode; j++) {
+        inner_weights(i, j) = 1.0 / denom;
+      }
+    } else if (i > mode) {
+      denom = (double)(i - std::ceil(mode) + 1);
+      for (int j = i; j >= mode; j--) {
+        inner_weights(i, j) = 1.0 / denom;
+      }
+    } else {
+      Rcpp::stop("get_inner_weights: How did you get here??");
+    }
+  }
+  return(inner_weights);
+}
 
 
 //' E-step in \code{\link{flexdog}}.

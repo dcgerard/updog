@@ -114,6 +114,18 @@ get_probk_vec <- function(pivec, model, mode) {
     .Call('_mupdog_get_probk_vec', PACKAGE = 'mupdog', pivec, model, mode)
 }
 
+#' Compute inner weights for updating the mixing proportions when using ash model.
+#'
+#' The (i,k)th element is \eqn{1(k \in F(a, i)) / |F(a,i)|}.
+#'
+#' @inheritParams flexdog
+#'
+#' @author David Gerard
+#'
+get_inner_weights <- function(ploidy, mode) {
+    .Call('_mupdog_get_inner_weights', PACKAGE = 'mupdog', ploidy, mode)
+}
+
 #' E-step in \code{\link{flexdog}}.
 #'
 #' @inheritParams flexdog

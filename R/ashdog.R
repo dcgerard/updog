@@ -70,6 +70,10 @@ flexdog <- function(refvec,
   for (em_index in 1:length(mode_vec)) {
     mode <- mode_vec[em_index]
 
+    ## Get inner weight vec only once
+    ## Used in convex optimization program
+    inner_weights <- get_inner_weights(ploidy = ploidy, mode = mode)
+
     ## Initialize pivec so that two modes have equal prob if model = "ash". Uniform if model = "flex".
     pivec <- initialize_pivec(ploidy = ploidy, mode = mode, model = model)
     assertthat::are_equal(sum(pivec), 1)
@@ -104,6 +108,22 @@ flexdog <- function(refvec,
     od   <- oout$par[3]
 
     ## Update pivec ----------------
+    weight_vec <- colSums(wik_mat)
+    if (model == "flex") {
+      pivec <- weight_vec / sum(weight_vec)
+    } else if (model == "ash") {
+      cv_pi <- CVXR::Variable(1, ploidy + 1)
+      obj   <- sum(t(weight_vec) * log(cv_pi %*% inner_weights))
+      prob  <- CVXR::Problem(CVXR::Maximize(obj), constraints = list(sum(cv_pi) == 1, cv_pi >= 0))
+      result <- solve(prob)
+      result$value
+      pivec <- c(result$getValue(cv_pi))
+    } else {
+      stop("flexdog: how did you get here?")
+    }
+
+    probk_vec <- get_probk_vec(pivec = pivec, model = model, mode = mode)
+
 
 
 
@@ -149,4 +169,5 @@ initialize_pivec <- function(ploidy, mode, model = c("ash", "flex")) {
 
   return(pivec)
 }
+
 

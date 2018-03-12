@@ -3,6 +3,10 @@ context("flexdog")
 test_that("flexdog works", {
   refvec    <- c(1, 2, 3)
   sizevec   <- c(6, 5, 4)
+  refvec    <- updog::snpdat$counts
+  sizevec   <- updog::snpdat$size
+  refvec    <- refvec[!is.na(refvec)]
+  sizevec   <- sizevec[!is.na(sizevec)]
   ploidy    <- 6
   model     <- "ash"
   verbose   <- TRUE
