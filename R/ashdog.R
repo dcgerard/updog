@@ -64,6 +64,8 @@ flexdog <- function(refvec,
     mode_vec <- (0:(ploidy - 1)) + 0.5
   }
 
+  boundary_tol <- 10 ^ -6
+
   ## Run EM for each mode in `mode_vec`.
   for (em_index in 1:length(mode_vec)) {
     mode <- mode_vec[em_index]
@@ -74,6 +76,37 @@ flexdog <- function(refvec,
 
     probk_vec <- get_probk_vec(pivec = pivec, model = model, mode = mode)
     assertthat::are_equal(sum(probk_vec), 1)
+
+
+    ## E-step ----------------------
+    wik_mat <- get_wik_mat(probk_vec = probk_vec, refvec = refvec,
+                           sizevec = sizevec, ploidy = ploidy,
+                           seq = seq, bias = bias, od = od)
+
+    ## Update seq, bias, and od ----
+    oout <- stats::optim(par       = c(seq, bias, od),
+                         fn        = obj_for_eps,
+                         gr        = grad_for_eps,
+                         method    = "L-BFGS-B",
+                         lower     = rep(boundary_tol, 3),
+                         upper     = c(1 - boundary_tol, Inf, 1 - boundary_tol),
+                         control   = list(fnscale = -1, maxit = 10),
+                         refvec    = refvec,
+                         sizevec   = sizevec,
+                         ploidy    = ploidy,
+                         mean_bias = mean_bias,
+                         var_bias  = var_bias,
+                         mean_seq  = mean_seq,
+                         var_seq   = var_seq,
+                         wmat      = wik_mat)
+    seq  <- oout$par[1]
+    bias <- oout$par[2]
+    od   <- oout$par[3]
+
+    ## Update pivec ----------------
+
+
+
   }
 
 }
@@ -89,6 +122,9 @@ flexdog <- function(refvec,
 #'
 #' @author David Gerard
 initialize_pivec <- function(ploidy, mode, model = c("ash", "flex")) {
+  assertthat::are_equal(1, length(ploidy), length(mode))
+  assertthat::are_equal(ploidy %% 1, 0)
+
   model <- match.arg(model)
   if (model == "flex") {
     pivec <- rep(x = 1 / (ploidy + 1), length = ploidy + 1)

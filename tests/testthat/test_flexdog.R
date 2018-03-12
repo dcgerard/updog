@@ -4,7 +4,7 @@ test_that("flexdog works", {
   refvec    <- c(1, 2, 3)
   sizevec   <- c(6, 5, 4)
   ploidy    <- 6
-  model     <- c("ash", "flex")
+  model     <- "ash"
   verbose   <- TRUE
   mean_bias <- 0
   var_bias  <- 1

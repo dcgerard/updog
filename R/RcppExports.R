@@ -101,8 +101,31 @@ rbetabinom <- function(n, size, mu, rho) {
     .Call('_mupdog_rbetabinom', PACKAGE = 'mupdog', n, size, mu, rho)
 }
 
+#' Obtain the genotype distribution given the distribution of discrete uniforms.
+#'
+#' @inheritParams flexdog
+#' @param pivec The mixing probability of the i'th discrete uniform distribution.
+#'
+#' @author David Gerard
+#'
+#' @seealso \code{\link{flexdog}} where this is used.
+#'
 get_probk_vec <- function(pivec, model, mode) {
     .Call('_mupdog_get_probk_vec', PACKAGE = 'mupdog', pivec, model, mode)
+}
+
+#' E-step in \code{\link{flexdog}}.
+#'
+#' @inheritParams flexdog
+#' @param probk_vec The vector of current prior probabilities of each genotype.
+#'
+#'
+#' @author David Gerard
+#'
+#' @seealso \code{\link{flexdog}} for the full EM algorithm.
+#'
+get_wik_mat <- function(probk_vec, refvec, sizevec, ploidy, seq, bias, od) {
+    .Call('_mupdog_get_wik_mat', PACKAGE = 'mupdog', probk_vec, refvec, sizevec, ploidy, seq, bias, od)
 }
 
 #' Gradient for \code{\link{obj_for_mu_sigma2}} with respect for \code{mu} and \code{sigma2}.
