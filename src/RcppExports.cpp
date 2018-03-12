@@ -150,6 +150,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// get_probk_vec
+NumericVector get_probk_vec(NumericVector pivec, std::string model, double mode);
+RcppExport SEXP _mupdog_get_probk_vec(SEXP pivecSEXP, SEXP modelSEXP, SEXP modeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type pivec(pivecSEXP);
+    Rcpp::traits::input_parameter< std::string >::type model(modelSEXP);
+    Rcpp::traits::input_parameter< double >::type mode(modeSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_probk_vec(pivec, model, mode));
+    return rcpp_result_gen;
+END_RCPP
+}
 // grad_for_mu_sigma2
 NumericVector grad_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2, NumericMatrix phifk_mat, arma::Mat<double> cor_inv, NumericMatrix log_bb_dense);
 RcppExport SEXP _mupdog_grad_for_mu_sigma2(SEXP muSEXP, SEXP sigma2SEXP, SEXP phifk_matSEXP, SEXP cor_invSEXP, SEXP log_bb_denseSEXP) {
@@ -659,6 +672,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_qbetabinom", (DL_FUNC) &_mupdog_qbetabinom, 4},
     {"_mupdog_rbetabinom_int", (DL_FUNC) &_mupdog_rbetabinom_int, 3},
     {"_mupdog_rbetabinom", (DL_FUNC) &_mupdog_rbetabinom, 4},
+    {"_mupdog_get_probk_vec", (DL_FUNC) &_mupdog_get_probk_vec, 3},
     {"_mupdog_grad_for_mu_sigma2", (DL_FUNC) &_mupdog_grad_for_mu_sigma2, 5},
     {"_mupdog_grad_for_mu_sigma2_wrapper", (DL_FUNC) &_mupdog_grad_for_mu_sigma2_wrapper, 4},
     {"_mupdog_dpen_dh", (DL_FUNC) &_mupdog_dpen_dh, 3},

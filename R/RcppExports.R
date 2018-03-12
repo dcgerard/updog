@@ -101,6 +101,10 @@ rbetabinom <- function(n, size, mu, rho) {
     .Call('_mupdog_rbetabinom', PACKAGE = 'mupdog', n, size, mu, rho)
 }
 
+get_probk_vec <- function(pivec, model, mode) {
+    .Call('_mupdog_get_probk_vec', PACKAGE = 'mupdog', pivec, model, mode)
+}
+
 #' Gradient for \code{\link{obj_for_mu_sigma2}} with respect for \code{mu} and \code{sigma2}.
 #'
 #' @inheritParams obj_for_mu_sigma2
@@ -397,7 +401,7 @@ obj_for_alpha <- function(mu, sigma2, alpha, rho, log_bb_dense, ploidy) {
 #' @param var_bias The prior variance of the log-bias
 #' @param mean_seq The prior mean of the logit sequencing error rate.
 #' @param var_seq The prior variance of the logit sequencing error rate.
-#' @param wmat The matrix of variational posterior probabilities for each dosage.
+#' @param wmat The matrix of (variational) posterior probabilities for each dosage.
 #'     The rows index the individuals and the columns index the dosage levels.
 #'
 #' @author David Gerard

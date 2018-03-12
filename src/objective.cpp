@@ -340,7 +340,7 @@ double obj_for_alpha(arma::Col<double> mu,
 //' @param var_bias The prior variance of the log-bias
 //' @param mean_seq The prior mean of the logit sequencing error rate.
 //' @param var_seq The prior variance of the logit sequencing error rate.
-//' @param wmat The matrix of variational posterior probabilities for each dosage.
+//' @param wmat The matrix of (variational) posterior probabilities for each dosage.
 //'     The rows index the individuals and the columns index the dosage levels.
 //'
 //' @author David Gerard

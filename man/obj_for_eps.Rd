@@ -26,7 +26,7 @@ is the overdispersion parameter.}
 
 \item{var_seq}{The prior variance of the logit sequencing error rate.}
 
-\item{wmat}{The matrix of variational posterior probabilities for each dosage.
+\item{wmat}{The matrix of (variational) posterior probabilities for each dosage.
 The rows index the individuals and the columns index the dosage levels.}
 }
 \description{
