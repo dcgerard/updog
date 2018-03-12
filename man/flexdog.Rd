@@ -6,7 +6,8 @@
 \usage{
 flexdog(refvec, sizevec, ploidy, model = c("ash", "flex"), verbose = TRUE,
   mean_bias = 0, var_bias = 1, mean_seq = -4.7, var_seq = 1,
-  seq = 0.005, bias = 1, od = 0.001, mode = NULL)
+  seq = 0.005, bias = 1, od = 0.001, mode = NULL, itermax = 200,
+  tol = 10^-4)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads with reference allele.}

@@ -140,6 +140,17 @@ get_wik_mat <- function(probk_vec, refvec, sizevec, ploidy, seq, bias, od) {
     .Call('_mupdog_get_wik_mat', PACKAGE = 'mupdog', probk_vec, refvec, sizevec, ploidy, seq, bias, od)
 }
 
+#' Log-likelihood that \code{\link{flexdog}} maximizes.
+#'
+#' @inheritParams flexdog
+#' @param probk_vec The kth element is the prior probability of genotype k (when starting to count from 0).
+#'
+#' @author David Gerard
+#'
+flexdog_obj <- function(probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq) {
+    .Call('_mupdog_flexdog_obj', PACKAGE = 'mupdog', probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq)
+}
+
 #' Gradient for \code{\link{obj_for_mu_sigma2}} with respect for \code{mu} and \code{sigma2}.
 #'
 #' @inheritParams obj_for_mu_sigma2

@@ -192,6 +192,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// flexdog_obj
+double flexdog_obj(NumericVector probk_vec, NumericVector refvec, NumericVector sizevec, int ploidy, double seq, double bias, double od, double mean_bias, double var_bias, double mean_seq, double var_seq);
+RcppExport SEXP _mupdog_flexdog_obj(SEXP probk_vecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type probk_vec(probk_vecSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type refvec(refvecSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type sizevec(sizevecSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< double >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< double >::type bias(biasSEXP);
+    Rcpp::traits::input_parameter< double >::type od(odSEXP);
+    Rcpp::traits::input_parameter< double >::type mean_bias(mean_biasSEXP);
+    Rcpp::traits::input_parameter< double >::type var_bias(var_biasSEXP);
+    Rcpp::traits::input_parameter< double >::type mean_seq(mean_seqSEXP);
+    Rcpp::traits::input_parameter< double >::type var_seq(var_seqSEXP);
+    rcpp_result_gen = Rcpp::wrap(flexdog_obj(probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq));
+    return rcpp_result_gen;
+END_RCPP
+}
 // grad_for_mu_sigma2
 NumericVector grad_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2, NumericMatrix phifk_mat, arma::Mat<double> cor_inv, NumericMatrix log_bb_dense);
 RcppExport SEXP _mupdog_grad_for_mu_sigma2(SEXP muSEXP, SEXP sigma2SEXP, SEXP phifk_matSEXP, SEXP cor_invSEXP, SEXP log_bb_denseSEXP) {
@@ -704,6 +725,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_get_probk_vec", (DL_FUNC) &_mupdog_get_probk_vec, 3},
     {"_mupdog_get_inner_weights", (DL_FUNC) &_mupdog_get_inner_weights, 2},
     {"_mupdog_get_wik_mat", (DL_FUNC) &_mupdog_get_wik_mat, 7},
+    {"_mupdog_flexdog_obj", (DL_FUNC) &_mupdog_flexdog_obj, 11},
     {"_mupdog_grad_for_mu_sigma2", (DL_FUNC) &_mupdog_grad_for_mu_sigma2, 5},
     {"_mupdog_grad_for_mu_sigma2_wrapper", (DL_FUNC) &_mupdog_grad_for_mu_sigma2_wrapper, 4},
     {"_mupdog_dpen_dh", (DL_FUNC) &_mupdog_dpen_dh, 3},

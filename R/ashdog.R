@@ -26,13 +26,15 @@ flexdog <- function(refvec,
                     model     = c("ash", "flex"),
                     verbose   = TRUE,
                     mean_bias = 0,
-                    var_bias  = 1,
+                    var_bias  = 0.01,
                     mean_seq  = -4.7,
                     var_seq   = 1,
                     seq       = 0.005,
                     bias      = 1,
                     od        = 0.001,
-                    mode      = NULL) {
+                    mode      = NULL,
+                    itermax   = 200,
+                    tol       = 10^-4) {
 
   ## Check input -----------------------------------------------------
   model <- match.arg(model)
@@ -55,11 +57,10 @@ flexdog <- function(refvec,
   if (!is.null(mode) & model == "flex") {
     stop('flexdog: `model` cannot equal `"flex"` when `mode` is specified.')
   } else if (is.null(mode) & model == "flex") {
-    mode_vec <- -1
+    mode_vec <- 0
   } else if (!is.null(mode) & model == "ash") {
     assertthat::are_equal(length(mode), 1)
-    assertthat::are_equal(mode %% 1, 0)
-    mode_vec <- mode + 0.5
+    mode_vec <- mode
   } else if (is.null(mode) & model == "ash") {
     mode_vec <- (0:(ploidy - 1)) + 0.5
   }
@@ -67,8 +68,13 @@ flexdog <- function(refvec,
   boundary_tol <- 10 ^ -6
 
   ## Run EM for each mode in `mode_vec`.
+  return_list <- list(llike = -Inf)
   for (em_index in 1:length(mode_vec)) {
     mode <- mode_vec[em_index]
+
+    if (verbose) {
+      cat("Mode:", mode, "\n")
+    }
 
     ## Get inner weight vec only once
     ## Used in convex optimization program
@@ -81,54 +87,125 @@ flexdog <- function(refvec,
     probk_vec <- get_probk_vec(pivec = pivec, model = model, mode = mode)
     assertthat::are_equal(sum(probk_vec), 1)
 
+    ## Run EM ----------------------------------------
+    iter_index  <- 1
+    err         <- tol + 1
+    llike       <- -Inf
+    while (err > tol & iter_index <= itermax) {
+      llike_old <- llike
 
-    ## E-step ----------------------
-    wik_mat <- get_wik_mat(probk_vec = probk_vec, refvec = refvec,
-                           sizevec = sizevec, ploidy = ploidy,
-                           seq = seq, bias = bias, od = od)
+      ## E-step ----------------------
+      wik_mat <- get_wik_mat(probk_vec = probk_vec, refvec = refvec,
+                             sizevec = sizevec, ploidy = ploidy,
+                             seq = seq, bias = bias, od = od)
 
-    ## Update seq, bias, and od ----
-    oout <- stats::optim(par       = c(seq, bias, od),
-                         fn        = obj_for_eps,
-                         gr        = grad_for_eps,
-                         method    = "L-BFGS-B",
-                         lower     = rep(boundary_tol, 3),
-                         upper     = c(1 - boundary_tol, Inf, 1 - boundary_tol),
-                         control   = list(fnscale = -1, maxit = 10),
-                         refvec    = refvec,
-                         sizevec   = sizevec,
-                         ploidy    = ploidy,
-                         mean_bias = mean_bias,
-                         var_bias  = var_bias,
-                         mean_seq  = mean_seq,
-                         var_seq   = var_seq,
-                         wmat      = wik_mat)
-    seq  <- oout$par[1]
-    bias <- oout$par[2]
-    od   <- oout$par[3]
+      ## Update seq, bias, and od ----
+      oout <- stats::optim(par       = c(seq, bias, od),
+                           fn        = obj_for_eps,
+                           gr        = grad_for_eps,
+                           method    = "L-BFGS-B",
+                           lower     = rep(boundary_tol, 3),
+                           upper     = c(1 - boundary_tol, Inf, 1 - boundary_tol),
+                           control   = list(fnscale = -1, maxit = 20),
+                           refvec    = refvec,
+                           sizevec   = sizevec,
+                           ploidy    = ploidy,
+                           mean_bias = mean_bias,
+                           var_bias  = var_bias,
+                           mean_seq  = mean_seq,
+                           var_seq   = var_seq,
+                           wmat      = wik_mat)
+      seq  <- oout$par[1]
+      bias <- oout$par[2]
+      od   <- oout$par[3]
 
-    ## Update pivec ----------------
-    weight_vec <- colSums(wik_mat)
-    if (model == "flex") {
-      pivec <- weight_vec / sum(weight_vec)
-    } else if (model == "ash") {
-      cv_pi <- CVXR::Variable(1, ploidy + 1)
-      obj   <- sum(t(weight_vec) * log(cv_pi %*% inner_weights))
-      prob  <- CVXR::Problem(CVXR::Maximize(obj), constraints = list(sum(cv_pi) == 1, cv_pi >= 0))
-      result <- solve(prob)
-      result$value
-      pivec <- c(result$getValue(cv_pi))
-    } else {
-      stop("flexdog: how did you get here?")
+      ## Update pivec ----------------
+      weight_vec <- colSums(wik_mat)
+      if (model == "flex") {
+        pivec <- weight_vec / sum(weight_vec)
+      } else if (model == "ash") {
+        cv_pi <- CVXR::Variable(1, ploidy + 1)
+        obj   <- sum(t(weight_vec) * log(cv_pi %*% inner_weights))
+        prob  <- CVXR::Problem(CVXR::Maximize(obj), constraints = list(sum(cv_pi) == 1, cv_pi >= 0))
+        result <- solve(prob)
+        result$value
+        pivec <- c(result$getValue(cv_pi))
+      } else {
+        stop("flexdog: how did you get here?")
+      }
+
+      ## Update probk_vec -----------------------------------------------
+      pivec[pivec < 0] <- 0
+      pivec[pivec > 1] <- 1
+      probk_vec <- get_probk_vec(pivec = pivec, model = model, mode = mode)
+
+      ## Calculate likelihood and update stopping criteria --------------
+      llike <- flexdog_obj(probk_vec = probk_vec, refvec = refvec, sizevec = sizevec,
+                           ploidy = ploidy, seq = seq, bias = bias, od = od,
+                           mean_bias = mean_bias, var_bias = var_bias,
+                           mean_seq = mean_seq, var_seq = var_seq)
+      err <- abs(llike - llike_old)
+      iter_index <- iter_index + 1
+
+      if (llike < llike_old - 10 ^ -8) {
+        warning(paste0("flexdog: likelihood not increasing.\nDifference is", llike - llike_old))
+      }
     }
 
-    probk_vec <- get_probk_vec(pivec = pivec, model = model, mode = mode)
+    if (verbose) {
+      cat("llike:", llike, "\n\n")
+    }
 
-
-
-
+    ## Check which mode has the highest likelihood --------------------
+    temp_list <- list(bias_val = bias, seq_error = seq, od_param = od,
+                      num_iter = iter_index, llike = llike, postmat = wik_mat,
+                      gene_dist = probk_vec)
+    if (temp_list$llike > return_list$llike) {
+      return_list <- temp_list
+    }
   }
 
+  ## Summaries --------------------------------------------------------
+  return_list$geno          <- apply(return_list$postmat, 1, which.max) - 1
+  return_list$maxpostprob   <- return_list$postmat[cbind(1:nrow(return_list$postmat), return_list$geno + 1)]
+  return_list$postmean      <- c(return_list$postmat %*% 0:ploidy)
+  return_list$input$refvec  <- refvec
+  return_list$input$sizevec <- sizevec
+  return_list$input$ploidy  <- ploidy
+  return_list$input$model   <- model
+
+  class(return_list) <- "flexdog"
+
+  return(return_list)
+}
+
+#' A wrapper for \code{\link[updog]{plot_geno}}. This will create a genotype plot.
+#'
+#' @param obj A \code{flexdog} object.
+#' @param ... Not used.
+#'
+#' @inherit plot.mupdog
+plot.flexdog <- function(obj, ...) {
+  assertthat::assert_that(is.flexdog(obj))
+  pl <- updog::plot_geno(ocounts = obj$input$refvec, osize = obj$input$sizevec,
+                         ploidy = obj$input$ploidy, ogeno = obj$geno,
+                         seq_error = obj$seq_error, bias_val = obj$bias_val,
+                         prob_ok = obj$maxpostprob) +
+    ggplot2::guides(alpha=ggplot2::guide_legend(title="maxpostprob"))
+  return(pl)
+}
+
+#' Tests if an argument is a \code{flexdog} object.
+#'
+#' @param x Anything.
+#'
+#' @return A logical. \code{TRUE} if \code{x} is a \code{flexdog} object, and \code{FALSE} otherwise.
+#'
+#' @author David Gerard
+#'
+#' @export
+is.flexdog <- function(x) {
+  inherits(x, "flexdog")
 }
 
 

@@ -125,7 +125,56 @@ NumericMatrix get_wik_mat(NumericVector probk_vec,
   return wik_mat;
 }
 
+//' Log-likelihood that \code{\link{flexdog}} maximizes.
+//'
+//' @inheritParams flexdog
+//' @param probk_vec The kth element is the prior probability of genotype k (when starting to count from 0).
+//'
+//' @author David Gerard
+//'
+// [[Rcpp::export]]
+double flexdog_obj(NumericVector probk_vec,
+                   NumericVector refvec,
+                   NumericVector sizevec,
+                   int ploidy,
+                   double seq,
+                   double bias,
+                   double od,
+                   double mean_bias,
+                   double var_bias,
+                   double mean_seq,
+                   double var_seq) {
+  // Check input -----------------------------------------------------------
+  int nind = refvec.length();
+  if (nind != sizevec.length()) {
+    Rcpp::stop("get_wik_mat: sizevec and refvec must have the same length.");
+  }
+  if (probk_vec.length() != ploidy + 1) {
+    Rcpp::stop("get_wik_mat: probk_vec must have length ploidy + 1.");
+  }
 
+  // Calculate the posterior probability of each genotype -------------------
+  NumericVector lprobk_vec = Rcpp::log(probk_vec);
+  NumericVector xi(ploidy + 1);
+  for (int k = 0; k <= ploidy; k++) {
+    xi(k) = xi_double((double)k / (double)ploidy, seq, bias);
+  }
+
+  // Calculate likelihood ---------------------------------------------------
+  double obj = 0.0;
+  NumericVector wvec(ploidy + 1);
+  for (int i = 0; i < nind; i++) {
+    for (int k = 0; k <= ploidy; k++) {
+      wvec(k) = lprobk_vec(k) + dbetabinom_double(refvec(i), sizevec(i), xi(k), od, true);
+    }
+    obj = obj + log_sum_exp(wvec);
+  }
+
+  // Penalties --------------------------------------------------------------
+  obj = obj + pen_bias(bias, mean_bias, var_bias);
+  obj = obj + pen_seq_error(seq, mean_seq, var_seq);
+  return obj;
+}
 
 
 
