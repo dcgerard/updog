@@ -2,17 +2,17 @@
 % Please edit documentation in R/ashdog.R
 \name{plot.flexdog}
 \alias{plot.flexdog}
-\title{A wrapper for \code{\link[updog]{plot_geno}}. This will create a genotype plot.}
+\title{Draw a genotype plot from the output of \code{\link{flexdog}}.}
 \usage{
-\method{plot}{flexdog}(obj, ...)
+\method{plot}{flexdog}(x, ...)
 }
 \arguments{
-\item{obj}{A \code{flexdog} object.}
+\item{x}{A \code{flexdog} object.}
 
 \item{...}{Not used.}
 }
 \description{
-A wrapper for \code{\link[updog]{plot_geno}}. This will create a genotype plot.
+Draw a genotype plot from the output of \code{\link{flexdog}}.
 }
 \details{
 On a genotype plot, the x-axis contains the counts of the non-reference allele and the y-axis
@@ -24,6 +24,9 @@ individual's genotype. Thus, we are less certain of the genotype of more transpa
 \seealso{
 \describe{
   \item{\code{\link[updog]{plot_geno}}}{The underlying plotting function.}
-  \item{\code{\link{mupdog}}}{Creates a \code{mupdog} object.}
+  \item{\code{\link{flexdog}}}{Creates a \code{flexpdog} object.}
 }
+}
+\author{
+David Gerard
 }

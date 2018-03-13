@@ -9,13 +9,16 @@ initialize_pivec(ploidy, mode, model = c("ash", "flex"))
 \arguments{
 \item{ploidy}{The ploidy of the species.}
 
-\item{mode}{The mode if \code{model = "ash"}. If not provided, \code{flexdog} will estimate the mode.}
+\item{mode}{The mode if \code{model = "ash"}. If not provided,
+\code{flexdog} will estimate the mode.}
 
-\item{model}{What form should the prior take? Should the genotype distribution be unimodal
-(\code{"ash"}) or should be generically any categorical distribution (\code{"flex"})?}
+\item{model}{What form should the prior take? Should the genotype
+distribution be unimodal (\code{"ash"}) or should be generically
+any categorical distribution (\code{"flex"})?}
 }
 \description{
-The key idea here is choosing the pi's so that the two modes have equal probability.
+The key idea here is choosing the pi's so that the two modes
+have equal probability.
 }
 \seealso{
 \code{\link{flexdog}} for where this is used.

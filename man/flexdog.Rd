@@ -5,7 +5,7 @@
 \title{Flexible updog}
 \usage{
 flexdog(refvec, sizevec, ploidy, model = c("ash", "flex"), verbose = TRUE,
-  mean_bias = 0, var_bias = 1, mean_seq = -4.7, var_seq = 1,
+  mean_bias = 0, var_bias = 0.7^2, mean_seq = -4.7, var_seq = 1,
   seq = 0.005, bias = 1, od = 0.001, mode = NULL, itermax = 200,
   tol = 10^-4)
 }
@@ -16,10 +16,12 @@ flexdog(refvec, sizevec, ploidy, model = c("ash", "flex"), verbose = TRUE,
 
 \item{ploidy}{The ploidy of the species.}
 
-\item{model}{What form should the prior take? Should the genotype distribution be unimodal
-(\code{"ash"}) or should be generically any categorical distribution (\code{"flex"})?}
+\item{model}{What form should the prior take? Should the genotype
+distribution be unimodal (\code{"ash"}) or should be generically
+any categorical distribution (\code{"flex"})?}
 
-\item{verbose}{Should we output more (\code{TRUE}) or less (\code{FALSE})?}
+\item{verbose}{Should we output more (\code{TRUE}) or less
+(\code{FALSE})?}
 
 \item{mean_bias}{The prior mean of the log-bias.}
 
@@ -27,7 +29,8 @@ flexdog(refvec, sizevec, ploidy, model = c("ash", "flex"), verbose = TRUE,
 
 \item{mean_seq}{The prior mean of the logit of the sequencing error rate.}
 
-\item{var_seq}{The prior variance of the logit of the sequencing error rate.}
+\item{var_seq}{The prior variance of the logit of the sequencing
+error rate.}
 
 \item{seq}{The starting value of the sequencing error rate.}
 
@@ -35,7 +38,16 @@ flexdog(refvec, sizevec, ploidy, model = c("ash", "flex"), verbose = TRUE,
 
 \item{od}{The starting value of the overdispersion parameter.}
 
-\item{mode}{The mode if \code{model = "ash"}. If not provided, \code{flexdog} will estimate the mode.}
+\item{mode}{The mode if \code{model = "ash"}. If not provided,
+\code{flexdog} will estimate the mode.}
+
+\item{itermax}{The maximum number of EM iterations to run for each mode
+(if \code{model = "ash"}) or the total number of EM iterations to
+run (if \code{model = "flex"}).}
+
+\item{tol}{The tolerance stopping criterion. The EM algorithm will stop
+if the difference in the log-likelihoods between two consecutive
+iterations is less than \code{tol}.}
 }
 \description{
 Flexible updog

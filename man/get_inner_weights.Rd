@@ -9,7 +9,8 @@ get_inner_weights(ploidy, mode)
 \arguments{
 \item{ploidy}{The ploidy of the species.}
 
-\item{mode}{The mode if \code{model = "ash"}. If not provided, \code{flexdog} will estimate the mode.}
+\item{mode}{The mode if \code{model = "ash"}. If not provided,
+\code{flexdog} will estimate the mode.}
 }
 \description{
 The (i,k)th element is \eqn{1(k \in F(a, i)) / |F(a,i)|}.

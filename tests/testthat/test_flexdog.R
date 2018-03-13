@@ -1,17 +1,17 @@
 context("flexdog")
 
 test_that("flexdog works", {
-  refvec    <- c(1, 2, 3)
-  sizevec   <- c(6, 5, 4)
+  refvec    <- 1:20
+  sizevec   <- 40:21
 
-  snpdat <- updog::snpdat
-  library(tidyverse)
-  snpdat %>% filter(snp == "SNP1") ->
-    smalldat
-  refvec <- smalldat$counts[!is.na(smalldat$counts)]
-  sizevec <- smalldat$size[!is.na(smalldat$size)]
+  # snpdat <- updog::snpdat
+  # library(tidyverse)
+  # snpdat %>% filter(snp == "SNP1") ->
+  #   smalldat
+  # refvec <- smalldat$counts[!is.na(smalldat$counts)]
+  # sizevec <- smalldat$size[!is.na(smalldat$size)]
 
-  ploidy    <- 6
+  ploidy    <- 4
   model     <- "flex"
   verbose   <- TRUE
   mean_bias <- 0
@@ -25,8 +25,9 @@ test_that("flexdog works", {
   itermax   = 10
   tol       = 10^-2
 
-  fout <- flexdog(refvec = refvec, sizevec = sizevec, ploidy = ploidy, model = "flex")
-  plot(fout)
+  fout <- flexdog(refvec = refvec, sizevec = sizevec,
+                  ploidy = ploidy, model = "flex")
+  pl <- plot(fout)
 }
 )
 

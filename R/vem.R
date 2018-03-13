@@ -325,6 +325,7 @@ mupdog <- function(refmat,
         foreach::registerDoSEQ()
       }
     }
+    index <- NA ## stupid workaround to get rid of CRAN note.
     fout <- foreach::foreach(index = 1:nsnps, .combine = cbind,
                              .export = c("obj_for_mu_sigma2_wrapper",
                                          "grad_for_mu_sigma2_wrapper")) %dopar% {

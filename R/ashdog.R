@@ -6,17 +6,27 @@
 #' @param refvec A vector of counts of reads with reference allele.
 #' @param sizevec A vector of total counts.
 #' @param ploidy The ploidy of the species.
-#' @param model What form should the prior take? Should the genotype distribution be unimodal
-#'     (\code{"ash"}) or should be generically any categorical distribution (\code{"flex"})?
-#' @param verbose Should we output more (\code{TRUE}) or less (\code{FALSE})?
+#' @param model What form should the prior take? Should the genotype
+#'     distribution be unimodal (\code{"ash"}) or should be generically
+#'     any categorical distribution (\code{"flex"})?
+#' @param verbose Should we output more (\code{TRUE}) or less
+#'     (\code{FALSE})?
 #' @param mean_bias The prior mean of the log-bias.
 #' @param var_bias The prior variance of the log-bias.
 #' @param mean_seq The prior mean of the logit of the sequencing error rate.
-#' @param var_seq The prior variance of the logit of the sequencing error rate.
+#' @param var_seq The prior variance of the logit of the sequencing
+#'     error rate.
 #' @param seq The starting value of the sequencing error rate.
 #' @param bias The starting value of the bias.
 #' @param od The starting value of the overdispersion parameter.
-#' @param mode The mode if \code{model = "ash"}. If not provided, \code{flexdog} will estimate the mode.
+#' @param mode The mode if \code{model = "ash"}. If not provided,
+#'     \code{flexdog} will estimate the mode.
+#' @param itermax The maximum number of EM iterations to run for each mode
+#'     (if \code{model = "ash"}) or the total number of EM iterations to
+#'     run (if \code{model = "flex"}).
+#' @param tol The tolerance stopping criterion. The EM algorithm will stop
+#'     if the difference in the log-likelihoods between two consecutive
+#'     iterations is less than \code{tol}.
 #'
 #' @author David Gerard
 #'
@@ -26,7 +36,7 @@ flexdog <- function(refvec,
                     model     = c("ash", "flex"),
                     verbose   = TRUE,
                     mean_bias = 0,
-                    var_bias  = 0.01,
+                    var_bias  = 0.7 ^ 2,
                     mean_seq  = -4.7,
                     var_seq   = 1,
                     seq       = 0.005,
@@ -53,6 +63,9 @@ flexdog <- function(refvec,
   assertthat::assert_that(is.logical(verbose))
   assertthat::are_equal(ploidy %% 1, 0)
   assertthat::assert_that(ploidy > 0)
+  assertthat::assert_that(tol > 0)
+  assertthat::are_equal(itermax %% 1, 0)
+  assertthat::assert_that(itermax > 0)
 
   if (!is.null(mode) & model == "flex") {
     stop('flexdog: `model` cannot equal `"flex"` when `mode` is specified.')
@@ -80,7 +93,8 @@ flexdog <- function(refvec,
     ## Used in convex optimization program
     inner_weights <- get_inner_weights(ploidy = ploidy, mode = mode)
 
-    ## Initialize pivec so that two modes have equal prob if model = "ash". Uniform if model = "flex".
+    ## Initialize pivec so that two modes have equal prob if model = "ash".
+    ##     Uniform if model = "flex".
     pivec <- initialize_pivec(ploidy = ploidy, mode = mode, model = model)
     assertthat::are_equal(sum(pivec), 1)
 
@@ -105,7 +119,8 @@ flexdog <- function(refvec,
                            gr        = grad_for_eps,
                            method    = "L-BFGS-B",
                            lower     = rep(boundary_tol, 3),
-                           upper     = c(1 - boundary_tol, Inf, 1 - boundary_tol),
+                           upper     = c(1 - boundary_tol, Inf,
+                                         1 - boundary_tol),
                            control   = list(fnscale = -1, maxit = 20),
                            refvec    = refvec,
                            sizevec   = sizevec,
@@ -126,7 +141,9 @@ flexdog <- function(refvec,
       } else if (model == "ash") {
         cv_pi <- CVXR::Variable(1, ploidy + 1)
         obj   <- sum(t(weight_vec) * log(cv_pi %*% inner_weights))
-        prob  <- CVXR::Problem(CVXR::Maximize(obj), constraints = list(sum(cv_pi) == 1, cv_pi >= 0))
+        prob  <- CVXR::Problem(CVXR::Maximize(obj),
+                               constraints = list(sum(cv_pi) == 1,
+                                                  cv_pi >= 0))
         result <- solve(prob)
         result$value
         pivec <- c(result$getValue(cv_pi))
@@ -140,15 +157,23 @@ flexdog <- function(refvec,
       probk_vec <- get_probk_vec(pivec = pivec, model = model, mode = mode)
 
       ## Calculate likelihood and update stopping criteria --------------
-      llike <- flexdog_obj(probk_vec = probk_vec, refvec = refvec, sizevec = sizevec,
-                           ploidy = ploidy, seq = seq, bias = bias, od = od,
-                           mean_bias = mean_bias, var_bias = var_bias,
-                           mean_seq = mean_seq, var_seq = var_seq)
-      err <- abs(llike - llike_old)
+      llike <- flexdog_obj(probk_vec = probk_vec,
+                           refvec    = refvec,
+                           sizevec   = sizevec,
+                           ploidy    = ploidy,
+                           seq       = seq,
+                           bias      = bias,
+                           od        = od,
+                           mean_bias = mean_bias,
+                           var_bias  = var_bias,
+                           mean_seq  = mean_seq,
+                           var_seq   = var_seq)
+      err        <- abs(llike - llike_old)
       iter_index <- iter_index + 1
 
       if (llike < llike_old - 10 ^ -8) {
-        warning(paste0("flexdog: likelihood not increasing.\nDifference is", llike - llike_old))
+        warning(paste0("flexdog: likelihood not increasing.\nDifference is",
+                       llike - llike_old))
       }
     }
 
@@ -157,8 +182,12 @@ flexdog <- function(refvec,
     }
 
     ## Check which mode has the highest likelihood --------------------
-    temp_list <- list(bias_val = bias, seq_error = seq, od_param = od,
-                      num_iter = iter_index, llike = llike, postmat = wik_mat,
+    temp_list <- list(bias_val  = bias,
+                      seq_error = seq,
+                      od_param  = od,
+                      num_iter  = iter_index,
+                      llike     = llike,
+                      postmat   = wik_mat,
                       gene_dist = probk_vec)
     if (temp_list$llike > return_list$llike) {
       return_list <- temp_list
@@ -179,18 +208,31 @@ flexdog <- function(refvec,
   return(return_list)
 }
 
-#' A wrapper for \code{\link[updog]{plot_geno}}. This will create a genotype plot.
+#' Draw a genotype plot from the output of \code{\link{flexdog}}.
 #'
-#' @param obj A \code{flexdog} object.
+#' @inherit plot.mupdog description details
+#'
+#' @param x A \code{flexdog} object.
 #' @param ... Not used.
 #'
-#' @inherit plot.mupdog
-plot.flexdog <- function(obj, ...) {
-  assertthat::assert_that(is.flexdog(obj))
-  pl <- updog::plot_geno(ocounts = obj$input$refvec, osize = obj$input$sizevec,
-                         ploidy = obj$input$ploidy, ogeno = obj$geno,
-                         seq_error = obj$seq_error, bias_val = obj$bias_val,
-                         prob_ok = obj$maxpostprob) +
+#' @author David Gerard
+#'
+#' @seealso
+#' \describe{
+#'   \item{\code{\link[updog]{plot_geno}}}{The underlying plotting function.}
+#'   \item{\code{\link{flexdog}}}{Creates a \code{flexpdog} object.}
+#' }
+#'
+#' @export
+plot.flexdog <- function(x, ...) {
+  assertthat::assert_that(is.flexdog(x))
+  pl <- updog::plot_geno(ocounts   = x$input$refvec,
+                         osize     = x$input$sizevec,
+                         ploidy    = x$input$ploidy,
+                         ogeno     = x$geno,
+                         seq_error = x$seq_error,
+                         bias_val  = x$bias_val,
+                         prob_ok   = x$maxpostprob) +
     ggplot2::guides(alpha=ggplot2::guide_legend(title="maxpostprob"))
   return(pl)
 }
@@ -211,7 +253,8 @@ is.flexdog <- function(x) {
 
 #' Initialize \code{pivec} for \code{\link{flexdog}} EM algorithm.
 #'
-#' The key idea here is choosing the pi's so that the two modes have equal probability.
+#' The key idea here is choosing the pi's so that the two modes
+#' have equal probability.
 #'
 #' @inheritParams flexdog
 #'

@@ -9,10 +9,12 @@ get_probk_vec(pivec, model, mode)
 \arguments{
 \item{pivec}{The mixing probability of the i'th discrete uniform distribution.}
 
-\item{model}{What form should the prior take? Should the genotype distribution be unimodal
-(\code{"ash"}) or should be generically any categorical distribution (\code{"flex"})?}
+\item{model}{What form should the prior take? Should the genotype
+distribution be unimodal (\code{"ash"}) or should be generically
+any categorical distribution (\code{"flex"})?}
 
-\item{mode}{The mode if \code{model = "ash"}. If not provided, \code{flexdog} will estimate the mode.}
+\item{mode}{The mode if \code{model = "ash"}. If not provided,
+\code{flexdog} will estimate the mode.}
 }
 \description{
 Obtain the genotype distribution given the distribution of discrete uniforms.
