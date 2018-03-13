@@ -4,5 +4,10 @@ language: R
 sudo: false
 cache: packages
 
+addons:
+  apt:
+    packages:
+    - libmpfr-dev
+
 after_success:
   - Rscript -e 'covr::codecov()'
