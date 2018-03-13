@@ -223,7 +223,7 @@ flexdog <- function(refvec,
                       llike     = llike,
                       postmat   = wik_mat,
                       gene_dist = probk_vec,
-                      par       = fupdate_out)
+                      par       = fupdate_out$par)
     if (temp_list$llike > return_list$llike) {
       return_list <- temp_list
     }
