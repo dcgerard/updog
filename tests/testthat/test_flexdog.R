@@ -12,7 +12,7 @@ test_that("flexdog works", {
   # sizevec <- smalldat$size[!is.na(smalldat$size)]
 
   ploidy    <- 4
-  model     <- "flex"
+  model     <- "ash"
   verbose   <- TRUE
   mean_bias <- 0
   var_bias  <- 1
@@ -25,6 +25,8 @@ test_that("flexdog works", {
   itermax   = 10
   tol       = 10^-2
 
+  fout <- flexdog(refvec = refvec, sizevec = sizevec,
+                  ploidy = ploidy, model = "hw")
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
                   ploidy = ploidy, model = "flex")
   pl <- plot(fout)

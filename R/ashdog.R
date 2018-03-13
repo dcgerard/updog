@@ -13,8 +13,9 @@
 #' @param sizevec A vector of total counts.
 #' @param ploidy The ploidy of the species.
 #' @param model What form should the prior take? Should the genotype
-#'     distribution be unimodal (\code{"ash"}) or should be generically
-#'     any categorical distribution (\code{"flex"})?
+#'     distribution be unimodal (\code{"ash"}), generically
+#'     any categorical distribution (\code{"flex"}), or binomial as a
+#'     result of assuming Hardy-Weinberg equilibrium (\code{"hw"})?
 #' @param verbose Should we output more (\code{TRUE}) or less
 #'     (\code{FALSE})?
 #' @param mean_bias The prior mean of the log-bias.
@@ -26,10 +27,11 @@
 #' @param bias The starting value of the bias.
 #' @param od The starting value of the overdispersion parameter.
 #' @param mode The mode if \code{model = "ash"}. If not provided,
-#'     \code{flexdog} will estimate the mode.
+#'     \code{flexdog} will estimate the mode. This is the starting point of
+#'     the allele frequency if \code{model = "hw"}.
 #' @param itermax The maximum number of EM iterations to run for each mode
 #'     (if \code{model = "ash"}) or the total number of EM iterations to
-#'     run (if \code{model = "flex"}).
+#'     run (if \code{model = "flex"} or \code{model = "hw"}).
 #' @param tol The tolerance stopping criterion. The EM algorithm will stop
 #'     if the difference in the log-likelihoods between two consecutive
 #'     iterations is less than \code{tol}.
@@ -40,7 +42,7 @@
 flexdog <- function(refvec,
                     sizevec,
                     ploidy,
-                    model     = c("ash", "flex"),
+                    model     = c("ash", "flex", "hw"),
                     verbose   = TRUE,
                     mean_bias = 0,
                     var_bias  = 0.7 ^ 2,
@@ -83,11 +85,21 @@ flexdog <- function(refvec,
     mode_vec <- mode
   } else if (is.null(mode) & model == "ash") {
     mode_vec <- (0:(ploidy - 1)) + 0.5
+  } else if (is.null(mode) & model == "hw") {
+    mode_vec <- mean(refvec / sizevec, na.rm = TRUE)
+  } else if (!is.null(mode) & model == "hw") {
+    if (any((mode < 0) | (mode > 1))) {
+      stop('If model = "hw" then `mode` should be between 0 and 1.\nIt is the initialization of the allele frequency.')
+    }
+  } else {
+    stop("flexdog: Checking mode. How did you get here?")
   }
 
+  ## Some variables needed to run EM ---------------------------
   boundary_tol <- 10 ^ -6
+  control      <- list()
 
-  ## Run EM for each mode in `mode_vec`.
+  ## Run EM for each mode in `mode_vec` -----------------------
   return_list <- list(llike = -Inf)
   for (em_index in 1:length(mode_vec)) {
     mode <- mode_vec[em_index]
@@ -98,7 +110,10 @@ flexdog <- function(refvec,
 
     ## Get inner weight vec only once
     ## Used in convex optimization program
-    inner_weights <- get_inner_weights(ploidy = ploidy, mode = mode)
+    if (model == "ash") {
+      control$inner_weights <- get_inner_weights(ploidy = ploidy, mode = mode)
+    }
+
 
     ## Initialize pivec so that two modes have equal prob if model = "ash".
     ##     Uniform if model = "flex".
@@ -143,20 +158,10 @@ flexdog <- function(refvec,
 
       ## Update pivec ----------------
       weight_vec <- colSums(wik_mat)
-      if (model == "flex") {
-        pivec <- weight_vec / sum(weight_vec)
-      } else if (model == "ash") {
-        cv_pi <- CVXR::Variable(1, ploidy + 1)
-        obj   <- sum(t(weight_vec) * log(cv_pi %*% inner_weights))
-        prob  <- CVXR::Problem(CVXR::Maximize(obj),
-                               constraints = list(sum(cv_pi) == 1,
-                                                  cv_pi >= 0))
-        result <- solve(prob)
-        result$value
-        pivec <- c(result$getValue(cv_pi))
-      } else {
-        stop("flexdog: how did you get here?")
-      }
+      fupdate_out <- flex_update_pivec(weight_vec = weight_vec,
+                                       model      = model,
+                                       control    = control)
+      pivec <- fupdate_out$pivec
 
       ## Update probk_vec -----------------------------------------------
       pivec[pivec < 0] <- 0
@@ -268,7 +273,7 @@ is.flexdog <- function(x) {
 #' @seealso \code{\link{flexdog}} for where this is used.
 #'
 #' @author David Gerard
-initialize_pivec <- function(ploidy, mode, model = c("ash", "flex")) {
+initialize_pivec <- function(ploidy, mode, model = c("ash", "flex", "hw")) {
   assertthat::are_equal(1, length(ploidy), length(mode))
   assertthat::are_equal(ploidy %% 1, 0)
 
@@ -277,7 +282,7 @@ initialize_pivec <- function(ploidy, mode, model = c("ash", "flex")) {
     pivec <- rep(x = 1 / (ploidy + 1), length = ploidy + 1)
   } else if ((mode <= 0) | (mode >= ploidy) | (mode %% 1 == 0)) {
     pivec <- rep(x = 1 / (ploidy + 1), length = ploidy + 1)
-  } else {
+  } else if (model == "ash") {
     floor_mode <- floor(mode)
     ceil_mode  <- ceiling(mode)
 
@@ -292,9 +297,73 @@ initialize_pivec <- function(ploidy, mode, model = c("ash", "flex")) {
 
     pivec <- c(rep(first_half, length = floor_mode + 1),
                rep(second_half, length = ploidy - ceil_mode + 1))
+  } else if (model == "hw") {
+    if (mode < 0 | mode > 1) {
+      stop('initialize_pivec: when model = "hw", mode should be between 0 and 1.\n It is the initialization of the allele frequency.')
+    }
+    pivec <- stats::dbinom(x = 0:ploidy, size = ploidy, prob = mode)
+  } else {
+    stop("initialize_pivec: How did you get here?")
   }
-
   return(pivec)
+}
+
+
+#' Update the distribution of genotypes from various models.
+#'
+#' @param weight_vec \code{colSums(wik_mat)} from \code{\link{flexdog}}.
+#'     This is the sum of current posterior probabilities of each individual
+#'     having genotype k.
+#' @param model What model are we assuming.
+#' @param control A list of anything else needed to be passed.
+#'     E.g. if \code{model = "ash"},
+#'     then \code{inner_weights} needs to be passed through \code{control}
+#'     (see \code{\link{get_inner_weights}} for how to get this matrix).
+#'
+#' @return A list with the following elements
+#' \describe{
+#'   \item{\code{pivec}}{The estimate of the genotype distribution.}
+#'   \item{\code{par}}{A list of estimated parameters. An empty list if the model does not contain any parameters other than \code{pivec}.}
+#' }
+#'
+#' @author David Gerard
+flex_update_pivec <- function(weight_vec, model = c("ash", "flex", "hw"), control) {
+  ## Check input -------------------------------
+  ploidy <- length(weight_vec) - 1
+  model <- match.arg(model)
+  assertthat::are_equal(sum(weight_vec), 1)
+  assertthat::assert_that(is.list(control))
+
+  ## Get pivec ---------------------------------
+  return_list <- list()
+  if (model == "flex") {
+    pivec <- weight_vec / sum(weight_vec)
+    return_list$pivec <- pivec
+    return_list$par <- list()
+  } else if (model == "ash") {
+    if (is.null(control$inner_weights)) {
+      stop('flex_update_pivec: control$inner_weights cannot be NULL when model = "ash"')
+    }
+    cv_pi <- CVXR::Variable(1, ploidy + 1)
+    obj   <- sum(t(weight_vec) * log(cv_pi %*% control$inner_weights))
+    prob  <- CVXR::Problem(CVXR::Maximize(obj),
+                           constraints = list(sum(cv_pi) == 1,
+                                              cv_pi >= 0))
+    result <- solve(prob)
+    result$value
+    pivec <- c(result$getValue(cv_pi))
+    return_list$pivec <- pivec
+    return_list$par <- list()
+  } else if (model == "hw") {
+    alpha <- sum(0:ploidy * weight_vec) / (ploidy * sum(weight_vec))
+    pivec <- stats::dbinom(x = 0:ploidy, size = ploidy, prob = alpha)
+    return_list$pivec     <- pivec
+    return_list$par       <- list()
+    return_list$par$alpha <- alpha
+  } else {
+    stop("flex_update_pivec: how did you get here?")
+  }
+  return(return_list)
 }
 
 

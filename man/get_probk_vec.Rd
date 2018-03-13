@@ -10,11 +10,13 @@ get_probk_vec(pivec, model, mode)
 \item{pivec}{The mixing probability of the i'th discrete uniform distribution.}
 
 \item{model}{What form should the prior take? Should the genotype
-distribution be unimodal (\code{"ash"}) or should be generically
-any categorical distribution (\code{"flex"})?}
+distribution be unimodal (\code{"ash"}), generically
+any categorical distribution (\code{"flex"}), or binomial as a
+result of assuming Hardy-Weinberg equilibrium (\code{"hw"})?}
 
 \item{mode}{The mode if \code{model = "ash"}. If not provided,
-\code{flexdog} will estimate the mode.}
+\code{flexdog} will estimate the mode. This is the starting point of
+the allele frequency if \code{model = "hw"}.}
 }
 \description{
 Obtain the genotype distribution given the distribution of discrete uniforms.
