@@ -3,10 +3,12 @@
 
 #' Flexible updog
 #'
-#' This function will genotype polyploid individuals from Next generation
+#' This function will genotype polyploid individuals from next generation
 #' sequencing (NGS) data while assuming the genotype distribution is either
-#' unimodal (\code{model = "ash"}) or generically any categorical
-#' distribution (\code{model = "ash"}). It does this while accounting for
+#' unimodal (\code{model = "ash"}), generically any categorical
+#' distribution (\code{model = "flex"}), or Binomial as a result of assuming
+#' the population is in Hardy-Weinberg equlibrium (\code{model = "hw"}).
+#' It does this while accounting for
 #' allele bias, overdispersion, and sequencing error.
 #'
 #' @param refvec A vector of counts of reads with the reference allele.
@@ -35,6 +37,26 @@
 #' @param tol The tolerance stopping criterion. The EM algorithm will stop
 #'     if the difference in the log-likelihoods between two consecutive
 #'     iterations is less than \code{tol}.
+#'
+#' @return An object of class \code{flexdog}, which consists
+#'     of a list with some or all of the following elements:
+#' \describe{
+#'   \item{\code{bias_val}}{The estimated bias parameter.}
+#'   \item{\code{seq_error}}{The estimated sequencing error rate.}
+#'   \item{\code{od_param}}{The estimated overdispersion parameter.}
+#'   \item{\code{num_iter}}{The number of EM iterations ran. You should be wary if this equals \code{itermax}.}
+#'   \item{\code{llike}}{The maximum marginal log-likelihood.}
+#'   \item{\code{postmat}}{A matrix of posterior probabilities of each genotype for each individual. The rows index the individuals and the columns index the allele dosage.}
+#'   \item{\code{gene_dist}}{The estimated genotype distribution. The \code{i}th element is the proportion of individuals with genotype \code{i-1}.}
+#'   \item{\code{par}}{A list of the final estimates of the parameters of the genotype distribution.}
+#'   \item{\code{geno}}{The posterior mode genotype.}
+#'   \item{\code{maxpostprob}}{The maximum posterior probability.}
+#'   \item{\code{postmean}}{The posterior mean genotype.}
+#'   \item{\code{input$refvec}}{The value of \code{refvec} provided by the user.}
+#'   \item{\code{input$sizevec}}{The value of \code{sizevec} provided by the user.}
+#'   \item{\code{input$ploidy}}{The value of \code{ploidy} provided by the user.}
+#'   \item{\code{input$model}}{The value of \code{model} provided by the user.}
+#' }
 #'
 #' @author David Gerard
 #'
@@ -200,7 +222,8 @@ flexdog <- function(refvec,
                       num_iter  = iter_index,
                       llike     = llike,
                       postmat   = wik_mat,
-                      gene_dist = probk_vec)
+                      gene_dist = probk_vec,
+                      par       = fupdate_out)
     if (temp_list$llike > return_list$llike) {
       return_list <- temp_list
     }
