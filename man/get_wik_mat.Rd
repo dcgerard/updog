@@ -9,7 +9,7 @@ get_wik_mat(probk_vec, refvec, sizevec, ploidy, seq, bias, od)
 \arguments{
 \item{probk_vec}{The vector of current prior probabilities of each genotype.}
 
-\item{refvec}{A vector of counts of reads with reference allele.}
+\item{refvec}{A vector of counts of reads with the reference allele.}
 
 \item{sizevec}{A vector of total counts.}
 

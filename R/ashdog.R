@@ -3,7 +3,13 @@
 
 #' Flexible updog
 #'
-#' @param refvec A vector of counts of reads with reference allele.
+#' This function will genotype polyploid individuals from Next generation
+#' sequencing (NGS) data while assuming the genotype distribution is either
+#' unimodal (\code{model = "ash"}) or generically any categorical
+#' distribution (\code{model = "ash"}). It does this while accounting for
+#' allele bias, overdispersion, and sequencing error.
+#'
+#' @param refvec A vector of counts of reads with the reference allele.
 #' @param sizevec A vector of total counts.
 #' @param ploidy The ploidy of the species.
 #' @param model What form should the prior take? Should the genotype
@@ -30,6 +36,7 @@
 #'
 #' @author David Gerard
 #'
+#' @export
 flexdog <- function(refvec,
                     sizevec,
                     ploidy,

@@ -10,7 +10,7 @@ flexdog(refvec, sizevec, ploidy, model = c("ash", "flex"), verbose = TRUE,
   tol = 10^-4)
 }
 \arguments{
-\item{refvec}{A vector of counts of reads with reference allele.}
+\item{refvec}{A vector of counts of reads with the reference allele.}
 
 \item{sizevec}{A vector of total counts.}
 
@@ -50,7 +50,11 @@ if the difference in the log-likelihoods between two consecutive
 iterations is less than \code{tol}.}
 }
 \description{
-Flexible updog
+This function will genotype polyploid individuals from Next generation
+sequencing (NGS) data while assuming the genotype distribution is either
+unimodal (\code{model = "ash"}) or generically any categorical
+distribution (\code{model = "ash"}). It does this while accounting for
+allele bias, overdispersion, and sequencing error.
 }
 \author{
 David Gerard
