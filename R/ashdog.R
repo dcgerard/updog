@@ -41,9 +41,9 @@
 #' @return An object of class \code{flexdog}, which consists
 #'     of a list with some or all of the following elements:
 #' \describe{
-#'   \item{\code{bias_val}}{The estimated bias parameter.}
-#'   \item{\code{seq_error}}{The estimated sequencing error rate.}
-#'   \item{\code{od_param}}{The estimated overdispersion parameter.}
+#'   \item{\code{bias}}{The estimated bias parameter.}
+#'   \item{\code{seq}}{The estimated sequencing error rate.}
+#'   \item{\code{od}}{The estimated overdispersion parameter.}
 #'   \item{\code{num_iter}}{The number of EM iterations ran. You should be wary if this equals \code{itermax}.}
 #'   \item{\code{llike}}{The maximum marginal log-likelihood.}
 #'   \item{\code{postmat}}{A matrix of posterior probabilities of each genotype for each individual. The rows index the individuals and the columns index the allele dosage.}
@@ -56,6 +56,7 @@
 #'   \item{\code{input$sizevec}}{The value of \code{sizevec} provided by the user.}
 #'   \item{\code{input$ploidy}}{The value of \code{ploidy} provided by the user.}
 #'   \item{\code{input$model}}{The value of \code{model} provided by the user.}
+#'   \item{\code{prop_mis}}{The posterior proportion of individuals misclassified.}
 #' }
 #'
 #' @author David Gerard
@@ -116,6 +117,11 @@ flexdog <- function(refvec,
   } else {
     stop("flexdog: Checking mode. How did you get here?")
   }
+
+  ## Deal with missingness in sizevec and refvec -----------------------
+  not_na_vec  <- !(is.na(refvec) | is.na(sizevec))
+  refvec      <- refvec[not_na_vec]
+  sizevec     <- sizevec[not_na_vec]
 
   ## Some variables needed to run EM ---------------------------
   boundary_tol <- 10 ^ -6
@@ -216,9 +222,9 @@ flexdog <- function(refvec,
     }
 
     ## Check which mode has the highest likelihood --------------------
-    temp_list <- list(bias_val  = bias,
-                      seq_error = seq,
-                      od_param  = od,
+    temp_list <- list(bias      = bias,
+                      seq       = seq,
+                      od        = od,
                       num_iter  = iter_index,
                       llike     = llike,
                       postmat   = wik_mat,
@@ -237,7 +243,36 @@ flexdog <- function(refvec,
   return_list$input$sizevec <- sizevec
   return_list$input$ploidy  <- ploidy
   return_list$input$model   <- model
+  return_list$prop_mis      <- 1 - mean(return_list$maxpostprob)
 
+
+  ## Add back missingness ---------------------------------------------
+  temp                     <- rep(NA, length = length(not_na_vec))
+  temp[not_na_vec]         <- refvec
+  return_list$input$refvec <- temp
+
+  temp                      <- rep(NA, length = length(not_na_vec))
+  temp[not_na_vec]          <- sizevec
+  return_list$input$sizevec <- temp
+
+  temp             <- rep(NA, nrow = length(not_na_vec))
+  temp[not_na_vec] <- return_list$geno
+  return_list$geno <- temp
+
+  temp                    <- rep(NA, nrow = length(not_na_vec))
+  temp[not_na_vec]        <- return_list$maxpostprob
+  return_list$maxpostprob <- temp
+
+  temp                 <- rep(NA, nrow = length(not_na_vec))
+  temp[not_na_vec]     <- return_list$postmean
+  return_list$postmean <- temp
+
+  temp                <- matrix(NA, nrow = length(not_na_vec),
+                                ncol = ncol(return_list$postmat))
+  temp[not_na_vec, ]  <- return_list$postmat
+  return_list$postmat <- temp
+
+  ## Set class to flexdog ---------------------------------------------
   class(return_list) <- "flexdog"
 
   return(return_list)

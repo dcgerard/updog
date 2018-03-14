@@ -55,9 +55,9 @@ iterations is less than \code{tol}.}
 An object of class \code{flexdog}, which consists
     of a list with some or all of the following elements:
 \describe{
-  \item{\code{bias_val}}{The estimated bias parameter.}
-  \item{\code{seq_error}}{The estimated sequencing error rate.}
-  \item{\code{od_param}}{The estimated overdispersion parameter.}
+  \item{\code{bias}}{The estimated bias parameter.}
+  \item{\code{seq}}{The estimated sequencing error rate.}
+  \item{\code{od}}{The estimated overdispersion parameter.}
   \item{\code{num_iter}}{The number of EM iterations ran. You should be wary if this equals \code{itermax}.}
   \item{\code{llike}}{The maximum marginal log-likelihood.}
   \item{\code{postmat}}{A matrix of posterior probabilities of each genotype for each individual. The rows index the individuals and the columns index the allele dosage.}
@@ -70,6 +70,7 @@ An object of class \code{flexdog}, which consists
   \item{\code{input$sizevec}}{The value of \code{sizevec} provided by the user.}
   \item{\code{input$ploidy}}{The value of \code{ploidy} provided by the user.}
   \item{\code{input$model}}{The value of \code{model} provided by the user.}
+  \item{\code{prop_mis}}{The posterior proportion of individuals misclassified.}
 }
 }
 \description{

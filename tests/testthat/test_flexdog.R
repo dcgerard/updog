@@ -4,6 +4,9 @@ test_that("flexdog works", {
   refvec    <- 1:20
   sizevec   <- 40:21
 
+  refvec[2]  <- NA
+  sizevec[3] <- NA
+
   # snpdat <- updog::snpdat
   # library(tidyverse)
   # snpdat %>% filter(snp == "SNP1") ->
