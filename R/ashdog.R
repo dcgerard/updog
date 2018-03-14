@@ -300,8 +300,8 @@ plot.flexdog <- function(x, ...) {
                          osize     = x$input$sizevec,
                          ploidy    = x$input$ploidy,
                          ogeno     = x$geno,
-                         seq_error = x$seq_error,
-                         bias_val  = x$bias_val,
+                         seq_error = x$seq,
+                         bias_val  = x$bias,
                          prob_ok   = x$maxpostprob) +
     ggplot2::guides(alpha=ggplot2::guide_legend(title="maxpostprob"))
   return(pl)
