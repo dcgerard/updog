@@ -307,6 +307,14 @@ mupdog <- function(refmat,
   err <- Inf
   if (num_core == 1) { # only need to do this once if no cores.
     foreach::registerDoSEQ()
+  } else if (num_core > 1) {
+    cl = parallel::makeCluster(num_core)
+    doParallel::registerDoParallel(cl = cl)
+    if (foreach::getDoParWorkers() == 1) {
+      stop("num_core > 1 but only one core registered using foreach::registerDoSEQ.")
+    }
+  } else {
+    stop("mupdog: how did you get here?")
   }
   while (iter < itermax & err > obj_tol) {
     obj_old <- obj
@@ -317,14 +325,6 @@ mupdog <- function(refmat,
       cat("Updating posterior means and variances.\n\n")
     }
 
-    if (num_core > 1) {
-      cl = parallel::makeCluster(num_core)
-      doParallel::registerDoParallel(cl = cl)
-      if (foreach::getDoParWorkers() == 1) {
-        warning("num_core > 1 but only one core registered using foreach::registerDoSEQ.")
-        foreach::registerDoSEQ()
-      }
-    }
     index <- NA ## stupid workaround to get rid of CRAN note.
     fout <- foreach::foreach(index = 1:nsnps, .combine = cbind,
                              .export = c("obj_for_mu_sigma2_wrapper",
@@ -341,9 +341,6 @@ mupdog <- function(refmat,
                            log_bb_dense = lbeta_array[, index, ])
       oout$par
     }
-    if (num_core > 1) {
-      parallel::stopCluster(cl)
-    }
     postmean <- fout[1:nind, ]
     postvar  <- fout[(nind + 1):(2 * nind), ]
 
@@ -353,14 +350,6 @@ mupdog <- function(refmat,
     if (update_allele_freq) {
       if (verbose) {
         cat("Updating allele_freq.\n\n")
-      }
-      if (num_core > 1) {
-        cl = parallel::makeCluster(num_core)
-        doParallel::registerDoParallel(cl = cl)
-        if (foreach::getDoParWorkers() == 1) {
-          warning("num_core > 1 but only one core registered using foreach::registerDoSEQ.")
-          foreach::registerDoSEQ()
-        }
       }
       allele_freq <- foreach::foreach(index = 1:nsnps, .combine = c,
                        .export = "obj_for_alpha") %dopar% {
@@ -376,9 +365,6 @@ mupdog <- function(refmat,
                              ploidy = ploidy)
         oout$par
         }
-      if (num_core > 1) {
-        parallel::stopCluster(cl)
-      }
     }
 
 
@@ -387,14 +373,6 @@ mupdog <- function(refmat,
     if (update_inbreeding) {
       if (verbose) {
         cat("Updating inbreeding.\n\n")
-      }
-      if (num_core > 1) {
-        cl = parallel::makeCluster(num_core)
-        doParallel::registerDoParallel(cl = cl)
-        if (foreach::getDoParWorkers() == 1) {
-          warning("num_core > 1 but only one core registered using foreach::registerDoSEQ.")
-          foreach::registerDoSEQ()
-        }
       }
       inbreeding <- foreach::foreach(index = 1:nind, .combine = c,
                                      .export = "obj_for_rho") %dopar% {
@@ -409,9 +387,6 @@ mupdog <- function(refmat,
                              log_bb_dense = lbeta_array[index, ,],
                              ploidy = ploidy)
         oout$par
-      }
-      if (num_core > 1) {
-        parallel::stopCluster(cl)
       }
     }
 
@@ -437,14 +412,6 @@ mupdog <- function(refmat,
     if (verbose) {
       cat("Updating seq, bias, and od.\n\n")
     }
-    if (num_core > 1) {
-      cl = parallel::makeCluster(num_core)
-      doParallel::registerDoParallel(cl = cl)
-      if (foreach::getDoParWorkers() == 1) {
-        warning("num_core > 1 but only one core registered using foreach::registerDoSEQ.")
-        foreach::registerDoSEQ()
-      }
-    }
     fout_seq <- foreach::foreach(index = 1:nsnps, .combine = cbind,
                                  .export = c("obj_for_eps",
                                              "grad_for_eps")) %dopar% {
@@ -465,9 +432,6 @@ mupdog <- function(refmat,
                            wmat = warray[, index, ])
       oout$par
       }
-    if (num_core > 1) {
-      parallel::stopCluster(cl)
-    }
     seq  <- fout_seq[1, ]
     bias <- fout_seq[2, ]
     od   <- fout_seq[3, ]
@@ -493,6 +457,11 @@ mupdog <- function(refmat,
         "      err:", err, "\n\n")
 
     iter <- iter + 1
+  }
+
+  ## Close cluster if used parallelization ----------------------------
+  if (num_core > 1) {
+    parallel::stopCluster(cl)
   }
 
   map_dosage <- apply(warray, c(1, 2), which.max) - 1
