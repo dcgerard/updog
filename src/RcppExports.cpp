@@ -213,6 +213,36 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// uni_obj
+double uni_obj(arma::vec pivec, arma::vec weight_vec, arma::mat lmat, long double lambda);
+RcppExport SEXP _mupdog_uni_obj(SEXP pivecSEXP, SEXP weight_vecSEXP, SEXP lmatSEXP, SEXP lambdaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type pivec(pivecSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type lmat(lmatSEXP);
+    Rcpp::traits::input_parameter< long double >::type lambda(lambdaSEXP);
+    rcpp_result_gen = Rcpp::wrap(uni_obj(pivec, weight_vec, lmat, lambda));
+    return rcpp_result_gen;
+END_RCPP
+}
+// uni_em
+arma::vec uni_em(arma::vec weight_vec, arma::mat lmat, arma::vec pi_init, long double lambda, int itermax, double obj_tol);
+RcppExport SEXP _mupdog_uni_em(SEXP weight_vecSEXP, SEXP lmatSEXP, SEXP pi_initSEXP, SEXP lambdaSEXP, SEXP itermaxSEXP, SEXP obj_tolSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type lmat(lmatSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type pi_init(pi_initSEXP);
+    Rcpp::traits::input_parameter< long double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< int >::type itermax(itermaxSEXP);
+    Rcpp::traits::input_parameter< double >::type obj_tol(obj_tolSEXP);
+    rcpp_result_gen = Rcpp::wrap(uni_em(weight_vec, lmat, pi_init, lambda, itermax, obj_tol));
+    return rcpp_result_gen;
+END_RCPP
+}
 // grad_for_mu_sigma2
 NumericVector grad_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2, NumericMatrix phifk_mat, arma::Mat<double> cor_inv, NumericMatrix log_bb_dense);
 RcppExport SEXP _mupdog_grad_for_mu_sigma2(SEXP muSEXP, SEXP sigma2SEXP, SEXP phifk_matSEXP, SEXP cor_invSEXP, SEXP log_bb_denseSEXP) {
@@ -726,6 +756,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_get_inner_weights", (DL_FUNC) &_mupdog_get_inner_weights, 2},
     {"_mupdog_get_wik_mat", (DL_FUNC) &_mupdog_get_wik_mat, 7},
     {"_mupdog_flexdog_obj", (DL_FUNC) &_mupdog_flexdog_obj, 11},
+    {"_mupdog_uni_obj", (DL_FUNC) &_mupdog_uni_obj, 4},
+    {"_mupdog_uni_em", (DL_FUNC) &_mupdog_uni_em, 6},
     {"_mupdog_grad_for_mu_sigma2", (DL_FUNC) &_mupdog_grad_for_mu_sigma2, 5},
     {"_mupdog_grad_for_mu_sigma2_wrapper", (DL_FUNC) &_mupdog_grad_for_mu_sigma2_wrapper, 4},
     {"_mupdog_dpen_dh", (DL_FUNC) &_mupdog_dpen_dh, 3},

@@ -1,6 +1,6 @@
 #include "mupdog.h"
 
-double TOL = 2.0 * DBL_EPSILON; // defined here, used everywhere
+double TOL = 10.0 * DBL_EPSILON; // defined here, used everywhere
 
 //' Density function of betabinomial with the shape parameterizations
 //'

@@ -7,7 +7,7 @@
 flexdog(refvec, sizevec, ploidy, model = c("ash", "flex", "hw"),
   verbose = TRUE, mean_bias = 0, var_bias = 0.7^2, mean_seq = -4.7,
   var_seq = 1, seq = 0.005, bias = 1, od = 0.001, mode = NULL,
-  itermax = 200, tol = 10^-4)
+  use_cvxr = FALSE, itermax = 200, tol = 10^-4)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads with the reference allele.}
@@ -42,6 +42,10 @@ error rate.}
 \item{mode}{The mode if \code{model = "ash"}. If not provided,
 \code{flexdog} will estimate the mode. This is the starting point of
 the allele frequency if \code{model = "hw"}.}
+
+\item{use_cvxr}{A logical. If \code{model = "ash"}, then do you want to use the EM algorithm
+(\code{FALSE}) or a convex optimization program using the package CVXR \code{TRUE}?
+Only available if CVXR is installed.}
 
 \item{itermax}{The maximum number of EM iterations to run for each mode
 (if \code{model = "ash"}) or the total number of EM iterations to

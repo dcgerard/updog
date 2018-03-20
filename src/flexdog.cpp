@@ -177,18 +177,150 @@ double flexdog_obj(NumericVector probk_vec,
 }
 
 
+//' Objective function optimized by \code{\link{uni_em}}.
+//'
+//' @inheritParams uni_em
+//' @param pivec The current parameters.
+//'
+//' @author David Gerard
+//'
+// [[Rcpp::export]]
+double uni_obj(arma::vec pivec,
+               arma::vec weight_vec,
+               arma::mat lmat,
+               long double lambda) {
+  arma::vec lpi = lmat.t() * pivec;
+  double obj = 0.0;
+  for (int k = 0; k < weight_vec.n_elem; k++) {
+    if ((weight_vec(k) > TOL) && (lpi(k) > TOL)) {
+      obj = obj + weight_vec(k) * std::log(lpi(k));
+    } else if ((weight_vec(k) > TOL * 1000) && (lpi(k) < TOL)) {
+      obj = R_NegInf;
+      break;
+    } else {
+      // do nothing.
+    }
+  }
 
+  // Add the penalty ----
+  double pen = 0.0;
+  if (lambda > TOL) {
+    pen = lambda * arma::sum(arma::log(pivec));
+  }
 
+  return obj + pen;
+}
 
+//' EM algorithm to fit weighted ash objective.
+//'
+//' Solves the following optimization problem
+//' \deqn{\max_{\pi} \sum_k w_k \log(\sum_j \pi_j \ell_jk).}
+//' It does this using a weighted EM algorithm.
+//'
+//' @param weight_vec A vector of weights. Each element of \code{weight_vec} corresponds
+//'     to a column of \code{lmat}.
+//' @param lmat A matrix of inner weights. The columns are the "individuals" and the rows are the "classes."
+//' @param pi_init The initial values of \code{pivec}. Each element of \code{pi_init}
+//'     corresponds to a row of \code{lmat}.
+//' @param itermax The maximum number of EM iterations to take.
+//' @param obj_tol The objective stopping criterion.
+//' @param lambda The penalty on the pi's. Should be greater than 0 and really really small.
+//'
+//'
+//' @author David Gerard
+//'
+// [[Rcpp::export]]
+arma::vec uni_em(arma::vec weight_vec,
+                 arma::mat lmat,
+                 arma::vec pi_init,
+                 long double lambda,
+                 int itermax,
+                 double obj_tol) {
+  // check input ----------------------------------------------
+  int ploidy = weight_vec.n_elem - 1;
+  if (obj_tol < TOL) {
+    Rcpp::stop("uni_em: obj_tol should be greater than 0.");
+  }
+  if (itermax < 0) {
+    Rcpp::stop("uni_em: itermax should be greater than or equal to 0.");
+  }
+  if (weight_vec.n_elem != pi_init.n_elem) {
+    Rcpp::stop("uni_em: weight_vec and pi_init should have the same number of elements.");
+  }
+  if (lmat.n_rows != weight_vec.n_elem) {
+    Rcpp::stop("uni_em: lmat should have ploidy + 1 rows.");
+  }
+  if (lmat.n_cols != weight_vec.n_elem) {
+    Rcpp::stop("uni_em: lmat should have ploidy + 1 columns.");
+  }
+  if (lambda < 0.0) {
+    Rcpp::stop("uni_em: lambda cannot be negative.");
+  }
 
+  // Run EM ---------------------------------------------------
+  int index       = 0;
+  double err      = obj_tol + 1.0;
+  arma::vec pivec = pi_init;
+  double obj      = uni_obj(pivec, weight_vec, lmat, lambda);
+  double old_obj  = obj;
+  double lsum     = 0.0;
+  arma::mat etamat(ploidy + 1, ploidy + 1);
+  arma::vec nvec(ploidy + 1);
 
+  while ((index < itermax) & (err > obj_tol)) {
+    old_obj = obj;
+    // get eta_jk -----------------
+    for (int k = 0; k <= ploidy; k++) {
+      lsum = 0.0;
+      for (int j = 0; j <= ploidy; j++) {
+        etamat(j, k) = pivec(j) * lmat(j, k);
+        lsum = lsum + etamat(j, k);
+      }
+      for (int j = 0; j <= ploidy; j++) {
+        etamat(j, k) = etamat(j, k) / lsum;
+      }
+    }
+    // get n_j's --------------------------------
+    nvec = etamat * weight_vec + lambda;
+    // normalize to get pi_j's ------------------
+    pivec = nvec / arma::sum(nvec);
+    // calculate objective and update stopping criteria
+    obj = uni_obj(pivec, weight_vec, lmat, lambda);
+    if (obj < old_obj - TOL) {
+      Rcpp::Rcout << "Index: "
+                  << index
+                  << std::endl
+                  << "obj: "
+                  << obj
+                  << std::endl
+                  << "pivec: "
+                  << std::endl
+                  << pivec.t()
+                  << std::endl
+                  << "weight_vec: "
+                  << std::endl
+                  << weight_vec.t()
+                  << std::endl
+                  << "lmat: "
+                  << std::endl
+                  << lmat
+                  << std::endl
+                  << "etamat: "
+                  << std::endl
+                  << etamat
+                  << "nvec: "
+                  << std::endl
+                  << nvec.t()
+                  << std::endl
+                  << std::endl;
+      Rcpp::stop("uni_em: Objective is not increasing.\n");
+    }
+    err = std::abs(obj - old_obj);
+    index++;
 
-
-
-
-
-
-
+  }
+  return pivec;
+}
 
 
 

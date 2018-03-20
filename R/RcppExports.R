@@ -151,6 +151,39 @@ flexdog_obj <- function(probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_
     .Call('_mupdog_flexdog_obj', PACKAGE = 'mupdog', probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq)
 }
 
+#' Objective function optimized by \code{\link{uni_em}}.
+#'
+#' @inheritParams uni_em
+#' @param pivec The current parameters.
+#'
+#' @author David Gerard
+#'
+uni_obj <- function(pivec, weight_vec, lmat, lambda) {
+    .Call('_mupdog_uni_obj', PACKAGE = 'mupdog', pivec, weight_vec, lmat, lambda)
+}
+
+#' EM algorithm to fit weighted ash objective.
+#'
+#' Solves the following optimization problem
+#' \deqn{\max_{\pi} \sum_k w_k \log(\sum_j \pi_j \ell_jk).}
+#' It does this using a weighted EM algorithm.
+#'
+#' @param weight_vec A vector of weights. Each element of \code{weight_vec} corresponds
+#'     to a column of \code{lmat}.
+#' @param lmat A matrix of inner weights. The columns are the "individuals" and the rows are the "classes."
+#' @param pi_init The initial values of \code{pivec}. Each element of \code{pi_init}
+#'     corresponds to a row of \code{lmat}.
+#' @param itermax The maximum number of EM iterations to take.
+#' @param obj_tol The objective stopping criterion.
+#' @param lambda The penalty on the pi's. Should be greater than 0 and really really small.
+#'
+#'
+#' @author David Gerard
+#'
+uni_em <- function(weight_vec, lmat, pi_init, lambda, itermax, obj_tol) {
+    .Call('_mupdog_uni_em', PACKAGE = 'mupdog', weight_vec, lmat, pi_init, lambda, itermax, obj_tol)
+}
+
 #' Gradient for \code{\link{obj_for_mu_sigma2}} with respect for \code{mu} and \code{sigma2}.
 #'
 #' @inheritParams obj_for_mu_sigma2

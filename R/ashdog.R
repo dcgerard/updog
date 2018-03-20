@@ -37,6 +37,9 @@
 #' @param tol The tolerance stopping criterion. The EM algorithm will stop
 #'     if the difference in the log-likelihoods between two consecutive
 #'     iterations is less than \code{tol}.
+#' @param use_cvxr A logical. If \code{model = "ash"}, then do you want to use the EM algorithm
+#'     (\code{FALSE}) or a convex optimization program using the package CVXR \code{TRUE}?
+#'     Only available if CVXR is installed.
 #'
 #' @return An object of class \code{flexdog}, which consists
 #'     of a list with some or all of the following elements:
@@ -75,6 +78,7 @@ flexdog <- function(refvec,
                     bias      = 1,
                     od        = 0.001,
                     mode      = NULL,
+                    use_cvxr  = FALSE,
                     itermax   = 200,
                     tol       = 10^-4) {
 
@@ -98,6 +102,7 @@ flexdog <- function(refvec,
   assertthat::assert_that(tol > 0)
   assertthat::are_equal(itermax %% 1, 0)
   assertthat::assert_that(itermax > 0)
+  assertthat::assert_that(is.logical(use_cvxr))
 
   if (!is.null(mode) & model == "flex") {
     stop('flexdog: `model` cannot equal `"flex"` when `mode` is specified.')
@@ -138,15 +143,17 @@ flexdog <- function(refvec,
 
     ## Get inner weight vec only once
     ## Used in convex optimization program
+    ## assign use_cvxr
     if (model == "ash") {
       control$inner_weights <- get_inner_weights(ploidy = ploidy, mode = mode)
+      control$use_cvxr      <- use_cvxr
     }
-
 
     ## Initialize pivec so that two modes have equal prob if model = "ash".
     ##     Uniform if model = "flex".
     pivec <- initialize_pivec(ploidy = ploidy, mode = mode, model = model)
     assertthat::are_equal(sum(pivec), 1)
+    control$pivec <- pivec ## initialization for unimodal optimization
 
     probk_vec <- get_probk_vec(pivec = pivec, model = model, mode = mode)
     assertthat::are_equal(sum(probk_vec), 1)
@@ -190,6 +197,7 @@ flexdog <- function(refvec,
                                        model      = model,
                                        control    = control)
       pivec <- fupdate_out$pivec
+      control$pivec <- pivec ## initial condition for unimodal optimization
 
       ## Update probk_vec -----------------------------------------------
       pivec[pivec < 0] <- 0
@@ -211,9 +219,15 @@ flexdog <- function(refvec,
       err        <- abs(llike - llike_old)
       iter_index <- iter_index + 1
 
-      if (llike < llike_old - 10 ^ -8) {
-        warning(paste0("flexdog: likelihood not increasing.\nDifference is",
+      if (llike < llike_old - 10 ^ -5) {
+        warning(paste0("flexdog: likelihood not increasing.\nDifference is: ",
                        llike - llike_old))
+        if (verbose) {
+          cat("\nindex: ", iter_index, "\n")
+          cat("llike: ", llike, "\n")
+          cat("pivec: ", paste0("c(", paste0(pivec, collapse = ", "), ")"), "\n")
+          cat("weight_vec: ",  paste0("c(", paste0(weight_vec, collapse = ", "), ")"), "\n\n")
+        }
       }
     }
 
@@ -402,14 +416,25 @@ flex_update_pivec <- function(weight_vec, model = c("ash", "flex", "hw"), contro
     if (is.null(control$inner_weights)) {
       stop('flex_update_pivec: control$inner_weights cannot be NULL when model = "ash"')
     }
-    cv_pi <- CVXR::Variable(1, ploidy + 1)
-    obj   <- sum(t(weight_vec) * log(cv_pi %*% control$inner_weights))
-    prob  <- CVXR::Problem(CVXR::Maximize(obj),
-                           constraints = list(sum(cv_pi) == 1,
-                                              cv_pi >= 0))
-    result <- solve(prob)
-    result$value
-    pivec <- c(result$getValue(cv_pi))
+    if (!control$use_cvxr) {
+      pivec <- uni_em(weight_vec = weight_vec,
+                      lmat = control$inner_weights,
+                      pi_init = control$pivec,
+                      itermax = 200,
+                      obj_tol = 10 ^ -4,
+                      lambda = 10^-8)
+    } else if (control$use_cvxr & requireNamespace("CVXR", quietly = TRUE)) {
+      cv_pi <- CVXR::Variable(1, ploidy + 1)
+      obj   <- sum(t(weight_vec) * log(cv_pi %*% control$inner_weights))
+      prob  <- CVXR::Problem(CVXR::Maximize(obj),
+                             constraints = list(sum(cv_pi) == 1,
+                                                cv_pi >= 0))
+      result <- solve(prob)
+      result$value
+      pivec <- c(result$getValue(cv_pi))
+    } else {
+      stop("flex_update_pivec: CVXR not installed but use_cvxr = TRUE.")
+    }
     return_list$pivec <- pivec
     return_list$par <- list()
   } else if (model == "hw") {
