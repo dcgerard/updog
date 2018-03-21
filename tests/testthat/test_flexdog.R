@@ -36,6 +36,35 @@ test_that("flexdog works", {
 }
 )
 
+test_that("get_uni_rep is inverse of get_probk_vec", {
+  probvec <- dbinom(0:6, 6, 0.4)
+  pout <- get_uni_rep(probvec)
+  probvec2 <- get_probk_vec(pivec = pout$pivec,
+                            model = "ash",
+                            mode = pout$mode - 1)
+  expect_equal(probvec, probvec2)
+
+  probvec <- dbinom(0:6, 6, 0.9)
+  pout <- get_uni_rep(probvec)
+  probvec2 <- get_probk_vec(pivec = pout$pivec,
+                            model = "ash",
+                            mode = pout$mode - 1)
+  expect_equal(probvec, probvec2)
+})
+
+test_that("get right mode in initialization", {
+  ploidyvec <- 2:30
+  for (ploidy in ploidyvec) {
+    modevec <- 0:(ploidy - 1) + 0.5
+    for (index in 1:length(modevec)) {
+      mode <- modevec[index]
+      pvec_init <- stats::dbinom(x = 0:ploidy, size = ploidy,
+                                 prob = floor(mode) / ploidy)
+      pout <- get_uni_rep(pvec_init)
+      expect_equal(pout$mode - 1, mode)
+    }
+  }
+})
 
 test_that("get_probk_vec works", {
   pivec <- c(0.3, 0.2, 0.5)

@@ -355,20 +355,23 @@ initialize_pivec <- function(ploidy, mode, model = c("ash", "flex", "hw")) {
   } else if ((mode <= 0) | (mode >= ploidy) | (mode %% 1 == 0)) {
     pivec <- rep(x = 1 / (ploidy + 1), length = ploidy + 1)
   } else if (model == "ash") {
-    floor_mode <- floor(mode)
-    ceil_mode  <- ceiling(mode)
-
-    d <- sum(1 / (ceil_mode:ploidy - ceil_mode + 1)) /
-      (sum(1 / (floor_mode - 0:floor_mode + 1)))
-
-    second_half <- 1 / (ploidy - ceil_mode + 1 + (floor_mode + 1) * d)
-
-    first_half <- second_half * d
-
-    ## assertthat::are_equal(first_half, (1 - (ploidy - ceil_mode + 1) * second_half) / (floor_mode + 1))
-
-    pivec <- c(rep(first_half, length = floor_mode + 1),
-               rep(second_half, length = ploidy - ceil_mode + 1))
+    init_type <- "equi"
+    if (init_type == "equi") { ## equimodal
+      floor_mode <- floor(mode)
+      ceil_mode  <- ceiling(mode)
+      d <- sum(1 / (ceil_mode:ploidy - ceil_mode + 1)) /
+        (sum(1 / (floor_mode - 0:floor_mode + 1)))
+      second_half <- 1 / (ploidy - ceil_mode + 1 + (floor_mode + 1) * d)
+      first_half <- second_half * d
+      ## assertthat::are_equal(first_half, (1 - (ploidy - ceil_mode + 1) * second_half) / (floor_mode + 1))
+      pivec <- c(rep(first_half, length = floor_mode + 1),
+                 rep(second_half, length = ploidy - ceil_mode + 1))
+    } else if (init_type == "bin") { ## binomial
+      pvec_init <- stats::dbinom(x = 0:ploidy, size = ploidy,
+                                 prob = floor(mode) / ploidy)
+      pivec <- get_uni_rep(pvec_init)$pivec + 10 ^-6
+      pivec <- pivec / sum(pivec)
+    }
   } else if (model == "hw") {
     if (mode < 0 | mode > 1) {
       stop('initialize_pivec: when model = "hw", mode should be between 0 and 1.\n It is the initialization of the allele frequency.')
@@ -449,4 +452,46 @@ flex_update_pivec <- function(weight_vec, model = c("ash", "flex", "hw"), contro
   return(return_list)
 }
 
+
+
+#' Get the representation of a discrete unimodal probability distribution.
+#'
+#' NB: In \code{get_uni_rep}, we count the mode starting at 1.
+#'     In \code{\link{get_probk_vec}}, we count the mode starting at 0.
+#'
+#' @param probvec A probability vector. It assumes the probabilities
+#'     are ordered according to the ordering of the discrete set.
+#'
+#' @seealso \code{\link{get_probk_vec}} with option \code{model = "ash"}
+#'     for the inverse of this function.
+#'
+#' @author David Gerard
+#'
+get_uni_rep <- function(probvec) {
+  assertthat::are_equal(sum(probvec), 1)
+  assertthat::assert_that(all(probvec >= 0))
+
+  mode <- which.max(probvec)
+  n    <- length(probvec)
+
+  if (mode < n) {
+    fak_vec <- c(mode:1, 1:(n - mode))
+  } else {
+    fak_vec <- n:1
+  }
+
+  if (mode < n) {
+    aug_probvec <- c(0, probvec, 0)
+    diffvec <- c(aug_probvec[2:(mode + 1)] - aug_probvec[1:mode],
+                 aug_probvec[(mode + 2):(n + 1)] - aug_probvec[(mode + 3):(n + 2)])
+  } else {
+    aug_probvec <- c(0, probvec)
+    diffvec <- aug_probvec[2:(n + 1)] - aug_probvec[1:n]
+  }
+
+  return_list <- list()
+  return_list$pivec <- diffvec * fak_vec
+  return_list$mode = mode + 0.5
+  return(return_list)
+}
 
