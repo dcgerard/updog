@@ -342,6 +342,12 @@ double obj_for_alpha(arma::Col<double> mu,
 //' @param var_seq The prior variance of the logit sequencing error rate.
 //' @param wmat The matrix of (variational) posterior probabilities for each dosage.
 //'     The rows index the individuals and the columns index the dosage levels.
+//' @param update_seq A logical. This is not used in \code{obj_for_eps},
+//'     but sets the first element to \code{0.0} in \code{\link{grad_for_eps}}.
+//' @param update_bias A logical. This is not used in \code{obj_for_eps},
+//'     but sets the second element to \code{0.0} in \code{\link{grad_for_eps}}.
+//' @param update_od A logical. This is not used in \code{obj_for_eps},
+//'     but sets the third element to \code{0.0} in \code{\link{grad_for_eps}}.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -353,7 +359,10 @@ double obj_for_eps(NumericVector parvec,
 		   double var_bias,
 		   double mean_seq,
 		   double var_seq,
-		   NumericMatrix wmat) {
+		   NumericMatrix wmat,
+		   bool update_bias = true,
+		   bool update_seq = true,
+		   bool update_od = true) {
   // Check input -------------------------------------------------------
   int nind = wmat.nrow();
 

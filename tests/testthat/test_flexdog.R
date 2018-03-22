@@ -78,7 +78,28 @@ test_that("get_probk_vec works", {
   expect_equal(get_probk_vec(pivec = pivec, model = "ash", mode = 0.5), c(0.3, 0.45, 0.25))
 
   expect_equal(get_probk_vec(pivec = pivec, model = "ash", mode = -0.5), c(0.4 + 0.5/3, 0.1 + 0.5/3, 0.5/3))
-
-
 }
 )
+
+test_that("don't update bias, seq, od when supposed not to", {
+  refvec  <- 1:20
+  sizevec <- 40:21
+  ploidy  <- 4
+  fout <- flexdog(refvec = refvec, sizevec = sizevec,
+                  ploidy = ploidy, model = "hw",
+                  update_bias = FALSE, bias = 0.5,
+                  verbose = FALSE)
+  expect_equal(fout$bias, 0.5)
+
+  fout <- flexdog(refvec = refvec, sizevec = sizevec,
+                  ploidy = ploidy, model = "hw",
+                  update_seq = FALSE, seq = 0.01,
+                  verbose = FALSE)
+  expect_equal(fout$seq, 0.01)
+
+  fout <- flexdog(refvec = refvec, sizevec = sizevec,
+                  ploidy = ploidy, model = "hw",
+                  update_od = FALSE, od = 0.01,
+                  verbose = FALSE)
+  expect_equal(fout$od, 0.01)
+})

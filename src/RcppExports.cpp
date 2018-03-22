@@ -436,8 +436,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // grad_for_eps
-NumericVector grad_for_eps(NumericVector parvec, NumericVector refvec, NumericVector sizevec, int ploidy, double mean_bias, double var_bias, double mean_seq, double var_seq, NumericMatrix wmat);
-RcppExport SEXP _mupdog_grad_for_eps(SEXP parvecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP wmatSEXP) {
+NumericVector grad_for_eps(NumericVector parvec, NumericVector refvec, NumericVector sizevec, int ploidy, double mean_bias, double var_bias, double mean_seq, double var_seq, NumericMatrix wmat, bool update_bias, bool update_seq, bool update_od);
+RcppExport SEXP _mupdog_grad_for_eps(SEXP parvecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP wmatSEXP, SEXP update_biasSEXP, SEXP update_seqSEXP, SEXP update_odSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -450,7 +450,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type mean_seq(mean_seqSEXP);
     Rcpp::traits::input_parameter< double >::type var_seq(var_seqSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type wmat(wmatSEXP);
-    rcpp_result_gen = Rcpp::wrap(grad_for_eps(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat));
+    Rcpp::traits::input_parameter< bool >::type update_bias(update_biasSEXP);
+    Rcpp::traits::input_parameter< bool >::type update_seq(update_seqSEXP);
+    Rcpp::traits::input_parameter< bool >::type update_od(update_odSEXP);
+    rcpp_result_gen = Rcpp::wrap(grad_for_eps(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat, update_bias, update_seq, update_od));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -573,8 +576,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // obj_for_eps
-double obj_for_eps(NumericVector parvec, NumericVector refvec, NumericVector sizevec, int ploidy, double mean_bias, double var_bias, double mean_seq, double var_seq, NumericMatrix wmat);
-RcppExport SEXP _mupdog_obj_for_eps(SEXP parvecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP wmatSEXP) {
+double obj_for_eps(NumericVector parvec, NumericVector refvec, NumericVector sizevec, int ploidy, double mean_bias, double var_bias, double mean_seq, double var_seq, NumericMatrix wmat, bool update_bias, bool update_seq, bool update_od);
+RcppExport SEXP _mupdog_obj_for_eps(SEXP parvecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP wmatSEXP, SEXP update_biasSEXP, SEXP update_seqSEXP, SEXP update_odSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -587,7 +590,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type mean_seq(mean_seqSEXP);
     Rcpp::traits::input_parameter< double >::type var_seq(var_seqSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type wmat(wmatSEXP);
-    rcpp_result_gen = Rcpp::wrap(obj_for_eps(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat));
+    Rcpp::traits::input_parameter< bool >::type update_bias(update_biasSEXP);
+    Rcpp::traits::input_parameter< bool >::type update_seq(update_seqSEXP);
+    Rcpp::traits::input_parameter< bool >::type update_od(update_odSEXP);
+    rcpp_result_gen = Rcpp::wrap(obj_for_eps(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat, update_bias, update_seq, update_od));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -785,7 +791,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_dxi_df", (DL_FUNC) &_mupdog_dxi_df, 2},
     {"_mupdog_df_deps", (DL_FUNC) &_mupdog_df_deps, 2},
     {"_mupdog_dlbeta_deps", (DL_FUNC) &_mupdog_dlbeta_deps, 6},
-    {"_mupdog_grad_for_eps", (DL_FUNC) &_mupdog_grad_for_eps, 9},
+    {"_mupdog_grad_for_eps", (DL_FUNC) &_mupdog_grad_for_eps, 12},
     {"_mupdog_post_prob", (DL_FUNC) &_mupdog_post_prob, 6},
     {"_mupdog_compute_all_post_prob", (DL_FUNC) &_mupdog_compute_all_post_prob, 5},
     {"_mupdog_compute_all_log_bb", (DL_FUNC) &_mupdog_compute_all_log_bb, 6},
@@ -794,7 +800,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_pen_seq_error", (DL_FUNC) &_mupdog_pen_seq_error, 3},
     {"_mupdog_obj_for_rho", (DL_FUNC) &_mupdog_obj_for_rho, 6},
     {"_mupdog_obj_for_alpha", (DL_FUNC) &_mupdog_obj_for_alpha, 6},
-    {"_mupdog_obj_for_eps", (DL_FUNC) &_mupdog_obj_for_eps, 9},
+    {"_mupdog_obj_for_eps", (DL_FUNC) &_mupdog_obj_for_eps, 12},
     {"_mupdog_obj_for_mu_sigma2", (DL_FUNC) &_mupdog_obj_for_mu_sigma2, 5},
     {"_mupdog_obj_for_mu_sigma2_wrapper", (DL_FUNC) &_mupdog_obj_for_mu_sigma2_wrapper, 4},
     {"_mupdog_elbo", (DL_FUNC) &_mupdog_elbo, 12},

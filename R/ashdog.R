@@ -50,6 +50,12 @@
 #'     (\code{FALSE}) or a convex optimization program using
 #'     the package CVXR \code{TRUE}?
 #'     Only available if CVXR is installed.
+#' @param update_bias A logical. Should we update \code{bias}
+#'     (\code{TRUE}), or not (\code{FALSE})?
+#' @param update_seq A logical. Should we update \code{seq}
+#'     (\code{TRUE}), or not (\code{FALSE})?
+#' @param update_od A logical. Should we update \code{od}
+#'     (\code{TRUE}), or not (\code{FALSE})?
 #'
 #' @return An object of class \code{flexdog}, which consists
 #'     of a list with some or all of the following elements:
@@ -93,19 +99,22 @@
 flexdog <- function(refvec,
                     sizevec,
                     ploidy,
-                    model     = c("ash", "flex", "hw", "f1", "s1"),
-                    verbose   = TRUE,
-                    mean_bias = 0,
-                    var_bias  = 0.7 ^ 2,
-                    mean_seq  = -4.7,
-                    var_seq   = 1,
-                    seq       = 0.005,
-                    bias      = 1,
-                    od        = 0.001,
-                    mode      = NULL,
-                    use_cvxr  = FALSE,
-                    itermax   = 200,
-                    tol       = 10^-4) {
+                    model       = c("ash", "flex", "hw", "f1", "s1"),
+                    verbose     = TRUE,
+                    mean_bias   = 0,
+                    var_bias    = 0.7 ^ 2,
+                    mean_seq    = -4.7,
+                    var_seq     = 1,
+                    seq         = 0.005,
+                    bias        = 1,
+                    od          = 0.001,
+                    update_bias = TRUE,
+                    update_seq  = TRUE,
+                    update_od   = TRUE,
+                    mode        = NULL,
+                    use_cvxr    = FALSE,
+                    itermax     = 200,
+                    tol         = 10^-4) {
 
   ## Check input -----------------------------------------------------
   model <- match.arg(model)
@@ -128,7 +137,11 @@ flexdog <- function(refvec,
   assertthat::are_equal(itermax %% 1, 0)
   assertthat::assert_that(itermax > 0)
   assertthat::assert_that(is.logical(use_cvxr))
+  assertthat::assert_that(is.logical(update_bias))
+  assertthat::assert_that(is.logical(update_seq))
+  assertthat::assert_that(is.logical(update_od))
 
+  ## check and set mode under various models -----------------------
   if (!is.null(mode) & model == "flex") {
     stop('flexdog: `model` cannot equal `"flex"` when `mode` is specified.')
   } else if (is.null(mode) & model == "flex") {
@@ -158,8 +171,24 @@ flexdog <- function(refvec,
   sizevec     <- sizevec[not_na_vec]
 
   ## Some variables needed to run EM ---------------------------
-  boundary_tol <- 10 ^ -6
-  control      <- list()
+  control <- list() ## will contain parameters used to update pivec
+  boundary_tol <- 10 ^ -6 ## smallest values of seq, bias, od,
+                          ## how close can od and seq get to 1.
+  if (od < boundary_tol) {
+    od <- boundary_tol
+  }
+  if (seq < boundary_tol) {
+    seq <- boundary_tol
+  }
+  if (bias < boundary_tol) {
+    bias <- boundary_tol
+  }
+  if (od > 1 - boundary_tol) {
+    od <- 1 - boundary_tol
+  }
+  if (seq > 1 - boundary_tol) {
+    seq <- 1 - boundary_tol
+  }
 
   ## Run EM for each mode in `mode_vec` -----------------------
   return_list <- list(llike = -Inf)
@@ -202,22 +231,25 @@ flexdog <- function(refvec,
                              seq = seq, bias = bias, od = od)
 
       ## Update seq, bias, and od ----
-      oout <- stats::optim(par       = c(seq, bias, od),
-                           fn        = obj_for_eps,
-                           gr        = grad_for_eps,
-                           method    = "L-BFGS-B",
-                           lower     = rep(boundary_tol, 3),
-                           upper     = c(1 - boundary_tol, Inf,
-                                         1 - boundary_tol),
-                           control   = list(fnscale = -1, maxit = 20),
-                           refvec    = refvec,
-                           sizevec   = sizevec,
-                           ploidy    = ploidy,
-                           mean_bias = mean_bias,
-                           var_bias  = var_bias,
-                           mean_seq  = mean_seq,
-                           var_seq   = var_seq,
-                           wmat      = wik_mat)
+      oout <- stats::optim(par         = c(seq, bias, od),
+                           fn          = obj_for_eps,
+                           gr          = grad_for_eps,
+                           method      = "L-BFGS-B",
+                           lower       = rep(boundary_tol, 3),
+                           upper       = c(1 - boundary_tol, Inf,
+                                           1 - boundary_tol),
+                           control     = list(fnscale = -1, maxit = 20),
+                           refvec      = refvec,
+                           sizevec     = sizevec,
+                           ploidy      = ploidy,
+                           mean_bias   = mean_bias,
+                           var_bias    = var_bias,
+                           mean_seq    = mean_seq,
+                           var_seq     = var_seq,
+                           wmat        = wik_mat,
+                           update_seq  = update_seq,
+                           update_bias = update_bias,
+                           update_od   = update_od)
       seq  <- oout$par[1]
       bias <- oout$par[2]
       od   <- oout$par[3]

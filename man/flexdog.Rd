@@ -6,8 +6,9 @@
 \usage{
 flexdog(refvec, sizevec, ploidy, model = c("ash", "flex", "hw", "f1", "s1"),
   verbose = TRUE, mean_bias = 0, var_bias = 0.7^2, mean_seq = -4.7,
-  var_seq = 1, seq = 0.005, bias = 1, od = 0.001, mode = NULL,
-  use_cvxr = FALSE, itermax = 200, tol = 10^-4)
+  var_seq = 1, seq = 0.005, bias = 1, od = 0.001, update_bias = TRUE,
+  update_seq = TRUE, update_od = TRUE, mode = NULL, use_cvxr = FALSE,
+  itermax = 200, tol = 10^-4)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads with the reference allele.}
@@ -42,6 +43,15 @@ error rate.}
 \item{bias}{The starting value of the bias.}
 
 \item{od}{The starting value of the overdispersion parameter.}
+
+\item{update_bias}{A logical. Should we update \code{bias}
+(\code{TRUE}), or not (\code{FALSE})?}
+
+\item{update_seq}{A logical. Should we update \code{seq}
+(\code{TRUE}), or not (\code{FALSE})?}
+
+\item{update_od}{A logical. Should we update \code{od}
+(\code{TRUE}), or not (\code{FALSE})?}
 
 \item{mode}{The mode if \code{model = "ash"}. If not provided,
 \code{flexdog} will estimate the mode. This is the starting point of

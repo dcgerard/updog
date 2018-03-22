@@ -292,7 +292,10 @@ NumericVector grad_for_eps(NumericVector parvec,
                    double var_bias,
                    double mean_seq,
                    double var_seq,
-                   NumericMatrix wmat) {
+                   NumericMatrix wmat,
+                   bool update_bias = true,
+                   bool update_seq = true,
+                   bool update_od = true) {
   // check input --------------------------------------------------------
   int nind = refvec.length();
   if (sizevec.length() != nind) {
@@ -330,6 +333,17 @@ NumericVector grad_for_eps(NumericVector parvec,
   // contribution by penalties
   grad(0) = grad(0) + dpen_deps(eps, mean_seq, var_seq);
   grad(1) = grad(1) + dpen_dh(h, mean_bias, var_bias);
+
+  // set gradient to zero where don't update parameter values.
+  if (!update_seq) {
+    grad(0) = 0.0;
+  }
+  if (!update_bias) {
+    grad(1) = 0.0;
+  }
+  if (!update_od) {
+    grad(2) = 0.0;
+  }
 
   return grad;
 }

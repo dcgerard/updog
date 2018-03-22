@@ -5,7 +5,7 @@
 \title{Gradient for \code{\link{obj_for_eps}}.}
 \usage{
 grad_for_eps(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq,
-  var_seq, wmat)
+  var_seq, wmat, update_bias = TRUE, update_seq = TRUE, update_od = TRUE)
 }
 \arguments{
 \item{parvec}{A vector of length three. The first element is the sequencing
@@ -28,6 +28,15 @@ is the overdispersion parameter.}
 
 \item{wmat}{The matrix of (variational) posterior probabilities for each dosage.
 The rows index the individuals and the columns index the dosage levels.}
+
+\item{update_bias}{A logical. This is not used in \code{obj_for_eps},
+but sets the second element to \code{0.0} in \code{\link{grad_for_eps}}.}
+
+\item{update_seq}{A logical. This is not used in \code{obj_for_eps},
+but sets the first element to \code{0.0} in \code{\link{grad_for_eps}}.}
+
+\item{update_od}{A logical. This is not used in \code{obj_for_eps},
+but sets the third element to \code{0.0} in \code{\link{grad_for_eps}}.}
 }
 \description{
 Gradient for \code{\link{obj_for_eps}}.

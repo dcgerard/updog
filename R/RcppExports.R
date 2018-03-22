@@ -359,8 +359,8 @@ dlbeta_deps <- function(x, n, p, eps, h, tau) {
 #' @inheritParams obj_for_eps
 #'
 #' @author David Gerard
-grad_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat) {
-    .Call('_mupdog_grad_for_eps', PACKAGE = 'mupdog', parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat)
+grad_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat, update_bias = TRUE, update_seq = TRUE, update_od = TRUE) {
+    .Call('_mupdog_grad_for_eps', PACKAGE = 'mupdog', parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat, update_bias, update_seq, update_od)
 }
 
 #' Variational posterior probability of having \code{dosage} A alleles
@@ -495,10 +495,16 @@ obj_for_alpha <- function(mu, sigma2, alpha, rho, log_bb_dense, ploidy) {
 #' @param var_seq The prior variance of the logit sequencing error rate.
 #' @param wmat The matrix of (variational) posterior probabilities for each dosage.
 #'     The rows index the individuals and the columns index the dosage levels.
+#' @param update_seq A logical. This is not used in \code{obj_for_eps},
+#'     but sets the first element to \code{0.0} in \code{\link{grad_for_eps}}.
+#' @param update_bias A logical. This is not used in \code{obj_for_eps},
+#'     but sets the second element to \code{0.0} in \code{\link{grad_for_eps}}.
+#' @param update_od A logical. This is not used in \code{obj_for_eps},
+#'     but sets the third element to \code{0.0} in \code{\link{grad_for_eps}}.
 #'
 #' @author David Gerard
-obj_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat) {
-    .Call('_mupdog_obj_for_eps', PACKAGE = 'mupdog', parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat)
+obj_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat, update_bias = TRUE, update_seq = TRUE, update_od = TRUE) {
+    .Call('_mupdog_obj_for_eps', PACKAGE = 'mupdog', parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat, update_bias, update_seq, update_od)
 }
 
 #' Objective function when updating mu and sigma2.
