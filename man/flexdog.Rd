@@ -8,7 +8,7 @@ flexdog(refvec, sizevec, ploidy, model = c("ash", "flex", "hw", "f1", "s1"),
   verbose = TRUE, mean_bias = 0, var_bias = 0.7^2, mean_seq = -4.7,
   var_seq = 1, seq = 0.005, bias = 1, od = 0.001, update_bias = TRUE,
   update_seq = TRUE, update_od = TRUE, mode = NULL, use_cvxr = FALSE,
-  itermax = 200, tol = 10^-4)
+  itermax = 200, tol = 10^-4, fs1_alpha = 10^-3)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads with the reference allele.}
@@ -72,6 +72,13 @@ run (if \code{model = "flex"}, \code{model = "hw"},
 \item{tol}{The tolerance stopping criterion. The EM algorithm will stop
 if the difference in the log-likelihoods between two consecutive
 iterations is less than \code{tol}.}
+
+\item{fs1_alpha}{Either \code{"optim"} or the value at which to fix
+the mixing proportion when \code{model = "f1"} or
+\code{model = "s1"}. If \code{optim}, then we optimize over
+the mixing proportion each iteration with possible values between
+\code{10^-8} and \code{10^-3}. If you fix it, I would recommend some small
+value such at \code{10^-3}.}
 }
 \value{
 An object of class \code{flexdog}, which consists

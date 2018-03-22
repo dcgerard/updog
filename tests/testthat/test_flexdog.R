@@ -103,3 +103,28 @@ test_that("don't update bias, seq, od when supposed not to", {
                   verbose = FALSE)
   expect_equal(fout$od, 0.01)
 })
+
+test_that("fs1_alpha works", {
+  refvec  <- 1:20
+  sizevec <- 40:21
+  ploidy  <- 4
+  fout1 <- flexdog(refvec = refvec,
+                   sizevec = sizevec,
+                   ploidy = ploidy,
+                   model = "s1",
+                   fs1_alpha = 10^-4,
+                   verbose = FALSE)
+  expect_error(
+    fout2 <- flexdog(refvec = refvec,
+                     sizevec = sizevec,
+                     ploidy = ploidy,
+                     model = "s1",
+                     fs1_alpha = "picard",
+                     verbose = FALSE)
+  )
+
+
+  expect_equal(fout1$par$alpha, 10^-4)
+
+
+})

@@ -56,6 +56,12 @@
 #'     (\code{TRUE}), or not (\code{FALSE})?
 #' @param update_od A logical. Should we update \code{od}
 #'     (\code{TRUE}), or not (\code{FALSE})?
+#' @param fs1_alpha Either \code{"optim"} or the value at which to fix
+#'     the mixing proportion when \code{model = "f1"} or
+#'     \code{model = "s1"}. If \code{optim}, then we optimize over
+#'     the mixing proportion each iteration with possible values between
+#'     \code{10^-8} and \code{10^-3}. If you fix it, I would recommend some small
+#'     value such at \code{10^-3}.
 #'
 #' @return An object of class \code{flexdog}, which consists
 #'     of a list with some or all of the following elements:
@@ -114,7 +120,8 @@ flexdog <- function(refvec,
                     mode        = NULL,
                     use_cvxr    = FALSE,
                     itermax     = 200,
-                    tol         = 10^-4) {
+                    tol         = 10 ^ -4,
+                    fs1_alpha   = 10 ^ -3) {
 
   ## Check input -----------------------------------------------------
   model <- match.arg(model)
@@ -140,6 +147,16 @@ flexdog <- function(refvec,
   assertthat::assert_that(is.logical(update_bias))
   assertthat::assert_that(is.logical(update_seq))
   assertthat::assert_that(is.logical(update_od))
+
+  ## check fs1_alpha -----------------------------------------------
+  if (is.numeric(fs1_alpha)) {
+    assertthat::are_equal(length(fs1_alpha), 1)
+    assertthat::assert_that(fs1_alpha <= 1, fs1_alpha >= 0)
+  } else {
+    if (fs1_alpha != "optim") {
+      stop("flexdog: fs1_alpha either needs to be 'optim' or a numeric between 0 and 1.")
+    }
+  }
 
   ## check and set mode under various models -----------------------
   if (!is.null(mode) & model == "flex") {
@@ -206,7 +223,8 @@ flexdog <- function(refvec,
       control$inner_weights <- get_inner_weights(ploidy = ploidy, mode = mode)
       control$use_cvxr      <- use_cvxr
     } else if (model == "f1" | model == "s1") {
-      control$qarray <- updog::get_q_array(ploidy = ploidy)
+      control$qarray    <- updog::get_q_array(ploidy = ploidy)
+      control$fs1_alpha <- fs1_alpha
     }
 
     ## Initialize pivec so that two modes have equal prob if model = "ash".
@@ -515,14 +533,22 @@ flex_update_pivec <- function(weight_vec, model = c("ash", "flex", "hw", "f1", "
     for (i in 0:ploidy) { ## parent 1
       for (j in 0:ploidy) { ## parent 2
         pvec <- control$qarray[i + 1, j + 1, ]
-        optim_out <- stats::optim(par = 0.01,
-                                  fn = f1_obj,
-                                  method = "Brent",
-                                  control = list(fnscale = -1),
-                                  upper = 0.001,
-                                  lower = 10 ^ -8,
-                                  pvec = pvec,
-                                  weight_vec = weight_vec)
+        if (control$fs1_alpha == "optim") {
+          optim_out <- stats::optim(par = 0.01,
+                                    fn = f1_obj,
+                                    method = "Brent",
+                                    control = list(fnscale = -1),
+                                    upper = 0.001,
+                                    lower = 10 ^ -8,
+                                    pvec = pvec,
+                                    weight_vec = weight_vec)
+        } else {
+          optim_out <- list()
+          optim_out$value <- f1_obj(alpha = control$fs1_alpha,
+                                    pvec = pvec,
+                                    weight_vec = weight_vec)
+          optim_out$par   <- control$fs1_alpha
+        }
         if (optim_out$value > optim_best$value) {
           optim_best <- optim_out
           optim_best$ell1 <- i
@@ -541,14 +567,22 @@ flex_update_pivec <- function(weight_vec, model = c("ash", "flex", "hw", "f1", "
     optim_best$value <- -Inf
     for (i in 0:ploidy) { ## parent
       pvec <- control$qarray[i + 1, i + 1, ]
-      optim_out <- stats::optim(par = 0.01,
-                                fn = f1_obj,
-                                method = "Brent",
-                                control = list(fnscale = -1),
-                                upper = 0.001,
-                                lower = 10 ^ -8,
-                                pvec = pvec,
-                                weight_vec = weight_vec)
+      if (control$fs1_alpha == "optim") {
+        optim_out <- stats::optim(par = 0.01,
+                                  fn = f1_obj,
+                                  method = "Brent",
+                                  control = list(fnscale = -1),
+                                  upper = 0.001,
+                                  lower = 10 ^ -8,
+                                  pvec = pvec,
+                                  weight_vec = weight_vec)
+      } else {
+        optim_out <- list()
+        optim_out$value <- f1_obj(alpha = control$fs1_alpha,
+                                  pvec = pvec,
+                                  weight_vec = weight_vec)
+        optim_out$par   <- control$fs1_alpha
+      }
       if (optim_out$value > optim_best$value) {
         optim_best <- optim_out
         optim_best$ell <- i
