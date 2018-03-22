@@ -62,6 +62,14 @@
 #'     the mixing proportion each iteration with possible values between
 #'     \code{10^-8} and \code{10^-3}. If you fix it, I would recommend some small
 #'     value such at \code{10^-3}.
+#' @param p1ref The reference counts for the first parent if
+#'     \code{model = "f1"}, or for the only parent if \code{model = "s1"}.
+#' @param p1size The total counts for the first parent if
+#'     \code{model = "f1"}, or for the only parent if \code{model = "s1"}.
+#' @param p2ref The reference counts for the second parent if
+#'     \code{model = "f1"}.
+#' @param p2size The total counts for the second parent if
+#'     \code{model = "f1"}.
 #'
 #' @return An object of class \code{flexdog}, which consists
 #'     of a list with some or all of the following elements:
@@ -121,7 +129,11 @@ flexdog <- function(refvec,
                     use_cvxr    = FALSE,
                     itermax     = 200,
                     tol         = 10 ^ -4,
-                    fs1_alpha   = 10 ^ -3) {
+                    fs1_alpha   = 10 ^ -3,
+                    p1ref       = NULL,
+                    p1size      = NULL,
+                    p2ref       = NULL,
+                    p2size      = NULL) {
 
   ## Check input -----------------------------------------------------
   model <- match.arg(model)
@@ -156,6 +168,26 @@ flexdog <- function(refvec,
     if (fs1_alpha != "optim") {
       stop("flexdog: fs1_alpha either needs to be 'optim' or a numeric between 0 and 1.")
     }
+  }
+
+  ## Check p1ref, p2ref, p1size, p2size ----------------------------
+  if ((!is.null(p1ref) | !is.null(p1size)) & (model != "f1" & model != "s1")) {
+    stop("flexdog: if model is not 'f1' or 's1', then p1ref and p1size both need to be NULL.")
+  }
+  if ((!is.null(p2ref) | !is.null(p2size)) & (model != "f1")) {
+    stop("flexdog: if model is not 'f1', then p2ref and p2size both need to be NULL.")
+  }
+  if ((is.null(p1ref) & !is.null(p1size)) | (!is.null(p1ref) & is.null(p1size))) {
+    stop("flexdog: p1ref and p1size either need to be both NULL or both non-NULL.")
+  }
+  if ((is.null(p2ref) & !is.null(p2size)) | (!is.null(p2ref) & is.null(p2size))) {
+    stop("flexdog: p1ref and p1size either need to be both NULL or both non-NULL.")
+  }
+  if (!is.null(p1ref)) {
+    assertthat::assert_that(p1ref >= 0, p1size >= p1ref)
+  }
+  if (!is.null(p2ref)) {
+    assertthat::assert_that(p2ref >= 0, p2size >= p2ref)
   }
 
   ## check and set mode under various models -----------------------
@@ -271,6 +303,37 @@ flexdog <- function(refvec,
       seq  <- oout$par[1]
       bias <- oout$par[2]
       od   <- oout$par[3]
+
+      ## if F1 or S1, update betabinomial log-likelihood of parent counts
+      if (model == "f1") {
+        if (!is.null(p1ref)) {
+          xi_vec <- xi_fun(p = 0:ploidy / ploidy, eps = seq, h = bias)
+          control$p1_lbb <- dbetabinom(x    = rep(p1ref, ploidy + 1),
+                                       size = rep(p1size, ploidy + 1),
+                                       mu   = xi_vec,
+                                       rho  = od,
+                                       log  = TRUE)
+        }
+        if (!is.null(p2ref)) {
+          xi_vec <- xi_fun(p = 0:ploidy / ploidy, eps = seq, h = bias)
+          control$p2_lbb <- dbetabinom(x    = rep(p2ref, ploidy + 1),
+                                       size = rep(p2size, ploidy + 1),
+                                       mu   = xi_vec,
+                                       rho  = od,
+                                       log  = TRUE)
+        }
+      } else if (model == "s1") {
+        if (!is.null(p1ref)) {
+          xi_vec <- xi_fun(p = 0:ploidy / ploidy, eps = seq, h = bias)
+          control$p1_lbb <- dbetabinom(x    = rep(p1ref, ploidy + 1),
+                                       size = rep(p1size, ploidy + 1),
+                                       mu   = xi_vec,
+                                       rho  = od,
+                                       log  = TRUE)
+        }
+      } else {
+        ## do nothing
+      }
 
       ## Update pivec ----------------
       weight_vec <- colSums(wik_mat)
@@ -549,6 +612,12 @@ flex_update_pivec <- function(weight_vec, model = c("ash", "flex", "hw", "f1", "
                                     weight_vec = weight_vec)
           optim_out$par   <- control$fs1_alpha
         }
+        if (!is.null(control$p1_lbb)) {
+          optim_out$value <- optim_out$value + control$p1_lbb[i + 1]
+        }
+        if (!is.null(control$p2_lbb)) {
+          optim_out$value <- optim_out$value + control$p2_lbb[j + 1]
+        }
         if (optim_out$value > optim_best$value) {
           optim_best <- optim_out
           optim_best$ell1 <- i
@@ -582,6 +651,9 @@ flex_update_pivec <- function(weight_vec, model = c("ash", "flex", "hw", "f1", "
                                   pvec = pvec,
                                   weight_vec = weight_vec)
         optim_out$par   <- control$fs1_alpha
+      }
+      if (!is.null(control$p1_lbb)) {
+        optim_out$value <- optim_out$value + control$p1_lbb[i + 1]
       }
       if (optim_out$value > optim_best$value) {
         optim_best <- optim_out

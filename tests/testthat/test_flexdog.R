@@ -125,6 +125,51 @@ test_that("fs1_alpha works", {
 
 
   expect_equal(fout1$par$alpha, 10^-4)
+})
 
+test_that("actually using parent data", {
+  refvec  <- 1:20
+  sizevec <- 40:21
+  ploidy  <- 6
 
+  mcount <- 100000
+  fout1 <- flexdog(refvec = refvec,
+                   sizevec = sizevec,
+                   ploidy = ploidy,
+                   model = "s1",
+                   fs1_alpha = 10^-4,
+                   verbose = FALSE,
+                   p1ref = mcount / ploidy,
+                   p1size = mcount,
+                   update_bias = FALSE,
+                   update_od = FALSE,
+                   update_seq = FALSE)
+
+  fout2 <- flexdog(refvec = refvec,
+                   sizevec = sizevec,
+                   ploidy = ploidy,
+                   model = "s1",
+                   fs1_alpha = 10^-4,
+                   verbose = FALSE,
+                   p1ref = 2 * mcount / ploidy,
+                   p1size = mcount,
+                   update_bias = FALSE,
+                   update_od = FALSE,
+                   update_seq = FALSE)
+
+  fout3 <- flexdog(refvec = refvec,
+                   sizevec = sizevec,
+                   ploidy = ploidy,
+                   model = "s1",
+                   fs1_alpha = 10^-4,
+                   verbose = FALSE,
+                   p1ref = 3 * mcount / ploidy,
+                   p1size = mcount,
+                   update_bias = FALSE,
+                   update_od = FALSE,
+                   update_seq = FALSE)
+
+  expect_equal(fout1$par$pgeno, 1)
+  expect_equal(fout2$par$pgeno, 2)
+  expect_equal(fout3$par$pgeno, 3)
 })
