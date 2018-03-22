@@ -26,7 +26,8 @@ flexdog_obj(probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_bias,
 
 \item{var_bias}{The prior variance of the log-bias.}
 
-\item{mean_seq}{The prior mean of the logit of the sequencing error rate.}
+\item{mean_seq}{The prior mean of the logit of the sequencing
+error rate.}
 
 \item{var_seq}{The prior variance of the logit of the sequencing
 error rate.}

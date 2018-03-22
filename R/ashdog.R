@@ -6,8 +6,10 @@
 #' This function will genotype polyploid individuals from next generation
 #' sequencing (NGS) data while assuming the genotype distribution is either
 #' unimodal (\code{model = "ash"}), generically any categorical
-#' distribution (\code{model = "flex"}), or Binomial as a result of assuming
-#' the population is in Hardy-Weinberg equlibrium (\code{model = "hw"}).
+#' distribution (\code{model = "flex"}), Binomial as a result of assuming
+#' the population is in Hardy-Weinberg equlibrium (\code{model = "hw"}),
+#' or results from the individuals being siblings from either an F1 cross
+#' \code{model = "f1"} or an S1 cross \code{model = "s1"}.
 #' It does this while accounting for
 #' allele bias, overdispersion, and sequencing error.
 #'
@@ -16,13 +18,17 @@
 #' @param ploidy The ploidy of the species.
 #' @param model What form should the prior take? Should the genotype
 #'     distribution be unimodal (\code{"ash"}), generically
-#'     any categorical distribution (\code{"flex"}), or binomial as a
-#'     result of assuming Hardy-Weinberg equilibrium (\code{"hw"})?
+#'     any categorical distribution (\code{"flex"}), binomial as a
+#'     result of assuming Hardy-Weinberg equilibrium (\code{"hw"}),
+#'     or a convolution of hypergeometics as a result that the population
+#'     consists of either an F1 cross (\code{"f1"}) or an S1
+#'     cross (\code{"s1"})?
 #' @param verbose Should we output more (\code{TRUE}) or less
 #'     (\code{FALSE})?
 #' @param mean_bias The prior mean of the log-bias.
 #' @param var_bias The prior variance of the log-bias.
-#' @param mean_seq The prior mean of the logit of the sequencing error rate.
+#' @param mean_seq The prior mean of the logit of the sequencing
+#'     error rate.
 #' @param var_seq The prior variance of the logit of the sequencing
 #'     error rate.
 #' @param seq The starting value of the sequencing error rate.
@@ -30,15 +36,19 @@
 #' @param od The starting value of the overdispersion parameter.
 #' @param mode The mode if \code{model = "ash"}. If not provided,
 #'     \code{flexdog} will estimate the mode. This is the starting point of
-#'     the allele frequency if \code{model = "hw"}.
+#'     the allele frequency if \code{model = "hw"}. This should be
+#'     \code{NULL} for all other options of \code{model}.
 #' @param itermax The maximum number of EM iterations to run for each mode
 #'     (if \code{model = "ash"}) or the total number of EM iterations to
-#'     run (if \code{model = "flex"} or \code{model = "hw"}).
+#'     run (if \code{model = "flex"}, \code{model = "hw"},
+#'     \code{model = "f1"}, or \code{model = "s1"}).
 #' @param tol The tolerance stopping criterion. The EM algorithm will stop
 #'     if the difference in the log-likelihoods between two consecutive
 #'     iterations is less than \code{tol}.
-#' @param use_cvxr A logical. If \code{model = "ash"}, then do you want to use the EM algorithm
-#'     (\code{FALSE}) or a convex optimization program using the package CVXR \code{TRUE}?
+#' @param use_cvxr A logical. If \code{model = "ash"}, then do you want
+#'     to use the EM algorithm
+#'     (\code{FALSE}) or a convex optimization program using
+#'     the package CVXR \code{TRUE}?
 #'     Only available if CVXR is installed.
 #'
 #' @return An object of class \code{flexdog}, which consists
@@ -47,19 +57,34 @@
 #'   \item{\code{bias}}{The estimated bias parameter.}
 #'   \item{\code{seq}}{The estimated sequencing error rate.}
 #'   \item{\code{od}}{The estimated overdispersion parameter.}
-#'   \item{\code{num_iter}}{The number of EM iterations ran. You should be wary if this equals \code{itermax}.}
+#'   \item{\code{num_iter}}{The number of EM iterations ran. You should
+#'       be wary if this equals \code{itermax}.}
 #'   \item{\code{llike}}{The maximum marginal log-likelihood.}
-#'   \item{\code{postmat}}{A matrix of posterior probabilities of each genotype for each individual. The rows index the individuals and the columns index the allele dosage.}
-#'   \item{\code{gene_dist}}{The estimated genotype distribution. The \code{i}th element is the proportion of individuals with genotype \code{i-1}.}
-#'   \item{\code{par}}{A list of the final estimates of the parameters of the genotype distribution.}
+#'   \item{\code{postmat}}{A matrix of posterior probabilities of each
+#'       genotype for each individual. The rows index the individuals
+#'       and the columns index the allele dosage.}
+#'   \item{\code{gene_dist}}{The estimated genotype distribution. The
+#'       \code{i}th element is the proportion of individuals with
+#'       genotype \code{i-1}.}
+#'   \item{\code{par}}{A list of the final estimates of the parameters
+#'       of the genotype distribution. If \code{model = "hw"} then
+#'       this will consist of \code{alpha}, the allele frequency.
+#'       If \code{model = "f1"} or \code{model = "s1"} then this will
+#'       consist of the parent genotype(s) and the mixing proportion
+#'       with the discrete uniform (also called \code{alpha}).}
 #'   \item{\code{geno}}{The posterior mode genotype.}
 #'   \item{\code{maxpostprob}}{The maximum posterior probability.}
 #'   \item{\code{postmean}}{The posterior mean genotype.}
-#'   \item{\code{input$refvec}}{The value of \code{refvec} provided by the user.}
-#'   \item{\code{input$sizevec}}{The value of \code{sizevec} provided by the user.}
-#'   \item{\code{input$ploidy}}{The value of \code{ploidy} provided by the user.}
-#'   \item{\code{input$model}}{The value of \code{model} provided by the user.}
-#'   \item{\code{prop_mis}}{The posterior proportion of individuals misclassified.}
+#'   \item{\code{input$refvec}}{The value of \code{refvec} provided by
+#'       the user.}
+#'   \item{\code{input$sizevec}}{The value of \code{sizevec} provided
+#'       by the user.}
+#'   \item{\code{input$ploidy}}{The value of \code{ploidy} provided
+#'       by the user.}
+#'   \item{\code{input$model}}{The value of \code{model} provided by
+#'       the user.}
+#'   \item{\code{prop_mis}}{The posterior proportion of individuals
+#'       misclassified.}
 #' }
 #'
 #' @author David Gerard
@@ -68,7 +93,7 @@
 flexdog <- function(refvec,
                     sizevec,
                     ploidy,
-                    model     = c("ash", "flex", "hw"),
+                    model     = c("ash", "flex", "hw", "f1", "s1"),
                     verbose   = TRUE,
                     mean_bias = 0,
                     var_bias  = 0.7 ^ 2,
@@ -108,6 +133,10 @@ flexdog <- function(refvec,
     stop('flexdog: `model` cannot equal `"flex"` when `mode` is specified.')
   } else if (is.null(mode) & model == "flex") {
     mode_vec <- 0
+  } else if (!is.null(mode) & (model == "f1" | model == "s1")) {
+    stop('flexdog: `model` cannot equal `"f1" or "s1"` when `mode` is specified.')
+  } else if (is.null(mode) & (model == "f1" | model == "s1")) {
+    mode_vec <- mean(refvec / sizevec, na.rm = TRUE) ## just to initialize pivec
   } else if (!is.null(mode) & model == "ash") {
     assertthat::are_equal(length(mode), 1)
     mode_vec <- mode
@@ -147,6 +176,8 @@ flexdog <- function(refvec,
     if (model == "ash") {
       control$inner_weights <- get_inner_weights(ploidy = ploidy, mode = mode)
       control$use_cvxr      <- use_cvxr
+    } else if (model == "f1" | model == "s1") {
+      control$qarray <- updog::get_q_array(ploidy = ploidy)
     }
 
     ## Initialize pivec so that two modes have equal prob if model = "ash".
@@ -345,7 +376,7 @@ is.flexdog <- function(x) {
 #' @seealso \code{\link{flexdog}} for where this is used.
 #'
 #' @author David Gerard
-initialize_pivec <- function(ploidy, mode, model = c("ash", "flex", "hw")) {
+initialize_pivec <- function(ploidy, mode, model = c("ash", "flex", "hw", "f1", "s1")) {
   assertthat::are_equal(1, length(ploidy), length(mode))
   assertthat::are_equal(ploidy %% 1, 0)
 
@@ -372,7 +403,7 @@ initialize_pivec <- function(ploidy, mode, model = c("ash", "flex", "hw")) {
       pivec <- get_uni_rep(pvec_init)$pivec + 10 ^-6
       pivec <- pivec / sum(pivec)
     }
-  } else if (model == "hw") {
+  } else if (model == "hw" | model == "f1" | model == "s1") {
     if (mode < 0 | mode > 1) {
       stop('initialize_pivec: when model = "hw", mode should be between 0 and 1.\n It is the initialization of the allele frequency.')
     }
@@ -402,7 +433,7 @@ initialize_pivec <- function(ploidy, mode, model = c("ash", "flex", "hw")) {
 #' }
 #'
 #' @author David Gerard
-flex_update_pivec <- function(weight_vec, model = c("ash", "flex", "hw"), control) {
+flex_update_pivec <- function(weight_vec, model = c("ash", "flex", "hw", "f1", "s1"), control) {
   ## Check input -------------------------------
   ploidy <- length(weight_vec) - 1
   model <- match.arg(model)
@@ -446,6 +477,56 @@ flex_update_pivec <- function(weight_vec, model = c("ash", "flex", "hw"), contro
     return_list$pivec     <- pivec
     return_list$par       <- list()
     return_list$par$alpha <- alpha
+  } else if (model == "f1") {
+    optim_best       <- list()
+    optim_best$value <- -Inf
+    for (i in 0:ploidy) { ## parent 1
+      for (j in 0:ploidy) { ## parent 2
+        pvec <- control$qarray[i + 1, j + 1, ]
+        optim_out <- stats::optim(par = 0.01,
+                                  fn = f1_obj,
+                                  method = "Brent",
+                                  control = list(fnscale = -1),
+                                  upper = 0.001,
+                                  lower = 10 ^ -8,
+                                  pvec = pvec,
+                                  weight_vec = weight_vec)
+        if (optim_out$value > optim_best$value) {
+          optim_best <- optim_out
+          optim_best$ell1 <- i
+          optim_best$ell2 <- j
+        }
+      }
+    }
+    return_list$pivec <- (1 - optim_best$par) * control$qarray[optim_best$ell1 + 1, optim_best$ell2 + 1, ] +
+      optim_best$par / (ploidy + 1)
+    return_list$par <- list()
+    return_list$par$p1geno <- optim_best$ell1
+    return_list$par$p2geno <- optim_best$ell2
+    return_list$par$alpha  <- optim_best$par
+  } else if (model == "s1") {
+    optim_best       <- list()
+    optim_best$value <- -Inf
+    for (i in 0:ploidy) { ## parent
+      pvec <- control$qarray[i + 1, i + 1, ]
+      optim_out <- stats::optim(par = 0.01,
+                                fn = f1_obj,
+                                method = "Brent",
+                                control = list(fnscale = -1),
+                                upper = 0.001,
+                                lower = 10 ^ -8,
+                                pvec = pvec,
+                                weight_vec = weight_vec)
+      if (optim_out$value > optim_best$value) {
+        optim_best <- optim_out
+        optim_best$ell <- i
+      }
+    }
+    return_list$pivec <- (1 - optim_best$par) * control$qarray[optim_best$ell + 1, optim_best$ell + 1, ] +
+      optim_best$par / (ploidy + 1)
+    return_list$par <- list()
+    return_list$par$pgeno <- optim_best$ell
+    return_list$par$alpha  <- optim_best$par
   } else {
     stop("flex_update_pivec: how did you get here?")
   }

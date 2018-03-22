@@ -4,7 +4,8 @@
 \alias{flex_update_pivec}
 \title{Update the distribution of genotypes from various models.}
 \usage{
-flex_update_pivec(weight_vec, model = c("ash", "flex", "hw"), control)
+flex_update_pivec(weight_vec, model = c("ash", "flex", "hw", "f1", "s1"),
+  control)
 }
 \arguments{
 \item{weight_vec}{\code{colSums(wik_mat)} from \code{\link{flexdog}}.

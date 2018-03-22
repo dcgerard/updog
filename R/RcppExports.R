@@ -184,6 +184,19 @@ uni_em <- function(weight_vec, lmat, pi_init, lambda, itermax, obj_tol) {
     .Call('_mupdog_uni_em', PACKAGE = 'mupdog', weight_vec, lmat, pi_init, lambda, itermax, obj_tol)
 }
 
+#' Objective for mixture of known dist and uniform dist.
+#'
+#' @param alpha The mixing weight.
+#' @param pvec The known distribtuion (e.g. from assuming an
+#'     F1 population).
+#' @param weight_vec A vector of weights.
+#'
+#' @author David Gerard
+#'
+f1_obj <- function(alpha, pvec, weight_vec) {
+    .Call('_mupdog_f1_obj', PACKAGE = 'mupdog', alpha, pvec, weight_vec)
+}
+
 #' Gradient for \code{\link{obj_for_mu_sigma2}} with respect for \code{mu} and \code{sigma2}.
 #'
 #' @inheritParams obj_for_mu_sigma2

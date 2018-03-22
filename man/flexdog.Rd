@@ -4,7 +4,7 @@
 \alias{flexdog}
 \title{Flexible updog}
 \usage{
-flexdog(refvec, sizevec, ploidy, model = c("ash", "flex", "hw"),
+flexdog(refvec, sizevec, ploidy, model = c("ash", "flex", "hw", "f1", "s1"),
   verbose = TRUE, mean_bias = 0, var_bias = 0.7^2, mean_seq = -4.7,
   var_seq = 1, seq = 0.005, bias = 1, od = 0.001, mode = NULL,
   use_cvxr = FALSE, itermax = 200, tol = 10^-4)
@@ -18,8 +18,11 @@ flexdog(refvec, sizevec, ploidy, model = c("ash", "flex", "hw"),
 
 \item{model}{What form should the prior take? Should the genotype
 distribution be unimodal (\code{"ash"}), generically
-any categorical distribution (\code{"flex"}), or binomial as a
-result of assuming Hardy-Weinberg equilibrium (\code{"hw"})?}
+any categorical distribution (\code{"flex"}), binomial as a
+result of assuming Hardy-Weinberg equilibrium (\code{"hw"}),
+or a convolution of hypergeometics as a result that the population
+consists of either an F1 cross (\code{"f1"}) or an S1
+cross (\code{"s1"})?}
 
 \item{verbose}{Should we output more (\code{TRUE}) or less
 (\code{FALSE})?}
@@ -28,7 +31,8 @@ result of assuming Hardy-Weinberg equilibrium (\code{"hw"})?}
 
 \item{var_bias}{The prior variance of the log-bias.}
 
-\item{mean_seq}{The prior mean of the logit of the sequencing error rate.}
+\item{mean_seq}{The prior mean of the logit of the sequencing
+error rate.}
 
 \item{var_seq}{The prior variance of the logit of the sequencing
 error rate.}
@@ -41,15 +45,19 @@ error rate.}
 
 \item{mode}{The mode if \code{model = "ash"}. If not provided,
 \code{flexdog} will estimate the mode. This is the starting point of
-the allele frequency if \code{model = "hw"}.}
+the allele frequency if \code{model = "hw"}. This should be
+\code{NULL} for all other options of \code{model}.}
 
-\item{use_cvxr}{A logical. If \code{model = "ash"}, then do you want to use the EM algorithm
-(\code{FALSE}) or a convex optimization program using the package CVXR \code{TRUE}?
+\item{use_cvxr}{A logical. If \code{model = "ash"}, then do you want
+to use the EM algorithm
+(\code{FALSE}) or a convex optimization program using
+the package CVXR \code{TRUE}?
 Only available if CVXR is installed.}
 
 \item{itermax}{The maximum number of EM iterations to run for each mode
 (if \code{model = "ash"}) or the total number of EM iterations to
-run (if \code{model = "flex"} or \code{model = "hw"}).}
+run (if \code{model = "flex"}, \code{model = "hw"},
+\code{model = "f1"}, or \code{model = "s1"}).}
 
 \item{tol}{The tolerance stopping criterion. The EM algorithm will stop
 if the difference in the log-likelihoods between two consecutive
@@ -62,27 +70,44 @@ An object of class \code{flexdog}, which consists
   \item{\code{bias}}{The estimated bias parameter.}
   \item{\code{seq}}{The estimated sequencing error rate.}
   \item{\code{od}}{The estimated overdispersion parameter.}
-  \item{\code{num_iter}}{The number of EM iterations ran. You should be wary if this equals \code{itermax}.}
+  \item{\code{num_iter}}{The number of EM iterations ran. You should
+      be wary if this equals \code{itermax}.}
   \item{\code{llike}}{The maximum marginal log-likelihood.}
-  \item{\code{postmat}}{A matrix of posterior probabilities of each genotype for each individual. The rows index the individuals and the columns index the allele dosage.}
-  \item{\code{gene_dist}}{The estimated genotype distribution. The \code{i}th element is the proportion of individuals with genotype \code{i-1}.}
-  \item{\code{par}}{A list of the final estimates of the parameters of the genotype distribution.}
+  \item{\code{postmat}}{A matrix of posterior probabilities of each
+      genotype for each individual. The rows index the individuals
+      and the columns index the allele dosage.}
+  \item{\code{gene_dist}}{The estimated genotype distribution. The
+      \code{i}th element is the proportion of individuals with
+      genotype \code{i-1}.}
+  \item{\code{par}}{A list of the final estimates of the parameters
+      of the genotype distribution. If \code{model = "hw"} then
+      this will consist of \code{alpha}, the allele frequency.
+      If \code{model = "f1"} or \code{model = "s1"} then this will
+      consist of the parent genotype(s) and the mixing proportion
+      with the discrete uniform (also called \code{alpha}).}
   \item{\code{geno}}{The posterior mode genotype.}
   \item{\code{maxpostprob}}{The maximum posterior probability.}
   \item{\code{postmean}}{The posterior mean genotype.}
-  \item{\code{input$refvec}}{The value of \code{refvec} provided by the user.}
-  \item{\code{input$sizevec}}{The value of \code{sizevec} provided by the user.}
-  \item{\code{input$ploidy}}{The value of \code{ploidy} provided by the user.}
-  \item{\code{input$model}}{The value of \code{model} provided by the user.}
-  \item{\code{prop_mis}}{The posterior proportion of individuals misclassified.}
+  \item{\code{input$refvec}}{The value of \code{refvec} provided by
+      the user.}
+  \item{\code{input$sizevec}}{The value of \code{sizevec} provided
+      by the user.}
+  \item{\code{input$ploidy}}{The value of \code{ploidy} provided
+      by the user.}
+  \item{\code{input$model}}{The value of \code{model} provided by
+      the user.}
+  \item{\code{prop_mis}}{The posterior proportion of individuals
+      misclassified.}
 }
 }
 \description{
 This function will genotype polyploid individuals from next generation
 sequencing (NGS) data while assuming the genotype distribution is either
 unimodal (\code{model = "ash"}), generically any categorical
-distribution (\code{model = "flex"}), or Binomial as a result of assuming
-the population is in Hardy-Weinberg equlibrium (\code{model = "hw"}).
+distribution (\code{model = "flex"}), Binomial as a result of assuming
+the population is in Hardy-Weinberg equlibrium (\code{model = "hw"}),
+or results from the individuals being siblings from either an F1 cross
+\code{model = "f1"} or an S1 cross \code{model = "s1"}.
 It does this while accounting for
 allele bias, overdispersion, and sequencing error.
 }

@@ -11,7 +11,8 @@ get_inner_weights(ploidy, mode)
 
 \item{mode}{The mode if \code{model = "ash"}. If not provided,
 \code{flexdog} will estimate the mode. This is the starting point of
-the allele frequency if \code{model = "hw"}.}
+the allele frequency if \code{model = "hw"}. This should be
+\code{NULL} for all other options of \code{model}.}
 }
 \description{
 The (i,k)th element is \eqn{1(k \in F(a, i)) / |F(a,i)|}.

@@ -18,10 +18,10 @@ Imports: Rcpp (>= 0.11.0),
     foreach,
     doParallel,
     updog,
-    ggplot2,
-    Rmpfr,
-    CVXR
+    ggplot2
 Suggests: covr,
     testthat,
-    SuppDists
+    SuppDists,
+    Rmpfr,
+    CVXR
 Remotes: dcgerard/updog

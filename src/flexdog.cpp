@@ -16,7 +16,7 @@
 NumericVector get_probk_vec(NumericVector pivec, std::string model, double mode) {
   int K = pivec.length() - 1;
   NumericVector probk_vec(K + 1);
-  if ((model == "flex") | (model == "hw")) {
+  if ((model == "flex") | (model == "hw") | (model == "f1") | (model == "s1")) {
     probk_vec = pivec;
   } else if (model == "ash") {
     double denom; // what you divide the pi's by.
@@ -38,7 +38,7 @@ NumericVector get_probk_vec(NumericVector pivec, std::string model, double mode)
       }
     }
   } else {
-    Rcpp::stop("get_probk_vec: model must be one of 'flex', 'ash', or 'hw'");
+    Rcpp::stop("get_probk_vec: model must be one of 'flex', 'ash', 'hw', 'f1', or 's1'");
   }
   return probk_vec;
 }
@@ -323,6 +323,36 @@ arma::vec uni_em(arma::vec weight_vec,
 }
 
 
+//' Objective for mixture of known dist and uniform dist.
+//'
+//' @param alpha The mixing weight.
+//' @param pvec The known distribtuion (e.g. from assuming an
+//'     F1 population).
+//' @param weight_vec A vector of weights.
+//'
+//' @author David Gerard
+//'
+// [[Rcpp::export]]
+double f1_obj(double alpha,
+              NumericVector pvec,
+              NumericVector weight_vec) {
 
+  // check input ----------------------------------
+  int ploidy = pvec.length() - 1;
+  if (weight_vec.length() != ploidy + 1) {
+    Rcpp::stop("f1_obj: pvec and weight_vec should be the same length.");
+  }
+  if ((alpha < 0) | (alpha > 1)) {
+    Rcpp::stop("f1_obj: alpha should be between 0 and 1.");
+  }
 
+  // get obj --------------------------------------
+  double obj = 0.0;
+  double newp;
+  for (int k = 0; k <= ploidy; k++) {
+    newp = (1.0 - alpha) * pvec(k) + alpha * (1 - pvec(k));
+    obj = obj + weight_vec(k) * std::log(newp);
+  }
+  return obj;
+}
 
