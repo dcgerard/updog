@@ -97,6 +97,7 @@
 #'     \code{model = "f1"}.
 #' @param p2size The total counts for the second parent if
 #'     \code{model = "f1"}.
+#' @param ashpen The penalty to put on the unimodal prior.
 #'
 #' @return An object of class \code{flexdog}, which consists
 #'     of a list with some or all of the following elements:
@@ -161,6 +162,7 @@ flexdog <- function(refvec,
                     itermax     = 200,
                     tol         = 10 ^ -4,
                     fs1_alpha   = 10 ^ -3,
+                    ashpen      = length(refvec) / 1000,
                     p1ref       = NULL,
                     p1size      = NULL,
                     p2ref       = NULL,
@@ -190,6 +192,7 @@ flexdog <- function(refvec,
   assertthat::assert_that(is.logical(update_bias))
   assertthat::assert_that(is.logical(update_seq))
   assertthat::assert_that(is.logical(update_od))
+  assertthat::assert_that(ashpen >= 0)
 
   ## check fs1_alpha -----------------------------------------------
   if (is.numeric(fs1_alpha)) {
@@ -285,6 +288,7 @@ flexdog <- function(refvec,
     if (model == "ash") {
       control$inner_weights <- get_inner_weights(ploidy = ploidy, mode = mode)
       control$use_cvxr      <- use_cvxr
+      control$lambda        <- ashpen
     } else if (model == "f1" | model == "s1") {
       control$qarray    <- updog::get_q_array(ploidy = ploidy)
       control$fs1_alpha <- fs1_alpha
@@ -391,6 +395,11 @@ flexdog <- function(refvec,
                            var_bias  = var_bias,
                            mean_seq  = mean_seq,
                            var_seq   = var_seq)
+
+      if (model == "ash" & !use_cvxr) { ## add small penalty if "ash"
+        llike <- llike + ashpen_fun(lambda = ashpen, pivec = pivec)
+      }
+
       err        <- abs(llike - llike_old)
       iter_index <- iter_index + 1
 
@@ -598,11 +607,11 @@ flex_update_pivec <- function(weight_vec, model = c("ash", "flex", "hw", "f1", "
     }
     if (!control$use_cvxr) {
       pivec <- uni_em(weight_vec = weight_vec,
-                      lmat = control$inner_weights,
-                      pi_init = control$pivec,
-                      itermax = 200,
-                      obj_tol = 10 ^ -4,
-                      lambda = 10^-8)
+                      lmat       = control$inner_weights,
+                      pi_init    = control$pivec,
+                      itermax    = 200,
+                      obj_tol    = 10 ^ -4,
+                      lambda     = control$lambda)
     } else if (control$use_cvxr & requireNamespace("CVXR", quietly = TRUE)) {
       cv_pi <- CVXR::Variable(1, ploidy + 1)
       obj   <- sum(t(weight_vec) * log(cv_pi %*% control$inner_weights))
@@ -749,4 +758,19 @@ get_uni_rep <- function(probvec) {
   return_list$mode = mode + 0.5
   return(return_list)
 }
+
+
+
+#' Penalty on pivec used when \code{model = "ash"} in \code{\link{flexdog}}.
+#'
+#' @param lambda The penalty.
+#' @param pivec The vector of mixing proportions for the component
+#'     discrete uniform distributions.
+#'
+#' @author David Gerard
+#'
+ashpen_fun <- function(lambda, pivec) {
+  lambda * sum(log(pivec))
+}
+
 

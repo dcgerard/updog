@@ -9,7 +9,8 @@ flexdog(refvec, sizevec, ploidy, model = c("hw", "ash", "f1", "s1", "flex",
   mean_seq = -4.7, var_seq = 1, seq = 0.005, bias = 1, od = 0.001,
   update_bias = TRUE, update_seq = TRUE, update_od = TRUE, mode = NULL,
   use_cvxr = FALSE, itermax = 200, tol = 10^-4, fs1_alpha = 10^-3,
-  p1ref = NULL, p1size = NULL, p2ref = NULL, p2size = NULL)
+  ashpen = length(refvec)/1000, p1ref = NULL, p1size = NULL,
+  p2ref = NULL, p2size = NULL)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads with the reference allele.}
@@ -82,6 +83,8 @@ the mixing proportion when \code{model = "f1"} or
 the mixing proportion each iteration with possible values between
 \code{10^-8} and \code{10^-3}. If you fix it, I would recommend some small
 value such at \code{10^-3}.}
+
+\item{ashpen}{The penalty to put on the unimodal prior.}
 
 \item{p1ref}{The reference counts for the first parent if
 \code{model = "f1"}, or for the only parent if \code{model = "s1"}.}
