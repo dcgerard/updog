@@ -1,10 +1,14 @@
 Package: mupdog
-Title: Extension of the updog Method for Genotyping Autopolyploids
-Version: 0.0.1
+Title: Extension of the Updog Method for Genotyping Autopolyploids
+Version: 0.0.2
+Date: 2018-03-23
 Authors@R: person("David", "Gerard", email = "dcgerard@uchicago.edu", role = c("aut", "cre"))
-Description: This package accounts for correlation between individuals' genotypes
-	     in the genotyping procedure by wielding information across all SNPs.
-	     This requires using a variational approximation.
+Description: This package provides a suite of functions that generalize the
+       updog approach to genotyping autopolyploids from next-generation
+       sequencing data. This includes a function
+       that accounts for the correlation between individuals' genotypes
+       (mupdog) and a function that more flexibly models the genotype 
+       distribution (flexdog).
 Depends: R (>= 3.4.0)
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
