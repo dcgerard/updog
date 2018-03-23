@@ -496,8 +496,6 @@ initialize_pivec <- function(ploidy, mode, model = c("ash", "flex", "hw", "f1", 
   model <- match.arg(model)
   if (model == "flex") {
     pivec <- rep(x = 1 / (ploidy + 1), length = ploidy + 1)
-  } else if ((mode <= 0) | (mode >= ploidy) | (mode %% 1 == 0)) {
-    pivec <- rep(x = 1 / (ploidy + 1), length = ploidy + 1)
   } else if (model == "ash") {
     init_type <- "equi"
     if (init_type == "equi") { ## equimodal
