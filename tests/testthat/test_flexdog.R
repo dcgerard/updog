@@ -29,9 +29,12 @@ test_that("flexdog works", {
   tol       = 10^-2
 
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
-                  ploidy = ploidy, model = "hw")
+                  ploidy = ploidy, model = "hw", verbose = FALSE)
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
-                  ploidy = ploidy, model = "flex")
+                  ploidy = ploidy, model = "flex", verbose = FALSE)
+  fout <- flexdog(refvec = refvec, sizevec = sizevec,
+                  ploidy = ploidy, model = "uniform", verbose = FALSE)
+  expect_equal(fout$gene_dist, rep(1 / (ploidy + 1), ploidy + 1))
   pl <- plot(fout)
 }
 )

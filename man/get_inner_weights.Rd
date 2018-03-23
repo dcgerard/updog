@@ -7,7 +7,8 @@
 get_inner_weights(ploidy, mode)
 }
 \arguments{
-\item{ploidy}{The ploidy of the species.}
+\item{ploidy}{The ploidy of the species. Assumed to be the same for each
+individual.}
 
 \item{mode}{The mode if \code{model = "ash"}. If not provided,
 \code{flexdog} will estimate the mode. This is the starting point of

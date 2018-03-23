@@ -1,28 +1,55 @@
 ## Functions for ashdog and flexdog
 
 
-#' Flexible updog
+#' Flexible genotyping for autopolyploids from next-generation sequencing data.
 #'
 #' This function will genotype polyploid individuals from next generation
 #' sequencing (NGS) data while assuming the genotype distribution is either
 #' unimodal (\code{model = "ash"}), generically any categorical
-#' distribution (\code{model = "flex"}), Binomial as a result of assuming
+#' distribution (\code{model = "flex"}), binomial as a result of assuming
 #' the population is in Hardy-Weinberg equlibrium (\code{model = "hw"}),
-#' or results from the individuals being siblings from either an F1 cross
-#' \code{model = "f1"} or an S1 cross \code{model = "s1"}.
+#' results from the individuals being siblings from either an F1 cross
+#' (\code{model = "f1"}) or an S1 cross (\code{model = "s1"}), or is a discrete
+#' uniform distribution (\code{model = "uniform"}).
 #' It does this while accounting for
 #' allele bias, overdispersion, and sequencing error.
 #'
+#' You might think a good default is \code{model = "uniform"} because it is
+#' somehow an "uninformative prior." But it is very informative and tends to
+#' work horribly in practice. I include it as an option only for completeness.
+#'
+#' You might also think that allowing the genotype distribution to be anything
+#' would work well (\code{model = "flex"}). But this tends to overfit the data
+#' and get stuck in local modes during optimization.
+#'
+#' A good default is either \code{model = "hw"}
+#' if you have a small number of individuals (say, \eqn{<500}),
+#' or \code{model = "ash"} if you have a lot of inidivuals (say, \eqn{>500}).
+#' If the individuals are all siblings, then \code{model = "f1"} or
+#' \code{model = "s1"} would work better. If the relatedness pattern between
+#' individuals is more complicated, then I might recommend trying out
+#' \code{\link{mupdog}}.
+#'
+#' Prior to using \code{flexdog}, during the read-mapping step,
+#' you could try to get rid of allelic bias by
+#' using WASP (\url{https://doi.org/10.1101/011221}). If you are successful
+#' in removing the allelic bias (because its only source was the read-mapping
+#' step), then you could set \code{update_bias = FALSE}. You can visually
+#' inspect SNPs for bias by using \code{\link[updog]{plot_geno}} from the
+#' \code{updog} package.
+#'
 #' @param refvec A vector of counts of reads with the reference allele.
 #' @param sizevec A vector of total counts.
-#' @param ploidy The ploidy of the species.
+#' @param ploidy The ploidy of the species. Assumed to be the same for each
+#'     individual.
 #' @param model What form should the prior take? Should the genotype
 #'     distribution be unimodal (\code{"ash"}), generically
 #'     any categorical distribution (\code{"flex"}), binomial as a
 #'     result of assuming Hardy-Weinberg equilibrium (\code{"hw"}),
-#'     or a convolution of hypergeometics as a result that the population
+#'     a convolution of hypergeometics as a result that the population
 #'     consists of either an F1 cross (\code{"f1"}) or an S1
-#'     cross (\code{"s1"})?
+#'     cross (\code{"s1"}), or fixed at a discrete uniform
+#'     (\code{"uniform"})?
 #' @param verbose Should we output more (\code{TRUE}) or less
 #'     (\code{FALSE})?
 #' @param mean_bias The prior mean of the log-bias.
@@ -41,7 +68,7 @@
 #' @param itermax The maximum number of EM iterations to run for each mode
 #'     (if \code{model = "ash"}) or the total number of EM iterations to
 #'     run (if \code{model = "flex"}, \code{model = "hw"},
-#'     \code{model = "f1"}, or \code{model = "s1"}).
+#'     \code{model = "f1"}, \code{model = "s1"}, or \code{model = "uniform"}).
 #' @param tol The tolerance stopping criterion. The EM algorithm will stop
 #'     if the difference in the log-likelihoods between two consecutive
 #'     iterations is less than \code{tol}.
@@ -103,6 +130,10 @@
 #'       by the user.}
 #'   \item{\code{input$model}}{The value of \code{model} provided by
 #'       the user.}
+#'   \item{\code{input$p1ref}}{The value of \code{p1ref} provided by the user.}
+#'   \item{\code{input$p1size}}{The value of \code{p1size} provided by the user.}
+#'   \item{\code{input$p2ref}}{The value of \code{p2ref} provided by the user.}
+#'   \item{\code{input$p2size}}{The value of \code{p2size} provided by the user.}
 #'   \item{\code{prop_mis}}{The posterior proportion of individuals
 #'       misclassified.}
 #' }
@@ -113,7 +144,7 @@
 flexdog <- function(refvec,
                     sizevec,
                     ploidy,
-                    model       = c("ash", "flex", "hw", "f1", "s1"),
+                    model       = c("hw", "ash", "f1", "s1", "flex", "uniform"),
                     verbose     = TRUE,
                     mean_bias   = 0,
                     var_bias    = 0.7 ^ 2,
@@ -195,9 +226,9 @@ flexdog <- function(refvec,
     stop('flexdog: `model` cannot equal `"flex"` when `mode` is specified.')
   } else if (is.null(mode) & model == "flex") {
     mode_vec <- 0
-  } else if (!is.null(mode) & (model == "f1" | model == "s1")) {
+  } else if (!is.null(mode) & (model == "f1" | model == "s1" | model == "uniform")) {
     stop('flexdog: `model` cannot equal `"f1" or "s1"` when `mode` is specified.')
-  } else if (is.null(mode) & (model == "f1" | model == "s1")) {
+  } else if (is.null(mode) & (model == "f1" | model == "s1" | model == "uniform")) {
     mode_vec <- mean(refvec / sizevec, na.rm = TRUE) ## just to initialize pivec
   } else if (!is.null(mode) & model == "ash") {
     assertthat::are_equal(length(mode), 1)
@@ -401,6 +432,10 @@ flexdog <- function(refvec,
   return_list$input$sizevec <- sizevec
   return_list$input$ploidy  <- ploidy
   return_list$input$model   <- model
+  return_list$input$p1ref   <- p1ref
+  return_list$input$p1size  <- p1size
+  return_list$input$p2ref   <- p2ref
+  return_list$input$p2size  <- p2size
   return_list$prop_mis      <- 1 - mean(return_list$maxpostprob)
 
 
@@ -461,7 +496,7 @@ plot.flexdog <- function(x, ...) {
                          seq_error = x$seq,
                          bias_val  = x$bias,
                          prob_ok   = x$maxpostprob) +
-    ggplot2::guides(alpha=ggplot2::guide_legend(title="maxpostprob"))
+    ggplot2::guides(alpha=ggplot2::guide_legend(title = "maxpostprob"))
   return(pl)
 }
 
@@ -489,12 +524,12 @@ is.flexdog <- function(x) {
 #' @seealso \code{\link{flexdog}} for where this is used.
 #'
 #' @author David Gerard
-initialize_pivec <- function(ploidy, mode, model = c("ash", "flex", "hw", "f1", "s1")) {
+initialize_pivec <- function(ploidy, mode, model = c("ash", "flex", "hw", "f1", "s1", "uniform")) {
   assertthat::are_equal(1, length(ploidy), length(mode))
   assertthat::are_equal(ploidy %% 1, 0)
 
   model <- match.arg(model)
-  if (model == "flex") {
+  if (model == "flex" | model == "uniform") {
     pivec <- rep(x = 1 / (ploidy + 1), length = ploidy + 1)
   } else if (model == "ash") {
     init_type <- "equi"
@@ -544,7 +579,7 @@ initialize_pivec <- function(ploidy, mode, model = c("ash", "flex", "hw", "f1", 
 #' }
 #'
 #' @author David Gerard
-flex_update_pivec <- function(weight_vec, model = c("ash", "flex", "hw", "f1", "s1"), control) {
+flex_update_pivec <- function(weight_vec, model = c("ash", "flex", "hw", "f1", "s1", "uniform"), control) {
   ## Check input -------------------------------
   ploidy <- length(weight_vec) - 1
   model <- match.arg(model)
@@ -663,6 +698,9 @@ flex_update_pivec <- function(weight_vec, model = c("ash", "flex", "hw", "f1", "
     return_list$par <- list()
     return_list$par$pgeno <- optim_best$ell
     return_list$par$alpha  <- optim_best$par
+  } else if (model == "uniform") {
+    return_list$pivec <- rep(x = 1 / (ploidy + 1), length = ploidy + 1)
+    return_list$par <- list()
   } else {
     stop("flex_update_pivec: how did you get here?")
   }

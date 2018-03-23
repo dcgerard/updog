@@ -4,10 +4,12 @@
 \alias{initialize_pivec}
 \title{Initialize \code{pivec} for \code{\link{flexdog}} EM algorithm.}
 \usage{
-initialize_pivec(ploidy, mode, model = c("ash", "flex", "hw", "f1", "s1"))
+initialize_pivec(ploidy, mode, model = c("ash", "flex", "hw", "f1", "s1",
+  "uniform"))
 }
 \arguments{
-\item{ploidy}{The ploidy of the species.}
+\item{ploidy}{The ploidy of the species. Assumed to be the same for each
+individual.}
 
 \item{mode}{The mode if \code{model = "ash"}. If not provided,
 \code{flexdog} will estimate the mode. This is the starting point of
@@ -18,9 +20,10 @@ the allele frequency if \code{model = "hw"}. This should be
 distribution be unimodal (\code{"ash"}), generically
 any categorical distribution (\code{"flex"}), binomial as a
 result of assuming Hardy-Weinberg equilibrium (\code{"hw"}),
-or a convolution of hypergeometics as a result that the population
+a convolution of hypergeometics as a result that the population
 consists of either an F1 cross (\code{"f1"}) or an S1
-cross (\code{"s1"})?}
+cross (\code{"s1"}), or fixed at a discrete uniform
+(\code{"uniform"})?}
 }
 \description{
 The key idea here is choosing the pi's so that the two modes

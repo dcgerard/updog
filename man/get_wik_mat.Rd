@@ -13,7 +13,8 @@ get_wik_mat(probk_vec, refvec, sizevec, ploidy, seq, bias, od)
 
 \item{sizevec}{A vector of total counts.}
 
-\item{ploidy}{The ploidy of the species.}
+\item{ploidy}{The ploidy of the species. Assumed to be the same for each
+individual.}
 
 \item{seq}{The starting value of the sequencing error rate.}
 
