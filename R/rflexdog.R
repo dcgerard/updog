@@ -54,6 +54,7 @@ rgeno <- function(n,
                   mode        = NULL,
                   pivec       = NULL) {
   ## Check input ----------------------------------------------------------
+  model <- match.arg(model)
   assertthat::are_equal(length(ploidy), 1)
   assertthat::are_equal(length(n), 1)
   assertthat::assert_that(ploidy >= 0)
