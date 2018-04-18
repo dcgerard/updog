@@ -3,7 +3,7 @@
 mupdog
 ======
 
-[![Travis-CI Build Status](https://travis-ci.org/dcgerard/mupdog.svg?branch=master)](https://travis-ci.org/dcgerard/mupdog) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/dcgerard/mupdog?branch=master&svg=true)](https://ci.appveyor.com/project/dcgerard/mupdog) <!-- [![Coverage Status](https://img.shields.io/codecov/c/github/dcgerard/mupdog/master.svg)](https://codecov.io/github/dcgerard/mupdog?branch=master) --> <!-- [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) -->
+[![Travis-CI Build Status](https://travis-ci.org/dcgerard/mupdog.svg?branch=master)](https://travis-ci.org/dcgerard/mupdog) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/dcgerard/mupdog?branch=master&svg=true)](https://ci.appveyor.com/project/dcgerard/mupdog) [![Coverage Status](https://img.shields.io/codecov/c/github/dcgerard/mupdog/master.svg)](https://codecov.io/github/dcgerard/mupdog?branch=master) [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 Mupdog (Multiple extensions of updog) provides a suite of generalizations of the updog procedure for genotyping autopolyploids from next-generation sequencing data.
 

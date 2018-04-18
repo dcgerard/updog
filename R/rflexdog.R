@@ -2,18 +2,20 @@
 
 #' Simulate individual genotypes from one of the supported \code{\link{flexdog}} models.
 #'
-#' This is simulate genotypes of a sample of individuals drawn from one of the populations supported by
-#' the \code{\link{flexdog}}. Specificially, either generic populations, those with a unimodal genotype
-#' distribution, those in Hardy-Weinberg equilibrium, those resulting from a biparental cross or a generation
+#' This will simulate genotypes of a sample of individuals drawn from one of the populations supported by
+#' \code{\link{flexdog}}. Specificially, either generic populations, those with a unimodal genotype
+#' distribution, those in Hardy-Weinberg equilibrium, those that are more dispersed than assumed from
+#' Hardy-Weinberg equilibrium, those resulting from a biparental cross or a generation
 #' of selfing, and populations with a uniform genotype distribution.
 #'
-#' The allowable variable values of \code{allele_freq}, \code{p1geno}, \code{p2geno}, \code{pivec},
+#' The allowable variable values of \code{allele_freq}, \code{od}, \code{p1geno}, \code{p2geno}, \code{pivec},
 #' and \code{mode} varies based on the value of \code{model}. If \code{model = "ash"}, then only
 #' \code{mode} and \code{pivec} can be non-\code{NULL}. If \code{model = "flex"} then only
 #' \code{pivec} can be non-\code{NULL}. If \code{model = "hw"}, then only \code{allele_freq} can
 #' be non-\code{NULL}. If \code{model = "f1"} then only \code{p1geno} and \code{p2geno} can be non-\code{NULL}.
 #' If \code{model = "s1"} then only \code{p1geno} can be non-\code{NULL}. If \code{model = "uniform"}, then
-#' none of the above variables can be non-\code{NULL}.
+#' none of the above variables can be non-\code{NULL}. If \code{model = "bb"}, then only \code{allele_freq},
+#' and \code{od} can be non-\code{NULL}.
 #'
 #' @param n The number of observations.
 #' @param ploidy The ploidy of the species.
@@ -21,12 +23,16 @@
 #'     distribution be unimodal (\code{"ash"}), generically
 #'     any categorical distribution (\code{"flex"}), binomial as a
 #'     result of assuming Hardy-Weinberg equilibrium (\code{"hw"}),
+#'     an overdispersed binomial (\code{"bb"}),
 #'     a convolution of hypergeometics as a result that the population
 #'     consists of either an F1 cross (\code{"f1"}) or an S1
 #'     cross (\code{"s1"}), or fixed at a discrete uniform
 #'     (\code{"uniform"})? See Details for more information.
 #' @param allele_freq If \code{model = "hw"}, then this is the allele frequency of the population.
 #'     For any other model, this should be \code{NULL}.
+#' @param od If \code{model = "bb"}, then this is the overdispersion parameter of the beta-binomial
+#'     distribution. See \code{\link{betabinom}} for details. For any other model, this should be
+#'     \code{NULL}.
 #' @param p1geno Either the first parent's genotype if \code{model = "f1"}, or the only parent's
 #'     genotype if \code{model = "s1"}. For any other model, this should be \code{NULL}.
 #' @param p2geno The second parent's genotype if \code{model = "f1"}.
@@ -47,8 +53,9 @@
 #'
 rgeno <- function(n,
                   ploidy,
-                  model       = c("hw", "ash", "f1", "s1", "flex", "uniform"),
+                  model       = c("hw", "bb", "ash", "f1", "s1", "flex", "uniform"),
                   allele_freq = NULL,
+                  od          = NULL,
                   p1geno      = NULL,
                   p2geno      = NULL,
                   mode        = NULL,
@@ -64,18 +71,21 @@ rgeno <- function(n,
     stopifnot(is.null(p2geno))
     stopifnot(is.null(mode))
     stopifnot(is.null(pivec))
+    stopifnot(is.null(od))
   } else if (model == "ash") {
     stopifnot(is.null(allele_freq))
     stopifnot(is.null(p1geno))
     stopifnot(is.null(p2geno))
     stopifnot(!is.null(mode))
     stopifnot(!is.null(pivec))
+    stopifnot(is.null(od))
   } else if (model == "f1") {
     stopifnot(is.null(allele_freq))
     stopifnot(!is.null(p1geno))
     stopifnot(!is.null(p2geno))
     stopifnot(is.null(mode))
     stopifnot(is.null(pivec))
+    stopifnot(is.null(od))
     if (ploidy %% 2 != 0) {
       stop("pgeno: ploidy must be even when model = 'f1'.")
     }
@@ -85,6 +95,7 @@ rgeno <- function(n,
     stopifnot(is.null(p2geno))
     stopifnot(is.null(mode))
     stopifnot(is.null(pivec))
+    stopifnot(is.null(od))
     if (ploidy %% 2 != 0) {
       stop("pgeno: ploidy must be even when model = 's1'.")
     }
@@ -94,12 +105,21 @@ rgeno <- function(n,
     stopifnot(is.null(p2geno))
     stopifnot(is.null(mode))
     stopifnot(!is.null(pivec))
+    stopifnot(is.null(od))
   } else if (model == "uniform") {
     stopifnot(is.null(allele_freq))
     stopifnot(is.null(p1geno))
     stopifnot(is.null(p2geno))
     stopifnot(is.null(mode))
     stopifnot(is.null(pivec))
+    stopifnot(is.null(od))
+  } else if (model == "bb") {
+    stopifnot(!is.null(allele_freq))
+    stopifnot(is.null(p1geno))
+    stopifnot(is.null(p2geno))
+    stopifnot(is.null(mode))
+    stopifnot(is.null(pivec))
+    stopifnot(!is.null(od))
   } else{
     stop("rgeno: how did you get here?")
   }
@@ -107,6 +127,10 @@ rgeno <- function(n,
   if (!is.null(allele_freq)) {
     stopifnot(length(allele_freq) == 1)
     stopifnot(allele_freq >= 0, allele_freq <= 1)
+  }
+  if (!is.null(od)) {
+    stopifnot(length(od) == 1)
+    stopifnot(od >= 0, od <= 1)
   }
   if (!is.null(p1geno)) {
     stopifnot(length(p1geno) == 1)
@@ -140,6 +164,8 @@ rgeno <- function(n,
     pivec <- updog::get_q_array(ploidy = ploidy)[p1geno + 1, p2geno + 1, ]
   } else if (model == "hw") {
     pivec <- stats::dbinom(x = 0:ploidy, size = ploidy, prob = allele_freq)
+  } else if (model == "bb") {
+    pivec <- dbetabinom(x = 0:ploidy, size = ploidy, mu = allele_freq, rho = od, log = FALSE)
   } else if (model == "uniform") {
     pivec <- rep(x = 1 / (ploidy + 1), length = ploidy + 1)
   } else if (model == "flex") {
@@ -171,6 +197,7 @@ rgeno <- function(n,
 #' @param od The overdispersion parameter. See Details of \code{rho} variable in \code{\link{betabinom}}.
 #'
 #' @seealso \code{\link{rgeno}} for a way to generate genotypes of individuals. \code{\link{rbetabinom}}
+#'     for how we generate the read-counts.
 #'
 #' @export
 #'

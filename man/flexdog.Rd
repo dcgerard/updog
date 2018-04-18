@@ -24,6 +24,7 @@ individual.}
 distribution be unimodal (\code{"ash"}), generically
 any categorical distribution (\code{"flex"}), binomial as a
 result of assuming Hardy-Weinberg equilibrium (\code{"hw"}),
+an overdispersed binomial (\code{"bb"}),
 a convolution of hypergeometics as a result that the population
 consists of either an F1 cross (\code{"f1"}) or an S1
 cross (\code{"s1"}), or fixed at a discrete uniform
@@ -145,6 +146,7 @@ sequencing (NGS) data while assuming the genotype distribution is either
 unimodal (\code{model = "ash"}), generically any categorical
 distribution (\code{model = "flex"}), binomial as a result of assuming
 the population is in Hardy-Weinberg equlibrium (\code{model = "hw"}),
+an overdispersed binomial (\code{model = "bb"}),
 results from the individuals being siblings from either an F1 cross
 (\code{model = "f1"}) or an S1 cross (\code{model = "s1"}), or is a discrete
 uniform distribution (\code{model = "uniform"}).

@@ -20,6 +20,7 @@ the allele frequency if \code{model = "hw"}. This should be
 distribution be unimodal (\code{"ash"}), generically
 any categorical distribution (\code{"flex"}), binomial as a
 result of assuming Hardy-Weinberg equilibrium (\code{"hw"}),
+an overdispersed binomial (\code{"bb"}),
 a convolution of hypergeometics as a result that the population
 consists of either an F1 cross (\code{"f1"}) or an S1
 cross (\code{"s1"}), or fixed at a discrete uniform

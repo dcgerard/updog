@@ -55,4 +55,5 @@ updog::plot_geno(ocounts = refvec, osize = sizevec,
 }
 \seealso{
 \code{\link{rgeno}} for a way to generate genotypes of individuals. \code{\link{rbetabinom}}
+    for how we generate the read-counts.
 }

@@ -4,9 +4,9 @@
 \alias{rgeno}
 \title{Simulate individual genotypes from one of the supported \code{\link{flexdog}} models.}
 \usage{
-rgeno(n, ploidy, model = c("hw", "ash", "f1", "s1", "flex", "uniform"),
-  allele_freq = NULL, p1geno = NULL, p2geno = NULL, mode = NULL,
-  pivec = NULL)
+rgeno(n, ploidy, model = c("hw", "bb", "ash", "f1", "s1", "flex", "uniform"),
+  allele_freq = NULL, od = NULL, p1geno = NULL, p2geno = NULL,
+  mode = NULL, pivec = NULL)
 }
 \arguments{
 \item{n}{The number of observations.}
@@ -17,6 +17,7 @@ rgeno(n, ploidy, model = c("hw", "ash", "f1", "s1", "flex", "uniform"),
 distribution be unimodal (\code{"ash"}), generically
 any categorical distribution (\code{"flex"}), binomial as a
 result of assuming Hardy-Weinberg equilibrium (\code{"hw"}),
+an overdispersed binomial (\code{"bb"}),
 a convolution of hypergeometics as a result that the population
 consists of either an F1 cross (\code{"f1"}) or an S1
 cross (\code{"s1"}), or fixed at a discrete uniform
@@ -24,6 +25,10 @@ cross (\code{"s1"}), or fixed at a discrete uniform
 
 \item{allele_freq}{If \code{model = "hw"}, then this is the allele frequency of the population.
 For any other model, this should be \code{NULL}.}
+
+\item{od}{If \code{model = "bb"}, then this is the overdispersion parameter of the beta-binomial
+distribution. See \code{\link{betabinom}} for details. For any other model, this should be
+\code{NULL}.}
 
 \item{p1geno}{Either the first parent's genotype if \code{model = "f1"}, or the only parent's
 genotype if \code{model = "s1"}. For any other model, this should be \code{NULL}.}
@@ -44,19 +49,21 @@ For any other model, this should be \code{NULL}.}
 A vector of length \code{n} with the genotypes of the sampled individuals.
 }
 \description{
-This is simulate genotypes of a sample of individuals drawn from one of the populations supported by
-the \code{\link{flexdog}}. Specificially, either generic populations, those with a unimodal genotype
-distribution, those in Hardy-Weinberg equilibrium, those resulting from a biparental cross or a generation
+This will simulate genotypes of a sample of individuals drawn from one of the populations supported by
+\code{\link{flexdog}}. Specificially, either generic populations, those with a unimodal genotype
+distribution, those in Hardy-Weinberg equilibrium, those that are more dispersed than assumed from
+Hardy-Weinberg equilibrium, those resulting from a biparental cross or a generation
 of selfing, and populations with a uniform genotype distribution.
 }
 \details{
-The allowable variable values of \code{allele_freq}, \code{p1geno}, \code{p2geno}, \code{pivec},
+The allowable variable values of \code{allele_freq}, \code{od}, \code{p1geno}, \code{p2geno}, \code{pivec},
 and \code{mode} varies based on the value of \code{model}. If \code{model = "ash"}, then only
 \code{mode} and \code{pivec} can be non-\code{NULL}. If \code{model = "flex"} then only
 \code{pivec} can be non-\code{NULL}. If \code{model = "hw"}, then only \code{allele_freq} can
 be non-\code{NULL}. If \code{model = "f1"} then only \code{p1geno} and \code{p2geno} can be non-\code{NULL}.
 If \code{model = "s1"} then only \code{p1geno} can be non-\code{NULL}. If \code{model = "uniform"}, then
-none of the above variables can be non-\code{NULL}.
+none of the above variables can be non-\code{NULL}. If \code{model = "bb"}, then only \code{allele_freq},
+and \code{od} can be non-\code{NULL}.
 }
 \author{
 David Gerard

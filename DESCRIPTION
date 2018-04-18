@@ -16,7 +16,7 @@ LazyData: true
 RoxygenNote: 6.0.1
 LinkingTo: Rcpp,
     RcppArmadillo
-Imports: Rcpp (>= 0.11.0),
+Imports: Rcpp (>= 0.12.16),
     RcppArmadillo,
     assertthat,
     foreach,

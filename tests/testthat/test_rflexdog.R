@@ -9,6 +9,7 @@ test_that("rgeno works", {
   trash <- rgeno(n = 10, ploidy = 6, model = "ash", pivec = pivec, mode = 1.2)
   trash <- rgeno(n = 10, ploidy = 6, model = "flex", pivec = pivec)
   trash <- rgeno(n = 10, ploidy = 6, model = "uniform")
+  trash <- rgeno(n = 10, ploidy = 6, model = "bb", allele_freq = 0.5, od = 0.1)
   expect_error(rgeno(n = 10, ploidy = 6, model = "hw", allele_freq = 0.5, p1geno = 1))
 })
 
