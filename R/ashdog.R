@@ -278,6 +278,9 @@ flexdog <- function(refvec,
   if (seq > 1 - boundary_tol) {
     seq <- 1 - boundary_tol
   }
+  if (ashpen < boundary_tol) {
+    ashpen <- boundary_tol
+  }
 
   ## Run EM for each mode in `mode_vec` -----------------------
   return_list <- list(llike = -Inf)
