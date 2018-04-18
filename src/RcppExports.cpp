@@ -457,6 +457,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// grad_for_weighted_lbb
+NumericVector grad_for_weighted_lbb(NumericVector parvec, int ploidy, NumericVector weight_vec);
+RcppExport SEXP _mupdog_grad_for_weighted_lbb(SEXP parvecSEXP, SEXP ploidySEXP, SEXP weight_vecSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type parvec(parvecSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type weight_vec(weight_vecSEXP);
+    rcpp_result_gen = Rcpp::wrap(grad_for_weighted_lbb(parvec, ploidy, weight_vec));
+    return rcpp_result_gen;
+END_RCPP
+}
 // post_prob
 double post_prob(int dosage, int ploidy, double mu, double sigma2, double alpha, double rho);
 RcppExport SEXP _mupdog_post_prob(SEXP dosageSEXP, SEXP ploidySEXP, SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP rhoSEXP) {
@@ -648,6 +661,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// obj_for_weighted_lbb
+double obj_for_weighted_lbb(NumericVector parvec, int ploidy, NumericVector weight_vec);
+RcppExport SEXP _mupdog_obj_for_weighted_lbb(SEXP parvecSEXP, SEXP ploidySEXP, SEXP weight_vecSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type parvec(parvecSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type weight_vec(weight_vecSEXP);
+    rcpp_result_gen = Rcpp::wrap(obj_for_weighted_lbb(parvec, ploidy, weight_vec));
+    return rcpp_result_gen;
+END_RCPP
+}
 // oracle_mis
 double oracle_mis(int n, int ploidy, double seq, double bias, double od, NumericVector dist);
 RcppExport SEXP _mupdog_oracle_mis(SEXP nSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP distSEXP) {
@@ -792,6 +818,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_df_deps", (DL_FUNC) &_mupdog_df_deps, 2},
     {"_mupdog_dlbeta_deps", (DL_FUNC) &_mupdog_dlbeta_deps, 6},
     {"_mupdog_grad_for_eps", (DL_FUNC) &_mupdog_grad_for_eps, 12},
+    {"_mupdog_grad_for_weighted_lbb", (DL_FUNC) &_mupdog_grad_for_weighted_lbb, 3},
     {"_mupdog_post_prob", (DL_FUNC) &_mupdog_post_prob, 6},
     {"_mupdog_compute_all_post_prob", (DL_FUNC) &_mupdog_compute_all_post_prob, 5},
     {"_mupdog_compute_all_log_bb", (DL_FUNC) &_mupdog_compute_all_log_bb, 6},
@@ -804,6 +831,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_obj_for_mu_sigma2", (DL_FUNC) &_mupdog_obj_for_mu_sigma2, 5},
     {"_mupdog_obj_for_mu_sigma2_wrapper", (DL_FUNC) &_mupdog_obj_for_mu_sigma2_wrapper, 4},
     {"_mupdog_elbo", (DL_FUNC) &_mupdog_elbo, 12},
+    {"_mupdog_obj_for_weighted_lbb", (DL_FUNC) &_mupdog_obj_for_weighted_lbb, 3},
     {"_mupdog_oracle_mis", (DL_FUNC) &_mupdog_oracle_mis, 6},
     {"_mupdog_eta_double", (DL_FUNC) &_mupdog_eta_double, 2},
     {"_mupdog_eta_fun", (DL_FUNC) &_mupdog_eta_fun, 2},

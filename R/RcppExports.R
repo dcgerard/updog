@@ -363,6 +363,19 @@ grad_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, m
     .Call('_mupdog_grad_for_eps', PACKAGE = 'mupdog', parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat, update_bias, update_seq, update_od)
 }
 
+#' Gradient for \code{\link{obj_for_weighted_lbb}}.
+#'
+#' @inheritParams obj_for_weighted_lbb
+#'
+#' @return A vector of length 2. The first component is the gradient of the mean of the underlying
+#'     beta. The second component is the gradient of the overdispersion parameter of the
+#'     underlying beta.
+#'
+#' @author David Gerard
+grad_for_weighted_lbb <- function(parvec, ploidy, weight_vec) {
+    .Call('_mupdog_grad_for_weighted_lbb', PACKAGE = 'mupdog', parvec, ploidy, weight_vec)
+}
+
 #' Variational posterior probability of having \code{dosage} A alleles
 #' when the ploidy is \code{ploidy}, the allele frequency is
 #' \code{alpha}, the individual-specific overdispersion parameter is
@@ -558,6 +571,20 @@ obj_for_mu_sigma2_wrapper <- function(muSigma2, phifk_mat, cor_inv, log_bb_dense
 #' @author David Gerard
 elbo <- function(warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mean_bias, var_bias, mean_seq, var_seq, ploidy) {
     .Call('_mupdog_elbo', PACKAGE = 'mupdog', warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mean_bias, var_bias, mean_seq, var_seq, ploidy)
+}
+
+#' Objective function for updating the beta-binomial genotype distribution when
+#' \code{model = "bb"} in \code{\link{flex_update_pivec}}.
+#'
+#' @param parvec A vector of length 2. The first term is the current mean of the
+#'     underlying beta. The second term is the current overdispersion parameter.
+#' @param ploidy The ploidy of the species.
+#' @param weight_vec A vector of length \code{ploidy + 1} that contains the weights
+#'     for each component beta-binomial.
+#'
+#' @author David Gerard
+obj_for_weighted_lbb <- function(parvec, ploidy, weight_vec) {
+    .Call('_mupdog_obj_for_weighted_lbb', PACKAGE = 'mupdog', parvec, ploidy, weight_vec)
 }
 
 #' Calculate oracle misclassification error.

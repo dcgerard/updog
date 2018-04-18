@@ -14,26 +14,38 @@ test_that("flexdog works", {
   # refvec <- smalldat$counts[!is.na(smalldat$counts)]
   # sizevec <- smalldat$size[!is.na(smalldat$size)]
 
-  ploidy    <- 4
-  model     <- "ash"
-  verbose   <- TRUE
-  mean_bias <- 0
-  var_bias  <- 1
-  mean_seq  <- -4.7
-  var_seq   <- 1
-  seq       <- 0.005
-  bias      <- 1
-  od        <- 0.001
-  mode      <- NULL
-  itermax   = 10
-  tol       = 10^-2
+  ploidy      <- 4
+  model       <- "bb"
+  verbose     <- TRUE
+  mean_bias   <- 0
+  var_bias    <- 1
+  mean_seq    <- -4.7
+  var_seq     <- 1
+  seq         <- 0.005
+  bias        <- 1
+  od          <- 0.001
+  mode        <- NULL
+  itermax     <- 10
+  tol         <- 10^-2
+  use_cvxr    <- FALSE
+  update_bias <- TRUE
+  update_seq  <- TRUE
+  update_od   <- TRUE
+  ashpen      <- 0
+  fs1_alpha   <- 10 ^ -3
+  p1ref       <- NULL
+  p1size      <- NULL
+  p2ref       <- NULL
+  p2size      <- NULL
 
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
                   ploidy = ploidy, model = "hw", verbose = FALSE)
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
                   ploidy = ploidy, model = "flex", verbose = FALSE)
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
-                  ploidy = ploidy, model = "uniform", verbose = FALSE)
+                  ploidy = ploidy, model = "bb", verbose = FALSE)
+  expect_warning(fout <- flexdog(refvec = refvec, sizevec = sizevec,
+                                 ploidy = ploidy, model = "uniform", verbose = FALSE))
   expect_equal(fout$gene_dist, rep(1 / (ploidy + 1), ploidy + 1))
   pl <- plot(fout)
 }

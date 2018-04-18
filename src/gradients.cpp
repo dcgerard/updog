@@ -349,4 +349,34 @@ NumericVector grad_for_eps(NumericVector parvec,
 }
 
 
+//' Gradient for \code{\link{obj_for_weighted_lbb}}.
+//'
+//' @inheritParams obj_for_weighted_lbb
+//'
+//' @return A vector of length 2. The first component is the gradient of the mean of the underlying
+//'     beta. The second component is the gradient of the overdispersion parameter of the
+//'     underlying beta.
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+NumericVector grad_for_weighted_lbb(NumericVector parvec,
+                                    int ploidy,
+                                    NumericVector weight_vec) {
+  if (parvec.length() != 2) {
+    Rcpp::stop("obj_for_weighted_lbb: parvec not of length 2.");
+  }
+  if (weight_vec.length() != (ploidy + 1)) {
+    Rcpp::stop("obj_for_weighted_lbb: weight_vec not of length ploidy + 1.");
+  }
+
+  double mu  = parvec(0);
+  double tau = parvec(1);
+  NumericVector grad(2);
+  for (int i = 0; i <= ploidy; i++) {
+    grad(0) = grad(0) + weight_vec(i) * dlbeta_dxi(i, ploidy, mu, tau);
+    grad(1) = grad(1) + weight_vec(i) * dlbeta_dc(i, ploidy, mu, (1.0 - tau) / tau) * dc_dtau(tau);
+  }
+
+  return grad;
+}
 

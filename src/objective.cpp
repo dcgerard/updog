@@ -596,3 +596,45 @@ double elbo(arma::Cube<double> warray, arma::Cube<double> lbeta_array,
   return(obj_val);
 
 }
+
+
+
+//' Objective function for updating the beta-binomial genotype distribution when
+//' \code{model = "bb"} in \code{\link{flex_update_pivec}}.
+//'
+//' @param parvec A vector of length 2. The first term is the current mean of the
+//'     underlying beta. The second term is the current overdispersion parameter.
+//' @param ploidy The ploidy of the species.
+//' @param weight_vec A vector of length \code{ploidy + 1} that contains the weights
+//'     for each component beta-binomial.
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double obj_for_weighted_lbb(NumericVector parvec,
+                            int ploidy,
+                            NumericVector weight_vec) {
+  if (parvec.length() != 2) {
+    Rcpp::stop("obj_for_weighted_lbb: parvec not of length 2.");
+  }
+  if (weight_vec.length() != (ploidy + 1)) {
+    Rcpp::stop("obj_for_weighted_lbb: weight_vec not of length ploidy + 1.");
+  }
+
+  double mu  = parvec(0);
+  double tau = parvec(1);
+  double obj = 0.0;
+  for (int i = 0; i <= ploidy; i++) {
+    obj = obj + weight_vec(i) * dbetabinom_double(i, ploidy, mu, tau, true);
+  }
+  return obj;
+}
+
+
+
+
+
+
+
+
+
+

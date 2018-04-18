@@ -4,7 +4,7 @@
 \alias{flex_update_pivec}
 \title{Update the distribution of genotypes from various models.}
 \usage{
-flex_update_pivec(weight_vec, model = c("ash", "flex", "hw", "f1", "s1",
+flex_update_pivec(weight_vec, model = c("hw", "bb", "ash", "f1", "s1", "flex",
   "uniform"), control)
 }
 \arguments{

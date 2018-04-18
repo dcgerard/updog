@@ -145,7 +145,7 @@
 flexdog <- function(refvec,
                     sizevec,
                     ploidy,
-                    model       = c("hw", "ash", "f1", "s1", "flex", "uniform"),
+                    model       = c("hw", "bb", "ash", "f1", "s1", "flex", "uniform"),
                     verbose     = TRUE,
                     mean_bias   = 0,
                     var_bias    = 0.7 ^ 2,
@@ -162,7 +162,7 @@ flexdog <- function(refvec,
                     itermax     = 200,
                     tol         = 10 ^ -4,
                     fs1_alpha   = 10 ^ -3,
-                    ashpen      = length(refvec) / 1000,
+                    ashpen      = 0,
                     p1ref       = NULL,
                     p1size      = NULL,
                     p2ref       = NULL,
@@ -170,6 +170,10 @@ flexdog <- function(refvec,
 
   ## Check input -----------------------------------------------------
   model <- match.arg(model)
+  if (model == "uniform") {
+    warning("flexdog: Using model = 'uniform' is almost always a bad idea.\nTry model = 'hw' if you have data from a population study.")
+  }
+
   assertthat::are_equal(length(refvec), length(sizevec))
   assertthat::assert_that(all(sizevec >= refvec, na.rm = TRUE))
   assertthat::assert_that(all(refvec >= 0, na.rm = TRUE))
@@ -238,11 +242,11 @@ flexdog <- function(refvec,
     mode_vec <- mode
   } else if (is.null(mode) & model == "ash") {
     mode_vec <- (0:(ploidy - 1)) + 0.5
-  } else if (is.null(mode) & model == "hw") {
+  } else if (is.null(mode) & (model == "hw" | model == "bb")) {
     mode_vec <- mean(refvec / sizevec, na.rm = TRUE)
-  } else if (!is.null(mode) & model == "hw") {
+  } else if (!is.null(mode) & (model == "hw" | model == "bb")) {
     if (any((mode < 0) | (mode > 1))) {
-      stop('If model = "hw" then `mode` should be between 0 and 1.\nIt is the initialization of the allele frequency.')
+      stop('If model = "hw" or model = "bb" then `mode` should be between 0 and 1.\nIt is the initialization of the allele frequency.')
     }
   } else {
     stop("flexdog: Checking mode. How did you get here?")
@@ -292,6 +296,9 @@ flexdog <- function(refvec,
     } else if (model == "f1" | model == "s1") {
       control$qarray    <- updog::get_q_array(ploidy = ploidy)
       control$fs1_alpha <- fs1_alpha
+    } else if (model == "bb") {
+      control$alpha <- mode ## initialize allele frequency for bb
+      control$tau   <- boundary_tol ## initialize od for bb
     }
 
     ## Initialize pivec so that two modes have equal prob if model = "ash".
@@ -377,6 +384,12 @@ flexdog <- function(refvec,
                                        control    = control)
       pivec <- fupdate_out$pivec
       control$pivec <- pivec ## initial condition for unimodal optimization
+
+      if (model == "bb") { ## update alpha and tau in control
+        control$alpha <- fupdate_out$par$alpha
+        control$tau   <- fupdate_out$par$tau
+      }
+
 
       ## Update probk_vec -----------------------------------------------
       pivec[pivec < 0] <- 0
@@ -533,7 +546,7 @@ is.flexdog <- function(x) {
 #' @seealso \code{\link{flexdog}} for where this is used.
 #'
 #' @author David Gerard
-initialize_pivec <- function(ploidy, mode, model = c("ash", "flex", "hw", "f1", "s1", "uniform")) {
+initialize_pivec <- function(ploidy, mode, model = c("hw", "bb", "ash", "f1", "s1", "flex", "uniform")) {
   assertthat::are_equal(1, length(ploidy), length(mode))
   assertthat::are_equal(ploidy %% 1, 0)
 
@@ -558,7 +571,7 @@ initialize_pivec <- function(ploidy, mode, model = c("ash", "flex", "hw", "f1", 
       pivec <- get_uni_rep(pvec_init)$pivec + 10 ^-6
       pivec <- pivec / sum(pivec)
     }
-  } else if (model == "hw" | model == "f1" | model == "s1") {
+  } else if (model == "hw" | model == "f1" | model == "s1" | model == "bb") {
     if (mode < 0 | mode > 1) {
       stop('initialize_pivec: when model = "hw", mode should be between 0 and 1.\n It is the initialization of the allele frequency.')
     }
@@ -588,7 +601,7 @@ initialize_pivec <- function(ploidy, mode, model = c("ash", "flex", "hw", "f1", 
 #' }
 #'
 #' @author David Gerard
-flex_update_pivec <- function(weight_vec, model = c("ash", "flex", "hw", "f1", "s1", "uniform"), control) {
+flex_update_pivec <- function(weight_vec, model = c("hw", "bb", "ash", "f1", "s1", "flex", "uniform"), control) {
   ## Check input -------------------------------
   ploidy <- length(weight_vec) - 1
   model <- match.arg(model)
@@ -710,6 +723,26 @@ flex_update_pivec <- function(weight_vec, model = c("ash", "flex", "hw", "f1", "
   } else if (model == "uniform") {
     return_list$pivec <- rep(x = 1 / (ploidy + 1), length = ploidy + 1)
     return_list$par <- list()
+  } else if (model == "bb") {
+    boundary_val <- 10 ^ -8
+    optim_out <- stats::optim(par        = c(control$alpha, control$tau),
+                              fn         = obj_for_weighted_lbb,
+                              gr         = grad_for_weighted_lbb,
+                              method     = "L-BFGS-B",
+                              lower      = c(boundary_val, boundary_val),
+                              upper      = c(1 - boundary_val, 1 - boundary_val),
+                              weight_vec = weight_vec,
+                              ploidy     = ploidy,
+                              control = list(fnscale = -1))
+
+    return_list$pivec <- dbetabinom(x    = 0:ploidy,
+                                    size = ploidy,
+                                    mu   = optim_out$par[1],
+                                    rho  = optim_out$par[2],
+                                    log  = FALSE)
+    return_list$par <- list()
+    return_list$par$alpha <- optim_out$par[1]
+    return_list$par$tau   <- optim_out$par[2]
   } else {
     stop("flex_update_pivec: how did you get here?")
   }
