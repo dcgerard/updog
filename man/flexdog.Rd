@@ -9,7 +9,7 @@ flexdog(refvec, sizevec, ploidy, model = c("hw", "bb", "ash", "f1", "s1",
   mean_seq = -4.7, var_seq = 1, seq = 0.005, bias = 1, od = 0.001,
   update_bias = TRUE, update_seq = TRUE, update_od = TRUE, mode = NULL,
   use_cvxr = FALSE, itermax = 200, tol = 10^-4, fs1_alpha = 10^-3,
-  ashpen = 0, p1ref = NULL, p1size = NULL, p2ref = NULL,
+  ashpen = 10^-6, p1ref = NULL, p1size = NULL, p2ref = NULL,
   p2size = NULL)
 }
 \arguments{
