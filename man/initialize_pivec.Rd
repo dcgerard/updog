@@ -16,7 +16,8 @@ individual.}
 the allele frequency if \code{model = "hw"}. This should be
 \code{NULL} for all other options of \code{model}.}
 
-\item{model}{What form should the prior take? See Details for possible values.}
+\item{model}{What form should the prior (genotype distribution) take?
+See Details for possible values.}
 }
 \description{
 The key idea here is choosing the pi's so that the two modes

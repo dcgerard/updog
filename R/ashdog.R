@@ -8,16 +8,28 @@
 #' several forms. It does this while accounting for allele bias, overdispersion,
 #' and sequencing error.
 #'
-#' Possible values of the genotype distribution (\code{model}) are:
+#' Possible values of the genotype distribution (values of \code{model}) are:
 #' \describe{
-#'   \item{\code{"hw"}}{A binomial distribution that results from assuming that the population is in Hardy-Weinberg equilibrium (HWE). This actually does pretty well even when there are minor to moderate deviations from HWE, and so is the default.}
-#'   \item{\code{"bb"}}{A beta-binomial distribution. This is a overdispersed version of "hw" and can be derived from a special case of the Balding-Nichols model.}
-#'   \item{\code{"norm"}}{A distribution whose genotype frequencies are proportional to the density value of a normal with some mean and some standard deviation. Unlike the "bb" option, this will allow for distributions less dispersed than a binomial.}
-#'   \item{\code{"ash"}}{Any unimodal prior. This will run \code{ploidy} EM algorithms with a different center during each optimization. It returns the center (and its fit) with the highest likelihood.}
-#'   \item{\code{"f1}}{This prior assumes the individuals are all full-siblings resulting from one generation of a bi-parental cross.}
-#'   \item{\code{"s1"}}{This prior assumes the individuals are all full-siblings resulting from one generation of selfing. I.e. there is only one parent.}
-#'   \item{\code{"flex}}{Generically any categorical distribution. This is usually too flexible a prior to be used in practice.}
-#'   \item{\code{"uniform"}}{A discrete uniform distribution. This should never be used in practice.}
+#'   \item{\code{"hw"}}{A binomial distribution that results from assuming that
+#'       the population is in Hardy-Weinberg equilibrium (HWE). This actually does
+#'       pretty well even when there are minor to moderate deviations from HWE, and
+#'       so is the default.}
+#'   \item{\code{"bb"}}{A beta-binomial distribution. This is a overdispersed
+#'       version of "hw" and can be derived from a special case of the Balding-Nichols model.}
+#'   \item{\code{"norm"}}{A distribution whose genotype frequencies are proportional
+#'       to the density value of a normal with some mean and some standard deviation.
+#'       Unlike the "bb" option, this will allow for distributions less dispersed than a binomial.}
+#'   \item{\code{"ash"}}{Any unimodal prior. This will run \code{ploidy} EM algorithms
+#'       with a different center during each optimization. It returns the center (and its fit)
+#'       with the highest likelihood.}
+#'   \item{\code{"f1"}}{This prior assumes the individuals are all full-siblings resulting
+#'       from one generation of a bi-parental cross.}
+#'   \item{\code{"s1"}}{This prior assumes the individuals are all full-siblings resulting
+#'       from one generation of selfing. I.e. there is only one parent.}
+#'   \item{\code{"flex"}}{Generically any categorical distribution. This is usually too
+#'       flexible a prior to be used in practice.}
+#'   \item{\code{"uniform"}}{A discrete uniform distribution. This should never be
+#'       used in practice.}
 #' }
 #'
 #'
@@ -44,7 +56,8 @@
 #' @param sizevec A vector of total counts.
 #' @param ploidy The ploidy of the species. Assumed to be the same for each
 #'     individual.
-#' @param model What form should the prior take? See Details for possible values.
+#' @param model What form should the prior (genotype distribution) take?
+#'     See Details for possible values.
 #' @param verbose Should we output more (\code{TRUE}) or less
 #'     (\code{FALSE})?
 #' @param mean_bias The prior mean of the log-bias.
@@ -114,7 +127,11 @@
 #'       this will consist of \code{alpha}, the allele frequency.
 #'       If \code{model = "f1"} or \code{model = "s1"} then this will
 #'       consist of the parent genotype(s) and the mixing proportion
-#'       with the discrete uniform (also called \code{alpha}).}
+#'       with the discrete uniform (also called \code{alpha}). If
+#'       \code{model = "bb"} then this will consist of \code{alpha},
+#'       the allele frequency, and \code{tau}, the overdispersion parameter.
+#'       If \code{model = "norm"} then this will consist of \code{mu}, the
+#'       normal mean, and \code{sigma}, the normal standard devation (not variance).}
 #'   \item{\code{geno}}{The posterior mode genotype.}
 #'   \item{\code{maxpostprob}}{The maximum posterior probability.}
 #'   \item{\code{postmean}}{The posterior mean genotype.}

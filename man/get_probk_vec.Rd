@@ -9,7 +9,8 @@ get_probk_vec(pivec, model, mode)
 \arguments{
 \item{pivec}{The mixing probability of the i'th discrete uniform distribution.}
 
-\item{model}{What form should the prior take? See Details for possible values.}
+\item{model}{What form should the prior (genotype distribution) take?
+See Details for possible values.}
 
 \item{mode}{The mode if \code{model = "ash"}. If not provided,
 \code{flexdog} will estimate the mode. This is the starting point of
