@@ -44,6 +44,13 @@ test_that("flexdog works", {
                   ploidy = ploidy, model = "flex", verbose = FALSE)
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
                   ploidy = ploidy, model = "bb", verbose = FALSE)
+
+  fout <- flexdog(refvec = refvec, sizevec = sizevec,
+                  ploidy = ploidy, model = "norm", verbose = FALSE)
+  pivec <- dnorm(x = 0:ploidy, mean = fout$par$mu, sd = fout$par$sigma, log = FALSE)
+  pivec <- pivec / sum(pivec)
+  expect_equal(pivec, fout$gene_dist)
+
   expect_warning(fout <- flexdog(refvec = refvec, sizevec = sizevec,
                                  ploidy = ploidy, model = "uniform", verbose = FALSE))
   expect_equal(fout$gene_dist, rep(1 / (ploidy + 1), ploidy + 1))

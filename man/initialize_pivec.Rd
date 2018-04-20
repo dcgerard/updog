@@ -4,8 +4,8 @@
 \alias{initialize_pivec}
 \title{Initialize \code{pivec} for \code{\link{flexdog}} EM algorithm.}
 \usage{
-initialize_pivec(ploidy, mode, model = c("hw", "bb", "ash", "f1", "s1",
-  "flex", "uniform"))
+initialize_pivec(ploidy, mode, model = c("hw", "bb", "norm", "ash", "f1",
+  "s1", "flex", "uniform"))
 }
 \arguments{
 \item{ploidy}{The ploidy of the species. Assumed to be the same for each
@@ -16,15 +16,7 @@ individual.}
 the allele frequency if \code{model = "hw"}. This should be
 \code{NULL} for all other options of \code{model}.}
 
-\item{model}{What form should the prior take? Should the genotype
-distribution be unimodal (\code{"ash"}), generically
-any categorical distribution (\code{"flex"}), binomial as a
-result of assuming Hardy-Weinberg equilibrium (\code{"hw"}),
-an overdispersed binomial (\code{"bb"}),
-a convolution of hypergeometics as a result that the population
-consists of either an F1 cross (\code{"f1"}) or an S1
-cross (\code{"s1"}), or fixed at a discrete uniform
-(\code{"uniform"})?}
+\item{model}{What form should the prior take? See Details for possible values.}
 }
 \description{
 The key idea here is choosing the pi's so that the two modes

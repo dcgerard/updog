@@ -3,10 +3,7 @@
 #' Simulate individual genotypes from one of the supported \code{\link{flexdog}} models.
 #'
 #' This will simulate genotypes of a sample of individuals drawn from one of the populations supported by
-#' \code{\link{flexdog}}. Specificially, either generic populations, those with a unimodal genotype
-#' distribution, those in Hardy-Weinberg equilibrium, those that are more dispersed than assumed from
-#' Hardy-Weinberg equilibrium, those resulting from a biparental cross or a generation
-#' of selfing, and populations with a uniform genotype distribution.
+#' \code{\link{flexdog}}. See the details of \code{\link{flexdog}} for the models allowed.
 #'
 #' The allowable variable values of \code{allele_freq}, \code{od}, \code{p1geno}, \code{p2geno}, \code{pivec},
 #' and \code{mode} varies based on the value of \code{model}. If \code{model = "ash"}, then only
@@ -15,19 +12,12 @@
 #' be non-\code{NULL}. If \code{model = "f1"} then only \code{p1geno} and \code{p2geno} can be non-\code{NULL}.
 #' If \code{model = "s1"} then only \code{p1geno} can be non-\code{NULL}. If \code{model = "uniform"}, then
 #' none of the above variables can be non-\code{NULL}. If \code{model = "bb"}, then only \code{allele_freq},
-#' and \code{od} can be non-\code{NULL}.
+#' and \code{od} can be non-\code{NULL}. If code{model == "norm"}, then only \code{mu} and \code{sigma}
+#' can be non-\code{NULL}.
 #'
 #' @param n The number of observations.
 #' @param ploidy The ploidy of the species.
-#' @param model What form should the prior take? Should the genotype
-#'     distribution be unimodal (\code{"ash"}), generically
-#'     any categorical distribution (\code{"flex"}), binomial as a
-#'     result of assuming Hardy-Weinberg equilibrium (\code{"hw"}),
-#'     an overdispersed binomial (\code{"bb"}),
-#'     a convolution of hypergeometics as a result that the population
-#'     consists of either an F1 cross (\code{"f1"}) or an S1
-#'     cross (\code{"s1"}), or fixed at a discrete uniform
-#'     (\code{"uniform"})? See Details for more information.
+#' @param model What form should the prior take? See Details in \code{\link{flexdog}}.
 #' @param allele_freq If \code{model = "hw"}, then this is the allele frequency of the population.
 #'     For any other model, this should be \code{NULL}.
 #' @param od If \code{model = "bb"}, then this is the overdispersion parameter of the beta-binomial
@@ -44,6 +34,10 @@
 #' @param mode If \code{model = "ash"}, this is the center of the distribution. This should be a non-integer value
 #'     (so the mode is either the floor or the cieling of \code{mode}).
 #'     For any other model, this should be \code{NULL}.
+#' @param mu If \code{model = "norm"}, this is the mean of the normal.
+#'     For any other model, this should be \code{NULL}.
+#' @param sigma If \code{model = "norm"}, this is the standard deviation of the normal.
+#'     For any other model, this should be \code{NULL}.
 #'
 #' @return A vector of length \code{n} with the genotypes of the sampled individuals.
 #'
@@ -53,13 +47,15 @@
 #'
 rgeno <- function(n,
                   ploidy,
-                  model       = c("hw", "bb", "ash", "f1", "s1", "flex", "uniform"),
+                  model       = c("hw", "bb", "norm", "ash", "f1", "s1", "flex", "uniform"),
                   allele_freq = NULL,
                   od          = NULL,
                   p1geno      = NULL,
                   p2geno      = NULL,
                   mode        = NULL,
-                  pivec       = NULL) {
+                  pivec       = NULL,
+                  mu          = NULL,
+                  sigma       = NULL) {
   ## Check input ----------------------------------------------------------
   model <- match.arg(model)
   assertthat::are_equal(length(ploidy), 1)
@@ -72,6 +68,8 @@ rgeno <- function(n,
     stopifnot(is.null(mode))
     stopifnot(is.null(pivec))
     stopifnot(is.null(od))
+    stopifnot(is.null(mu))
+    stopifnot(is.null(sigma))
   } else if (model == "ash") {
     stopifnot(is.null(allele_freq))
     stopifnot(is.null(p1geno))
@@ -79,6 +77,8 @@ rgeno <- function(n,
     stopifnot(!is.null(mode))
     stopifnot(!is.null(pivec))
     stopifnot(is.null(od))
+    stopifnot(is.null(mu))
+    stopifnot(is.null(sigma))
   } else if (model == "f1") {
     stopifnot(is.null(allele_freq))
     stopifnot(!is.null(p1geno))
@@ -86,6 +86,8 @@ rgeno <- function(n,
     stopifnot(is.null(mode))
     stopifnot(is.null(pivec))
     stopifnot(is.null(od))
+    stopifnot(is.null(mu))
+    stopifnot(is.null(sigma))
     if (ploidy %% 2 != 0) {
       stop("pgeno: ploidy must be even when model = 'f1'.")
     }
@@ -96,6 +98,8 @@ rgeno <- function(n,
     stopifnot(is.null(mode))
     stopifnot(is.null(pivec))
     stopifnot(is.null(od))
+    stopifnot(is.null(mu))
+    stopifnot(is.null(sigma))
     if (ploidy %% 2 != 0) {
       stop("pgeno: ploidy must be even when model = 's1'.")
     }
@@ -106,6 +110,8 @@ rgeno <- function(n,
     stopifnot(is.null(mode))
     stopifnot(!is.null(pivec))
     stopifnot(is.null(od))
+    stopifnot(is.null(mu))
+    stopifnot(is.null(sigma))
   } else if (model == "uniform") {
     stopifnot(is.null(allele_freq))
     stopifnot(is.null(p1geno))
@@ -113,6 +119,8 @@ rgeno <- function(n,
     stopifnot(is.null(mode))
     stopifnot(is.null(pivec))
     stopifnot(is.null(od))
+    stopifnot(is.null(mu))
+    stopifnot(is.null(sigma))
   } else if (model == "bb") {
     stopifnot(!is.null(allele_freq))
     stopifnot(is.null(p1geno))
@@ -120,6 +128,17 @@ rgeno <- function(n,
     stopifnot(is.null(mode))
     stopifnot(is.null(pivec))
     stopifnot(!is.null(od))
+    stopifnot(is.null(mu))
+    stopifnot(is.null(sigma))
+  } else if (model == "norm") {
+    stopifnot(is.null(allele_freq))
+    stopifnot(is.null(p1geno))
+    stopifnot(is.null(p2geno))
+    stopifnot(is.null(mode))
+    stopifnot(is.null(pivec))
+    stopifnot(is.null(od))
+    stopifnot(!is.null(mu))
+    stopifnot(!is.null(sigma))
   } else{
     stop("rgeno: how did you get here?")
   }
@@ -153,6 +172,13 @@ rgeno <- function(n,
     stopifnot(sum(pivec) == 1)
     stopifnot(pivec >= 0, pivec <= 1)
   }
+  if (!is.null(mu)) {
+    stopifnot(length(mu) == 1)
+  }
+  if (!is.null(sigma)) {
+    stopifnot(length(sigma) == 1)
+    stopifnot(sigma > 0)
+  }
 
   ## Generate probability vector ---------------------------------------
 
@@ -172,6 +198,9 @@ rgeno <- function(n,
     pivec <- pivec
   } else if (model == "ash") {
     pivec <- get_probk_vec(pivec = pivec, model = "ash", mode = mode)
+  } else if (model == "norm") {
+    pivec <- stats::dnorm(x = 0:ploidy, mean = mu, sd = sigma, log = TRUE)
+    pivec <- exp(pivec - log_sum_exp(pivec))
   } else {
     stop("rgeno: how did you get here?")
   }

@@ -9,15 +9,7 @@ get_probk_vec(pivec, model, mode)
 \arguments{
 \item{pivec}{The mixing probability of the i'th discrete uniform distribution.}
 
-\item{model}{What form should the prior take? Should the genotype
-distribution be unimodal (\code{"ash"}), generically
-any categorical distribution (\code{"flex"}), binomial as a
-result of assuming Hardy-Weinberg equilibrium (\code{"hw"}),
-an overdispersed binomial (\code{"bb"}),
-a convolution of hypergeometics as a result that the population
-consists of either an F1 cross (\code{"f1"}) or an S1
-cross (\code{"s1"}), or fixed at a discrete uniform
-(\code{"uniform"})?}
+\item{model}{What form should the prior take? See Details for possible values.}
 
 \item{mode}{The mode if \code{model = "ash"}. If not provided,
 \code{flexdog} will estimate the mode. This is the starting point of

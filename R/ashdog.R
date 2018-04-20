@@ -4,32 +4,33 @@
 #' Flexible genotyping for autopolyploids from next-generation sequencing data.
 #'
 #' This function will genotype polyploid individuals from next generation
-#' sequencing (NGS) data while assuming the genotype distribution is either
-#' unimodal (\code{model = "ash"}), generically any categorical
-#' distribution (\code{model = "flex"}), binomial as a result of assuming
-#' the population is in Hardy-Weinberg equlibrium (\code{model = "hw"}),
-#' an overdispersed binomial (\code{model = "bb"}),
-#' results from the individuals being siblings from either an F1 cross
-#' (\code{model = "f1"}) or an S1 cross (\code{model = "s1"}), or is a discrete
-#' uniform distribution (\code{model = "uniform"}).
-#' It does this while accounting for
-#' allele bias, overdispersion, and sequencing error.
+#' sequencing (NGS) data while assuming the genotype distribution is one of
+#' several forms. It does this while accounting for allele bias, overdispersion,
+#' and sequencing error.
+#'
+#' Possible values of the genotype distribution (\code{model}) are:
+#' \describe{
+#'   \item{\code{"hw"}}{A binomial distribution that results from assuming that the population is in Hardy-Weinberg equilibrium (HWE). This actually does pretty well even when there are minor to moderate deviations from HWE, and so is the default.}
+#'   \item{\code{"bb"}}{A beta-binomial distribution. This is a overdispersed version of "hw" and can be derived from a special case of the Balding-Nichols model.}
+#'   \item{\code{"norm"}}{A distribution whose genotype frequencies are proportional to the density value of a normal with some mean and some standard deviation. Unlike the "bb" option, this will allow for distributions less dispersed than a binomial.}
+#'   \item{\code{"ash"}}{Any unimodal prior. This will run \code{ploidy} EM algorithms with a different center during each optimization. It returns the center (and its fit) with the highest likelihood.}
+#'   \item{\code{"f1}}{This prior assumes the individuals are all full-siblings resulting from one generation of a bi-parental cross.}
+#'   \item{\code{"s1"}}{This prior assumes the individuals are all full-siblings resulting from one generation of selfing. I.e. there is only one parent.}
+#'   \item{\code{"flex}}{Generically any categorical distribution. This is usually too flexible a prior to be used in practice.}
+#'   \item{\code{"uniform"}}{A discrete uniform distribution. This should never be used in practice.}
+#' }
+#'
 #'
 #' You might think a good default is \code{model = "uniform"} because it is
 #' somehow an "uninformative prior." But it is very informative and tends to
-#' work horribly in practice. I include it as an option only for completeness.
+#' work horribly in practice. It will generally estimate the allele bias and sequencing
+#' error rates to be unrealistic values so that the estimated genotypes are
+#' approximately uniform. I include it as an option only for completeness.
+#' Please don't use it.
 #'
 #' You might also think that allowing the genotype distribution to be anything
 #' would work well (\code{model = "flex"}). But this tends to overfit the data
 #' and get stuck in local modes during optimization.
-#'
-#' A good default is either \code{model = "hw"}
-#' if you have a small number of individuals (say, \eqn{<500}),
-#' or \code{model = "ash"} if you have a lot of inidivuals (say, \eqn{>500}).
-#' If the individuals are all siblings, then \code{model = "f1"} or
-#' \code{model = "s1"} would work better. If the relatedness pattern between
-#' individuals is more complicated, then I might recommend trying out
-#' \code{\link{mupdog}}.
 #'
 #' Prior to using \code{flexdog}, during the read-mapping step,
 #' you could try to get rid of allelic bias by
@@ -43,15 +44,7 @@
 #' @param sizevec A vector of total counts.
 #' @param ploidy The ploidy of the species. Assumed to be the same for each
 #'     individual.
-#' @param model What form should the prior take? Should the genotype
-#'     distribution be unimodal (\code{"ash"}), generically
-#'     any categorical distribution (\code{"flex"}), binomial as a
-#'     result of assuming Hardy-Weinberg equilibrium (\code{"hw"}),
-#'     an overdispersed binomial (\code{"bb"}),
-#'     a convolution of hypergeometics as a result that the population
-#'     consists of either an F1 cross (\code{"f1"}) or an S1
-#'     cross (\code{"s1"}), or fixed at a discrete uniform
-#'     (\code{"uniform"})?
+#' @param model What form should the prior take? See Details for possible values.
 #' @param verbose Should we output more (\code{TRUE}) or less
 #'     (\code{FALSE})?
 #' @param mean_bias The prior mean of the log-bias.
@@ -147,7 +140,7 @@
 flexdog <- function(refvec,
                     sizevec,
                     ploidy,
-                    model       = c("hw", "bb", "ash", "f1", "s1", "flex", "uniform"),
+                    model       = c("hw", "bb", "norm", "ash", "f1", "s1", "flex", "uniform"),
                     verbose     = TRUE,
                     mean_bias   = 0,
                     var_bias    = 0.7 ^ 2,
@@ -244,11 +237,11 @@ flexdog <- function(refvec,
     mode_vec <- mode
   } else if (is.null(mode) & model == "ash") {
     mode_vec <- (0:(ploidy - 1)) + 0.5
-  } else if (is.null(mode) & (model == "hw" | model == "bb")) {
+  } else if (is.null(mode) & (model == "hw" | model == "bb" | model == "norm")) {
     mode_vec <- mean(refvec / sizevec, na.rm = TRUE)
-  } else if (!is.null(mode) & (model == "hw" | model == "bb")) {
+  } else if (!is.null(mode) & (model == "hw" | model == "bb" | model == "norm")) {
     if (any((mode < 0) | (mode > 1))) {
-      stop('If model = "hw" or model = "bb" then `mode` should be between 0 and 1.\nIt is the initialization of the allele frequency.')
+      stop('If model = "hw" or model = "bb" or model = "norm" then `mode` should be between 0 and 1.\nIt is the initialization of the allele frequency.')
     }
   } else {
     stop("flexdog: Checking mode. How did you get here?")
@@ -304,6 +297,9 @@ flexdog <- function(refvec,
     } else if (model == "bb") {
       control$alpha <- mode ## initialize allele frequency for bb
       control$tau   <- boundary_tol ## initialize od for bb
+    } else if (model == "norm") {
+      control$mu    <- mode * ploidy ## initialize mean of normal
+      control$sigma <- sqrt(ploidy * mode * (1 - mode)) ## initialize sd of normal
     }
 
     ## Initialize pivec so that two modes have equal prob if model = "ash".
@@ -390,11 +386,14 @@ flexdog <- function(refvec,
       pivec <- fupdate_out$pivec
       control$pivec <- pivec ## initial condition for unimodal optimization
 
-      if (model == "bb") { ## update alpha and tau in control
+      ## New initialization parameters for priors that use gradient ascent.
+      if (model == "bb") {
         control$alpha <- fupdate_out$par$alpha
         control$tau   <- fupdate_out$par$tau
+      } else if (model == "norm") {
+        control$mu    <- fupdate_out$par$mu
+        control$sigma <- fupdate_out$par$sigma
       }
-
 
       ## Update probk_vec -----------------------------------------------
       pivec[pivec < 0] <- 0
@@ -551,7 +550,7 @@ is.flexdog <- function(x) {
 #' @seealso \code{\link{flexdog}} for where this is used.
 #'
 #' @author David Gerard
-initialize_pivec <- function(ploidy, mode, model = c("hw", "bb", "ash", "f1", "s1", "flex", "uniform")) {
+initialize_pivec <- function(ploidy, mode, model = c("hw", "bb", "norm", "ash", "f1", "s1", "flex", "uniform")) {
   assertthat::are_equal(1, length(ploidy), length(mode))
   assertthat::are_equal(ploidy %% 1, 0)
 
@@ -576,7 +575,7 @@ initialize_pivec <- function(ploidy, mode, model = c("hw", "bb", "ash", "f1", "s
       pivec <- get_uni_rep(pvec_init)$pivec + 10 ^-6
       pivec <- pivec / sum(pivec)
     }
-  } else if (model == "hw" | model == "f1" | model == "s1" | model == "bb") {
+  } else if (model == "hw" | model == "f1" | model == "s1" | model == "bb" | model == "norm") {
     if (mode < 0 | mode > 1) {
       stop('initialize_pivec: when model = "hw", mode should be between 0 and 1.\n It is the initialization of the allele frequency.')
     }
@@ -606,7 +605,7 @@ initialize_pivec <- function(ploidy, mode, model = c("hw", "bb", "ash", "f1", "s
 #' }
 #'
 #' @author David Gerard
-flex_update_pivec <- function(weight_vec, model = c("hw", "bb", "ash", "f1", "s1", "flex", "uniform"), control) {
+flex_update_pivec <- function(weight_vec, model = c("hw", "bb", "norm", "ash", "f1", "s1", "flex", "uniform"), control) {
   ## Check input -------------------------------
   ploidy <- length(weight_vec) - 1
   model <- match.arg(model)
@@ -748,6 +747,24 @@ flex_update_pivec <- function(weight_vec, model = c("hw", "bb", "ash", "f1", "s1
     return_list$par <- list()
     return_list$par$alpha <- optim_out$par[1]
     return_list$par$tau   <- optim_out$par[2]
+  } else if (model == "norm") {
+    optim_out <- stats::optim(par        = c(control$mu, control$sigma),
+                              fn         = obj_for_weighted_lnorm,
+                              gr         = grad_for_weighted_lnorm,
+                              method     = "L-BFGS-B",
+                              lower      = c(-1, 10 ^ -8),
+                              upper      = c(ploidy + 1, Inf),
+                              weight_vec = weight_vec,
+                              ploidy     = ploidy,
+                              control    = list(fnscale = -1))
+    return_list$pivec <- stats::dnorm(x = 0:ploidy,
+                                      mean = optim_out$par[1],
+                                      sd = optim_out$par[2],
+                                      log = TRUE)
+    return_list$pivec <- exp(return_list$pivec - log_sum_exp(return_list$pivec))
+    return_list$par       <- list()
+    return_list$par$mu    <- optim_out$par[1]
+    return_list$par$sigma <- optim_out$par[2]
   } else {
     stop("flex_update_pivec: how did you get here?")
   }

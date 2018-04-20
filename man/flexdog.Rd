@@ -4,13 +4,13 @@
 \alias{flexdog}
 \title{Flexible genotyping for autopolyploids from next-generation sequencing data.}
 \usage{
-flexdog(refvec, sizevec, ploidy, model = c("hw", "bb", "ash", "f1", "s1",
-  "flex", "uniform"), verbose = TRUE, mean_bias = 0, var_bias = 0.7^2,
-  mean_seq = -4.7, var_seq = 1, seq = 0.005, bias = 1, od = 0.001,
-  update_bias = TRUE, update_seq = TRUE, update_od = TRUE, mode = NULL,
-  use_cvxr = FALSE, itermax = 200, tol = 10^-4, fs1_alpha = 10^-3,
-  ashpen = 10^-6, p1ref = NULL, p1size = NULL, p2ref = NULL,
-  p2size = NULL)
+flexdog(refvec, sizevec, ploidy, model = c("hw", "bb", "norm", "ash", "f1",
+  "s1", "flex", "uniform"), verbose = TRUE, mean_bias = 0,
+  var_bias = 0.7^2, mean_seq = -4.7, var_seq = 1, seq = 0.005,
+  bias = 1, od = 0.001, update_bias = TRUE, update_seq = TRUE,
+  update_od = TRUE, mode = NULL, use_cvxr = FALSE, itermax = 200,
+  tol = 10^-4, fs1_alpha = 10^-3, ashpen = 10^-6, p1ref = NULL,
+  p1size = NULL, p2ref = NULL, p2size = NULL)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads with the reference allele.}
@@ -20,15 +20,7 @@ flexdog(refvec, sizevec, ploidy, model = c("hw", "bb", "ash", "f1", "s1",
 \item{ploidy}{The ploidy of the species. Assumed to be the same for each
 individual.}
 
-\item{model}{What form should the prior take? Should the genotype
-distribution be unimodal (\code{"ash"}), generically
-any categorical distribution (\code{"flex"}), binomial as a
-result of assuming Hardy-Weinberg equilibrium (\code{"hw"}),
-an overdispersed binomial (\code{"bb"}),
-a convolution of hypergeometics as a result that the population
-consists of either an F1 cross (\code{"f1"}) or an S1
-cross (\code{"s1"}), or fixed at a discrete uniform
-(\code{"uniform"})?}
+\item{model}{What form should the prior take? See Details for possible values.}
 
 \item{verbose}{Should we output more (\code{TRUE}) or less
 (\code{FALSE})?}
@@ -142,33 +134,33 @@ An object of class \code{flexdog}, which consists
 }
 \description{
 This function will genotype polyploid individuals from next generation
-sequencing (NGS) data while assuming the genotype distribution is either
-unimodal (\code{model = "ash"}), generically any categorical
-distribution (\code{model = "flex"}), binomial as a result of assuming
-the population is in Hardy-Weinberg equlibrium (\code{model = "hw"}),
-an overdispersed binomial (\code{model = "bb"}),
-results from the individuals being siblings from either an F1 cross
-(\code{model = "f1"}) or an S1 cross (\code{model = "s1"}), or is a discrete
-uniform distribution (\code{model = "uniform"}).
-It does this while accounting for
-allele bias, overdispersion, and sequencing error.
+sequencing (NGS) data while assuming the genotype distribution is one of
+several forms. It does this while accounting for allele bias, overdispersion,
+and sequencing error.
 }
 \details{
+Possible values of the genotype distribution (\code{model}) are:
+\describe{
+  \item{\code{"hw"}}{A binomial distribution that results from assuming that the population is in Hardy-Weinberg equilibrium (HWE). This actually does pretty well even when there are minor to moderate deviations from HWE, and so is the default.}
+  \item{\code{"bb"}}{A beta-binomial distribution. This is a overdispersed version of "hw" and can be derived from a special case of the Balding-Nichols model.}
+  \item{\code{"norm"}}{A distribution whose genotype frequencies are proportional to the density value of a normal with some mean and some standard deviation. Unlike the "bb" option, this will allow for distributions less dispersed than a binomial.}
+  \item{\code{"ash"}}{Any unimodal prior. This will run \code{ploidy} EM algorithms with a different center during each optimization. It returns the center (and its fit) with the highest likelihood.}
+  \item{\code{"f1}}{This prior assumes the individuals are all full-siblings resulting from one generation of a bi-parental cross.}
+  \item{\code{"s1"}}{This prior assumes the individuals are all full-siblings resulting from one generation of selfing. I.e. there is only one parent.}
+  \item{\code{"flex}}{Generically any categorical distribution. This is usually too flexible a prior to be used in practice.}
+  \item{\code{"uniform"}}{A discrete uniform distribution. This should never be used in practice.}
+}
+
 You might think a good default is \code{model = "uniform"} because it is
 somehow an "uninformative prior." But it is very informative and tends to
-work horribly in practice. I include it as an option only for completeness.
+work horribly in practice. It will generally estimate the allele bias and sequencing
+error rates to be unrealistic values so that the estimated genotypes are
+approximately uniform. I include it as an option only for completeness.
+Please don't use it.
 
 You might also think that allowing the genotype distribution to be anything
 would work well (\code{model = "flex"}). But this tends to overfit the data
 and get stuck in local modes during optimization.
-
-A good default is either \code{model = "hw"}
-if you have a small number of individuals (say, \eqn{<500}),
-or \code{model = "ash"} if you have a lot of inidivuals (say, \eqn{>500}).
-If the individuals are all siblings, then \code{model = "f1"} or
-\code{model = "s1"} would work better. If the relatedness pattern between
-individuals is more complicated, then I might recommend trying out
-\code{\link{mupdog}}.
 
 Prior to using \code{flexdog}, during the read-mapping step,
 you could try to get rid of allelic bias by

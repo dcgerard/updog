@@ -380,3 +380,45 @@ NumericVector grad_for_weighted_lbb(NumericVector parvec,
   return grad;
 }
 
+
+//' Gradient for \code{\link{obj_for_weighted_lnorm}}.
+//'
+//' @inheritParams obj_for_weighted_lnorm
+//'
+//' @return A vector of length 2. The first term is the derivative with respect to the mean,
+//'     the second term is the derivative with respect to the standard deviation (not variance).
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+NumericVector grad_for_weighted_lnorm(NumericVector parvec,
+                                      int ploidy,
+                                      NumericVector weight_vec) {
+  if (parvec.length() != 2) {
+    Rcpp::stop("obj_for_weighted_lbb: parvec not of length 2.");
+  }
+  if (weight_vec.length() != (ploidy + 1)) {
+    Rcpp::stop("obj_for_weighted_lbb: weight_vec not of length ploidy + 1.");
+  }
+
+  double mu    = parvec(0);
+  double sigma = parvec(1);
+  NumericVector grad(2);
+  NumericVector pvec(ploidy + 1);
+  for (int i = 0; i <= ploidy; i++) {
+    pvec(i) = R::dnorm(((double)i - mu) / sigma, 0, 1, true);
+  }
+  double lsum = log_sum_exp(pvec);
+  pvec = Rcpp::exp(pvec - lsum);
+  double wsum = Rcpp::sum(weight_vec);
+
+  for (int i = 0; i <= ploidy; i++) {
+    grad(0) = grad(0) + weight_vec(i) * ((double)i - mu) - wsum * ((double)i - mu) * pvec(i);
+    grad(1) = grad(1) + weight_vec(i) * std::pow(((double)i - mu), 2) - wsum * std::pow(((double)i - mu), 2) * pvec(i);
+  }
+
+  grad(0) = grad(0) / std::pow(sigma, 2);
+  grad(1) = grad(1) / std::pow(sigma, 3);
+
+  return(grad);
+}
+

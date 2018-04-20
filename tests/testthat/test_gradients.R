@@ -212,7 +212,24 @@ test_that("grad_for_weighted_lbb is gradient for obj_for_weighted_lbb", {
 })
 
 
+test_that("grad_for_weighted_lnorm is gradient for obj_for_weighted_lnorm", {
+  set.seed(1)
+  ploidy <- 6
+  weight_vec <- runif(ploidy + 1)
+  parvec <- c(1.1, 1.2)
 
+  myg <- grad_for_weighted_lnorm(parvec = parvec, ploidy = ploidy, weight_vec = weight_vec)
+
+  myenv <- new.env()
+  assign(x = "parvec", value = parvec, envir = myenv)
+  assign(x = "ploidy", value = ploidy, envir = myenv)
+  assign(x = "weight_vec", value = weight_vec, envir = myenv)
+  nout <- stats::numericDeriv(quote(obj_for_weighted_lnorm(parvec = parvec,
+                                                           ploidy = ploidy,
+                                                           weight_vec = weight_vec)),
+                              "parvec", myenv)
+  expect_equal(c(attr(nout, "gradient")), myg, tol = 10^-5)
+})
 
 
 

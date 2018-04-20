@@ -376,6 +376,18 @@ grad_for_weighted_lbb <- function(parvec, ploidy, weight_vec) {
     .Call('_mupdog_grad_for_weighted_lbb', PACKAGE = 'mupdog', parvec, ploidy, weight_vec)
 }
 
+#' Gradient for \code{\link{obj_for_weighted_lnorm}}.
+#'
+#' @inheritParams obj_for_weighted_lnorm
+#'
+#' @return A vector of length 2. The first term is the derivative with respect to the mean,
+#'     the second term is the derivative with respect to the standard deviation (not variance).
+#'
+#' @author David Gerard
+grad_for_weighted_lnorm <- function(parvec, ploidy, weight_vec) {
+    .Call('_mupdog_grad_for_weighted_lnorm', PACKAGE = 'mupdog', parvec, ploidy, weight_vec)
+}
+
 #' Variational posterior probability of having \code{dosage} A alleles
 #' when the ploidy is \code{ploidy}, the allele frequency is
 #' \code{alpha}, the individual-specific overdispersion parameter is
@@ -585,6 +597,22 @@ elbo <- function(warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mea
 #' @author David Gerard
 obj_for_weighted_lbb <- function(parvec, ploidy, weight_vec) {
     .Call('_mupdog_obj_for_weighted_lbb', PACKAGE = 'mupdog', parvec, ploidy, weight_vec)
+}
+
+#' Objective funtion for updating discrete normal genotype distribution
+#' when \code{model = "normal"} in \code{\link{flex_update_pivec}}.
+#'
+#' @param parvec A vector of length 2. The first term is the current mean of the
+#'     underlying normal. The second term is the current standard deviation
+#'     (not variance) of the normal.
+#' @param ploidy The ploidy of the species.
+#' @param weight_vec A vector of length \code{ploidy + 1} that contains the weights
+#'     for each component beta-binomial.
+#'
+#' @author David Gerard
+#'
+obj_for_weighted_lnorm <- function(parvec, ploidy, weight_vec) {
+    .Call('_mupdog_obj_for_weighted_lnorm', PACKAGE = 'mupdog', parvec, ploidy, weight_vec)
 }
 
 #' Calculate oracle misclassification error.

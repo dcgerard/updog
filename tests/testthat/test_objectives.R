@@ -112,3 +112,24 @@ test_that("obj_for_mu_sigma2 and elbo match", {
 }
 )
 
+test_that("obj_for_weighted_lnorm is correct", {
+  weight_vec <- c(1, 2, 3)
+  ploidy <- 2
+  parvec <- c(0.3, 0.4)
+
+  cobj <- obj_for_weighted_lnorm(parvec = parvec, ploidy = ploidy, weight_vec = weight_vec)
+
+  pivec <- dnorm(x = 0:ploidy, mean = parvec[1], sd = parvec[2])
+  pivec <- pivec / sum(pivec)
+  robj <- sum(log(pivec) * weight_vec)
+
+  expect_equal(cobj, robj)
+
+  ## The R code is actually a little faster
+  # microbenchmark::microbenchmark(
+  #   {pivec <- dnorm(x = 0:ploidy, mean = parvec[1], sd = parvec[2])
+  #   pivec <- pivec / sum(pivec)
+  #   robj <- sum(log(pivec) * weight_vec)},
+  #   cobj <- obj_for_weighted_lnorm(parvec = parvec, ploidy = ploidy, weight_vec = weight_vec)
+  # )
+})

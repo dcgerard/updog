@@ -16,7 +16,7 @@
 NumericVector get_probk_vec(NumericVector pivec, std::string model, double mode) {
   int K = pivec.length() - 1;
   NumericVector probk_vec(K + 1);
-  if ((model == "flex") | (model == "hw") | (model == "f1") | (model == "s1") | (model == "uniform") | (model == "bb")) {
+  if ((model == "flex") | (model == "hw") | (model == "f1") | (model == "s1") | (model == "uniform") | (model == "bb") | (model == "norm")) {
     probk_vec = pivec;
   } else if (model == "ash") {
     double denom; // what you divide the pi's by.
@@ -38,7 +38,7 @@ NumericVector get_probk_vec(NumericVector pivec, std::string model, double mode)
       }
     }
   } else {
-    Rcpp::stop("get_probk_vec: model must be one of 'flex', 'ash', 'hw', 'bb', 'f1', 's1', or 'uniform'");
+    Rcpp::stop("get_probk_vec: model must be one of 'flex', 'ash', 'hw', 'bb', 'norm', 'f1', 's1', or 'uniform'");
   }
   return probk_vec;
 }

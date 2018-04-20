@@ -4,24 +4,16 @@
 \alias{rgeno}
 \title{Simulate individual genotypes from one of the supported \code{\link{flexdog}} models.}
 \usage{
-rgeno(n, ploidy, model = c("hw", "bb", "ash", "f1", "s1", "flex", "uniform"),
-  allele_freq = NULL, od = NULL, p1geno = NULL, p2geno = NULL,
-  mode = NULL, pivec = NULL)
+rgeno(n, ploidy, model = c("hw", "bb", "norm", "ash", "f1", "s1", "flex",
+  "uniform"), allele_freq = NULL, od = NULL, p1geno = NULL,
+  p2geno = NULL, mode = NULL, pivec = NULL, mu = NULL, sigma = NULL)
 }
 \arguments{
 \item{n}{The number of observations.}
 
 \item{ploidy}{The ploidy of the species.}
 
-\item{model}{What form should the prior take? Should the genotype
-distribution be unimodal (\code{"ash"}), generically
-any categorical distribution (\code{"flex"}), binomial as a
-result of assuming Hardy-Weinberg equilibrium (\code{"hw"}),
-an overdispersed binomial (\code{"bb"}),
-a convolution of hypergeometics as a result that the population
-consists of either an F1 cross (\code{"f1"}) or an S1
-cross (\code{"s1"}), or fixed at a discrete uniform
-(\code{"uniform"})? See Details for more information.}
+\item{model}{What form should the prior take? See Details in \code{\link{flexdog}}.}
 
 \item{allele_freq}{If \code{model = "hw"}, then this is the allele frequency of the population.
 For any other model, this should be \code{NULL}.}
@@ -44,16 +36,19 @@ For any other model, this should be \code{NULL}.}
 the mixing proportions of the discrete uniforms. If
 \code{model = "flex"}, then element \code{i} is the probability of genotype \code{i - 1}.
 For any other model, this should be \code{NULL}.}
+
+\item{mu}{If \code{model = "norm"}, this is the mean of the normal.
+For any other model, this should be \code{NULL}.}
+
+\item{sigma}{If \code{model = "norm"}, this is the standard deviation of the normal.
+For any other model, this should be \code{NULL}.}
 }
 \value{
 A vector of length \code{n} with the genotypes of the sampled individuals.
 }
 \description{
 This will simulate genotypes of a sample of individuals drawn from one of the populations supported by
-\code{\link{flexdog}}. Specificially, either generic populations, those with a unimodal genotype
-distribution, those in Hardy-Weinberg equilibrium, those that are more dispersed than assumed from
-Hardy-Weinberg equilibrium, those resulting from a biparental cross or a generation
-of selfing, and populations with a uniform genotype distribution.
+\code{\link{flexdog}}. See the details of \code{\link{flexdog}} for the models allowed.
 }
 \details{
 The allowable variable values of \code{allele_freq}, \code{od}, \code{p1geno}, \code{p2geno}, \code{pivec},
@@ -63,7 +58,8 @@ and \code{mode} varies based on the value of \code{model}. If \code{model = "ash
 be non-\code{NULL}. If \code{model = "f1"} then only \code{p1geno} and \code{p2geno} can be non-\code{NULL}.
 If \code{model = "s1"} then only \code{p1geno} can be non-\code{NULL}. If \code{model = "uniform"}, then
 none of the above variables can be non-\code{NULL}. If \code{model = "bb"}, then only \code{allele_freq},
-and \code{od} can be non-\code{NULL}.
+and \code{od} can be non-\code{NULL}. If code{model == "norm"}, then only \code{mu} and \code{sigma}
+can be non-\code{NULL}.
 }
 \author{
 David Gerard
