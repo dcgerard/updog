@@ -169,7 +169,7 @@ rgeno <- function(n,
   }
   if (!is.null(pivec)) {
     stopifnot(length(pivec) == (ploidy + 1))
-    stopifnot(sum(pivec) == 1)
+    stopifnot(abs(sum(pivec) - 1) < 10^-8)
     stopifnot(pivec >= 0, pivec <= 1)
   }
   if (!is.null(mu)) {
