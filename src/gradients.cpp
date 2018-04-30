@@ -419,6 +419,7 @@ NumericVector grad_for_weighted_lnorm(NumericVector parvec,
   grad(0) = grad(0) / std::pow(sigma, 2);
   grad(1) = grad(1) / std::pow(sigma, 3);
 
+
   return(grad);
 }
 

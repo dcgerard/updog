@@ -1,6 +1,7 @@
 context("flexdog")
 
 test_that("flexdog works", {
+  skip("takes too long for CRAN.")
   refvec    <- 1:20
   sizevec   <- 40:21
 
@@ -104,6 +105,7 @@ test_that("get_probk_vec works", {
 )
 
 test_that("don't update bias, seq, od when supposed not to", {
+  skip("takes too long for CRAN.")
   refvec  <- 1:20
   sizevec <- 40:21
   ploidy  <- 4
@@ -164,6 +166,7 @@ test_that("actually using parent data", {
                    p1ref = mcount / ploidy,
                    p1size = mcount,
                    update_bias = FALSE,
+                   bias_init = 1,
                    update_od = FALSE,
                    update_seq = FALSE)
 
@@ -176,6 +179,7 @@ test_that("actually using parent data", {
                    p1ref = 2 * mcount / ploidy,
                    p1size = mcount,
                    update_bias = FALSE,
+                   bias_init = 1,
                    update_od = FALSE,
                    update_seq = FALSE)
 
@@ -188,6 +192,7 @@ test_that("actually using parent data", {
                    p1ref = 3 * mcount / ploidy,
                    p1size = mcount,
                    update_bias = FALSE,
+                   bias_init = 1,
                    update_od = FALSE,
                    update_seq = FALSE)
 

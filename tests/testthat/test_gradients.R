@@ -216,7 +216,7 @@ test_that("grad_for_weighted_lnorm is gradient for obj_for_weighted_lnorm", {
   set.seed(1)
   ploidy <- 6
   weight_vec <- runif(ploidy + 1)
-  parvec <- c(1.1, 1.2)
+  parvec <- c(11, 2)
 
   myg <- grad_for_weighted_lnorm(parvec = parvec, ploidy = ploidy, weight_vec = weight_vec)
 
@@ -229,6 +229,8 @@ test_that("grad_for_weighted_lnorm is gradient for obj_for_weighted_lnorm", {
                                                            weight_vec = weight_vec)),
                               "parvec", myenv)
   expect_equal(c(attr(nout, "gradient")), myg, tol = 10^-5)
+
+
 })
 
 

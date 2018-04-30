@@ -103,7 +103,7 @@ rbetabinom <- function(n, size, mu, rho) {
 
 #' Obtain the genotype distribution given the distribution of discrete uniforms.
 #'
-#' @inheritParams flexdog
+#' @inheritParams flexdog_full
 #' @param pivec The mixing probability of the i'th discrete uniform distribution.
 #'
 #' @author David Gerard
@@ -118,7 +118,7 @@ get_probk_vec <- function(pivec, model, mode) {
 #'
 #' The (i,k)th element is \eqn{1(k \in F(a, i)) / |F(a,i)|}.
 #'
-#' @inheritParams flexdog
+#' @inheritParams flexdog_full
 #'
 #' @author David Gerard
 #'
@@ -128,7 +128,7 @@ get_inner_weights <- function(ploidy, mode) {
 
 #' E-step in \code{\link{flexdog}}.
 #'
-#' @inheritParams flexdog
+#' @inheritParams flexdog_full
 #' @param probk_vec The vector of current prior probabilities of each genotype.
 #'
 #'
@@ -142,7 +142,7 @@ get_wik_mat <- function(probk_vec, refvec, sizevec, ploidy, seq, bias, od) {
 
 #' Log-likelihood that \code{\link{flexdog}} maximizes.
 #'
-#' @inheritParams flexdog
+#' @inheritParams flexdog_full
 #' @param probk_vec The kth element is the prior probability of genotype k (when starting to count from 0).
 #'
 #' @author David Gerard

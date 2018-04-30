@@ -1,6 +1,78 @@
 ## Functions for ashdog and flexdog
 
 
+#' @inherit flexdog_full
+#'
+#' @param bias_init A vector of initial values for the bias parameter
+#'     over the multiple runs of \code{flexdog}.
+#' @param ... Additional parameters to pass to \code{\link{flexdog_full}}.
+#'
+#' @seealso \code{\link{flexdog_full}} For additional parameter options.
+#'
+#' @author David Gerard
+#'
+#' @export
+flexdog <- function(refvec,
+                    sizevec,
+                    ploidy,
+                    model       = c("flex", "norm", "hw", "bb", "ash", "f1", "s1", "uniform"),
+                    p1ref       = NULL,
+                    p1size      = NULL,
+                    p2ref       = NULL,
+                    p2size      = NULL,
+                    bias_init   = c(0.5, 0.7, 1, 1.4, 2),
+                    verbose     = TRUE,
+                    ...) {
+  assertthat::assert_that(all(bias_init > 0))
+
+  if (verbose) {
+    if (length(refvec) < (10 * (ploidy + 1))) {
+      cat('Very few individuals for model = "flex"\nYou might want to try model = "norm" instead.\n\n')
+    }
+  }
+
+  fout <- list()
+  fout$llike <- -Inf
+  for (bias_index in 1:length(bias_init)) {
+    if (verbose) {
+      cat("         Fit:", bias_index, "of", length(bias_init), "\n")
+      cat("Initial Bias:", bias_init[bias_index], "\n")
+    }
+
+    fcurrent <- flexdog_full(refvec  = refvec,
+                             sizevec = sizevec,
+                             ploidy  = ploidy,
+                             model   = model,
+                             p1ref   = p1ref,
+                             p1size  = p1size,
+                             p2ref   = p2ref,
+                             p2size  = p2size,
+                             bias    = bias_init[bias_index],
+                             verbose = FALSE,
+                             ...)
+
+    if (verbose) {
+      cat("Log-Likelihood:", fcurrent$llike, "\n")
+    }
+
+    if (fcurrent$llike > fout$llike) {
+      fout <- fcurrent
+
+      if (verbose) {
+        cat("Keeping new fit.\n\n")
+      }
+    } else if (verbose) {
+      cat("Keeping old fit.\n\n")
+    }
+  }
+
+  if (verbose) {
+    cat("Done!\n")
+  }
+
+  return(fout)
+}
+
 #' Flexible genotyping for autopolyploids from next-generation sequencing data.
 #'
 #' This function will genotype polyploid individuals from next generation
@@ -12,8 +84,7 @@
 #' \describe{
 #'   \item{\code{"hw"}}{A binomial distribution that results from assuming that
 #'       the population is in Hardy-Weinberg equilibrium (HWE). This actually does
-#'       pretty well even when there are minor to moderate deviations from HWE, and
-#'       so is the default.}
+#'       pretty well even when there are minor to moderate deviations from HWE.}
 #'   \item{\code{"bb"}}{A beta-binomial distribution. This is a overdispersed
 #'       version of "hw" and can be derived from a special case of the Balding-Nichols model.}
 #'   \item{\code{"norm"}}{A distribution whose genotype frequencies are proportional
@@ -26,8 +97,8 @@
 #'       from one generation of a bi-parental cross.}
 #'   \item{\code{"s1"}}{This prior assumes the individuals are all full-siblings resulting
 #'       from one generation of selfing. I.e. there is only one parent.}
-#'   \item{\code{"flex"}}{Generically any categorical distribution. This is usually too
-#'       flexible a prior to be used in practice.}
+#'   \item{\code{"flex"}}{Generically any categorical distribution. This works well if
+#'       you have a lot of individuals, and so is the default.}
 #'   \item{\code{"uniform"}}{A discrete uniform distribution. This should never be
 #'       used in practice.}
 #' }
@@ -40,15 +111,17 @@
 #' approximately uniform. I include it as an option only for completeness.
 #' Please don't use it.
 #'
-#' You might also think that allowing the genotype distribution to be anything
-#' would work well (\code{model = "flex"}). But this tends to overfit the data
-#' and get stuck in local modes during optimization.
+#' Generally, good defaults are to use \code{model = "flex"} if you have
+#' a lot of individuals (say, \eqn{> 10 * (ploidy + 1)}) and \code{model = "normal"} if you do not have
+#' a lot of individuals (say, \eqn{< 10 * (ploidy + 1)}). This is if you use multiple initializations
+#' of the bias as is the default in \code{\link{flexdog}}.
 #'
 #' Prior to using \code{flexdog}, during the read-mapping step,
 #' you could try to get rid of allelic bias by
 #' using WASP (\url{https://doi.org/10.1101/011221}). If you are successful
 #' in removing the allelic bias (because its only source was the read-mapping
-#' step), then you could set \code{update_bias = FALSE}. You can visually
+#' step), then you could set \code{update_bias = FALSE} and \code{bias_init = 1}.
+#' You can visually
 #' inspect SNPs for bias by using \code{\link[updog]{plot_geno}} from the
 #' \code{updog} package.
 #'
@@ -154,31 +227,31 @@
 #' @author David Gerard
 #'
 #' @export
-flexdog <- function(refvec,
-                    sizevec,
-                    ploidy,
-                    model       = c("hw", "bb", "norm", "ash", "f1", "s1", "flex", "uniform"),
-                    verbose     = TRUE,
-                    mean_bias   = 0,
-                    var_bias    = 0.7 ^ 2,
-                    mean_seq    = -4.7,
-                    var_seq     = 1,
-                    seq         = 0.005,
-                    bias        = 1,
-                    od          = 0.001,
-                    update_bias = TRUE,
-                    update_seq  = TRUE,
-                    update_od   = TRUE,
-                    mode        = NULL,
-                    use_cvxr    = FALSE,
-                    itermax     = 200,
-                    tol         = 10 ^ -4,
-                    fs1_alpha   = 10 ^ -3,
-                    ashpen      = 10 ^ -6,
-                    p1ref       = NULL,
-                    p1size      = NULL,
-                    p2ref       = NULL,
-                    p2size      = NULL) {
+flexdog_full <- function(refvec,
+                         sizevec,
+                         ploidy,
+                         model       = c("hw", "bb", "norm", "ash", "f1", "s1", "flex", "uniform"),
+                         verbose     = TRUE,
+                         mean_bias   = 0,
+                         var_bias    = 0.7 ^ 2,
+                         mean_seq    = -4.7,
+                         var_seq     = 1,
+                         seq         = 0.005,
+                         bias        = 1,
+                         od          = 0.001,
+                         update_bias = TRUE,
+                         update_seq  = TRUE,
+                         update_od   = TRUE,
+                         mode        = NULL,
+                         use_cvxr    = FALSE,
+                         itermax     = 200,
+                         tol         = 10 ^ -4,
+                         fs1_alpha   = 10 ^ -3,
+                         ashpen      = 10 ^ -6,
+                         p1ref       = NULL,
+                         p1size      = NULL,
+                         p2ref       = NULL,
+                         p2size      = NULL) {
 
   ## Check input -----------------------------------------------------
   model <- match.arg(model)
@@ -562,7 +635,7 @@ is.flexdog <- function(x) {
 #' The key idea here is choosing the pi's so that the two modes
 #' have equal probability.
 #'
-#' @inheritParams flexdog
+#' @inheritParams flexdog_full
 #'
 #' @seealso \code{\link{flexdog}} for where this is used.
 #'

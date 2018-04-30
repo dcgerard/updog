@@ -656,7 +656,7 @@ double obj_for_weighted_lnorm(NumericVector parvec,
   double mu    = parvec(0);
   double sigma = parvec(1);
   NumericVector lpvec(ploidy + 1);
-  double obj;
+  double obj = 0.0;
   for (int i = 0; i <= ploidy; i++) {
     lpvec(i) = R::dnorm((double)i, mu, sigma, true);
     obj = obj + weight_vec(i) * lpvec(i);
