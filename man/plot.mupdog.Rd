@@ -14,7 +14,7 @@
 \item{...}{Not used.}
 }
 \description{
-A wrapper for \code{\link[updog]{plot_geno}}. This will create a genotype plot for a single SNP.
+A wrapper for \code{\link{plot_geno}}. This will create a genotype plot for a single SNP.
 }
 \details{
 On a genotype plot, the x-axis contains the counts of the non-reference allele and the y-axis

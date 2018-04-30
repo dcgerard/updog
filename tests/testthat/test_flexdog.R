@@ -1,7 +1,6 @@
 context("flexdog")
 
 test_that("flexdog works", {
-  skip("takes too long for CRAN.")
   refvec    <- 1:20
   sizevec   <- 40:21
 
@@ -41,8 +40,10 @@ test_that("flexdog works", {
 
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
                   ploidy = ploidy, model = "hw", verbose = FALSE)
+  pl <- plot(fout)
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
                   ploidy = ploidy, model = "flex", verbose = FALSE)
+  pl <- plot(fout)
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
                   ploidy = ploidy, model = "bb", verbose = FALSE)
 

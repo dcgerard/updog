@@ -48,9 +48,9 @@ refvec  <- rflexdog(sizevec = sizevec, geno = genovec,
                     ploidy = ploidy, seq = 0.001,
                     bias = 0.5, od = 0)
 
-## Plot the simulated data using plot_geno from the updog package.
-updog::plot_geno(ocounts = refvec, osize = sizevec,
-                 ploidy = ploidy, seq = 0.001, bias = 0.5)
+## Plot the simulated data using plot_geno.
+plot_geno(refvec = refvec, sizevec = sizevec,
+          ploidy = ploidy, seq = 0.001, bias = 0.5)
 
 }
 \seealso{

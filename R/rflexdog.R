@@ -187,7 +187,7 @@ rgeno <- function(n,
   }
 
   if ((model == "s1") | (model == "f1")) {
-    pivec <- updog::get_q_array(ploidy = ploidy)[p1geno + 1, p2geno + 1, ]
+    pivec <- get_q_array(ploidy = ploidy)[p1geno + 1, p2geno + 1, ]
   } else if (model == "hw") {
     pivec <- stats::dbinom(x = 0:ploidy, size = ploidy, prob = allele_freq)
   } else if (model == "bb") {
@@ -254,9 +254,9 @@ rgeno <- function(n,
 #'                     ploidy = ploidy, seq = 0.001,
 #'                     bias = 0.5, od = 0)
 #'
-#' ## Plot the simulated data using plot_geno from the updog package.
-#' updog::plot_geno(ocounts = refvec, osize = sizevec,
-#'                  ploidy = ploidy, seq = 0.001, bias = 0.5)
+#' ## Plot the simulated data using plot_geno.
+#' plot_geno(refvec = refvec, sizevec = sizevec,
+#'           ploidy = ploidy, seq = 0.001, bias = 0.5)
 #'
 rflexdog <- function(sizevec,
                      geno,

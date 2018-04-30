@@ -122,8 +122,7 @@ flexdog <- function(refvec,
 #' in removing the allelic bias (because its only source was the read-mapping
 #' step), then you could set \code{update_bias = FALSE} and \code{bias_init = 1}.
 #' You can visually
-#' inspect SNPs for bias by using \code{\link[updog]{plot_geno}} from the
-#' \code{updog} package.
+#' inspect SNPs for bias by using \code{\link{plot_geno}}.
 #'
 #' @param refvec A vector of counts of reads with the reference allele.
 #' @param sizevec A vector of total counts.
@@ -382,7 +381,7 @@ flexdog_full <- function(refvec,
       control$use_cvxr      <- use_cvxr
       control$lambda        <- ashpen
     } else if (model == "f1" | model == "s1") {
-      control$qarray    <- updog::get_q_array(ploidy = ploidy)
+      control$qarray    <- get_q_array(ploidy = ploidy)
       control$fs1_alpha <- fs1_alpha
     } else if (model == "bb") {
       control$alpha <- mode ## initialize allele frequency for bb
@@ -598,21 +597,20 @@ flexdog_full <- function(refvec,
 #'
 #' @seealso
 #' \describe{
-#'   \item{\code{\link[updog]{plot_geno}}}{The underlying plotting function.}
+#'   \item{\code{\link{plot_geno}}}{The underlying plotting function.}
 #'   \item{\code{\link{flexdog}}}{Creates a \code{flexpdog} object.}
 #' }
 #'
 #' @export
 plot.flexdog <- function(x, ...) {
   assertthat::assert_that(is.flexdog(x))
-  pl <- updog::plot_geno(ocounts   = x$input$refvec,
-                         osize     = x$input$sizevec,
-                         ploidy    = x$input$ploidy,
-                         ogeno     = x$geno,
-                         seq_error = x$seq,
-                         bias_val  = x$bias,
-                         prob_ok   = x$maxpostprob) +
-    ggplot2::guides(alpha=ggplot2::guide_legend(title = "maxpostprob"))
+  pl <- plot_geno(refvec      = x$input$refvec,
+                  sizevec     = x$input$sizevec,
+                  ploidy      = x$input$ploidy,
+                  geno        = x$geno,
+                  seq         = x$seq,
+                  bias        = x$bias,
+                  maxpostprob = x$maxpostprob)
   return(pl)
 }
 
@@ -918,4 +916,79 @@ ashpen_fun <- function(lambda, pivec) {
   lambda * sum(log(pivec))
 }
 
+#' Return the probabilities of an offspring's genotype given its
+#' parental genotypes for all possible combinations of parental and
+#' offspring genotypes.
+#'
+#' @param ploidy A positive integer. The ploidy of the species.
+#'
+#' @author David Gerard
+#'
+#' @return An three-way array of proportions. The (i, j, k)th element
+#'     is the probability of an offspring having k - 1 reference
+#'     alleles given that parent 1 has i - 1 refrerence alleles and
+#'     parent 2 has j - 1 reference alleles. Each dimension of the
+#'     array is \code{ploidy + 1}. In the dimension names, "A" stands
+#'     for the reference allele and "a" stands for any other allele.
+#'
+#' @examples
+#' qarray <- get_q_array(6)
+#' apply(qarray, c(1, 2), sum) ## should all be 1's.
+#'
+#' @export
+#'
+get_q_array <- function(ploidy) {
+  assertthat::assert_that(ploidy > 0)
+  assertthat::are_equal(ploidy %% 2, 0)
+
+  qarray <- array(0, dim = rep(ploidy + 1, 3))
+
+  for(oindex in 0:ploidy) {
+    for (p1index in 0:ploidy) {
+      for (p2index in 0:ploidy) {
+        if (p1index + p2index < oindex) {
+          qarray[p1index + 1, p2index + 1, oindex + 1] <- 0
+        } else {
+          minval <- max(0, oindex - p2index)
+          maxval <- min(ploidy / 2, p1index)
+          aseq <- minval:maxval
+
+          p1prob <- stats::dhyper(x = aseq, m = p1index, n = ploidy - p1index, k = ploidy / 2)
+          p2prob <- stats::dhyper(x = oindex - aseq, m = p2index, n = ploidy - p2index, k = ploidy / 2)
+          qarray[p1index + 1, p2index + 1, oindex + 1] <- sum(p1prob * p2prob)
+        }
+      }
+    }
+  }
+
+  ## get dimnames
+
+  dimvec <- get_dimname(ploidy)
+  dimnames(qarray) <- list(parent1 = dimvec, parent2 = dimvec, offspring = dimvec)
+
+
+  assertthat::assert_that(all(abs(apply(qarray, c(1, 2), sum) - 1) < 10 ^ -14))
+
+  return(qarray)
+}
+
+
+#' Returns a vector character strings that are all of the possible
+#' combinations of the reference allele and the non-reference allele.
+#'
+#' @param ploidy The ploidy of the species.
+#'
+#' @return For example, if \code{ploidy = 3} then this will return
+#'     c("aaa", "Aaa", "AAa", "AAA")
+#'
+#' @author David Gerard
+#'
+#'
+get_dimname <- function(ploidy) {
+  dimvec <- sapply(mapply(FUN = c, lapply(X = 0:ploidy, FUN = rep.int, x = "A"),
+                          lapply(X = ploidy:0, FUN = rep.int, x = "a"),
+                          SIMPLIFY = FALSE),
+                   FUN = paste, collapse = "")
+  return(dimvec)
+}
 

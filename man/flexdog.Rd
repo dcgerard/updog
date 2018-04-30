@@ -132,8 +132,7 @@ using WASP (\url{https://doi.org/10.1101/011221}). If you are successful
 in removing the allelic bias (because its only source was the read-mapping
 step), then you could set \code{update_bias = FALSE} and \code{bias_init = 1}.
 You can visually
-inspect SNPs for bias by using \code{\link[updog]{plot_geno}} from the
-\code{updog} package.
+inspect SNPs for bias by using \code{\link{plot_geno}}.
 }
 \seealso{
 \code{\link{flexdog_full}} For additional parameter options.

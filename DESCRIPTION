@@ -21,11 +21,10 @@ Imports: Rcpp (>= 0.12.16),
     assertthat,
     foreach,
     doParallel,
-    updog,
-    ggplot2
+    ggplot2,
+    ggthemes
 Suggests: covr,
     testthat,
     SuppDists,
     Rmpfr,
     CVXR
-Remotes: dcgerard/updog
