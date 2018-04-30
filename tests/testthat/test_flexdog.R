@@ -106,7 +106,6 @@ test_that("get_probk_vec works", {
 )
 
 test_that("don't update bias, seq, od when supposed not to", {
-  skip("takes too long for CRAN.")
   refvec  <- 1:20
   sizevec <- 40:21
   ploidy  <- 4

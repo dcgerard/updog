@@ -1,7 +1,6 @@
 context("mupdog")
 
 test_that("mupdog works", {
-  skip("takes too long for CRAN.")
   set.seed(1)
   nind <- 11
   nsnps <- 37

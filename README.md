@@ -11,7 +11,7 @@ The function `mupdog` allows for correlation between the individuals' genotypes 
 
 The function `flexdog` provides many options for the genotype prior, including all of the options available in `updog`. But the algorithms used in `flexdog` tend to be much faster (~3 to 6 times faster).
 
-See also [updog](https://github.com/dcgerard/updog), [ebg](https://github.com/pblischak/polyploid-genotyping), and [TET](http://www.g3journal.org/content/suppl/2017/01/19/g3.117.039008.DC1).
+See also [updog](https://github.com/dcgerard/updog), [ebg](https://github.com/pblischak/polyploid-genotyping), [fitPoly](https://cran.r-project.org/package=fitPoly), and [TET](http://www.g3journal.org/content/suppl/2017/01/19/g3.117.039008.DC1). Our best "competitor" is probably [fitPoly](https://cran.r-project.org/package=fitPoly) :smile:.
 
 Installation
 ------------
@@ -23,7 +23,7 @@ You can install mupdog from Github with:
 devtools::install_github("dcgerard/mupdog")
 ```
 
-If you want to use the `use_cvxr = TRUE` option in `flexdog`, you will need to install the [CVXR](https://cran.r-project.org/web/packages/CVXR/index.html) package. Before I could install CVXR in Ubuntu, I had to run in the terminal
+If you want to use the `use_cvxr = TRUE` option in `flexdog` (not generally recommended), you will need to install the [CVXR](https://cran.r-project.org/web/packages/CVXR/index.html) package. Before I could install CVXR in Ubuntu, I had to run in the terminal
 
 ``` bash
 sudo apt-get install libmpfr-dev

@@ -122,7 +122,7 @@ approximately uniform. I include it as an option only for completeness.
 Please don't use it.
 
 Generally, good defaults are to use \code{model = "flex"} if you have
-a lot of individuals (say, \eqn{> 10 * (ploidy + 1)}) and \code{model = "normal"} if you do not have
+a lot of individuals (say, \eqn{> 10 * (ploidy + 1)}) and \code{model = "norm"} if you do not have
 a lot of individuals (say, \eqn{< 10 * (ploidy + 1)}). This is if you use multiple initializations
 of the bias as is the default in \code{\link{flexdog}}.
 
