@@ -6,7 +6,8 @@
 \usage{
 flexdog(refvec, sizevec, ploidy, model = c("flex", "norm", "hw", "bb", "ash",
   "f1", "s1", "uniform"), p1ref = NULL, p1size = NULL, p2ref = NULL,
-  p2size = NULL, bias_init = c(0.5, 0.7, 1, 1.4, 2), verbose = TRUE, ...)
+  p2size = NULL, bias_init = c(0.5, 0.7, 1, 1.4, 2), verbose = TRUE,
+  outliers = FALSE, ...)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads with the reference allele.}
@@ -37,6 +38,11 @@ over the multiple runs of \code{flexdog}.}
 \item{verbose}{Should we output more (\code{TRUE}) or less
 (\code{FALSE})?}
 
+\item{outliers}{A logical. Should we allow for the inclusion of outliers
+(\code{TRUE}) or not (\code{FALSE}). Only supported when
+\code{model = "f1"} or \code{model = "s1"}. I wouldn't
+recommend it for any other model anyway.}
+
 \item{...}{Additional parameters to pass to \code{\link{flexdog_full}}.}
 }
 \value{
@@ -51,23 +57,28 @@ An object of class \code{flexdog}, which consists
   \item{\code{llike}}{The maximum marginal log-likelihood.}
   \item{\code{postmat}}{A matrix of posterior probabilities of each
       genotype for each individual. The rows index the individuals
-      and the columns index the allele dosage.}
+      and the columns index the allele dosage. Note that the rows will
+      not sum to one if \code{outliers = TRUE}.}
   \item{\code{gene_dist}}{The estimated genotype distribution. The
       \code{i}th element is the proportion of individuals with
-      genotype \code{i-1}.}
+      genotype \code{i-1}. If \code{outliers = TRUE}, then this
+      is conditional on the point not being an outlier.}
   \item{\code{par}}{A list of the final estimates of the parameters
       of the genotype distribution. If \code{model = "hw"} then
       this will consist of \code{alpha}, the allele frequency.
       If \code{model = "f1"} or \code{model = "s1"} then this will
-      consist of the parent genotype(s) and the mixing proportion
-      with the discrete uniform (also called \code{alpha}). If
+      consist of the parent genotype(s), the value of \code{fs1_alpha}
+      (now just called \code{alpha}), and possibly the outlier
+      proportion \code{out_prop}. If
       \code{model = "bb"} then this will consist of \code{alpha},
       the allele frequency, and \code{tau}, the overdispersion parameter.
       If \code{model = "norm"} then this will consist of \code{mu}, the
       normal mean, and \code{sigma}, the normal standard devation (not variance).}
   \item{\code{geno}}{The posterior mode genotype.}
   \item{\code{maxpostprob}}{The maximum posterior probability.}
-  \item{\code{postmean}}{The posterior mean genotype.}
+  \item{\code{postmean}}{The posterior mean genotype. If
+      \code{outliers = TRUE}, then this is conditioned on a point
+      not being an outlier.}
   \item{\code{input$refvec}}{The value of \code{refvec} provided by
       the user.}
   \item{\code{input$sizevec}}{The value of \code{sizevec} provided
@@ -84,14 +95,15 @@ An object of class \code{flexdog}, which consists
       misclassified.}
   \item{\code{out_prop}}{The estimate proportion of points that are outliers.}
   \item{\code{prob_out}}{The ith element is the posterior probability
-  that individual i is an outlier}
+      that individual i is an outlier}
 }
 }
 \description{
-This function will genotype polyploid individuals from next generation
+Genotype polyploid individuals from next generation
 sequencing (NGS) data while assuming the genotype distribution is one of
-several forms. It does this while accounting for allele bias, overdispersion,
-and sequencing error.
+several forms. \code{flexdog} does this while accounting for allele bias,
+overdispersion, sequencing error, and possibly outlying observations
+(if \code{model = "f1"} or \code{model = "s1"}).
 }
 \details{
 Possible values of the genotype distribution (values of \code{model}) are:
@@ -108,34 +120,88 @@ Possible values of the genotype distribution (values of \code{model}) are:
       with a different center during each optimization. It returns the center (and its fit)
       with the highest likelihood.}
   \item{\code{"f1"}}{This prior assumes the individuals are all full-siblings resulting
-      from one generation of a bi-parental cross.}
+      from one generation of a bi-parental cross. Since this is a pretty strong
+      and well-founded prior, we allow \code{outliers = TRUE} when \code{model = "f1"}.}
   \item{\code{"s1"}}{This prior assumes the individuals are all full-siblings resulting
-      from one generation of selfing. I.e. there is only one parent.}
+      from one generation of selfing. I.e. there is only one parent.
+      Since this is a pretty strong and well-founded prior,
+      we allow \code{outliers = TRUE} when \code{model = "s1"}.}
   \item{\code{"flex"}}{Generically any categorical distribution. This works well if
-      you have a lot of individuals, and so is the default.}
-  \item{\code{"uniform"}}{A discrete uniform distribution. This should never be
-      used in practice.}
+      you have a lot of individuals, and so is the default. Though we
+      recommend \code{model = "norm"} (and provide a warning concerning this)
+      if you have too few individuals.}
+  \item{\code{"uniform"}}{A discrete uniform distribution. This should never
+      be used in practice. Please don't email me that \code{flexdog} doesn't
+      work if you use this option.}
 }
 
 You might think a good default is \code{model = "uniform"} because it is
 somehow an "uninformative prior." But it is very informative and tends to
-work horribly in practice. It will generally estimate the allele bias and sequencing
-error rates to be unrealistic values so that the estimated genotypes are
-approximately uniform. I include it as an option only for completeness.
-Please don't use it.
+work horribly in practice. The intuition is that it will estimate
+the allele bias and sequencing error rates so that the estimated genotypes
+are approximately uniform (since we are assuming that they are approximately
+uniform). This will usually result in unintuitive genotyping since most
+populations don't have a uniform genotype distribution.
+I include it as an option only for completeness. Please, please don't use it.
 
 Generally, good defaults are to use \code{model = "flex"} if you have
-a lot of individuals (say, \eqn{> 10 * (ploidy + 1)}) and \code{model = "norm"} if you do not have
-a lot of individuals (say, \eqn{< 10 * (ploidy + 1)}). This is if you use multiple initializations
-of the bias as is the default in \code{\link{flexdog}}.
+a lot of individuals (say, \eqn{> 10 * (ploidy + 1)}) and
+\code{model = "norm"} if you do not have a lot of individuals
+(say, \eqn{< 10 * (ploidy + 1)}). This is if you use
+multiple initializations of the bias as is the default
+in \code{\link{flexdog}}.
+
+In most datasets I've examined, allelic bias is a major issue. However,
+you may fit the model assuming no allelic bias by setting
+\code{update_bias = FALSE} and \code{bias_init = 1}.
 
 Prior to using \code{flexdog}, during the read-mapping step,
 you could try to get rid of allelic bias by
 using WASP (\url{https://doi.org/10.1101/011221}). If you are successful
 in removing the allelic bias (because its only source was the read-mapping
-step), then you could set \code{update_bias = FALSE} and \code{bias_init = 1}.
-You can visually
-inspect SNPs for bias by using \code{\link{plot_geno}}.
+step), then setting \code{update_bias = FALSE} and \code{bias_init = 1}
+would be reasonable. You can visually inspect SNPs for bias by
+using \code{\link{plot_geno}}.
+
+\code{flexdog}, like most methods, is invariant to which allele you
+label as the "reference" and which you label as the "alternative".
+That is, if you set \code{refvec} with the number of alternative
+read-counts, then the resulting genotype estimates
+will be the estimated allele dosage of the alternative allele.
+}
+\examples{
+\dontrun{
+
+## An S1 population where the first individual
+## is the parent. Fit assuming outliers.
+data("snpdat")
+ploidy  <- 6
+refvec  <- snpdat$counts[snpdat$snp == "SNP3"]
+sizevec <- snpdat$size[snpdat$snp == "SNP3"]
+fout    <- flexdog(refvec   = refvec[-1],
+                   sizevec  = sizevec[-1],
+                   ploidy   = ploidy,
+                   model    = "s1",
+                   p1ref    = refvec[1],
+                   p1size   = sizevec[1],
+                   outliers = TRUE)
+plot(fout)
+
+## A natural population. We will assume a
+## normal prior since there are so few
+## individuals.
+data("uitdewilligen")
+ploidy  <- 4
+refvec  <- uitdewilligen$refmat[, 1]
+sizevec <- uitdewilligen$sizemat[, 1]
+fout    <- flexdog(refvec  = refvec,
+                   sizevec = sizevec,
+                   ploidy  = ploidy,
+                   model   = "norm")
+plot(fout)
+
+}
+
 }
 \seealso{
 \code{\link{flexdog_full}} For additional parameter options.
