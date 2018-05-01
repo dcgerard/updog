@@ -82,6 +82,9 @@ An object of class \code{flexdog}, which consists
   \item{\code{input$p2size}}{The value of \code{p2size} provided by the user.}
   \item{\code{prop_mis}}{The posterior proportion of individuals
       misclassified.}
+  \item{\code{out_prop}}{The estimate proportion of points that are outliers.}
+  \item{\code{prob_out}}{The ith element is the posterior probability
+  that individual i is an outlier}
 }
 }
 \description{

@@ -39,7 +39,7 @@ test_that("flexdog works", {
   p2size      <- NULL
 
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
-                  ploidy = ploidy, model = "hw", verbose = FALSE)
+                  ploidy = ploidy, model = "f1", verbose = FALSE)
   pl <- plot(fout)
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
                   ploidy = ploidy, model = "flex", verbose = FALSE)

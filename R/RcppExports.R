@@ -645,6 +645,54 @@ oracle_mis <- function(n, ploidy, seq, bias, od, dist) {
     .Call('_mupdog_oracle_mis', PACKAGE = 'mupdog', n, ploidy, seq, bias, od, dist)
 }
 
+#' The outlier distribution we use. Right now it is just a
+#' beta binomial with mean 1/2 and od 1/3 (so underlying beta
+#' is just a uniform from 0 to 1).
+#'
+#' @param x The number of reference counts.
+#' @param n The total number of read-counts.
+#' @param logp Return the log density \code{TRUE} or not \code{FALSE}?
+#'
+#'
+#' @author David Gerard
+#'
+#'
+doutdist <- function(x, n, logp) {
+    .Call('_mupdog_doutdist', PACKAGE = 'mupdog', x, n, logp)
+}
+
+#' E-step in \code{\link{flexdog}} where we now allow an outlier distribution.
+#'
+#' @inheritParams flexdog_full
+#' @param probk_vec The vector of current prior probabilities of each genotype.
+#' @param out_prop The probability of being an outlier.
+#'
+#' @author David Gerard
+#'
+#' @seealso \code{\link{flexdog}} for the full EM algorithm.
+#'     \code{\link{get_wik_mat}} for the equivalent function
+#'     without outliers. \code{\link{doutdist}} for the outlier
+#'     density function.
+#'
+get_wik_mat_out <- function(probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od) {
+    .Call('_mupdog_get_wik_mat_out', PACKAGE = 'mupdog', probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od)
+}
+
+#' Log-likelihood that \code{\link{flexdog}} maximizes when
+#' outliers are present.
+#'
+#' @inheritParams flexdog_full
+#' @param probk_vec The kth element is the prior probability of genotype k (when starting to count from 0).
+#' @param out_prop The probability of being an outlier.
+#'
+#' @author David Gerard
+#'
+#' @seealso \code{\link{flexdog_obj}} for the objective function without outliers.
+#'
+flexdog_obj_out <- function(probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq) {
+    .Call('_mupdog_flexdog_obj_out', PACKAGE = 'mupdog', probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq)
+}
+
 #' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
 #'
 #' @param p The allele dosage.

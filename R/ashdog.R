@@ -24,6 +24,7 @@ flexdog <- function(refvec,
                     verbose     = TRUE,
                     ...) {
   assertthat::assert_that(all(bias_init > 0))
+  model <- match.arg(model)
 
   if (verbose) {
     if (length(refvec) < (10 * (ploidy + 1))) {
@@ -163,11 +164,10 @@ flexdog <- function(refvec,
 #'     (\code{TRUE}), or not (\code{FALSE})?
 #' @param update_od A logical. Should we update \code{od}
 #'     (\code{TRUE}), or not (\code{FALSE})?
-#' @param fs1_alpha Either \code{"optim"} or the value at which to fix
-#'     the mixing proportion when \code{model = "f1"} or
-#'     \code{model = "s1"}. If \code{optim}, then we optimize over
-#'     the mixing proportion each iteration with possible values between
-#'     \code{10^-8} and \code{10^-3}. If you fix it, I would recommend some small
+#' @param fs1_alpha The value at which to fix
+#'     the mixing proportion for the uniform compnent
+#'      when \code{model = "f1"} or
+#'     \code{model = "s1"}. I would recommend some small
 #'     value such at \code{10^-3}.
 #' @param p1ref The reference counts for the first parent if
 #'     \code{model = "f1"}, or for the only parent if \code{model = "s1"}.
@@ -178,6 +178,10 @@ flexdog <- function(refvec,
 #' @param p2size The total counts for the second parent if
 #'     \code{model = "f1"}.
 #' @param ashpen The penalty to put on the unimodal prior.
+#' @param outliers A logical. Should we allow for the inclusion of outliers
+#'     \code{TRUE} or not \code{FALSE}. Only supported when \code{model = "f1"}
+#'     or \code{model = "s1"}. I wouldn't recommend it for any other model
+#'     anyway.
 #'
 #' @return An object of class \code{flexdog}, which consists
 #'     of a list with some or all of the following elements:
@@ -221,6 +225,9 @@ flexdog <- function(refvec,
 #'   \item{\code{input$p2size}}{The value of \code{p2size} provided by the user.}
 #'   \item{\code{prop_mis}}{The posterior proportion of individuals
 #'       misclassified.}
+#'   \item{\code{out_prop}}{The estimate proportion of points that are outliers.}
+#'   \item{\code{prob_out}}{The ith element is the posterior probability
+#'   that individual i is an outlier}
 #' }
 #'
 #' @author David Gerard
@@ -250,12 +257,18 @@ flexdog_full <- function(refvec,
                          p1ref       = NULL,
                          p1size      = NULL,
                          p2ref       = NULL,
-                         p2size      = NULL) {
+                         p2size      = NULL,
+                         outliers    = FALSE) {
 
   ## Check input -----------------------------------------------------
   model <- match.arg(model)
   if (model == "uniform") {
     warning("flexdog: Using model = 'uniform' is almost always a bad idea.\nTry model = 'hw' if you have data from a population study.")
+  }
+  if (outliers) {
+    if ((model != "s1") & (model != "f1")) {
+      stop('flexdog: outliers = TRUE only supported when model = "f1" or model = "s1".')
+    }
   }
 
   assertthat::are_equal(length(refvec), length(sizevec))
@@ -283,14 +296,8 @@ flexdog_full <- function(refvec,
   assertthat::assert_that(ashpen >= 0)
 
   ## check fs1_alpha -----------------------------------------------
-  if (is.numeric(fs1_alpha)) {
-    assertthat::are_equal(length(fs1_alpha), 1)
-    assertthat::assert_that(fs1_alpha <= 1, fs1_alpha >= 0)
-  } else {
-    if (fs1_alpha != "optim") {
-      stop("flexdog: fs1_alpha either needs to be 'optim' or a numeric between 0 and 1.")
-    }
-  }
+  assertthat::are_equal(length(fs1_alpha), 1)
+  assertthat::assert_that(fs1_alpha <= 1, fs1_alpha >= 0)
 
   ## Check p1ref, p2ref, p1size, p2size ----------------------------
   if ((!is.null(p1ref) | !is.null(p1size)) & (model != "f1" & model != "s1")) {
@@ -306,10 +313,10 @@ flexdog_full <- function(refvec,
     stop("flexdog: p1ref and p1size either need to be both NULL or both non-NULL.")
   }
   if (!is.null(p1ref)) {
-    assertthat::assert_that(p1ref >= 0, p1size >= p1ref)
+    stopifnot(p1ref >= 0, p1size >= p1ref)
   }
   if (!is.null(p2ref)) {
-    assertthat::assert_that(p2ref >= 0, p2size >= p2ref)
+    stopifnot(p2ref >= 0, p2size >= p2ref)
   }
 
   ## check and set mode under various models -----------------------
@@ -322,7 +329,7 @@ flexdog_full <- function(refvec,
   } else if (is.null(mode) & (model == "f1" | model == "s1" | model == "uniform")) {
     mode_vec <- mean(refvec / sizevec, na.rm = TRUE) ## just to initialize pivec
   } else if (!is.null(mode) & model == "ash") {
-    assertthat::are_equal(length(mode), 1)
+    stopifnot(length(mode) == 1)
     mode_vec <- mode
   } else if (is.null(mode) & model == "ash") {
     mode_vec <- (0:(ploidy - 1)) + 0.5
@@ -383,6 +390,10 @@ flexdog_full <- function(refvec,
     } else if (model == "f1" | model == "s1") {
       control$qarray    <- get_q_array(ploidy = ploidy)
       control$fs1_alpha <- fs1_alpha
+      control$outliers  <- outliers
+      if (outliers) {
+        control$out_prop  <- 0.01
+      }
     } else if (model == "bb") {
       control$alpha <- mode ## initialize allele frequency for bb
       control$tau   <- boundary_tol ## initialize od for bb
@@ -408,9 +419,26 @@ flexdog_full <- function(refvec,
       llike_old <- llike
 
       ## E-step ----------------------
-      wik_mat <- get_wik_mat(probk_vec = probk_vec, refvec = refvec,
-                             sizevec = sizevec, ploidy = ploidy,
-                             seq = seq, bias = bias, od = od)
+      if (!outliers) {
+        wik_mat <- get_wik_mat(probk_vec = probk_vec,
+                               refvec    = refvec,
+                               sizevec   = sizevec,
+                               ploidy    = ploidy,
+                               seq       = seq,
+                               bias      = bias, od = od)
+      } else {
+        wik_temp <- get_wik_mat_out(probk_vec = probk_vec,
+                                    out_prop  = control$out_prop,
+                                    refvec    = refvec,
+                                    sizevec   = sizevec,
+                                    ploidy    = ploidy,
+                                    seq       = seq,
+                                    bias      = bias,
+                                    od        = od)
+        wik_mat <- wik_temp[, 1:(ploidy + 1), drop = FALSE]
+        prob_outlier <- wik_temp[, ploidy + 2]
+      }
+
 
       ## Update seq, bias, and od ----
       oout <- stats::optim(par         = c(seq, bias, od),
@@ -469,6 +497,9 @@ flexdog_full <- function(refvec,
 
       ## Update pivec ----------------
       weight_vec <- colSums(wik_mat)
+      if (outliers) {
+        control$weight_out <- sum(prob_outlier)
+      }
       fupdate_out <- flex_update_pivec(weight_vec = weight_vec,
                                        model      = model,
                                        control    = control)
@@ -482,6 +513,9 @@ flexdog_full <- function(refvec,
       } else if (model == "norm") {
         control$mu    <- fupdate_out$par$mu
         control$sigma <- fupdate_out$par$sigma
+      } else if (((model == "f1") | (model == "s1")) & outliers) {
+        out_prop         <- fupdate_out$par$out_prop
+        control$out_prop <- fupdate_out$par$out_prop
       }
 
       ## Update probk_vec -----------------------------------------------
@@ -490,20 +524,38 @@ flexdog_full <- function(refvec,
       probk_vec <- get_probk_vec(pivec = pivec, model = model, mode = mode)
 
       ## Calculate likelihood and update stopping criteria --------------
-      llike <- flexdog_obj(probk_vec = probk_vec,
-                           refvec    = refvec,
-                           sizevec   = sizevec,
-                           ploidy    = ploidy,
-                           seq       = seq,
-                           bias      = bias,
-                           od        = od,
-                           mean_bias = mean_bias,
-                           var_bias  = var_bias,
-                           mean_seq  = mean_seq,
-                           var_seq   = var_seq)
+      if (!outliers) {
+        llike <- flexdog_obj(probk_vec = probk_vec,
+                             refvec    = refvec,
+                             sizevec   = sizevec,
+                             ploidy    = ploidy,
+                             seq       = seq,
+                             bias      = bias,
+                             od        = od,
+                             mean_bias = mean_bias,
+                             var_bias  = var_bias,
+                             mean_seq  = mean_seq,
+                             var_seq   = var_seq)
+      } else {
+        llike <- flexdog_obj_out(probk_vec = probk_vec,
+                                 out_prop  = out_prop,
+                                 refvec    = refvec,
+                                 sizevec   = sizevec,
+                                 ploidy    = ploidy,
+                                 seq       = seq,
+                                 bias      = bias,
+                                 od        = od,
+                                 mean_bias = mean_bias,
+                                 var_bias  = var_bias,
+                                 mean_seq  = mean_seq,
+                                 var_seq   = var_seq)
+      }
+
 
       if (model == "ash" & !use_cvxr) { ## add small penalty if "ash"
         llike <- llike + ashpen_fun(lambda = ashpen, pivec = pivec)
+      } else if (((model == "f1") | (model == "s1")) & outliers) {
+
       }
 
       err        <- abs(llike - llike_old)
@@ -534,6 +586,10 @@ flexdog_full <- function(refvec,
                       postmat   = wik_mat,
                       gene_dist = probk_vec,
                       par       = fupdate_out$par)
+    if (outliers) {
+      temp_list$prob_outlier    <- prob_outlier
+      temp_list$out_prop        <- out_prop
+    }
     if (temp_list$llike > return_list$llike) {
       return_list <- temp_list
     }
@@ -553,6 +609,12 @@ flexdog_full <- function(refvec,
   return_list$input$p2size  <- p2size
   return_list$prop_mis      <- 1 - mean(return_list$maxpostprob)
 
+  ## Adjust probabilities by outlier probabilities --------------------
+  if (outliers) {
+    return_list$maxpostprob <- return_list$maxpostprob * (1 - return_list$par$out_prop)
+    return_list$prop_mis    <- 1 - mean(return_list$maxpostprob)
+    return_list$postmean    <- return_list$postmean / rowSums(return_list$postmat)
+  }
 
   ## Add back missingness ---------------------------------------------
   temp                     <- rep(NA, length = length(not_na_vec))
@@ -743,33 +805,22 @@ flex_update_pivec <- function(weight_vec, model = c("hw", "bb", "norm", "ash", "
     for (i in 0:ploidy) { ## parent 1
       for (j in 0:ploidy) { ## parent 2
         pvec <- control$qarray[i + 1, j + 1, ]
-        if (control$fs1_alpha == "optim") {
-          optim_out <- stats::optim(par = 0.01,
-                                    fn = f1_obj,
-                                    method = "Brent",
-                                    control = list(fnscale = -1),
-                                    upper = 0.001,
-                                    lower = 10 ^ -8,
-                                    pvec = pvec,
-                                    weight_vec = weight_vec)
-        } else {
-          optim_out <- list()
-          optim_out$value <- f1_obj(alpha = control$fs1_alpha,
-                                    pvec = pvec,
-                                    weight_vec = weight_vec)
-          optim_out$par   <- control$fs1_alpha
-        }
-        if (!is.null(control$p1_lbb)) {
-          optim_out$value <- optim_out$value + control$p1_lbb[i + 1]
-        }
-        if (!is.null(control$p2_lbb)) {
-          optim_out$value <- optim_out$value + control$p2_lbb[j + 1]
-        }
-        if (optim_out$value > optim_best$value) {
-          optim_best <- optim_out
-          optim_best$ell1 <- i
-          optim_best$ell2 <- j
-        }
+        optim_out <- list() ## called this for historical reasons.
+        optim_out$value <- f1_obj(alpha = control$fs1_alpha,
+                                  pvec = pvec,
+                                  weight_vec = weight_vec)
+        optim_out$par   <- control$fs1_alpha
+      }
+      if (!is.null(control$p1_lbb)) {
+        optim_out$value <- optim_out$value + control$p1_lbb[i + 1]
+      }
+      if (!is.null(control$p2_lbb)) {
+        optim_out$value <- optim_out$value + control$p2_lbb[j + 1]
+      }
+      if (optim_out$value > optim_best$value) {
+        optim_best <- optim_out
+        optim_best$ell1 <- i
+        optim_best$ell2 <- j
       }
     }
     return_list$pivec <- (1 - optim_best$par) * control$qarray[optim_best$ell1 + 1, optim_best$ell2 + 1, ] +
@@ -778,27 +829,19 @@ flex_update_pivec <- function(weight_vec, model = c("hw", "bb", "norm", "ash", "
     return_list$par$p1geno <- optim_best$ell1
     return_list$par$p2geno <- optim_best$ell2
     return_list$par$alpha  <- optim_best$par
+    if (control$outliers) {
+      return_list$par$out_prop <- control$weight_out / (control$weight_out + sum(weight_vec))
+    }
   } else if (model == "s1") {
     optim_best       <- list()
     optim_best$value <- -Inf
     for (i in 0:ploidy) { ## parent
       pvec <- control$qarray[i + 1, i + 1, ]
-      if (control$fs1_alpha == "optim") {
-        optim_out <- stats::optim(par = 0.01,
-                                  fn = f1_obj,
-                                  method = "Brent",
-                                  control = list(fnscale = -1),
-                                  upper = 0.001,
-                                  lower = 10 ^ -8,
-                                  pvec = pvec,
-                                  weight_vec = weight_vec)
-      } else {
-        optim_out <- list()
-        optim_out$value <- f1_obj(alpha = control$fs1_alpha,
-                                  pvec = pvec,
-                                  weight_vec = weight_vec)
-        optim_out$par   <- control$fs1_alpha
-      }
+      optim_out <- list() ## named this for historical reasons
+      optim_out$value <- f1_obj(alpha = control$fs1_alpha,
+                                pvec = pvec,
+                                weight_vec = weight_vec)
+      optim_out$par   <- control$fs1_alpha
       if (!is.null(control$p1_lbb)) {
         optim_out$value <- optim_out$value + control$p1_lbb[i + 1]
       }
@@ -812,6 +855,9 @@ flex_update_pivec <- function(weight_vec, model = c("hw", "bb", "norm", "ash", "
     return_list$par <- list()
     return_list$par$pgeno <- optim_best$ell
     return_list$par$alpha  <- optim_best$par
+    if (control$outliers) {
+      return_list$par$out_prop <- control$weight_out / (control$weight_out + sum(weight_vec))
+    }
   } else if (model == "uniform") {
     return_list$pivec <- rep(x = 1 / (ploidy + 1), length = ploidy + 1)
     return_list$par <- list()

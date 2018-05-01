@@ -10,7 +10,7 @@ flexdog_full(refvec, sizevec, ploidy, model = c("hw", "bb", "norm", "ash",
   bias = 1, od = 0.001, update_bias = TRUE, update_seq = TRUE,
   update_od = TRUE, mode = NULL, use_cvxr = FALSE, itermax = 200,
   tol = 10^-4, fs1_alpha = 10^-3, ashpen = 10^-6, p1ref = NULL,
-  p1size = NULL, p2ref = NULL, p2size = NULL)
+  p1size = NULL, p2ref = NULL, p2size = NULL, outliers = FALSE)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads with the reference allele.}
@@ -71,11 +71,10 @@ run (if \code{model = "flex"}, \code{model = "hw"},
 if the difference in the log-likelihoods between two consecutive
 iterations is less than \code{tol}.}
 
-\item{fs1_alpha}{Either \code{"optim"} or the value at which to fix
-the mixing proportion when \code{model = "f1"} or
-\code{model = "s1"}. If \code{optim}, then we optimize over
-the mixing proportion each iteration with possible values between
-\code{10^-8} and \code{10^-3}. If you fix it, I would recommend some small
+\item{fs1_alpha}{The value at which to fix
+the mixing proportion for the uniform compnent
+ when \code{model = "f1"} or
+\code{model = "s1"}. I would recommend some small
 value such at \code{10^-3}.}
 
 \item{ashpen}{The penalty to put on the unimodal prior.}
@@ -91,6 +90,11 @@ value such at \code{10^-3}.}
 
 \item{p2size}{The total counts for the second parent if
 \code{model = "f1"}.}
+
+\item{outliers}{A logical. Should we allow for the inclusion of outliers
+\code{TRUE} or not \code{FALSE}. Only supported when \code{model = "f1"}
+or \code{model = "s1"}. I wouldn't recommend it for any other model
+anyway.}
 }
 \value{
 An object of class \code{flexdog}, which consists
@@ -135,6 +139,9 @@ An object of class \code{flexdog}, which consists
   \item{\code{input$p2size}}{The value of \code{p2size} provided by the user.}
   \item{\code{prop_mis}}{The posterior proportion of individuals
       misclassified.}
+  \item{\code{out_prop}}{The estimate proportion of points that are outliers.}
+  \item{\code{prob_out}}{The ith element is the posterior probability
+  that individual i is an outlier}
 }
 }
 \description{

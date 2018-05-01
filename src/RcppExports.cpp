@@ -716,6 +716,59 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// doutdist
+double doutdist(int x, int n, bool logp);
+RcppExport SEXP _mupdog_doutdist(SEXP xSEXP, SEXP nSEXP, SEXP logpSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< bool >::type logp(logpSEXP);
+    rcpp_result_gen = Rcpp::wrap(doutdist(x, n, logp));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_wik_mat_out
+NumericMatrix get_wik_mat_out(NumericVector probk_vec, double out_prop, NumericVector refvec, NumericVector sizevec, int ploidy, double seq, double bias, double od);
+RcppExport SEXP _mupdog_get_wik_mat_out(SEXP probk_vecSEXP, SEXP out_propSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type probk_vec(probk_vecSEXP);
+    Rcpp::traits::input_parameter< double >::type out_prop(out_propSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type refvec(refvecSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type sizevec(sizevecSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< double >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< double >::type bias(biasSEXP);
+    Rcpp::traits::input_parameter< double >::type od(odSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_wik_mat_out(probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od));
+    return rcpp_result_gen;
+END_RCPP
+}
+// flexdog_obj_out
+double flexdog_obj_out(NumericVector probk_vec, double out_prop, NumericVector refvec, NumericVector sizevec, int ploidy, double seq, double bias, double od, double mean_bias, double var_bias, double mean_seq, double var_seq);
+RcppExport SEXP _mupdog_flexdog_obj_out(SEXP probk_vecSEXP, SEXP out_propSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type probk_vec(probk_vecSEXP);
+    Rcpp::traits::input_parameter< double >::type out_prop(out_propSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type refvec(refvecSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type sizevec(sizevecSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< double >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< double >::type bias(biasSEXP);
+    Rcpp::traits::input_parameter< double >::type od(odSEXP);
+    Rcpp::traits::input_parameter< double >::type mean_bias(mean_biasSEXP);
+    Rcpp::traits::input_parameter< double >::type var_bias(var_biasSEXP);
+    Rcpp::traits::input_parameter< double >::type mean_seq(mean_seqSEXP);
+    Rcpp::traits::input_parameter< double >::type var_seq(var_seqSEXP);
+    rcpp_result_gen = Rcpp::wrap(flexdog_obj_out(probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq));
+    return rcpp_result_gen;
+END_RCPP
+}
 // eta_double
 double eta_double(double p, double eps);
 RcppExport SEXP _mupdog_eta_double(SEXP pSEXP, SEXP epsSEXP) {
@@ -861,6 +914,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mupdog_obj_for_weighted_lbb", (DL_FUNC) &_mupdog_obj_for_weighted_lbb, 3},
     {"_mupdog_obj_for_weighted_lnorm", (DL_FUNC) &_mupdog_obj_for_weighted_lnorm, 3},
     {"_mupdog_oracle_mis", (DL_FUNC) &_mupdog_oracle_mis, 6},
+    {"_mupdog_doutdist", (DL_FUNC) &_mupdog_doutdist, 3},
+    {"_mupdog_get_wik_mat_out", (DL_FUNC) &_mupdog_get_wik_mat_out, 8},
+    {"_mupdog_flexdog_obj_out", (DL_FUNC) &_mupdog_flexdog_obj_out, 12},
     {"_mupdog_eta_double", (DL_FUNC) &_mupdog_eta_double, 2},
     {"_mupdog_eta_fun", (DL_FUNC) &_mupdog_eta_fun, 2},
     {"_mupdog_xi_double", (DL_FUNC) &_mupdog_xi_double, 3},

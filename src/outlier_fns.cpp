@@ -1,0 +1,146 @@
+#include "mupdog.h"
+
+//' The outlier distribution we use. Right now it is just a
+//' beta binomial with mean 1/2 and od 1/3 (so underlying beta
+//' is just a uniform from 0 to 1).
+//'
+//' @param x The number of reference counts.
+//' @param n The total number of read-counts.
+//' @param logp Return the log density \code{TRUE} or not \code{FALSE}?
+//'
+//'
+//' @author David Gerard
+//'
+//'
+// [[Rcpp::export]]
+double doutdist(int x, int n, bool logp) {
+  double dval = dbetabinom_double(x, n, 0.5, 1.0 / 3.0, logp);
+  return dval;
+}
+
+//' E-step in \code{\link{flexdog}} where we now allow an outlier distribution.
+//'
+//' @inheritParams flexdog_full
+//' @param probk_vec The vector of current prior probabilities of each genotype.
+//' @param out_prop The probability of being an outlier.
+//'
+//' @author David Gerard
+//'
+//' @seealso \code{\link{flexdog}} for the full EM algorithm.
+//'     \code{\link{get_wik_mat}} for the equivalent function
+//'     without outliers. \code{\link{doutdist}} for the outlier
+//'     density function.
+//'
+// [[Rcpp::export]]
+NumericMatrix get_wik_mat_out(NumericVector probk_vec,
+                              double out_prop,
+                              NumericVector refvec,
+                              NumericVector sizevec,
+                              int ploidy,
+                              double seq,
+                              double bias,
+                              double od) {
+  // Check input -----------------------------------------------------------
+  int nind = refvec.length();
+  if (nind != sizevec.length()) {
+    Rcpp::stop("get_wik_mat_out: sizevec and refvec must have the same length.");
+  }
+  if (probk_vec.length() != ploidy + 1) {
+    Rcpp::stop("get_wik_mat_out: probk_vec must have length ploidy + 1.");
+  }
+  if (out_prop < TOL) {
+    Rcpp::stop("get_wik_mat_out: out_prop needs to be greater than 0.");
+  }
+  if (1.0 - out_prop < TOL) {
+    Rcpp::stop("get_wik_mat_out: out_prop needs to be less than 1.");
+  }
+
+  // Calculate the posterior probability of each genotype -------------------
+  NumericMatrix wik_mat(nind, ploidy + 2);
+  NumericVector lprobk_vec = Rcpp::log(probk_vec);
+  NumericVector xi(ploidy + 1);
+  for (int k = 0; k <= ploidy; k++) {
+    xi(k) = xi_double((double)k / (double)ploidy, seq, bias);
+  }
+
+  double sumi; // denominator to get wik for each i.
+  NumericVector wvec(ploidy + 2);
+  for (int i = 0; i < nind; i++) {
+    for (int k = 0; k <= ploidy; k++) {
+      wvec(k) = log(1.0 - out_prop) + lprobk_vec(k) + dbetabinom_double(refvec(i), sizevec(i), xi(k), od, true);
+    }
+    wvec(ploidy + 1) = log(out_prop) + doutdist(refvec(i), sizevec(i), true);
+    sumi = log_sum_exp(wvec);
+    wvec = Rcpp::exp(wvec - sumi);
+    wik_mat(i, _) = wvec;
+  }
+
+  return wik_mat;
+}
+
+
+
+
+//' Log-likelihood that \code{\link{flexdog}} maximizes when
+//' outliers are present.
+//'
+//' @inheritParams flexdog_full
+//' @param probk_vec The kth element is the prior probability of genotype k (when starting to count from 0).
+//' @param out_prop The probability of being an outlier.
+//'
+//' @author David Gerard
+//'
+//' @seealso \code{\link{flexdog_obj}} for the objective function without outliers.
+//'
+// [[Rcpp::export]]
+double flexdog_obj_out(NumericVector probk_vec,
+                       double out_prop,
+                       NumericVector refvec,
+                       NumericVector sizevec,
+                       int ploidy,
+                       double seq,
+                       double bias,
+                       double od,
+                       double mean_bias,
+                       double var_bias,
+                       double mean_seq,
+                       double var_seq) {
+  // Check input -----------------------------------------------------------
+  int nind = refvec.length();
+  if (nind != sizevec.length()) {
+    Rcpp::stop("get_wik_mat: sizevec and refvec must have the same length.");
+  }
+  if (probk_vec.length() != ploidy + 1) {
+    Rcpp::stop("get_wik_mat: probk_vec must have length ploidy + 1.");
+  }
+  if (out_prop < TOL) {
+    Rcpp::stop("get_wik_mat_out: out_prop needs to be greater than 0.");
+  }
+  if (1.0 - out_prop < TOL) {
+    Rcpp::stop("get_wik_mat_out: out_prop needs to be less than 1.");
+  }
+
+  // Calculate the posterior probability of each genotype -------------------
+  NumericVector lprobk_vec = Rcpp::log(probk_vec);
+  NumericVector xi(ploidy + 1);
+  for (int k = 0; k <= ploidy; k++) {
+    xi(k) = xi_double((double)k / (double)ploidy, seq, bias);
+  }
+
+  // Calculate likelihood ---------------------------------------------------
+  double obj = 0.0;
+  NumericVector wvec(ploidy + 2);
+  for (int i = 0; i < nind; i++) {
+    for (int k = 0; k <= ploidy; k++) {
+      wvec(k) = log(1.0 - out_prop) + lprobk_vec(k) + dbetabinom_double(refvec(i), sizevec(i), xi(k), od, true);
+    }
+    wvec(ploidy + 1) = log(out_prop) + doutdist(refvec(i), sizevec(i), true);
+    obj = obj + log_sum_exp(wvec);
+  }
+
+  // Penalties --------------------------------------------------------------
+  obj = obj + pen_bias(bias, mean_bias, var_bias);
+  obj = obj + pen_seq_error(seq, mean_seq, var_seq);
+  return obj;
+}
+
