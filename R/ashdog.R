@@ -249,8 +249,7 @@ flexdog <- function(refvec,
 #'   \item{\code{llike}}{The maximum marginal log-likelihood.}
 #'   \item{\code{postmat}}{A matrix of posterior probabilities of each
 #'       genotype for each individual. The rows index the individuals
-#'       and the columns index the allele dosage. Note that the rows will
-#'       not sum to one if \code{outliers = TRUE}.}
+#'       and the columns index the allele dosage.}
 #'   \item{\code{gene_dist}}{The estimated genotype distribution. The
 #'       \code{i}th element is the proportion of individuals with
 #'       genotype \code{i-1}. If \code{outliers = TRUE}, then this
@@ -655,6 +654,17 @@ flexdog_full <- function(refvec,
     }
   }
 
+  ## Adjust postmat for outliers --------------------------------------
+  if (outliers) {
+    return_list$postmat <- return_list$postmat +
+      outer(return_list$prob_outlier, return_list$gene_dist, "*")
+
+    temp                     <- rep(NA, length = length(not_na_vec))
+    temp[not_na_vec]         <- return_list$prob_outlier
+    return_list$prob_outlier <- temp
+  }
+
+
   ## Summaries --------------------------------------------------------
   return_list$geno          <- apply(return_list$postmat, 1, which.max) - 1
   return_list$maxpostprob   <- return_list$postmat[cbind(1:nrow(return_list$postmat), return_list$geno + 1)]
@@ -668,15 +678,6 @@ flexdog_full <- function(refvec,
   return_list$input$p2ref   <- p2ref
   return_list$input$p2size  <- p2size
   return_list$prop_mis      <- 1 - mean(return_list$maxpostprob)
-
-  ## Adjust probabilities by outlier probabilities --------------------
-  if (outliers) {
-    return_list$postmean     <- return_list$postmean / rowSums(return_list$postmat)
-
-    temp                     <- rep(NA, length = length(not_na_vec))
-    temp[not_na_vec]         <- return_list$prob_outlier
-    return_list$prob_outlier <- temp
-  }
 
   ## Add back missingness ---------------------------------------------
   temp                     <- rep(NA, length = length(not_na_vec))

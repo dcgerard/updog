@@ -57,8 +57,7 @@ An object of class \code{flexdog}, which consists
   \item{\code{llike}}{The maximum marginal log-likelihood.}
   \item{\code{postmat}}{A matrix of posterior probabilities of each
       genotype for each individual. The rows index the individuals
-      and the columns index the allele dosage. Note that the rows will
-      not sum to one if \code{outliers = TRUE}.}
+      and the columns index the allele dosage.}
   \item{\code{gene_dist}}{The estimated genotype distribution. The
       \code{i}th element is the proportion of individuals with
       genotype \code{i-1}. If \code{outliers = TRUE}, then this
