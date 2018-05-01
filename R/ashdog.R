@@ -3,7 +3,7 @@
 #' @inherit flexdog_full
 #'
 #' @param bias_init A vector of initial values for the bias parameter
-#'     over the multiple runs of \code{flexdog}.
+#'     over the multiple runs of \code{flexdog_full}.
 #' @param ... Additional parameters to pass to \code{\link{flexdog_full}}.
 #'
 #' @seealso \code{\link{flexdog_full}} For additional parameter options.
@@ -671,7 +671,11 @@ flexdog_full <- function(refvec,
 
   ## Adjust probabilities by outlier probabilities --------------------
   if (outliers) {
-    return_list$postmean    <- return_list$postmean / rowSums(return_list$postmat)
+    return_list$postmean     <- return_list$postmean / rowSums(return_list$postmat)
+
+    temp                     <- rep(NA, length = length(not_na_vec))
+    temp[not_na_vec]         <- return_list$prob_outlier
+    return_list$prob_outlier <- temp
   }
 
   ## Add back missingness ---------------------------------------------

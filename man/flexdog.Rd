@@ -33,7 +33,7 @@ See Details for possible values.}
 \code{model = "f1"}.}
 
 \item{bias_init}{A vector of initial values for the bias parameter
-over the multiple runs of \code{flexdog}.}
+over the multiple runs of \code{flexdog_full}.}
 
 \item{verbose}{Should we output more (\code{TRUE}) or less
 (\code{FALSE})?}
