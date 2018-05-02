@@ -12,6 +12,7 @@ test_that("summary.mupdog works", {
 )
 
 test_that("plot.mupdog works", {
-  pl <- plot.mupdog(mupout, 1)
+  data("mupout")
+  plot.mupdog(mupout, 1)
 }
 )

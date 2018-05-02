@@ -15,7 +15,7 @@ test_that("dbetabinom works", {
 
     # microbenchmark::microbenchmark(
     #   dbetabinom_suppdists(1, 2, 0.5, 0.2, TRUE),
-    #   mupdog::dbetabinom(1, 2, 0.5, 0.2, TRUE),
+    #   updog::dbetabinom(1, 2, 0.5, 0.2, TRUE),
     #   VGAM::dbetabinom(1, 2, 0.5, 0.2, TRUE)
     # )
   }

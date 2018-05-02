@@ -729,13 +729,30 @@ flexdog_full <- function(refvec,
 #' @export
 plot.flexdog <- function(x, ...) {
   assertthat::assert_that(is.flexdog(x))
+  if (x$input$model == "s1") {
+    p1geno <- x$par$pgeno
+    p2geno <- NULL
+  } else if (x$input$model == "f1") {
+    p1geno <- x$par$p1geno
+    p2geno <- x$par$p2geno
+  } else {
+    p1geno <- NULL
+    p2geno <- NULL
+  }
+  
   pl <- plot_geno(refvec      = x$input$refvec,
                   sizevec     = x$input$sizevec,
                   ploidy      = x$input$ploidy,
                   geno        = x$geno,
                   seq         = x$seq,
                   bias        = x$bias,
-                  maxpostprob = x$maxpostprob)
+                  maxpostprob = x$maxpostprob,
+                  p1ref       = x$input$p1ref,
+                  p1size      = x$input$p1size,
+                  p2ref       = x$input$p2ref,
+                  p2size      = x$input$p2size,
+                  p1geno      = p1geno,
+                  p2geno      = p2geno)
   return(pl)
 }
 

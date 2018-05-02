@@ -110,8 +110,8 @@ plot_geno <- function(refvec,
 
   ## add parents if we have them
   if (!is.null(p1size) & !is.null(p1ref)) {
-    assertthat::assert_that(all(p1ref >= 0, na.rm = TRUE))
-    assertthat::assert_that(all(p1size >= p1ref, na.rm = TRUE))
+    stopifnot(all(p1ref >= 0, na.rm = TRUE))
+    stopifnot(all(p1size >= p1ref, na.rm = TRUE))
     if (any(p1ref > maxcount | p1size - p1ref > maxcount, na.rm = TRUE)) {
       bad_parent_points <- p1ref > maxcount | p1size - p1ref > maxcount
       bad_parent_points[is.na(bad_parent_points)] <- FALSE
@@ -131,8 +131,8 @@ plot_geno <- function(refvec,
     }
   }
   if (!is.null(p2size) & !is.null(p2ref)) {
-    assertthat::assert_that(all(p2ref >= 0, na.rm = TRUE))
-    assertthat::assert_that(all(p2size >= p2ref, na.rm = TRUE))
+    stopifnot(all(p2ref >= 0, na.rm = TRUE))
+    stopifnot(all(p2size >= p2ref, na.rm = TRUE))
     if (any(p2ref > maxcount | p2size - p2ref > maxcount, na.rm = TRUE)) {
       bad_parent_points <- p2ref > maxcount | p2size - p2ref > maxcount
       bad_parent_points[is.na(bad_parent_points)] <- FALSE
@@ -196,14 +196,14 @@ plot_geno <- function(refvec,
 #'
 #' @seealso
 #' \describe{
-#'   \item{\code{\link[updog]{plot_geno}}}{The underlying plotting function.}
+#'   \item{\code{\link{plot_geno}}}{The underlying plotting function.}
 #'   \item{\code{\link{mupdog}}}{Creates a \code{mupdog} object.}
 #' }
 #'
 #' @author David Gerard
 #'
 #' @examples
-#' data(mupout)
+#' data("mupout")
 #' plot(mupout, 4)
 #'
 plot.mupdog <- function(x, index, ...) {
@@ -217,7 +217,6 @@ plot.mupdog <- function(x, index, ...) {
                   bias           = x$bias[index],
                   maxpostprob    = x$maxpostprob[, index],
                   use_colorblind = FALSE)
-
   return(pl)
 }
 

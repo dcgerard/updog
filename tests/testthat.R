@@ -1,4 +1,4 @@
 library(testthat)
-library(mupdog)
+library(updog)
 
-test_check("mupdog")
+test_check("updog")

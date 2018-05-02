@@ -7,7 +7,7 @@ test_that("flexdog works", {
   refvec[2]  <- NA
   sizevec[3] <- NA
 
-  # snpdat <- updog::snpdat
+  # data("snpdat")
   # library(tidyverse)
   # snpdat %>% filter(snp == "SNP1") ->
   #   smalldat
@@ -39,7 +39,9 @@ test_that("flexdog works", {
   p2size      <- NULL
 
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
-                  ploidy = ploidy, model = "f1", verbose = FALSE)
+                  ploidy = ploidy, model = "f1", verbose = FALSE,
+                  p1ref = 1, p1size = 2,
+                  p2ref = 5, p2size = 10)
   pl <- plot(fout)
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
                   ploidy = ploidy, model = "flex", verbose = FALSE)

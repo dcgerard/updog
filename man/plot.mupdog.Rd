@@ -24,13 +24,13 @@ Transparency is proportional to the maximum posterior probability for an
 individual's genotype. Thus, we are less certain of the genotype of more transparent individuals.
 }
 \examples{
-data(mupout)
+data("mupout")
 plot(mupout, 4)
 
 }
 \seealso{
 \describe{
-  \item{\code{\link[updog]{plot_geno}}}{The underlying plotting function.}
+  \item{\code{\link{plot_geno}}}{The underlying plotting function.}
   \item{\code{\link{mupdog}}}{Creates a \code{mupdog} object.}
 }
 }

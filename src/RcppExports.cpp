@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // dbetabinom_alpha_beta_double
 double dbetabinom_alpha_beta_double(int x, int size, double alpha, double beta, bool log);
-RcppExport SEXP _mupdog_dbetabinom_alpha_beta_double(SEXP xSEXP, SEXP sizeSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP logSEXP) {
+RcppExport SEXP _updog_dbetabinom_alpha_beta_double(SEXP xSEXP, SEXP sizeSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP logSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -23,7 +23,7 @@ END_RCPP
 }
 // dbernbinom
 double dbernbinom(int x, int size, double mu, bool log);
-RcppExport SEXP _mupdog_dbernbinom(SEXP xSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP logSEXP) {
+RcppExport SEXP _updog_dbernbinom(SEXP xSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP logSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -37,7 +37,7 @@ END_RCPP
 }
 // dbetabinom_double
 double dbetabinom_double(int x, int size, double mu, double rho, bool log);
-RcppExport SEXP _mupdog_dbetabinom_double(SEXP xSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP, SEXP logSEXP) {
+RcppExport SEXP _updog_dbetabinom_double(SEXP xSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP, SEXP logSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -52,7 +52,7 @@ END_RCPP
 }
 // dbetabinom
 NumericVector dbetabinom(IntegerVector x, IntegerVector size, NumericVector mu, NumericVector rho, LogicalVector log);
-RcppExport SEXP _mupdog_dbetabinom(SEXP xSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP, SEXP logSEXP) {
+RcppExport SEXP _updog_dbetabinom(SEXP xSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP, SEXP logSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -67,7 +67,7 @@ END_RCPP
 }
 // pbetabinom_double
 double pbetabinom_double(int q, int size, double mu, double rho, bool log_p);
-RcppExport SEXP _mupdog_pbetabinom_double(SEXP qSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP, SEXP log_pSEXP) {
+RcppExport SEXP _updog_pbetabinom_double(SEXP qSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP, SEXP log_pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -82,7 +82,7 @@ END_RCPP
 }
 // pbetabinom
 NumericVector pbetabinom(IntegerVector q, IntegerVector size, NumericVector mu, NumericVector rho, LogicalVector log_p);
-RcppExport SEXP _mupdog_pbetabinom(SEXP qSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP, SEXP log_pSEXP) {
+RcppExport SEXP _updog_pbetabinom(SEXP qSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP, SEXP log_pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -97,7 +97,7 @@ END_RCPP
 }
 // qbetabinom_double
 int qbetabinom_double(double p, int size, double mu, double rho);
-RcppExport SEXP _mupdog_qbetabinom_double(SEXP pSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP) {
+RcppExport SEXP _updog_qbetabinom_double(SEXP pSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -111,7 +111,7 @@ END_RCPP
 }
 // qbetabinom
 IntegerVector qbetabinom(NumericVector p, IntegerVector size, NumericVector mu, NumericVector rho);
-RcppExport SEXP _mupdog_qbetabinom(SEXP pSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP) {
+RcppExport SEXP _updog_qbetabinom(SEXP pSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -125,7 +125,7 @@ END_RCPP
 }
 // rbetabinom_int
 int rbetabinom_int(int size, double mu, double rho);
-RcppExport SEXP _mupdog_rbetabinom_int(SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP) {
+RcppExport SEXP _updog_rbetabinom_int(SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -138,7 +138,7 @@ END_RCPP
 }
 // rbetabinom
 IntegerVector rbetabinom(int n, IntegerVector size, NumericVector mu, NumericVector rho);
-RcppExport SEXP _mupdog_rbetabinom(SEXP nSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP) {
+RcppExport SEXP _updog_rbetabinom(SEXP nSEXP, SEXP sizeSEXP, SEXP muSEXP, SEXP rhoSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -152,7 +152,7 @@ END_RCPP
 }
 // get_probk_vec
 NumericVector get_probk_vec(NumericVector pivec, std::string model, double mode);
-RcppExport SEXP _mupdog_get_probk_vec(SEXP pivecSEXP, SEXP modelSEXP, SEXP modeSEXP) {
+RcppExport SEXP _updog_get_probk_vec(SEXP pivecSEXP, SEXP modelSEXP, SEXP modeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -165,7 +165,7 @@ END_RCPP
 }
 // get_inner_weights
 NumericMatrix get_inner_weights(int ploidy, double mode);
-RcppExport SEXP _mupdog_get_inner_weights(SEXP ploidySEXP, SEXP modeSEXP) {
+RcppExport SEXP _updog_get_inner_weights(SEXP ploidySEXP, SEXP modeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -177,7 +177,7 @@ END_RCPP
 }
 // get_wik_mat
 NumericMatrix get_wik_mat(NumericVector probk_vec, NumericVector refvec, NumericVector sizevec, int ploidy, double seq, double bias, double od);
-RcppExport SEXP _mupdog_get_wik_mat(SEXP probk_vecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP) {
+RcppExport SEXP _updog_get_wik_mat(SEXP probk_vecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -194,7 +194,7 @@ END_RCPP
 }
 // flexdog_obj
 double flexdog_obj(NumericVector probk_vec, NumericVector refvec, NumericVector sizevec, int ploidy, double seq, double bias, double od, double mean_bias, double var_bias, double mean_seq, double var_seq);
-RcppExport SEXP _mupdog_flexdog_obj(SEXP probk_vecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP) {
+RcppExport SEXP _updog_flexdog_obj(SEXP probk_vecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -215,7 +215,7 @@ END_RCPP
 }
 // uni_obj
 double uni_obj(arma::vec pivec, arma::vec weight_vec, arma::mat lmat, long double lambda);
-RcppExport SEXP _mupdog_uni_obj(SEXP pivecSEXP, SEXP weight_vecSEXP, SEXP lmatSEXP, SEXP lambdaSEXP) {
+RcppExport SEXP _updog_uni_obj(SEXP pivecSEXP, SEXP weight_vecSEXP, SEXP lmatSEXP, SEXP lambdaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -229,7 +229,7 @@ END_RCPP
 }
 // uni_em
 arma::vec uni_em(arma::vec weight_vec, arma::mat lmat, arma::vec pi_init, long double lambda, int itermax, double obj_tol);
-RcppExport SEXP _mupdog_uni_em(SEXP weight_vecSEXP, SEXP lmatSEXP, SEXP pi_initSEXP, SEXP lambdaSEXP, SEXP itermaxSEXP, SEXP obj_tolSEXP) {
+RcppExport SEXP _updog_uni_em(SEXP weight_vecSEXP, SEXP lmatSEXP, SEXP pi_initSEXP, SEXP lambdaSEXP, SEXP itermaxSEXP, SEXP obj_tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -245,7 +245,7 @@ END_RCPP
 }
 // f1_obj
 double f1_obj(double alpha, NumericVector pvec, NumericVector weight_vec);
-RcppExport SEXP _mupdog_f1_obj(SEXP alphaSEXP, SEXP pvecSEXP, SEXP weight_vecSEXP) {
+RcppExport SEXP _updog_f1_obj(SEXP alphaSEXP, SEXP pvecSEXP, SEXP weight_vecSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -258,7 +258,7 @@ END_RCPP
 }
 // grad_for_mu_sigma2
 NumericVector grad_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2, NumericMatrix phifk_mat, arma::Mat<double> cor_inv, NumericMatrix log_bb_dense);
-RcppExport SEXP _mupdog_grad_for_mu_sigma2(SEXP muSEXP, SEXP sigma2SEXP, SEXP phifk_matSEXP, SEXP cor_invSEXP, SEXP log_bb_denseSEXP) {
+RcppExport SEXP _updog_grad_for_mu_sigma2(SEXP muSEXP, SEXP sigma2SEXP, SEXP phifk_matSEXP, SEXP cor_invSEXP, SEXP log_bb_denseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -273,7 +273,7 @@ END_RCPP
 }
 // grad_for_mu_sigma2_wrapper
 NumericVector grad_for_mu_sigma2_wrapper(arma::Col<double> muSigma2, NumericMatrix phifk_mat, arma::Mat<double> cor_inv, NumericMatrix log_bb_dense);
-RcppExport SEXP _mupdog_grad_for_mu_sigma2_wrapper(SEXP muSigma2SEXP, SEXP phifk_matSEXP, SEXP cor_invSEXP, SEXP log_bb_denseSEXP) {
+RcppExport SEXP _updog_grad_for_mu_sigma2_wrapper(SEXP muSigma2SEXP, SEXP phifk_matSEXP, SEXP cor_invSEXP, SEXP log_bb_denseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -287,7 +287,7 @@ END_RCPP
 }
 // dpen_dh
 double dpen_dh(double h, double mu_h, double sigma2_h);
-RcppExport SEXP _mupdog_dpen_dh(SEXP hSEXP, SEXP mu_hSEXP, SEXP sigma2_hSEXP) {
+RcppExport SEXP _updog_dpen_dh(SEXP hSEXP, SEXP mu_hSEXP, SEXP sigma2_hSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -300,7 +300,7 @@ END_RCPP
 }
 // dpen_deps
 double dpen_deps(double eps, double mu_eps, double sigma2_eps);
-RcppExport SEXP _mupdog_dpen_deps(SEXP epsSEXP, SEXP mu_epsSEXP, SEXP sigma2_epsSEXP) {
+RcppExport SEXP _updog_dpen_deps(SEXP epsSEXP, SEXP mu_epsSEXP, SEXP sigma2_epsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -313,7 +313,7 @@ END_RCPP
 }
 // dlbeta_dc
 double dlbeta_dc(int x, int n, double xi, double c);
-RcppExport SEXP _mupdog_dlbeta_dc(SEXP xSEXP, SEXP nSEXP, SEXP xiSEXP, SEXP cSEXP) {
+RcppExport SEXP _updog_dlbeta_dc(SEXP xSEXP, SEXP nSEXP, SEXP xiSEXP, SEXP cSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -327,7 +327,7 @@ END_RCPP
 }
 // dc_dtau
 double dc_dtau(double tau);
-RcppExport SEXP _mupdog_dc_dtau(SEXP tauSEXP) {
+RcppExport SEXP _updog_dc_dtau(SEXP tauSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -338,7 +338,7 @@ END_RCPP
 }
 // dlbeta_dtau
 double dlbeta_dtau(int x, int n, double p, double eps, double h, double tau);
-RcppExport SEXP _mupdog_dlbeta_dtau(SEXP xSEXP, SEXP nSEXP, SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP, SEXP tauSEXP) {
+RcppExport SEXP _updog_dlbeta_dtau(SEXP xSEXP, SEXP nSEXP, SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP, SEXP tauSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -354,7 +354,7 @@ END_RCPP
 }
 // dlbeta_dxi
 double dlbeta_dxi(int x, int n, double xi, double tau);
-RcppExport SEXP _mupdog_dlbeta_dxi(SEXP xSEXP, SEXP nSEXP, SEXP xiSEXP, SEXP tauSEXP) {
+RcppExport SEXP _updog_dlbeta_dxi(SEXP xSEXP, SEXP nSEXP, SEXP xiSEXP, SEXP tauSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -368,7 +368,7 @@ END_RCPP
 }
 // dxi_dh
 double dxi_dh(double p, double eps, double h);
-RcppExport SEXP _mupdog_dxi_dh(SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP) {
+RcppExport SEXP _updog_dxi_dh(SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -381,7 +381,7 @@ END_RCPP
 }
 // dlbeta_dh
 double dlbeta_dh(int x, int n, double p, double eps, double h, double tau);
-RcppExport SEXP _mupdog_dlbeta_dh(SEXP xSEXP, SEXP nSEXP, SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP, SEXP tauSEXP) {
+RcppExport SEXP _updog_dlbeta_dh(SEXP xSEXP, SEXP nSEXP, SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP, SEXP tauSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -397,7 +397,7 @@ END_RCPP
 }
 // dxi_df
 double dxi_df(double h, double f);
-RcppExport SEXP _mupdog_dxi_df(SEXP hSEXP, SEXP fSEXP) {
+RcppExport SEXP _updog_dxi_df(SEXP hSEXP, SEXP fSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -409,7 +409,7 @@ END_RCPP
 }
 // df_deps
 double df_deps(double p, double eps);
-RcppExport SEXP _mupdog_df_deps(SEXP pSEXP, SEXP epsSEXP) {
+RcppExport SEXP _updog_df_deps(SEXP pSEXP, SEXP epsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -421,7 +421,7 @@ END_RCPP
 }
 // dlbeta_deps
 double dlbeta_deps(int x, int n, double p, double eps, double h, double tau);
-RcppExport SEXP _mupdog_dlbeta_deps(SEXP xSEXP, SEXP nSEXP, SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP, SEXP tauSEXP) {
+RcppExport SEXP _updog_dlbeta_deps(SEXP xSEXP, SEXP nSEXP, SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP, SEXP tauSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -437,7 +437,7 @@ END_RCPP
 }
 // grad_for_eps
 NumericVector grad_for_eps(NumericVector parvec, NumericVector refvec, NumericVector sizevec, int ploidy, double mean_bias, double var_bias, double mean_seq, double var_seq, NumericMatrix wmat, bool update_bias, bool update_seq, bool update_od);
-RcppExport SEXP _mupdog_grad_for_eps(SEXP parvecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP wmatSEXP, SEXP update_biasSEXP, SEXP update_seqSEXP, SEXP update_odSEXP) {
+RcppExport SEXP _updog_grad_for_eps(SEXP parvecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP wmatSEXP, SEXP update_biasSEXP, SEXP update_seqSEXP, SEXP update_odSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -459,7 +459,7 @@ END_RCPP
 }
 // grad_for_weighted_lbb
 NumericVector grad_for_weighted_lbb(NumericVector parvec, int ploidy, NumericVector weight_vec);
-RcppExport SEXP _mupdog_grad_for_weighted_lbb(SEXP parvecSEXP, SEXP ploidySEXP, SEXP weight_vecSEXP) {
+RcppExport SEXP _updog_grad_for_weighted_lbb(SEXP parvecSEXP, SEXP ploidySEXP, SEXP weight_vecSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -472,7 +472,7 @@ END_RCPP
 }
 // grad_for_weighted_lnorm
 NumericVector grad_for_weighted_lnorm(NumericVector parvec, int ploidy, NumericVector weight_vec);
-RcppExport SEXP _mupdog_grad_for_weighted_lnorm(SEXP parvecSEXP, SEXP ploidySEXP, SEXP weight_vecSEXP) {
+RcppExport SEXP _updog_grad_for_weighted_lnorm(SEXP parvecSEXP, SEXP ploidySEXP, SEXP weight_vecSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -485,7 +485,7 @@ END_RCPP
 }
 // post_prob
 double post_prob(int dosage, int ploidy, double mu, double sigma2, double alpha, double rho);
-RcppExport SEXP _mupdog_post_prob(SEXP dosageSEXP, SEXP ploidySEXP, SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP rhoSEXP) {
+RcppExport SEXP _updog_post_prob(SEXP dosageSEXP, SEXP ploidySEXP, SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP rhoSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -501,7 +501,7 @@ END_RCPP
 }
 // compute_all_post_prob
 arma::Cube<double> compute_all_post_prob(int ploidy, NumericMatrix mu, NumericMatrix sigma2, NumericVector alpha, NumericVector rho);
-RcppExport SEXP _mupdog_compute_all_post_prob(SEXP ploidySEXP, SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP rhoSEXP) {
+RcppExport SEXP _updog_compute_all_post_prob(SEXP ploidySEXP, SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP rhoSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -516,7 +516,7 @@ END_RCPP
 }
 // compute_all_log_bb
 arma::Cube<double> compute_all_log_bb(NumericMatrix refmat, NumericMatrix sizemat, int ploidy, NumericVector seq, NumericVector bias, NumericVector od);
-RcppExport SEXP _mupdog_compute_all_log_bb(SEXP refmatSEXP, SEXP sizematSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP) {
+RcppExport SEXP _updog_compute_all_log_bb(SEXP refmatSEXP, SEXP sizematSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -532,7 +532,7 @@ END_RCPP
 }
 // compute_all_phifk
 arma::Cube<double> compute_all_phifk(NumericVector alpha, NumericVector rho, int ploidy);
-RcppExport SEXP _mupdog_compute_all_phifk(SEXP alphaSEXP, SEXP rhoSEXP, SEXP ploidySEXP) {
+RcppExport SEXP _updog_compute_all_phifk(SEXP alphaSEXP, SEXP rhoSEXP, SEXP ploidySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -545,7 +545,7 @@ END_RCPP
 }
 // pen_bias
 double pen_bias(double h, double mu_h, double sigma2_h);
-RcppExport SEXP _mupdog_pen_bias(SEXP hSEXP, SEXP mu_hSEXP, SEXP sigma2_hSEXP) {
+RcppExport SEXP _updog_pen_bias(SEXP hSEXP, SEXP mu_hSEXP, SEXP sigma2_hSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -558,7 +558,7 @@ END_RCPP
 }
 // pen_seq_error
 double pen_seq_error(double eps, double mu_eps, double sigma2_eps);
-RcppExport SEXP _mupdog_pen_seq_error(SEXP epsSEXP, SEXP mu_epsSEXP, SEXP sigma2_epsSEXP) {
+RcppExport SEXP _updog_pen_seq_error(SEXP epsSEXP, SEXP mu_epsSEXP, SEXP sigma2_epsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -571,7 +571,7 @@ END_RCPP
 }
 // obj_for_rho
 double obj_for_rho(double rho, NumericVector mu, NumericVector sigma2, NumericVector alpha, NumericMatrix log_bb_dense, int ploidy);
-RcppExport SEXP _mupdog_obj_for_rho(SEXP rhoSEXP, SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP log_bb_denseSEXP, SEXP ploidySEXP) {
+RcppExport SEXP _updog_obj_for_rho(SEXP rhoSEXP, SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP log_bb_denseSEXP, SEXP ploidySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -587,7 +587,7 @@ END_RCPP
 }
 // obj_for_alpha
 double obj_for_alpha(arma::Col<double> mu, arma::Col<double> sigma2, double alpha, NumericVector rho, NumericMatrix log_bb_dense, int ploidy);
-RcppExport SEXP _mupdog_obj_for_alpha(SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP rhoSEXP, SEXP log_bb_denseSEXP, SEXP ploidySEXP) {
+RcppExport SEXP _updog_obj_for_alpha(SEXP muSEXP, SEXP sigma2SEXP, SEXP alphaSEXP, SEXP rhoSEXP, SEXP log_bb_denseSEXP, SEXP ploidySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -603,7 +603,7 @@ END_RCPP
 }
 // obj_for_eps
 double obj_for_eps(NumericVector parvec, NumericVector refvec, NumericVector sizevec, int ploidy, double mean_bias, double var_bias, double mean_seq, double var_seq, NumericMatrix wmat, bool update_bias, bool update_seq, bool update_od);
-RcppExport SEXP _mupdog_obj_for_eps(SEXP parvecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP wmatSEXP, SEXP update_biasSEXP, SEXP update_seqSEXP, SEXP update_odSEXP) {
+RcppExport SEXP _updog_obj_for_eps(SEXP parvecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP wmatSEXP, SEXP update_biasSEXP, SEXP update_seqSEXP, SEXP update_odSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -625,7 +625,7 @@ END_RCPP
 }
 // obj_for_mu_sigma2
 double obj_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2, NumericMatrix phifk_mat, arma::Mat<double> cor_inv, NumericMatrix log_bb_dense);
-RcppExport SEXP _mupdog_obj_for_mu_sigma2(SEXP muSEXP, SEXP sigma2SEXP, SEXP phifk_matSEXP, SEXP cor_invSEXP, SEXP log_bb_denseSEXP) {
+RcppExport SEXP _updog_obj_for_mu_sigma2(SEXP muSEXP, SEXP sigma2SEXP, SEXP phifk_matSEXP, SEXP cor_invSEXP, SEXP log_bb_denseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -640,7 +640,7 @@ END_RCPP
 }
 // obj_for_mu_sigma2_wrapper
 double obj_for_mu_sigma2_wrapper(arma::Col<double> muSigma2, NumericMatrix phifk_mat, arma::Mat<double> cor_inv, NumericMatrix log_bb_dense);
-RcppExport SEXP _mupdog_obj_for_mu_sigma2_wrapper(SEXP muSigma2SEXP, SEXP phifk_matSEXP, SEXP cor_invSEXP, SEXP log_bb_denseSEXP) {
+RcppExport SEXP _updog_obj_for_mu_sigma2_wrapper(SEXP muSigma2SEXP, SEXP phifk_matSEXP, SEXP cor_invSEXP, SEXP log_bb_denseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -654,7 +654,7 @@ END_RCPP
 }
 // elbo
 double elbo(arma::Cube<double> warray, arma::Cube<double> lbeta_array, arma::Mat<double> cor_inv, arma::Mat<double> postmean, arma::Mat<double> postvar, NumericVector bias, NumericVector seq, double mean_bias, double var_bias, double mean_seq, double var_seq, int ploidy);
-RcppExport SEXP _mupdog_elbo(SEXP warraySEXP, SEXP lbeta_arraySEXP, SEXP cor_invSEXP, SEXP postmeanSEXP, SEXP postvarSEXP, SEXP biasSEXP, SEXP seqSEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP ploidySEXP) {
+RcppExport SEXP _updog_elbo(SEXP warraySEXP, SEXP lbeta_arraySEXP, SEXP cor_invSEXP, SEXP postmeanSEXP, SEXP postvarSEXP, SEXP biasSEXP, SEXP seqSEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP ploidySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -676,7 +676,7 @@ END_RCPP
 }
 // obj_for_weighted_lbb
 double obj_for_weighted_lbb(NumericVector parvec, int ploidy, NumericVector weight_vec);
-RcppExport SEXP _mupdog_obj_for_weighted_lbb(SEXP parvecSEXP, SEXP ploidySEXP, SEXP weight_vecSEXP) {
+RcppExport SEXP _updog_obj_for_weighted_lbb(SEXP parvecSEXP, SEXP ploidySEXP, SEXP weight_vecSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -689,7 +689,7 @@ END_RCPP
 }
 // obj_for_weighted_lnorm
 double obj_for_weighted_lnorm(NumericVector parvec, int ploidy, NumericVector weight_vec);
-RcppExport SEXP _mupdog_obj_for_weighted_lnorm(SEXP parvecSEXP, SEXP ploidySEXP, SEXP weight_vecSEXP) {
+RcppExport SEXP _updog_obj_for_weighted_lnorm(SEXP parvecSEXP, SEXP ploidySEXP, SEXP weight_vecSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -702,7 +702,7 @@ END_RCPP
 }
 // oracle_mis
 double oracle_mis(int n, int ploidy, double seq, double bias, double od, NumericVector dist);
-RcppExport SEXP _mupdog_oracle_mis(SEXP nSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP distSEXP) {
+RcppExport SEXP _updog_oracle_mis(SEXP nSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP distSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -718,7 +718,7 @@ END_RCPP
 }
 // doutdist
 double doutdist(int x, int n, bool logp);
-RcppExport SEXP _mupdog_doutdist(SEXP xSEXP, SEXP nSEXP, SEXP logpSEXP) {
+RcppExport SEXP _updog_doutdist(SEXP xSEXP, SEXP nSEXP, SEXP logpSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -731,7 +731,7 @@ END_RCPP
 }
 // get_wik_mat_out
 NumericMatrix get_wik_mat_out(NumericVector probk_vec, double out_prop, NumericVector refvec, NumericVector sizevec, int ploidy, double seq, double bias, double od);
-RcppExport SEXP _mupdog_get_wik_mat_out(SEXP probk_vecSEXP, SEXP out_propSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP) {
+RcppExport SEXP _updog_get_wik_mat_out(SEXP probk_vecSEXP, SEXP out_propSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -749,7 +749,7 @@ END_RCPP
 }
 // flexdog_obj_out
 double flexdog_obj_out(NumericVector probk_vec, double out_prop, NumericVector refvec, NumericVector sizevec, int ploidy, double seq, double bias, double od, double mean_bias, double var_bias, double mean_seq, double var_seq);
-RcppExport SEXP _mupdog_flexdog_obj_out(SEXP probk_vecSEXP, SEXP out_propSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP) {
+RcppExport SEXP _updog_flexdog_obj_out(SEXP probk_vecSEXP, SEXP out_propSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -771,7 +771,7 @@ END_RCPP
 }
 // eta_double
 double eta_double(double p, double eps);
-RcppExport SEXP _mupdog_eta_double(SEXP pSEXP, SEXP epsSEXP) {
+RcppExport SEXP _updog_eta_double(SEXP pSEXP, SEXP epsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -783,7 +783,7 @@ END_RCPP
 }
 // eta_fun
 NumericVector eta_fun(NumericVector p, NumericVector eps);
-RcppExport SEXP _mupdog_eta_fun(SEXP pSEXP, SEXP epsSEXP) {
+RcppExport SEXP _updog_eta_fun(SEXP pSEXP, SEXP epsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -795,7 +795,7 @@ END_RCPP
 }
 // xi_double
 double xi_double(double p, double eps, double h);
-RcppExport SEXP _mupdog_xi_double(SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP) {
+RcppExport SEXP _updog_xi_double(SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -808,7 +808,7 @@ END_RCPP
 }
 // xi_fun
 NumericVector xi_fun(NumericVector p, NumericVector eps, NumericVector h);
-RcppExport SEXP _mupdog_xi_fun(SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP) {
+RcppExport SEXP _updog_xi_fun(SEXP pSEXP, SEXP epsSEXP, SEXP hSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -821,7 +821,7 @@ END_RCPP
 }
 // log_sum_exp
 double log_sum_exp(NumericVector x);
-RcppExport SEXP _mupdog_log_sum_exp(SEXP xSEXP) {
+RcppExport SEXP _updog_log_sum_exp(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -832,7 +832,7 @@ END_RCPP
 }
 // log_sum_exp_2
 double log_sum_exp_2(double x, double y);
-RcppExport SEXP _mupdog_log_sum_exp_2(SEXP xSEXP, SEXP ySEXP) {
+RcppExport SEXP _updog_log_sum_exp_2(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -844,7 +844,7 @@ END_RCPP
 }
 // logit
 double logit(double x);
-RcppExport SEXP _mupdog_logit(SEXP xSEXP) {
+RcppExport SEXP _updog_logit(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -855,7 +855,7 @@ END_RCPP
 }
 // expit
 double expit(double x);
-RcppExport SEXP _mupdog_expit(SEXP xSEXP) {
+RcppExport SEXP _updog_expit(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -866,69 +866,69 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_mupdog_dbetabinom_alpha_beta_double", (DL_FUNC) &_mupdog_dbetabinom_alpha_beta_double, 5},
-    {"_mupdog_dbernbinom", (DL_FUNC) &_mupdog_dbernbinom, 4},
-    {"_mupdog_dbetabinom_double", (DL_FUNC) &_mupdog_dbetabinom_double, 5},
-    {"_mupdog_dbetabinom", (DL_FUNC) &_mupdog_dbetabinom, 5},
-    {"_mupdog_pbetabinom_double", (DL_FUNC) &_mupdog_pbetabinom_double, 5},
-    {"_mupdog_pbetabinom", (DL_FUNC) &_mupdog_pbetabinom, 5},
-    {"_mupdog_qbetabinom_double", (DL_FUNC) &_mupdog_qbetabinom_double, 4},
-    {"_mupdog_qbetabinom", (DL_FUNC) &_mupdog_qbetabinom, 4},
-    {"_mupdog_rbetabinom_int", (DL_FUNC) &_mupdog_rbetabinom_int, 3},
-    {"_mupdog_rbetabinom", (DL_FUNC) &_mupdog_rbetabinom, 4},
-    {"_mupdog_get_probk_vec", (DL_FUNC) &_mupdog_get_probk_vec, 3},
-    {"_mupdog_get_inner_weights", (DL_FUNC) &_mupdog_get_inner_weights, 2},
-    {"_mupdog_get_wik_mat", (DL_FUNC) &_mupdog_get_wik_mat, 7},
-    {"_mupdog_flexdog_obj", (DL_FUNC) &_mupdog_flexdog_obj, 11},
-    {"_mupdog_uni_obj", (DL_FUNC) &_mupdog_uni_obj, 4},
-    {"_mupdog_uni_em", (DL_FUNC) &_mupdog_uni_em, 6},
-    {"_mupdog_f1_obj", (DL_FUNC) &_mupdog_f1_obj, 3},
-    {"_mupdog_grad_for_mu_sigma2", (DL_FUNC) &_mupdog_grad_for_mu_sigma2, 5},
-    {"_mupdog_grad_for_mu_sigma2_wrapper", (DL_FUNC) &_mupdog_grad_for_mu_sigma2_wrapper, 4},
-    {"_mupdog_dpen_dh", (DL_FUNC) &_mupdog_dpen_dh, 3},
-    {"_mupdog_dpen_deps", (DL_FUNC) &_mupdog_dpen_deps, 3},
-    {"_mupdog_dlbeta_dc", (DL_FUNC) &_mupdog_dlbeta_dc, 4},
-    {"_mupdog_dc_dtau", (DL_FUNC) &_mupdog_dc_dtau, 1},
-    {"_mupdog_dlbeta_dtau", (DL_FUNC) &_mupdog_dlbeta_dtau, 6},
-    {"_mupdog_dlbeta_dxi", (DL_FUNC) &_mupdog_dlbeta_dxi, 4},
-    {"_mupdog_dxi_dh", (DL_FUNC) &_mupdog_dxi_dh, 3},
-    {"_mupdog_dlbeta_dh", (DL_FUNC) &_mupdog_dlbeta_dh, 6},
-    {"_mupdog_dxi_df", (DL_FUNC) &_mupdog_dxi_df, 2},
-    {"_mupdog_df_deps", (DL_FUNC) &_mupdog_df_deps, 2},
-    {"_mupdog_dlbeta_deps", (DL_FUNC) &_mupdog_dlbeta_deps, 6},
-    {"_mupdog_grad_for_eps", (DL_FUNC) &_mupdog_grad_for_eps, 12},
-    {"_mupdog_grad_for_weighted_lbb", (DL_FUNC) &_mupdog_grad_for_weighted_lbb, 3},
-    {"_mupdog_grad_for_weighted_lnorm", (DL_FUNC) &_mupdog_grad_for_weighted_lnorm, 3},
-    {"_mupdog_post_prob", (DL_FUNC) &_mupdog_post_prob, 6},
-    {"_mupdog_compute_all_post_prob", (DL_FUNC) &_mupdog_compute_all_post_prob, 5},
-    {"_mupdog_compute_all_log_bb", (DL_FUNC) &_mupdog_compute_all_log_bb, 6},
-    {"_mupdog_compute_all_phifk", (DL_FUNC) &_mupdog_compute_all_phifk, 3},
-    {"_mupdog_pen_bias", (DL_FUNC) &_mupdog_pen_bias, 3},
-    {"_mupdog_pen_seq_error", (DL_FUNC) &_mupdog_pen_seq_error, 3},
-    {"_mupdog_obj_for_rho", (DL_FUNC) &_mupdog_obj_for_rho, 6},
-    {"_mupdog_obj_for_alpha", (DL_FUNC) &_mupdog_obj_for_alpha, 6},
-    {"_mupdog_obj_for_eps", (DL_FUNC) &_mupdog_obj_for_eps, 12},
-    {"_mupdog_obj_for_mu_sigma2", (DL_FUNC) &_mupdog_obj_for_mu_sigma2, 5},
-    {"_mupdog_obj_for_mu_sigma2_wrapper", (DL_FUNC) &_mupdog_obj_for_mu_sigma2_wrapper, 4},
-    {"_mupdog_elbo", (DL_FUNC) &_mupdog_elbo, 12},
-    {"_mupdog_obj_for_weighted_lbb", (DL_FUNC) &_mupdog_obj_for_weighted_lbb, 3},
-    {"_mupdog_obj_for_weighted_lnorm", (DL_FUNC) &_mupdog_obj_for_weighted_lnorm, 3},
-    {"_mupdog_oracle_mis", (DL_FUNC) &_mupdog_oracle_mis, 6},
-    {"_mupdog_doutdist", (DL_FUNC) &_mupdog_doutdist, 3},
-    {"_mupdog_get_wik_mat_out", (DL_FUNC) &_mupdog_get_wik_mat_out, 8},
-    {"_mupdog_flexdog_obj_out", (DL_FUNC) &_mupdog_flexdog_obj_out, 12},
-    {"_mupdog_eta_double", (DL_FUNC) &_mupdog_eta_double, 2},
-    {"_mupdog_eta_fun", (DL_FUNC) &_mupdog_eta_fun, 2},
-    {"_mupdog_xi_double", (DL_FUNC) &_mupdog_xi_double, 3},
-    {"_mupdog_xi_fun", (DL_FUNC) &_mupdog_xi_fun, 3},
-    {"_mupdog_log_sum_exp", (DL_FUNC) &_mupdog_log_sum_exp, 1},
-    {"_mupdog_log_sum_exp_2", (DL_FUNC) &_mupdog_log_sum_exp_2, 2},
-    {"_mupdog_logit", (DL_FUNC) &_mupdog_logit, 1},
-    {"_mupdog_expit", (DL_FUNC) &_mupdog_expit, 1},
+    {"_updog_dbetabinom_alpha_beta_double", (DL_FUNC) &_updog_dbetabinom_alpha_beta_double, 5},
+    {"_updog_dbernbinom", (DL_FUNC) &_updog_dbernbinom, 4},
+    {"_updog_dbetabinom_double", (DL_FUNC) &_updog_dbetabinom_double, 5},
+    {"_updog_dbetabinom", (DL_FUNC) &_updog_dbetabinom, 5},
+    {"_updog_pbetabinom_double", (DL_FUNC) &_updog_pbetabinom_double, 5},
+    {"_updog_pbetabinom", (DL_FUNC) &_updog_pbetabinom, 5},
+    {"_updog_qbetabinom_double", (DL_FUNC) &_updog_qbetabinom_double, 4},
+    {"_updog_qbetabinom", (DL_FUNC) &_updog_qbetabinom, 4},
+    {"_updog_rbetabinom_int", (DL_FUNC) &_updog_rbetabinom_int, 3},
+    {"_updog_rbetabinom", (DL_FUNC) &_updog_rbetabinom, 4},
+    {"_updog_get_probk_vec", (DL_FUNC) &_updog_get_probk_vec, 3},
+    {"_updog_get_inner_weights", (DL_FUNC) &_updog_get_inner_weights, 2},
+    {"_updog_get_wik_mat", (DL_FUNC) &_updog_get_wik_mat, 7},
+    {"_updog_flexdog_obj", (DL_FUNC) &_updog_flexdog_obj, 11},
+    {"_updog_uni_obj", (DL_FUNC) &_updog_uni_obj, 4},
+    {"_updog_uni_em", (DL_FUNC) &_updog_uni_em, 6},
+    {"_updog_f1_obj", (DL_FUNC) &_updog_f1_obj, 3},
+    {"_updog_grad_for_mu_sigma2", (DL_FUNC) &_updog_grad_for_mu_sigma2, 5},
+    {"_updog_grad_for_mu_sigma2_wrapper", (DL_FUNC) &_updog_grad_for_mu_sigma2_wrapper, 4},
+    {"_updog_dpen_dh", (DL_FUNC) &_updog_dpen_dh, 3},
+    {"_updog_dpen_deps", (DL_FUNC) &_updog_dpen_deps, 3},
+    {"_updog_dlbeta_dc", (DL_FUNC) &_updog_dlbeta_dc, 4},
+    {"_updog_dc_dtau", (DL_FUNC) &_updog_dc_dtau, 1},
+    {"_updog_dlbeta_dtau", (DL_FUNC) &_updog_dlbeta_dtau, 6},
+    {"_updog_dlbeta_dxi", (DL_FUNC) &_updog_dlbeta_dxi, 4},
+    {"_updog_dxi_dh", (DL_FUNC) &_updog_dxi_dh, 3},
+    {"_updog_dlbeta_dh", (DL_FUNC) &_updog_dlbeta_dh, 6},
+    {"_updog_dxi_df", (DL_FUNC) &_updog_dxi_df, 2},
+    {"_updog_df_deps", (DL_FUNC) &_updog_df_deps, 2},
+    {"_updog_dlbeta_deps", (DL_FUNC) &_updog_dlbeta_deps, 6},
+    {"_updog_grad_for_eps", (DL_FUNC) &_updog_grad_for_eps, 12},
+    {"_updog_grad_for_weighted_lbb", (DL_FUNC) &_updog_grad_for_weighted_lbb, 3},
+    {"_updog_grad_for_weighted_lnorm", (DL_FUNC) &_updog_grad_for_weighted_lnorm, 3},
+    {"_updog_post_prob", (DL_FUNC) &_updog_post_prob, 6},
+    {"_updog_compute_all_post_prob", (DL_FUNC) &_updog_compute_all_post_prob, 5},
+    {"_updog_compute_all_log_bb", (DL_FUNC) &_updog_compute_all_log_bb, 6},
+    {"_updog_compute_all_phifk", (DL_FUNC) &_updog_compute_all_phifk, 3},
+    {"_updog_pen_bias", (DL_FUNC) &_updog_pen_bias, 3},
+    {"_updog_pen_seq_error", (DL_FUNC) &_updog_pen_seq_error, 3},
+    {"_updog_obj_for_rho", (DL_FUNC) &_updog_obj_for_rho, 6},
+    {"_updog_obj_for_alpha", (DL_FUNC) &_updog_obj_for_alpha, 6},
+    {"_updog_obj_for_eps", (DL_FUNC) &_updog_obj_for_eps, 12},
+    {"_updog_obj_for_mu_sigma2", (DL_FUNC) &_updog_obj_for_mu_sigma2, 5},
+    {"_updog_obj_for_mu_sigma2_wrapper", (DL_FUNC) &_updog_obj_for_mu_sigma2_wrapper, 4},
+    {"_updog_elbo", (DL_FUNC) &_updog_elbo, 12},
+    {"_updog_obj_for_weighted_lbb", (DL_FUNC) &_updog_obj_for_weighted_lbb, 3},
+    {"_updog_obj_for_weighted_lnorm", (DL_FUNC) &_updog_obj_for_weighted_lnorm, 3},
+    {"_updog_oracle_mis", (DL_FUNC) &_updog_oracle_mis, 6},
+    {"_updog_doutdist", (DL_FUNC) &_updog_doutdist, 3},
+    {"_updog_get_wik_mat_out", (DL_FUNC) &_updog_get_wik_mat_out, 8},
+    {"_updog_flexdog_obj_out", (DL_FUNC) &_updog_flexdog_obj_out, 12},
+    {"_updog_eta_double", (DL_FUNC) &_updog_eta_double, 2},
+    {"_updog_eta_fun", (DL_FUNC) &_updog_eta_fun, 2},
+    {"_updog_xi_double", (DL_FUNC) &_updog_xi_double, 3},
+    {"_updog_xi_fun", (DL_FUNC) &_updog_xi_fun, 3},
+    {"_updog_log_sum_exp", (DL_FUNC) &_updog_log_sum_exp, 1},
+    {"_updog_log_sum_exp_2", (DL_FUNC) &_updog_log_sum_exp_2, 2},
+    {"_updog_logit", (DL_FUNC) &_updog_logit, 1},
+    {"_updog_expit", (DL_FUNC) &_updog_expit, 1},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_mupdog(DllInfo *dll) {
+RcppExport void R_init_updog(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

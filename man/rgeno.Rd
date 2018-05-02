@@ -58,7 +58,7 @@ and \code{mode} varies based on the value of \code{model}. If \code{model = "ash
 be non-\code{NULL}. If \code{model = "f1"} then only \code{p1geno} and \code{p2geno} can be non-\code{NULL}.
 If \code{model = "s1"} then only \code{p1geno} can be non-\code{NULL}. If \code{model = "uniform"}, then
 none of the above variables can be non-\code{NULL}. If \code{model = "bb"}, then only \code{allele_freq},
-and \code{od} can be non-\code{NULL}. If code{model == "norm"}, then only \code{mu} and \code{sigma}
+and \code{od} can be non-\code{NULL}. If \code{model == "norm"}, then only \code{mu} and \code{sigma}
 can be non-\code{NULL}.
 }
 \author{

@@ -31,7 +31,7 @@ the allele frequency is \code{alpha} then you could calculate
 \code{dist} using the R code: \code{dbinom(x = 0:ploidy, size = ploidy, prob = alpha)}.
 Alternatively, if you know the genotypes of the individual's two parents are, say,
 \code{ref_count1} and \code{ref_count2}, then you could use the \code{\link[updog]{get_q_array}}
-function from the updog package: \code{updog::get_q_array(ploidy)[ref_count1 + 1, ref_count2 + 1, ]}.
+function from the updog package: \code{get_q_array(ploidy)[ref_count1 + 1, ref_count2 + 1, ]}.
 }
 \author{
 David Gerard
