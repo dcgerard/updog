@@ -132,16 +132,10 @@ double flexdog_obj_out(NumericVector probk_vec,
   // Check input -----------------------------------------------------------
   int nind = refvec.length();
   if (nind != sizevec.length()) {
-    Rcpp::stop("get_wik_mat: sizevec and refvec must have the same length.");
+    Rcpp::stop("flexdog_obj_out: sizevec and refvec must have the same length.");
   }
   if (probk_vec.length() != ploidy + 1) {
-    Rcpp::stop("get_wik_mat: probk_vec must have length ploidy + 1.");
-  }
-  if (out_prop < TOL) {
-    Rcpp::stop("get_wik_mat_out: out_prop needs to be greater than 0.");
-  }
-  if (1.0 - out_prop < TOL) {
-    Rcpp::stop("get_wik_mat_out: out_prop needs to be less than 1.");
+    Rcpp::stop("flexdog_obj_out: probk_vec must have length ploidy + 1.");
   }
 
   // Calculate the posterior probability of each genotype -------------------
@@ -154,12 +148,28 @@ double flexdog_obj_out(NumericVector probk_vec,
   // Calculate likelihood ---------------------------------------------------
   double obj = 0.0;
   NumericVector wvec(ploidy + 2);
-  for (int i = 0; i < nind; i++) {
-    for (int k = 0; k <= ploidy; k++) {
-      wvec(k) = log(1.0 - out_prop) + lprobk_vec(k) + dbetabinom_double(refvec(i), sizevec(i), xi(k), od, true);
+  if (out_prop < TOL) { // only non-outliers contribute
+    for (int i = 0; i < nind; i++) {
+      for (int k = 0; k <= ploidy; k++) {
+        wvec(k) = lprobk_vec(k) + dbetabinom_double(refvec(i), sizevec(i), xi(k), od, true);
+      }
+      wvec(ploidy + 1) = R_NegInf;
+      obj = obj + log_sum_exp(wvec);
     }
-    wvec(ploidy + 1) = log(out_prop) + doutdist(refvec(i), sizevec(i), true);
-    obj = obj + log_sum_exp(wvec);
+  } else if (1.0 - out_prop < TOL) { // only outliers contribute
+    double out_val = 0.0;
+    for (int i = 0; i < nind; i++) {
+      out_val = doutdist(refvec(i), sizevec(i), true);
+      obj = obj + out_val;
+    } 
+  } else {
+    for (int i = 0; i < nind; i++) {
+      for (int k = 0; k <= ploidy; k++) {
+        wvec(k) = log(1.0 - out_prop) + lprobk_vec(k) + dbetabinom_double(refvec(i), sizevec(i), xi(k), od, true);
+      }
+      wvec(ploidy + 1) = log(out_prop) + doutdist(refvec(i), sizevec(i), true);
+      obj = obj + log_sum_exp(wvec);
+    } 
   }
 
   // Penalties --------------------------------------------------------------
