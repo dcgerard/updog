@@ -1,5 +1,13 @@
 #include "mupdog.h"
 
+NumericMatrix get_wik_mat(NumericVector probk_vec,
+                          NumericVector refvec,
+                          NumericVector sizevec,
+                          int ploidy,
+                          double seq,
+                          double bias,
+                          double od);
+
 //' The outlier distribution we use. Right now it is just a
 //' beta binomial with mean 1/2 and od 1/3 (so underlying beta
 //' is just a uniform from 0 to 1).
@@ -48,31 +56,47 @@ NumericMatrix get_wik_mat_out(NumericVector probk_vec,
   if (probk_vec.length() != ploidy + 1) {
     Rcpp::stop("get_wik_mat_out: probk_vec must have length ploidy + 1.");
   }
-  if (out_prop < TOL) {
-    Rcpp::stop("get_wik_mat_out: out_prop needs to be greater than 0.");
-  }
-  if (1.0 - out_prop < TOL) {
-    Rcpp::stop("get_wik_mat_out: out_prop needs to be less than 1.");
-  }
+  
 
-  // Calculate the posterior probability of each genotype -------------------
-  NumericMatrix wik_mat(nind, ploidy + 2);
-  NumericVector lprobk_vec = Rcpp::log(probk_vec);
-  NumericVector xi(ploidy + 1);
-  for (int k = 0; k <= ploidy; k++) {
-    xi(k) = xi_double((double)k / (double)ploidy, seq, bias);
-  }
-
-  double sumi; // denominator to get wik for each i.
-  NumericVector wvec(ploidy + 2);
-  for (int i = 0; i < nind; i++) {
-    for (int k = 0; k <= ploidy; k++) {
-      wvec(k) = log(1.0 - out_prop) + lprobk_vec(k) + dbetabinom_double(refvec(i), sizevec(i), xi(k), od, true);
+  NumericMatrix wik_mat(nind, ploidy + 2);  
+  if (out_prop < TOL) { // outliers have zero probability
+    NumericMatrix wik_sub(nind, ploidy + 1);
+    wik_sub = get_wik_mat(probk_vec,
+                          refvec,
+                          sizevec,
+                          ploidy,
+                          seq,
+                          bias,
+                          od);
+    
+    for (int i = 0; i < nind; i++) {
+      for (int k = 0; k <= ploidy; k++) {
+        wik_mat(i, k) = wik_sub(i, k);
+      }
     }
-    wvec(ploidy + 1) = log(out_prop) + doutdist(refvec(i), sizevec(i), true);
-    sumi = log_sum_exp(wvec);
-    wvec = Rcpp::exp(wvec - sumi);
-    wik_mat(i, _) = wvec;
+  } else if (1.0 - out_prop < TOL) {
+    for (int i = 0; i < nind; i++) { // Last column is 1, rest are 0 since all are outliers.
+      wik_mat(i, ploidy + 1) = 1.0;
+    }
+  } else {
+    // Calculate the posterior probability of each genotype -------------------
+    NumericVector lprobk_vec = Rcpp::log(probk_vec);
+    NumericVector xi(ploidy + 1);
+    for (int k = 0; k <= ploidy; k++) {
+      xi(k) = xi_double((double)k / (double)ploidy, seq, bias);
+    }
+    
+    double sumi; // denominator to get wik for each i.
+    NumericVector wvec(ploidy + 2);
+    for (int i = 0; i < nind; i++) {
+      for (int k = 0; k <= ploidy; k++) {
+        wvec(k) = log(1.0 - out_prop) + lprobk_vec(k) + dbetabinom_double(refvec(i), sizevec(i), xi(k), od, true);
+      }
+      wvec(ploidy + 1) = log(out_prop) + doutdist(refvec(i), sizevec(i), true);
+      sumi = log_sum_exp(wvec);
+      wvec = Rcpp::exp(wvec - sumi);
+      wik_mat(i, _) = wvec;
+    }
   }
 
   return wik_mat;

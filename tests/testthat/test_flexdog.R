@@ -202,3 +202,43 @@ test_that("actually using parent data", {
   expect_equal(fout2$par$pgeno, 2)
   expect_equal(fout3$par$pgeno, 3)
 })
+
+
+test_that("get_wik_mat_out has expected behavior", {
+  ploidy    <- 4
+  probk_vec <- seq(1 / (ploidy + 1), ploidy + 1)
+  refvec    <- 1:5
+  sizevec   <- 6:10
+  seq       <- 0.001
+  bias      <- 0.25
+  od        <- 0.02
+  wikmat <- get_wik_mat_out(probk_vec = probk_vec,
+                            out_prop  = 1,
+                            refvec    = refvec,
+                            sizevec   = sizevec,
+                            ploidy    = ploidy,
+                            seq       = seq,
+                            bias      = bias,
+                            od        = od)
+  expect_true(all(wikmat[1:5, 1:5] == 0))
+  expect_true(all(wikmat[, 6] == 1))
+  
+  wikmat1 <- get_wik_mat_out(probk_vec = probk_vec,
+                             out_prop  = 0,
+                             refvec    = refvec,
+                             sizevec   = sizevec,
+                             ploidy    = ploidy,
+                             seq       = seq,
+                             bias      = bias,
+                             od        = od)
+  
+  wikmat2 <- get_wik_mat(probk_vec = probk_vec,
+                         refvec    = refvec,
+                         sizevec   = sizevec,
+                         ploidy    = ploidy,
+                         seq       = seq,
+                         bias      = bias,
+                         od        = od)
+  
+  expect_equal(wikmat1[1:5, 1:5], wikmat2)
+})
