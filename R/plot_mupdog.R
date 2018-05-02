@@ -9,31 +9,31 @@
 #' vector.
 #'
 #' If parental genotypes are provided (\code{p1geno} and \code{p2geno}) then
-#' the will be colored the same as the offspring. Since they are often hard to see,
+#' they will be colored the same as the offspring. Since they are often hard to see,
 #' a small black dot will also indicate their position.
 #'
 #' @param refvec A vector of non-negative integers. The number of
-#'     reference alleles observed in the offspring.
+#'     reference reads observed in the offspring.
 #' @param sizevec A vector of positive integers. The total number of
 #'     reads in the offspring.
 #' @param p1ref A vector of non-negative integers. The number of
-#'     reference alleles observed in parent 1.
+#'     reference reads observed in parent 1.
 #' @param p1size A vector of positive integers. The total number of
 #'     reads in parent 1.
 #' @param p2ref A vector of non-negative integers. The number of
-#'     reference alleles observed in parent 2.
+#'     reference reads observed in parent 2.
 #' @param p2size A vector of positive integers. The total number of
 #'     reads in parent 2.
 #' @param ploidy A non-negative integer. The ploidy of the species.
-#' @param geno The child genotypes
-#' @param seq The average sequencing error rate.
+#' @param geno The individual genotypes
+#' @param seq The sequencing error rate.
 #' @param bias The bias parameter.
 #' @param maxpostprob A vector of the posterior probabilities of being at
 #'     the modal genotype.
 #' @param p1geno Parent 1's genotype.
 #' @param p2geno Parent 2's genotype.
 #' @param use_colorblind A logical. Should we use a colorblind safe palette (\code{TRUE}),
-#'     or not (\code{FALSE})?
+#'     or not (\code{FALSE})? Only allowed if \code{ploidy <= 6}.
 #'
 #' @export
 #'
@@ -190,6 +190,9 @@ plot_geno <- function(refvec,
 #'
 #' @param x A mupdog object.
 #' @param index The column number of the gene to plot.
+#' @param use_colorblind Should we use a colorblind-safe palette
+#'     (\code{TRUE}) or not (\code{FALSE})? \code{TRUE} is only allowed
+#'     if the ploidy is less than or equal to 6.
 #' @param ... Not used.
 #'
 #' @export
@@ -206,7 +209,7 @@ plot_geno <- function(refvec,
 #' data("mupout")
 #' plot(mupout, 4)
 #'
-plot.mupdog <- function(x, index, ...) {
+plot.mupdog <- function(x, index, use_colorblind = TRUE, ...) {
   assertthat::assert_that(is.mupdog(x))
 
   pl <- plot_geno(refvec         = x$input$refmat[, index],
@@ -216,7 +219,7 @@ plot.mupdog <- function(x, index, ...) {
                   seq            = x$seq[index],
                   bias           = x$bias[index],
                   maxpostprob    = x$maxpostprob[, index],
-                  use_colorblind = FALSE)
+                  use_colorblind = use_colorblind)
   return(pl)
 }
 

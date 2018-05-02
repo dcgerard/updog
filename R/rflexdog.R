@@ -223,7 +223,8 @@ rgeno <- function(n,
 #' @param ploidy The ploidy of the species.
 #' @param seq The sequencing error rate.
 #' @param bias The bias parameter. Pr(a read after selected) / Pr(A read after selected).
-#' @param od The overdispersion parameter. See Details of \code{rho} variable in \code{\link{betabinom}}.
+#' @param od The overdispersion parameter. See the
+#'     Details of the \code{rho} variable in \code{\link{betabinom}}.
 #'
 #' @seealso \code{\link{rgeno}} for a way to generate genotypes of individuals. \code{\link{rbetabinom}}
 #'     for how we generate the read-counts.

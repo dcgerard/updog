@@ -11,7 +11,7 @@ plot_geno(refvec, sizevec, ploidy, p1ref = NULL, p1size = NULL,
 }
 \arguments{
 \item{refvec}{A vector of non-negative integers. The number of
-reference alleles observed in the offspring.}
+reference reads observed in the offspring.}
 
 \item{sizevec}{A vector of positive integers. The total number of
 reads in the offspring.}
@@ -19,20 +19,20 @@ reads in the offspring.}
 \item{ploidy}{A non-negative integer. The ploidy of the species.}
 
 \item{p1ref}{A vector of non-negative integers. The number of
-reference alleles observed in parent 1.}
+reference reads observed in parent 1.}
 
 \item{p1size}{A vector of positive integers. The total number of
 reads in parent 1.}
 
 \item{p2ref}{A vector of non-negative integers. The number of
-reference alleles observed in parent 2.}
+reference reads observed in parent 2.}
 
 \item{p2size}{A vector of positive integers. The total number of
 reads in parent 2.}
 
-\item{geno}{The child genotypes}
+\item{geno}{The individual genotypes}
 
-\item{seq}{The average sequencing error rate.}
+\item{seq}{The sequencing error rate.}
 
 \item{bias}{The bias parameter.}
 
@@ -44,7 +44,7 @@ the modal genotype.}
 \item{p2geno}{Parent 2's genotype.}
 
 \item{use_colorblind}{A logical. Should we use a colorblind safe palette (\code{TRUE}),
-or not (\code{FALSE})?}
+or not (\code{FALSE})? Only allowed if \code{ploidy <= 6}.}
 }
 \description{
 The x-axis is the counts of the non-reference allele,
@@ -54,7 +54,7 @@ vector.
 }
 \details{
 If parental genotypes are provided (\code{p1geno} and \code{p2geno}) then
-the will be colored the same as the offspring. Since they are often hard to see,
+they will be colored the same as the offspring. Since they are often hard to see,
 a small black dot will also indicate their position.
 }
 \author{

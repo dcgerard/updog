@@ -17,7 +17,8 @@ An three-way array of proportions. The (i, j, k)th element
     alleles given that parent 1 has i - 1 refrerence alleles and
     parent 2 has j - 1 reference alleles. Each dimension of the
     array is \code{ploidy + 1}. In the dimension names, "A" stands
-    for the reference allele and "a" stands for any other allele.
+    for the reference allele and "a" stands for the 
+    alternative allele.
 }
 \description{
 Return the probabilities of an offspring's genotype given its

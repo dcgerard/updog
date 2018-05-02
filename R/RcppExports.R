@@ -75,7 +75,7 @@ qbetabinom_double <- function(p, size, mu, rho) {
     .Call('_updog_qbetabinom_double', PACKAGE = 'updog', p, size, mu, rho)
 }
 
-#' @describeIn betabinom Distribution function.
+#' @describeIn betabinom Quantile function.
 #'
 #' @export
 #'
@@ -93,7 +93,7 @@ rbetabinom_int <- function(size, mu, rho) {
     .Call('_updog_rbetabinom_int', PACKAGE = 'updog', size, mu, rho)
 }
 
-#' @describeIn betabinom Distribution function.
+#' @describeIn betabinom Random generation.
 #'
 #' @export
 #'
@@ -615,11 +615,14 @@ obj_for_weighted_lnorm <- function(parvec, ploidy, weight_vec) {
     .Call('_updog_obj_for_weighted_lnorm', PACKAGE = 'updog', parvec, ploidy, weight_vec)
 }
 
-#' Calculate oracle misclassification error.
+#' Calculate oracle misclassification error rate.
 #'
-#' Given knowledge of the parameters, we calculate the expected misclassification error,
-#' where the expectation is taken over both the data generation process and the allele-distribution.
-#' This is an ideal level of misclassification error.
+#' Given perfect knowledge of the data generating parameters, 
+#' \code{oracle_mis} calculates the misclassification error
+#' rate, where the error rate is taken over both the data generation 
+#' process and the allele-distribution.
+#' This is an ideal level of the misclassification error rate and
+#' any real method will have a larger rate than this.
 #'
 #' To come up with \code{dist}, you need some additional assumptions.
 #' For example, if the population is in Hardy-Weinberg equilibrium and
@@ -632,7 +635,7 @@ obj_for_weighted_lnorm <- function(parvec, ploidy, weight_vec) {
 #' @param n The read-depth.
 #' @param ploidy The ploidy of the individual.
 #' @param seq The sequencing error rate.
-#' @param bias The allele-bias
+#' @param bias The allele-bias.
 #' @param od The overdispersion parameter.
 #' @param dist The distribution of the alleles.
 #'

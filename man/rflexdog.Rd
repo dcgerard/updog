@@ -18,7 +18,8 @@ each individual has.}
 
 \item{bias}{The bias parameter. Pr(a read after selected) / Pr(A read after selected).}
 
-\item{od}{The overdispersion parameter. See Details of \code{rho} variable in \code{\link{betabinom}}.}
+\item{od}{The overdispersion parameter. See the
+Details of the \code{rho} variable in \code{\link{betabinom}}.}
 }
 \description{
 This will take a vector of genotypes and a vector of total read-counts, then generate a vector of reference

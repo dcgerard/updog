@@ -70,7 +70,6 @@ kl_wrapp <- function(par, dist, ploidy) {
 #'
 #' @author David Gerard
 #'
-#' @export
 #'
 kl_opt <- function(dist, ploidy) {
   assertthat::are_equal(length(dist), ploidy + 1)

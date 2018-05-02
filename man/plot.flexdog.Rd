@@ -4,10 +4,14 @@
 \alias{plot.flexdog}
 \title{Draw a genotype plot from the output of \code{\link{flexdog}}.}
 \usage{
-\method{plot}{flexdog}(x, ...)
+\method{plot}{flexdog}(x, use_colorblind = TRUE, ...)
 }
 \arguments{
 \item{x}{A \code{flexdog} object.}
+
+\item{use_colorblind}{Should we use a colorblind-safe palette
+(\code{TRUE}) or not (\code{FALSE})? \code{TRUE} is only allowed
+if the ploidy is less than or equal to 6.}
 
 \item{...}{Not used.}
 }

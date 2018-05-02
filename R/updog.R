@@ -57,7 +57,7 @@ NULL
 #' rather than the typical shape parameters.
 #'
 #'
-#' Let \eqn{\mu} and \eqn{\rho} be the mean and overdispersion paramters.
+#' Let \eqn{\mu} and \eqn{\rho} be the mean and overdispersion parameters.
 #' Let \eqn{\alpha} and \eqn{\beta} be the usual shape parameters of
 #' a beta distribution. Then we have the relation
 #' \deqn{\mu = \alpha/(\alpha + \beta),}

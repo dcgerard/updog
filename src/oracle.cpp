@@ -2,11 +2,14 @@
 
 // functions for oracle misclassification rates
 
-//' Calculate oracle misclassification error.
+//' Calculate oracle misclassification error rate.
 //'
-//' Given knowledge of the parameters, we calculate the expected misclassification error,
-//' where the expectation is taken over both the data generation process and the allele-distribution.
-//' This is an ideal level of misclassification error.
+//' Given perfect knowledge of the data generating parameters, 
+//' \code{oracle_mis} calculates the misclassification error
+//' rate, where the error rate is taken over both the data generation 
+//' process and the allele-distribution.
+//' This is an ideal level of the misclassification error rate and
+//' any real method will have a larger rate than this.
 //'
 //' To come up with \code{dist}, you need some additional assumptions.
 //' For example, if the population is in Hardy-Weinberg equilibrium and
@@ -19,7 +22,7 @@
 //' @param n The read-depth.
 //' @param ploidy The ploidy of the individual.
 //' @param seq The sequencing error rate.
-//' @param bias The allele-bias
+//' @param bias The allele-bias.
 //' @param od The overdispersion parameter.
 //' @param dist The distribution of the alleles.
 //'

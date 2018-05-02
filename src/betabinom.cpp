@@ -347,8 +347,8 @@ int qbetabinom_double(double p, int size, double mu, double rho) {
 }
 
 
-// documentation in mupdog.R
-//' @describeIn betabinom Distribution function.
+// documentation in updog.R
+//' @describeIn betabinom Quantile function.
 //'
 //' @export
 //'
@@ -419,8 +419,8 @@ int rbetabinom_int(int size, double mu, double rho) {
   return draw;
 }
 
-// documentation in mupdog.R
-//' @describeIn betabinom Distribution function.
+// documentation in updog.R
+//' @describeIn betabinom Random generation.
 //'
 //' @export
 //'

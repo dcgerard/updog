@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{oracle_mis}
 \alias{oracle_mis}
-\title{Calculate oracle misclassification error.}
+\title{Calculate oracle misclassification error rate.}
 \usage{
 oracle_mis(n, ploidy, seq, bias, od, dist)
 }
@@ -13,16 +13,19 @@ oracle_mis(n, ploidy, seq, bias, od, dist)
 
 \item{seq}{The sequencing error rate.}
 
-\item{bias}{The allele-bias}
+\item{bias}{The allele-bias.}
 
 \item{od}{The overdispersion parameter.}
 
 \item{dist}{The distribution of the alleles.}
 }
 \description{
-Given knowledge of the parameters, we calculate the expected misclassification error,
-where the expectation is taken over both the data generation process and the allele-distribution.
-This is an ideal level of misclassification error.
+Given perfect knowledge of the data generating parameters, 
+\code{oracle_mis} calculates the misclassification error
+rate, where the error rate is taken over both the data generation 
+process and the allele-distribution.
+This is an ideal level of the misclassification error rate and
+any real method will have a larger rate than this.
 }
 \details{
 To come up with \code{dist}, you need some additional assumptions.

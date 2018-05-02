@@ -9,7 +9,8 @@ Description:  Implements empirical Bayes approaches to genotype
        error. The main function is flexdog, which allows the specification
        of many different genotype distributions. An experimental
        function that takes into account varying leves of relatedness
-       is implemented in mupdog. 
+       is implemented in mupdog. Also provided are functions to 
+       simulate genotypes (rgeno) and read-counts (rflexdog).
 Depends: R (>= 3.4.0)
 License: GPL-3 + file LICENSE
 Encoding: UTF-8

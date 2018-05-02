@@ -160,6 +160,18 @@ flexdog <- function(refvec,
 #' (say, \eqn{< 10 * (ploidy + 1)}). This is if you use
 #' multiple initializations of the bias as is the default
 #' in \code{\link{flexdog}}.
+#' 
+#' The value of \code{prop_mis} is a very intuitive measure for
+#' the quality of the SNP. \code{prop_mis} is the posterior 
+#' proportion of individuals mis-genotyped. So if you want to
+#' accurately genotype, say, 95\% of the individuals, you could
+#' discard all SNPs with a \code{prop_mis} under \code{0.95}.
+#' 
+#' The value of \code{maxpostprob} is a very intuitive measure
+#' for the quality of the genotype estimate of an individual. 
+#' This is the posterior probability of correctly genotyping 
+#' the individual when using \code{ogeno} (the posterior mode) 
+#' as the genotype estimate. 
 #'
 #' In most datasets I've examined, allelic bias is a major issue. However,
 #' you may fit the model assuming no allelic bias by setting
@@ -267,9 +279,7 @@ flexdog <- function(refvec,
 #'       normal mean, and \code{sigma}, the normal standard devation (not variance).}
 #'   \item{\code{geno}}{The posterior mode genotype.}
 #'   \item{\code{maxpostprob}}{The maximum posterior probability.}
-#'   \item{\code{postmean}}{The posterior mean genotype. If
-#'       \code{outliers = TRUE}, then this is conditioned on a point
-#'       not being an outlier.}
+#'   \item{\code{postmean}}{The posterior mean genotype.}
 #'   \item{\code{input$refvec}}{The value of \code{refvec} provided by
 #'       the user.}
 #'   \item{\code{input$sizevec}}{The value of \code{sizevec} provided
@@ -284,9 +294,11 @@ flexdog <- function(refvec,
 #'   \item{\code{input$p2size}}{The value of \code{p2size} provided by the user.}
 #'   \item{\code{prop_mis}}{The posterior proportion of individuals
 #'       misclassified.}
-#'   \item{\code{out_prop}}{The estimate proportion of points that are outliers.}
+#'   \item{\code{out_prop}}{The estimated proportion of points that 
+#'       are outliers. Only available if \code{outliers = TRUE}.}
 #'   \item{\code{prob_out}}{The ith element is the posterior probability
-#'       that individual i is an outlier}
+#'       that individual i is an outlier. Only available if
+#'       \code{outliers = TRUE}.}
 #' }
 #'
 #' @author David Gerard
@@ -716,6 +728,9 @@ flexdog_full <- function(refvec,
 #' @inherit plot.mupdog description details
 #'
 #' @param x A \code{flexdog} object.
+#' @param use_colorblind Should we use a colorblind-safe palette
+#'     (\code{TRUE}) or not (\code{FALSE})? \code{TRUE} is only allowed
+#'     if the ploidy is less than or equal to 6.
 #' @param ... Not used.
 #'
 #' @author David Gerard
@@ -727,7 +742,7 @@ flexdog_full <- function(refvec,
 #' }
 #'
 #' @export
-plot.flexdog <- function(x, ...) {
+plot.flexdog <- function(x, use_colorblind = TRUE, ...) {
   assertthat::assert_that(is.flexdog(x))
   if (x$input$model == "s1") {
     p1geno <- x$par$pgeno
@@ -740,19 +755,20 @@ plot.flexdog <- function(x, ...) {
     p2geno <- NULL
   }
   
-  pl <- plot_geno(refvec      = x$input$refvec,
-                  sizevec     = x$input$sizevec,
-                  ploidy      = x$input$ploidy,
-                  geno        = x$geno,
-                  seq         = x$seq,
-                  bias        = x$bias,
-                  maxpostprob = x$maxpostprob,
-                  p1ref       = x$input$p1ref,
-                  p1size      = x$input$p1size,
-                  p2ref       = x$input$p2ref,
-                  p2size      = x$input$p2size,
-                  p1geno      = p1geno,
-                  p2geno      = p2geno)
+  pl <- plot_geno(refvec         = x$input$refvec,
+                  sizevec        = x$input$sizevec,
+                  ploidy         = x$input$ploidy,
+                  geno           = x$geno,
+                  seq            = x$seq,
+                  bias           = x$bias,
+                  maxpostprob    = x$maxpostprob,
+                  p1ref          = x$input$p1ref,
+                  p1size         = x$input$p1size,
+                  p2ref          = x$input$p2ref,
+                  p2size         = x$input$p2size,
+                  p1geno         = p1geno,
+                  p2geno         = p2geno,
+                  use_colorblind = use_colorblind)
   return(pl)
 }
 
@@ -788,7 +804,7 @@ initialize_pivec <- function(ploidy, mode, model = c("hw", "bb", "norm", "ash", 
   if (model == "flex" | model == "uniform") {
     pivec <- rep(x = 1 / (ploidy + 1), length = ploidy + 1)
   } else if (model == "ash") {
-    init_type <- "equi"
+    init_type <- "bin"
     if (init_type == "equi") { ## equimodal
       floor_mode <- floor(mode)
       ceil_mode  <- ceiling(mode)
@@ -1055,7 +1071,8 @@ ashpen_fun <- function(lambda, pivec) {
 #'     alleles given that parent 1 has i - 1 refrerence alleles and
 #'     parent 2 has j - 1 reference alleles. Each dimension of the
 #'     array is \code{ploidy + 1}. In the dimension names, "A" stands
-#'     for the reference allele and "a" stands for any other allele.
+#'     for the reference allele and "a" stands for the 
+#'     alternative allele.
 #'
 #' @examples
 #' qarray <- get_q_array(6)

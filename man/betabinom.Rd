@@ -49,7 +49,7 @@ by the mean \code{mu} and the overdispersion parameter \code{rho}
 rather than the typical shape parameters.
 }
 \details{
-Let \eqn{\mu} and \eqn{\rho} be the mean and overdispersion paramters.
+Let \eqn{\mu} and \eqn{\rho} be the mean and overdispersion parameters.
 Let \eqn{\alpha} and \eqn{\beta} be the usual shape parameters of
 a beta distribution. Then we have the relation
 \deqn{\mu = \alpha/(\alpha + \beta),}
@@ -66,9 +66,9 @@ and
 
 \item \code{pbetabinom}: Distribution function.
 
-\item \code{qbetabinom}: Distribution function.
+\item \code{qbetabinom}: Quantile function.
 
-\item \code{rbetabinom}: Distribution function.
+\item \code{rbetabinom}: Random generation.
 }}
 
 \author{
