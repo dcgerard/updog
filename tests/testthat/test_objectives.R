@@ -133,3 +133,16 @@ test_that("obj_for_weighted_lnorm is correct", {
   #   cobj <- obj_for_weighted_lnorm(parvec = parvec, ploidy = ploidy, weight_vec = weight_vec)
   # )
 })
+
+test_that("no penalty when variance is Inf", {
+  expect_equal(pen_bias(h = 0.1, mu_h = 1, sigma2_h = Inf), 0)
+  expect_equal(pen_seq_error(eps = 0.1, mu_eps = -1, sigma2_eps = Inf), 0)
+  expect_equal(dpen_deps(eps = 0.1, mu_eps = -1, sigma2_eps = Inf), 0)  
+  expect_equal(dpen_dh(h = 0.1, mu_h = 1, sigma2_h = Inf), 0)  
+  
+  expect_true(pen_bias(h = 0.1, mu_h = 1, sigma2_h = 10000) != 0)
+  expect_true(pen_seq_error(eps = 0.1, mu_eps = -1, sigma2_eps = 10000) != 0)
+  expect_true(dpen_deps(eps = 0.1, mu_eps = -1, sigma2_eps = 10000) != 0)  
+  expect_true(dpen_dh(h = 0.1, mu_h = 1, sigma2_h = 10000) != 0)  
+  
+})

@@ -190,7 +190,12 @@ double pen_bias(double h, double mu_h, double sigma2_h) {
     Rcpp::stop("pen_bias: sigma2_h must be greater tha 0.");
   }
 
-  double pen = -std::log(h) - std::pow(std::log(h) - mu_h, 2) / (2.0 * sigma2_h);
+  double pen;
+  if (arma::is_finite(sigma2_h)) {
+    pen = -std::log(h) - std::pow(std::log(h) - mu_h, 2) / (2.0 * sigma2_h);
+  } else {
+    pen = 0.0;
+  }
 
   return pen;
 }
@@ -213,7 +218,13 @@ double pen_seq_error(double eps, double mu_eps, double sigma2_eps) {
   if (sigma2_eps < TOL) {
     Rcpp::stop("pen_seq_error: sigma2_eps must be greater tha 0.");
   }
-  double pen = -log(eps * (1.0 - eps)) - std::pow(logit(eps) - mu_eps, 2) / (2.0 * sigma2_eps);
+  
+  double pen;
+  if (arma::is_finite(sigma2_eps)) {
+    pen = -log(eps * (1.0 - eps)) - std::pow(logit(eps) - mu_eps, 2) / (2.0 * sigma2_eps);
+  } else {
+    pen = 0.0;
+  }
   return pen;
 }
 
