@@ -93,9 +93,8 @@ Now run the same simulations assuming the individuals are in Hardy-Weinberg popu
 ```{r}
 true_geno <- rgeno(n      = nind,
                    ploidy = ploidy,
-                   model  = "f1", 
-                   p1geno = 4,
-                   p2geno = 5)
+                   model  = "hw", 
+                   allele_freq = 0.75)
 refvec <- rflexdog(sizevec = sizevec, 
                    geno    = true_geno, 
                    ploidy  = ploidy, 
