@@ -1,0 +1,20 @@
+bibentry(bibtype    = "Article",
+         title      = "Harnessing empirical {B}ayes and {M}endelian segregation for genotyping autopolyploids from messy sequencing data",
+          year      = "2018",
+          journal   = "bioRxiv",
+          publisher = "Cold Spring Harbor Laboratory",
+          doi       = "10.1101/281550",
+          author    = c(person(given  = "David",
+                               family = "Gerard",
+                               email  = "gerard.1787@gmail.com"),
+                        person(given  = "Luis Felipe Ventorim",
+                               family = "Ferr{\\~a}o",
+                               email  = "lfelipe.ferrao@gmail.com"),
+                        person(given  = "Antonio Augusto Franco",
+                               family = "Garcia",
+                               email  = "aafgarci@esalq.usp.br"),
+                        person(given  = "Matthew",
+                               family = "Stephens",
+                               email  = "mstephens@uchicago.edu")
+                       )
+)

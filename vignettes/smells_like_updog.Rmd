@@ -1,0 +1,105 @@
+---
+title: "Example Use of Updog"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: "genobib.bib"
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width=4.5, 
+  fig.height=3.5
+)
+```
+
+# What's Updog?
+
+Updog is a package containing empirical Bayes approaches to genotype individuals (particularly polyploids) from next generation sequencing (NGS) data. We had in mind NGS data that results from a reduced representation library, such as "genotyping-by-sequencing" (GBS) [@elshire2011robust] or "restriction site-associated DNA sequencing" (RAD-seq) [@baird2008rapid].
+
+Updog wields the power of hierarchical modeling to account for some key features of NGS data overlooked in most other analyses, particularly allelic bias and overdispersion. Updog will also automatically account for sequencing errors.
+
+To efficiently account for these features, updog needs to know the distribution of the individual genotypes in the population. The function `flexdog` can accurately estimate this distribution under a wide variety of situations.
+
+You can read more about the updog method in @gerard2018harnessing.
+
+In this vignette, we will go through one example of fitting `flexdog` on an S1 population of individuals.
+
+# Example from an S1 Population
+
+## Fit updog
+
+Load `updog` and the `snpdat` dataset. The data frame `snpdat` contains three example SNPs (single nucleotide polymorphisms) from the study of @shirasawa2017high. The individuals in this dataset resulted from a single generation of selfing (an S1 population). You can read more about it by typing `?snpdat`.
+
+```{r}
+set.seed(1)
+library(updog)
+data("snpdat")
+```
+
+We'll use the `tidyverse` to extract the First SNP.
+
+```{r, message=FALSE}
+library(tidyverse)
+snpdat %>% 
+  filter(snp == "SNP1") %>%
+  select(counts, size, id) ->
+  smalldat
+head(smalldat)
+```
+
+We will separate the counts between the children and the parent (the first individual). Note that you do *not* need the parental counts to fit updog, but they can help improve estimates of the parameters in the updog model.
+
+```{r}
+pref    <- smalldat$counts[1]
+psize   <- smalldat$size[1]
+oref    <- smalldat$counts[-1]
+osize   <- smalldat$size[-1]
+ploidy  <- 6 # sweet potatoes are hexaploid
+```
+
+We can first use `plot_geno` to visualize the raw data.
+
+```{r, warning=FALSE}
+plot_geno(refvec = oref, sizevec = osize, ploidy = ploidy)
+```
+
+Now we use the `flexdog` function to fit the model. We use `model = "s1"` because the individuals resulted from one generation of selfing of the same parent.
+
+```{r}
+uout <- flexdog(refvec  = oref, 
+                sizevec = osize, 
+                ploidy  = ploidy, 
+                model   = "s1", 
+                p1ref   = pref, 
+                p1size  = psize)
+```
+
+## Analyze Output
+
+We use `plot.flexdog` to visualize the fit. Points are color coded according to the genotype with the highest posterior probability. For example, a genotype of "4" represents four copies of the reference allele and two copies of the alternative allele (AAAAaa). The level of transparency is proportional to the maximum posterior probability. This is equivalent to the posterior probability that this genotype estimate is correct. The lines represent the mean counts at a given genotype. The "+" symbol with a black dot is the location of the parent.
+
+```{r}
+plot(uout)
+```
+
+## Filtering SNPs
+
+For downstream analyses, you might want to filter out poorly behaved SNPs. These SNPs might be poorly behaved for a variety of reasons (they might not be real SNPs, it might be much more very difficult to map one allele to the correct location relative to the other allele, etc). Updog gives you some measures to filter out these SNPs.
+
+The most intuitive measure would be the (posterior) proportion of individuals mis-genotyped:
+```{r}
+uout$prop_mis
+```
+
+For this SNP, we expect about `r round(uout$prop_mis, digits = 4) * 100` percent of the individuals to be mis-genotyped. The specific cutoff you use is context and data dependent. But as a starting point, you could try a loose cutoff by keeping SNPs only if they have a `prop_mis` of less than 0.2.
+
+From our simulation studies, we also generally get rid of SNPs with overdispersion parameters greater than 0.05 or SNPs with bias parameters either less than 0.5 or greater than 2. However, if you have higher or lower read depths than what we looked at in our simulations, you should adjust these levels accordingly.
+
+# References

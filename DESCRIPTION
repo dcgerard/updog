@@ -3,7 +3,7 @@ Title: Flexible Genotyping for Autopolyploids
 Version: 2.0.0
 Date: 2018-05-02
 Authors@R: person("David", "Gerard", email = "dcgerard@uchicago.edu", role = c("aut", "cre"))
-Description:  Implements empirical Bayes approaches to genotype
+Description: Implements empirical Bayes approaches to genotype
        autopolyploids from next generation sequencing data while
        accounting for allelic bias, overdispersion, and sequencing
        error. The main function is flexdog, which allows the specification
@@ -29,4 +29,8 @@ Suggests: covr,
     testthat,
     SuppDists,
     Rmpfr,
-    CVXR
+    CVXR,
+    knitr,
+    rmarkdown,
+    tidyverse
+VignetteBuilder: knitr
