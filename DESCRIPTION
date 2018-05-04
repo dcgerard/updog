@@ -3,7 +3,7 @@ Title: Flexible Genotyping for Autopolyploids
 Version: 0.99.0
 Date: 2018-05-02
 Authors@R: person("David", "Gerard", email = "dcgerard@uchicago.edu", role = c("aut", "cre"))
-biocViews: Bayesian, Classification, DNASeq, VariantDetection
+biocViews: StatisticalMethod, Bayesian, Classification, Sequencing, DNASeq, VariantDetection
 Description: Implements empirical Bayes approaches to genotype
        autopolyploids from next generation sequencing data while
        accounting for allelic bias, overdispersion, and sequencing

@@ -3,7 +3,8 @@
 language: R
 sudo: false
 cache: packages
-use_bioc: true
+
+bioc_packages: BiocInstaller
 
 addons:
   apt:
