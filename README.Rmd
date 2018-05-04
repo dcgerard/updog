@@ -13,27 +13,32 @@ knitr::opts_chunk$set(
 ```
 
 # mupdog
-[![Travis-CI Build Status](https://travis-ci.org/dcgerard/mupdog.svg?branch=master)](https://travis-ci.org/dcgerard/mupdog)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/dcgerard/mupdog?branch=master&svg=true)](https://ci.appveyor.com/project/dcgerard/mupdog)
-[![Coverage Status](https://img.shields.io/codecov/c/github/dcgerard/mupdog/master.svg)](https://codecov.io/github/dcgerard/mupdog?branch=master)
+[![Build Status](https://travis-ci.org/dcgerard/updog.svg?branch=master)](https://travis-ci.org/dcgerard/updog)
+[![Appveyor Build status](https://ci.appveyor.com/api/projects/status/c80fdy61ead6s3vr?svg=true)](https://ci.appveyor.com/project/dcgerard/updog-06s8t)
+[![codecov](https://codecov.io/gh/dcgerard/updog/branch/master/graph/badge.svg)](https://codecov.io/gh/dcgerard/updog)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-Mupdog (Multiple extensions of updog) provides a suite of generalizations of the updog procedure for genotyping autopolyploids from next-generation sequencing data. 
+Updog provides a suite of methods for genotyping autopolyploids from next-generation sequencing (NGS) data. It does this while accounting for 
+many common features of NGS data: allelic bias, overdispersion, sequencing
+error, and (possibly) outlying observations.
 
-The function `mupdog` allows for correlation between the individuals' genotypes while jointly estimating the genotypes of the individuals at all provided SNPs. The implementation uses a variational approximation. This is designed for samples where the individuals share a complex relatedness structure (e.g. siblings, cousins, uncles, half-siblings, etc).
+The main function is `flexdog`, which provides many options for the 
+distribution of the genotypes in your sample.
 
-The function `flexdog` provides many options for the genotype prior, including all of the options available in `updog`. But the algorithms used in `flexdog` tend to be much faster (~3 to 6 times faster).
+The experimental function `mupdog` allows for correlation between the individuals' genotypes while jointly estimating the genotypes of the individuals at all provided SNPs. The implementation uses a variational approximation. This is designed for samples where the individuals share a complex relatedness structure (e.g. siblings, cousins, uncles, half-siblings, etc).
 
-See also [updog](https://github.com/dcgerard/updog), [ebg](https://github.com/pblischak/polyploid-genotyping),
+The original `updog` package is now names `updogAlpha` and may be found [here](https://github.com/dcgerard/updogAlpha).
+
+See also [ebg](https://github.com/pblischak/polyploid-genotyping),
 [fitPoly](https://cran.r-project.org/package=fitPoly), and [TET](http://www.g3journal.org/content/suppl/2017/01/19/g3.117.039008.DC1). Our best "competitor" is probably [fitPoly](https://cran.r-project.org/package=fitPoly) :smile:.
 
 ## Installation
 
-You can install mupdog from Github with:
+You can install updog from Github with:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
-devtools::install_github("dcgerard/mupdog")
+devtools::install_github("dcgerard/updog")
 ```
 
 If you want to use the `use_cvxr = TRUE` option in `flexdog` (not generally recommended), you will need to install the [CVXR](https://cran.r-project.org/web/packages/CVXR/index.html) package. Before I could install CVXR in Ubuntu, I had to run in the terminal
@@ -47,7 +52,7 @@ install.packages("Rmpfr")
 
 ## How to Cite
 
-If you use `flexdog` with options `model = "hw"`, `model = "s1"`, or `model = "f1"`, please cite
+If you use `flexdog`, please cite
 
 > Gerard, D., Ferr&atilde;o L.F.V., Garcia, A.A.F., & Stephens, M. (2018). Harnessing Empirical Bayes and Mendelian Segregation for Genotyping Autopolyploids from Messy Sequencing Data. *bioRxiv*. doi: [10.1101/281550](https://doi.org/10.1101/281550).
 
