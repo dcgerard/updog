@@ -52,7 +52,7 @@ flexdog <- function(refvec,
                     p1size      = NULL,
                     p2ref       = NULL,
                     p2size      = NULL,
-                    bias_init   = c(0.5, 0.7, 1, 1.4, 2),
+                    bias_init   = exp(c(-1, -0.5, 0, 0.5, 1)),
                     verbose     = TRUE,
                     outliers    = FALSE,
                     ...) {

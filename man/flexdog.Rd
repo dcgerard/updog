@@ -6,7 +6,7 @@
 \usage{
 flexdog(refvec, sizevec, ploidy, model = c("flex", "norm", "hw", "bb", "ash",
   "f1", "s1", "uniform"), p1ref = NULL, p1size = NULL, p2ref = NULL,
-  p2size = NULL, bias_init = c(0.5, 0.7, 1, 1.4, 2), verbose = TRUE,
+  p2size = NULL, bias_init = exp(c(-1, -0.5, 0, 0.5, 1)), verbose = TRUE,
   outliers = FALSE, ...)
 }
 \arguments{
