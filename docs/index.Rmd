@@ -1,6 +1,8 @@
 ---
-title: "Home"
-output: html_document
+title: "Vignettes for updog"
+output: 
+  rmarkdown: html_document
+  highlight: united
 ---
 
 * [smells_like_updog](smells_like_updog.html): An introduction to `updog` with some example usage.
