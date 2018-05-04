@@ -1,0 +1,124 @@
+---
+title: "Simulate NGS Data"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width=4.5, 
+  fig.height=3.5
+)
+```
+
+# Abstract
+
+We demonstrate how to simulate NGS data under various genotype distributions, then fit these data using `flexdog`.
+
+# Analysis
+
+Let's suppose that we have 100 hexaploid individuals, with varying levels of read-depth.
+```{r}
+set.seed(15342)
+library(updog)
+nind    <- 100
+ploidy  <- 6
+sizevec <- stats::rpois(n = nind, lambda = 100)
+```
+
+We can simulate their read-counts under various genotype distributions, allele biases, overdispersions, and sequencing error rates using the `rgeno` and `rflexdog` functions.
+
+## F1 Population
+
+Suppose these individuals are all siblings where the first parent has 4 copies of the reference allele and the second parent has 5 copies of the reference allele. Then the following code, using `rgeno`, will simulate the individuals' genotypes.
+```{r}
+true_geno <- rgeno(n      = nind, 
+                   ploidy = ploidy,
+                   model  = "f1", 
+                   p1geno = 4,
+                   p2geno = 5)
+```
+
+Once we have their genotypes, we can simulate their read-counts using `rflexdog`. Let's suppose that there is a moderate level of allelic bias (0.7) and a small level of overdispersion (0.005). Generally, in the real data that I've seen, the bias will range between 0.5 and 2 and the overdispersion will range between 0 and 0.02, with only a few extremely overdispersed SNPs above 0.02.
+
+```{r}
+refvec <- rflexdog(sizevec = sizevec, 
+                   geno    = true_geno, 
+                   ploidy  = ploidy, 
+                   seq     = 0.001, 
+                   bias    = 0.7, 
+                   od      = 0.005)
+```
+
+When we plot the data, it looks realistic
+```{r}
+plot_geno(refvec  = refvec, 
+          sizevec = sizevec, 
+          ploidy  = ploidy, 
+          bias    = 0.7, 
+          seq     = 0.001,
+          geno    = true_geno)
+```
+
+We can test `flexdog` on these data
+```{r}
+fout <- flexdog(refvec  = refvec, 
+                sizevec = sizevec, 
+                ploidy  = ploidy, 
+                model   = "f1")
+```
+
+`flexdog` gives us reasonable genotyping, and it accurately estimates the proportion of individuals mis-genotyped.
+```{r}
+plot(fout)
+
+## Estimated proportion misgenotyped
+fout$prop_mis
+
+## Actual proportion misgenotyped
+mean(fout$geno != true_geno)
+```
+
+## HWE Population
+
+Now run the same simulations assuming the individuals are in Hardy-Weinberg population with an allele frequency of 0.75.
+
+```{r}
+true_geno <- rgeno(n      = nind,
+                   ploidy = ploidy,
+                   model  = "f1", 
+                   p1geno = 4,
+                   p2geno = 5)
+refvec <- rflexdog(sizevec = sizevec, 
+                   geno    = true_geno, 
+                   ploidy  = ploidy, 
+                   seq     = 0.001, 
+                   bias    = 0.7, 
+                   od      = 0.005)
+fout <- flexdog(refvec  = refvec, 
+                sizevec = sizevec, 
+                ploidy  = ploidy, 
+                model   = "hw")
+plot(fout)
+
+## Estimated proportion misgenotyped
+fout$prop_mis
+
+## Actual proportion misgenotyped
+mean(fout$geno != true_geno)
+
+## Estimated allele frequency close to true allele frequency
+fout$par$alpha
+```
+
+
+
+
+

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="David Gerard" />
+
+<meta name="date" content="2018-05-04" />
+
+<title>Parallelized Genotyping using Updog</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Parallelized Genotyping using Updog</h1>
+<h4 class="author"><em>David Gerard</em></h4>
+<h4 class="date"><em>2018-05-04</em></h4>
+
+
+
+<div id="abstract" class="section level1">
+<h1>Abstract</h1>
+<p>We provide two examples of parallelizing <code>flexdog</code> to genotype many genes.</p>
+</div>
+<div id="analysis" class="section level1">
+<h1>Analysis</h1>
+<p>Before we begin, we’ll need to load the <code>parallel</code>, <code>foreach</code>, and <code>doParallel</code> packages. There are other ways to perform parallel computation in R, but we find these to be pretty handy and easy to use.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(parallel)
+<span class="kw">library</span>(foreach)
+<span class="kw">library</span>(doParallel)</code></pre></div>
+<p>Of course, we’ll need to load the <code>updog</code> package to actually do the genotyping.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(updog)</code></pre></div>
+<p>We’ll work with the <code>uitedewilligen</code> dataset, which is a subset of the data from <span class="citation">Uitdewilligen (2013)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;uitdewilligen&quot;</span>)
+ngenes &lt;-<span class="st"> </span><span class="kw">ncol</span>(uitdewilligen<span class="op">$</span>refmat)</code></pre></div>
+<p>You can read more about these data by typing <code>?uitdewilligen</code> in R.</p>
+<p>Suppose we wanted to use parallel computing to genotype this individual. Also suppose we only wanted the MAP (maximum a posteriori) estimated genotypes for each individual and each gene. Then we can use the following code.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc &lt;-<span class="st"> </span><span class="dv">2</span> ## number of cores. 
+        ## You should change this for your specific computing environment.
+cl &lt;-<span class="st"> </span>parallel<span class="op">::</span><span class="kw">makeCluster</span>(nc)
+doParallel<span class="op">::</span><span class="kw">registerDoParallel</span>(<span class="dt">cl =</span> cl)
+<span class="kw">stopifnot</span>(foreach<span class="op">::</span><span class="kw">getDoParWorkers</span>() <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>) ## make sure cluster is set up.
+gene_est &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">i =</span> <span class="dv">1</span><span class="op">:</span>ngenes, 
+                    <span class="dt">.combine =</span> cbind, 
+                    <span class="dt">.export =</span> <span class="st">&quot;flexdog&quot;</span>) <span class="op">%dopar%</span><span class="st"> </span>{
+                      ## fit flexdog
+                      fout &lt;-<span class="st"> </span><span class="kw">flexdog</span>(<span class="dt">refvec  =</span> uitdewilligen<span class="op">$</span>refmat[, i], 
+                                      <span class="dt">sizevec =</span> uitdewilligen<span class="op">$</span>sizemat[, i], 
+                                      <span class="dt">ploidy  =</span> uitdewilligen<span class="op">$</span>ploidy, 
+                                      <span class="dt">model   =</span> <span class="st">&quot;norm&quot;</span>, 
+                                      <span class="dt">verbose =</span> <span class="ot">FALSE</span>)
+                      fout<span class="op">$</span>geno
+                      }
+<span class="kw">stopCluster</span>(cl)</code></pre></div>
+<p>Note that I used <code>model = &quot;norm&quot;</code> because we have a very small number of samples.</p>
+<p>However, this doesn’t return any sort of diagnostic statistics for each SNP. So suppose we now want to save all of the output of each SNP and not just the MAP genotype, then we can use the following code:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc &lt;-<span class="st"> </span><span class="dv">2</span> ## number of cores. 
+        ## You should change this for your specific computing environment.
+cl &lt;-<span class="st"> </span>parallel<span class="op">::</span><span class="kw">makeCluster</span>(nc)
+doParallel<span class="op">::</span><span class="kw">registerDoParallel</span>(<span class="dt">cl =</span> cl)
+<span class="kw">stopifnot</span>(foreach<span class="op">::</span><span class="kw">getDoParWorkers</span>() <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>) ## make sure cluster is set up.
+glist &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">i =</span> <span class="dv">1</span><span class="op">:</span>ngenes, 
+                 <span class="dt">.export =</span> <span class="st">&quot;flexdog&quot;</span>) <span class="op">%dopar%</span><span class="st"> </span>{
+                   ## fit flexdog
+                   fout &lt;-<span class="st"> </span><span class="kw">flexdog</span>(<span class="dt">refvec  =</span> uitdewilligen<span class="op">$</span>refmat[, i], 
+                                   <span class="dt">sizevec =</span> uitdewilligen<span class="op">$</span>sizemat[, i], 
+                                   <span class="dt">ploidy  =</span> uitdewilligen<span class="op">$</span>ploidy, 
+                                   <span class="dt">model   =</span> <span class="st">&quot;norm&quot;</span>, 
+                                   <span class="dt">verbose =</span> <span class="ot">FALSE</span>)
+                   fout
+                   }
+<span class="kw">stopCluster</span>(cl)</code></pre></div>
+<p>Returning the diagnostics for each SNP is pretty easy. For example, below we extract the variable <code>prop_mis</code> from the list <code>glist</code> and make a histogram of these values.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+prop_mis &lt;-<span class="st"> </span><span class="kw">sapply</span>(<span class="dt">X =</span> glist, <span class="dt">FUN =</span> <span class="cf">function</span>(x) x<span class="op">$</span>prop_mis)
+<span class="kw">qplot</span>(prop_mis, 
+      <span class="dt">xlab =</span> <span class="st">&quot;Posterior Proportion Mis-genotyped&quot;</span>, 
+      <span class="dt">bins =</span> <span class="dv">30</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-gerard2018harnessing">
+<p>Gerard, David, Luis Felipe Ventorim Ferrão, Antonio Augusto Franco Garcia, and Matthew Stephens. 2018. “Harnessing Empirical Bayes and Mendelian Segregation for Genotyping Autopolyploids from Messy Sequencing Data.” <em>bioRxiv</em>. Cold Spring Harbor Laboratory. doi:<a href="https://doi.org/10.1101/281550">10.1101/281550</a>.</p>
+</div>
+<div id="ref-uitdewilligen2013next">
+<p>Uitdewilligen, Anne-Marie A. AND D’hoop, Jan G. A. M. L. AND Wolters. 2013. “A Next-Generation Sequencing Method for Genotyping-by-Sequencing of Highly Heterozygous Autotetraploid Potato.” <em>PLOS ONE</em> 8 (5). Public Library of Science: 1–14. doi:<a href="https://doi.org/10.1371/journal.pone.0062355">10.1371/journal.pone.0062355</a>.</p>
+</div>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

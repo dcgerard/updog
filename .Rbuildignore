@@ -6,4 +6,5 @@
 ^appveyor\.yml$
 ^codecov\.yml$
 ^CONDUCT\.md$
-^.github
+^.github$
+^docs$
