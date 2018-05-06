@@ -232,6 +232,21 @@ That is, if you set \code{refvec} with the number of alternative
 read-counts, then the resulting genotype estimates
 will be the estimated allele dosage of the alternative allele.
 }
+\examples{
+## A natural population. We will assume a
+## normal prior since there are so few
+## individuals.
+data("uitdewilligen")
+ploidy  <- 4
+refvec  <- uitdewilligen$refmat[, 1]
+sizevec <- uitdewilligen$sizemat[, 1]
+fout    <- flexdog_full(refvec  = refvec,
+                        sizevec = sizevec,
+                        ploidy  = ploidy,
+                        model   = "norm")
+plot(fout)
+
+}
 \author{
 David Gerard
 }

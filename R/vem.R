@@ -510,6 +510,10 @@ update_R <- function(postmean, postvar) {
 #' @return A logical. \code{TRUE} if \code{x} is a mupdog object, and \code{FALSE} otherwise.
 #'
 #' @author David Gerard
+#' 
+#' @examples 
+#' is.mupdog("anything")
+#' # FALSE
 #'
 #' @export
 #'

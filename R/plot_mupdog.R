@@ -38,6 +38,13 @@
 #' @export
 #'
 #' @author David Gerard
+#' 
+#' @examples 
+#' data("snpdat")
+#' refvec  <- snpdat$counts[snpdat$snp == "SNP1"]
+#' sizevec <- snpdat$size[snpdat$snp == "SNP1"]
+#' ploidy  <- 6
+#' plot_geno(refvec = refvec, sizevec = sizevec, ploidy = ploidy)
 #'
 plot_geno <- function(refvec,
                       sizevec,

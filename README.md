@@ -25,7 +25,7 @@ You can install updog from Github with:
 devtools::install_github("dcgerard/updog")
 ```
 
-If you want to use the `use_cvxr = TRUE` option in `flexdog` (not generally recommended), you will need to install the [CVXR](https://cran.r-project.org/web/packages/CVXR/index.html) package. Before I could install CVXR in Ubuntu, I had to run in the terminal
+If you want to use the `use_cvxr = TRUE` option in `flexdog` (not generally recommended), you will need to install the [CVXR](https://cran.r-project.org/package=CVXR) package. Before I could install CVXR in Ubuntu, I had to run in the terminal
 
 ``` bash
 sudo apt-get install libmpfr-dev

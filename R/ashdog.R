@@ -27,6 +27,8 @@
 #'                    p1size   = sizevec[1],
 #'                    outliers = TRUE)
 #' plot(fout)
+#' 
+#' }
 #'
 #' ## A natural population. We will assume a
 #' ## normal prior since there are so few
@@ -41,7 +43,7 @@
 #'                    model   = "norm")
 #' plot(fout)
 #'
-#' }
+#'
 #'
 #' @export
 flexdog <- function(refvec,
@@ -302,6 +304,20 @@ flexdog <- function(refvec,
 #' }
 #'
 #' @author David Gerard
+#' 
+#' @examples 
+#' ## A natural population. We will assume a
+#' ## normal prior since there are so few
+#' ## individuals.
+#' data("uitdewilligen")
+#' ploidy  <- 4
+#' refvec  <- uitdewilligen$refmat[, 1]
+#' sizevec <- uitdewilligen$sizemat[, 1]
+#' fout    <- flexdog_full(refvec  = refvec,
+#'                         sizevec = sizevec,
+#'                         ploidy  = ploidy,
+#'                         model   = "norm")
+#' plot(fout)
 #'
 #' @export
 flexdog_full <- function(refvec,
@@ -781,6 +797,11 @@ plot.flexdog <- function(x, use_colorblind = TRUE, ...) {
 #' @author David Gerard
 #'
 #' @export
+#' 
+#' @examples 
+#' is.flexdog("anything")
+#' # FALSE
+#' 
 is.flexdog <- function(x) {
   inherits(x, "flexdog")
 }

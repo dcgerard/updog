@@ -198,6 +198,8 @@ fout    <- flexdog(refvec   = refvec[-1],
                    outliers = TRUE)
 plot(fout)
 
+}
+
 ## A natural population. We will assume a
 ## normal prior since there are so few
 ## individuals.
@@ -211,7 +213,7 @@ fout    <- flexdog(refvec  = refvec,
                    model   = "norm")
 plot(fout)
 
-}
+
 
 }
 \seealso{

@@ -15,6 +15,11 @@ A logical. \code{TRUE} if \code{x} is a \code{flexdog} object, and \code{FALSE} 
 \description{
 Tests if an argument is a \code{flexdog} object.
 }
+\examples{
+is.flexdog("anything")
+# FALSE
+
+}
 \author{
 David Gerard
 }

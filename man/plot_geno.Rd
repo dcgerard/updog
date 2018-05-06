@@ -57,6 +57,14 @@ If parental genotypes are provided (\code{p1geno} and \code{p2geno}) then
 they will be colored the same as the offspring. Since they are often hard to see,
 a small black dot will also indicate their position.
 }
+\examples{
+data("snpdat")
+refvec  <- snpdat$counts[snpdat$snp == "SNP1"]
+sizevec <- snpdat$size[snpdat$snp == "SNP1"]
+ploidy  <- 6
+plot_geno(refvec = refvec, sizevec = sizevec, ploidy = ploidy)
+
+}
 \author{
 David Gerard
 }

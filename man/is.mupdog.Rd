@@ -15,6 +15,11 @@ A logical. \code{TRUE} if \code{x} is a mupdog object, and \code{FALSE} otherwis
 \description{
 Tests if its argument is a mupdog object.
 }
+\examples{
+is.mupdog("anything")
+# FALSE
+
+}
 \author{
 David Gerard
 }
