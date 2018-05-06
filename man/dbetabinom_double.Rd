@@ -18,6 +18,9 @@ dbetabinom_double(x, size, mu, rho, log)
 \item{log}{A logical. Should we return the log of the
 density \code{TRUE} or not \code{FALSE}?}
 }
+\value{
+The density of the beta-binomial.
+}
 \description{
 The density function of the beta-binomial distribution.
 }

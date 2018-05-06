@@ -19,6 +19,9 @@ dlbeta_dh(x, n, p, eps, h, tau)
 
 \item{tau}{The overdispersion parameter.}
 }
+\value{
+A double.
+}
 \description{
 Derivative of log-betabinomial density with respect to bias parameter.
 }

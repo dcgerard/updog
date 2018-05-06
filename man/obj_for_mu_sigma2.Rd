@@ -19,6 +19,10 @@ The rows index the individuals and the columns index the dosages.}
 \item{log_bb_dense}{A matrix of log-densities of the beta binomial. The rows index the individuals and the columns index the allele dosage.
 Allele dosage goes from -1 to ploidy, so there are ploidy + 2 elements.}
 }
+\value{
+A double. The objective when updating \code{mu} and \code{sigma2}
+    in \code{\link{mupdog}}.
+}
 \description{
 Objective function when updating mu and sigma2.
 }

@@ -15,6 +15,10 @@ the second element is \code{alpha} in \code{\link{kl_prob}}.}
 
 \item{ploidy}{The ploidy of the individual.}
 }
+\value{
+A double. The KL-divergence between \code{dist} and the
+    Guassian-Binomial.
+}
 \description{
 A wrapper of \code{\link{kl_prob}}.
 }

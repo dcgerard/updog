@@ -238,6 +238,9 @@ rgeno <- function(n,
 #'
 #' @seealso \code{\link{rgeno}} for a way to generate genotypes of individuals. \code{\link{rbetabinom}}
 #'     for how we generate the read-counts.
+#'     
+#' @return A vector the same length as \code{sizevec}. The ith element
+#'     is the number of reference counts for individual i.
 #'
 #' @export
 #'

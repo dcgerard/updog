@@ -17,9 +17,6 @@
 #' Mupdog uses a variational Bayes approach to estimate all parameters of interest and
 #' the posterior probabilities of the genotypes for each individual at each locus.
 #'
-#'
-#' @importFrom foreach %dopar%
-#'
 #' @param refmat A matrix of reference counts.
 #'     The rows index the individuals and the columns index the SNPs.
 #' @param sizemat A matrix of total counts.
@@ -95,6 +92,46 @@
 #' @export
 #'
 #' @author David Gerard
+#' 
+#' @return A list with some or all of the following elements:
+#' \describe{
+#'     \item{\code{map_dosage}}{A matrix of numerics containting 
+#'         the variational maximum-a-posterior (MAP) genotypes
+#'         (allele dosages) for each individual at each SNP. Element
+#'         (i, j) is the MAP genotype for individual i at SNP j.}
+#'     \item{\code{maxpostprob}}{A matrix of numerics containing
+#'         the variational maximum posterior probabilites for each
+#'         individual at each SNP. The (i, j)th element is the 
+#'         variational posterior
+#'         probability that individual i is genotyped correctly at 
+#'         SNP j.}
+#'     \item{\code{postprob}}{A three-way array of numerics. Element (i, j, k) is
+#'         the variational posterior probability that individual i has genotype 
+#'         k-1 at SNP j.}
+#'     \item{\code{seq}}{A vector of numerics. Element j is the estimated
+#'         sequencing error rate for SNP j.}
+#'     \item{\code{bias}}{A vector of numerics. Element j is the estimated
+#'         allelic bias for SNP j.}
+#'     \item{\code{od}}{A vector of numerics. Element j is the estimated
+#'         overdispersion parameter for SNP j.}
+#'     \item{\code{allele_freq}}{A vector of numerics. Element j is the
+#'         estimated allele-frequency for SNP j.}
+#'     \item{\code{inbreeding}}{A vector of numerics. Element i is the
+#'         estimated inbreeding coefficient for individual i.}
+#'     \item{\code{cor_mat}}{A symmetric matrix of numerics. Element (i, j)
+#'         is the estimated _latent_ correlation between individual 
+#'         i and individual j.}
+#'     \item{\code{postmean}}{A matrix of numerics. Element (i, j) is the 
+#'         variational posterior mean for individual i at SNP j.}
+#'     \item{\code{postvar}}{A matrix of numerics. Element (i, j) is the
+#'         variational posterior variance for individual i at SNP j.}
+#'     \item{\code{input$refmat}}{A matrix of numerics. 
+#'         The inputted \code{refmat}.}
+#'     \item{\code{input$sizemat}}{A matrix of numerics. The inputted
+#'         \code{sizemat}.}
+#'     \item{\code{input$ploidy}}{The inputted \code{ploidy}.}
+#'     \item{\code{obj}}{The maximized variational objective.}
+#' }
 #'
 #'
 #' @examples
@@ -494,6 +531,9 @@ mupdog <- function(refmat,
 #'     individuals and the columns index the SNPs.
 #' @param postvar The matrix of posterior variances. The rows index
 #'     the individuals and the columns index the SNPs.
+#'     
+#' @return A symmetric matrix of numerics. The update of the underlying
+#'     correlation matrix.
 #'
 #' @author David Gerard
 update_R <- function(postmean, postvar) {

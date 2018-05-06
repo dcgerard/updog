@@ -13,7 +13,10 @@ greater than 0. A value of 1 means no bias.}
 \item{mu_h}{The prior mean of the log-bias parameter.}
 
 \item{sigma2_h}{The prior variance (not standard deviation)
-of the log-bias parameter.}
+of the log-bias parameter. Set to to \code{Inf} to return \code{0}.}
+}
+\value{
+A double. The default penalty on the allelic bias parameter.
 }
 \description{
 Penalty on bias parameter.

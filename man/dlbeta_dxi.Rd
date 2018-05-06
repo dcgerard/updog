@@ -16,6 +16,9 @@ dlbeta_dxi(x, n, xi, tau)
 
 \item{tau}{The overdispersion parameter.}
 }
+\value{
+A double.
+}
 \description{
 Derivative of the log-betabinomial density with respect to the
 mean of the underlying beta.

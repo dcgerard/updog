@@ -13,6 +13,9 @@ dxi_dh(p, eps, h)
 
 \item{h}{The bias parameter.}
 }
+\value{
+A double.
+}
 \description{
 Derivative of xi-function with respect to bias parameter.
 }

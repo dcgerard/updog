@@ -9,6 +9,9 @@ expit(x)
 \arguments{
 \item{x}{A double.}
 }
+\value{
+The expit (logistic) of \code{x}.
+}
 \description{
 The expit (logistic) function.
 }

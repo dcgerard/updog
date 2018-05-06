@@ -9,6 +9,9 @@ dc_dtau(tau)
 \arguments{
 \item{tau}{The overdispersion parameter.}
 }
+\value{
+A double.
+}
 \description{
 Derivative of \eqn{c = (1 - \tau) / \tau} with respect to \eqn{\tau}.
 }

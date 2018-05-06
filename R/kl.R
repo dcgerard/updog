@@ -7,6 +7,9 @@
 #' @param ploidy The ploidy of the individual.
 #' @param sigma2 The underlying variance of the Gaussian-Binomial distribution.
 #' @param alpha The probability of success.
+#' 
+#' @return A double. The KL-divergence between \code{dist} and the
+#'     Guassian-Binomial. 
 #'
 #' @author David Gerard
 #'
@@ -40,10 +43,12 @@ kl_prob <- function(dist, ploidy, sigma2, alpha) {
 #' A wrapper of \code{\link{kl_prob}}.
 #'
 #' @inheritParams kl_prob
+#' @inherit kl_prob return
 #' @param par A vector of length two. The first element is \code{sigma2} in \code{\link{kl_prob}},
 #'     the second element is \code{alpha} in \code{\link{kl_prob}}.
 #'
 #' @author David Gerard
+#' 
 #'
 #' @seealso \code{\link{kl_prob}} and \code{\link{kl_opt}} for optimizing \code{kl_wrapp} over \code{par}.
 #'
@@ -63,6 +68,9 @@ kl_wrapp <- function(par, dist, ploidy) {
 #' distribution function. In our context, \eqn{K} is the ploidy of the species. This function tries to
 #' find the closest Gaussian-Binomial distribution to a provided distribution, where "closest" means
 #' smallest Kulback-Leibler divergence. We do this by optimizing over both \eqn{\alpha} and \eqn{\sigma^2}.
+#'
+#' @return A list containing the fitted distribution along with the 
+#'     fitted parameters.
 #'
 #' @inheritParams kl_prob
 #'

@@ -1,6 +1,6 @@
 Package: updog
 Title: Flexible Genotyping for Autopolyploids
-Version: 0.99.0
+Version: 1.0.0
 Date: 2018-05-02
 Authors@R: person("David", "Gerard", email = "gerard.1787@gmail.com", role = c("aut", "cre"))
 biocViews: StatisticalMethod, Bayesian, Classification, Sequencing, DNASeq, VariantDetection

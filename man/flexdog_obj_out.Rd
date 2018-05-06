@@ -36,6 +36,10 @@ error rate.}
 \item{var_seq}{The prior variance of the logit of the sequencing
 error rate.}
 }
+\value{
+A double. The \code{\link{flexdog}} objective when 
+    \code{outliers = TRUE}.
+}
 \description{
 Log-likelihood that \code{\link{flexdog}} maximizes when
 outliers are present.

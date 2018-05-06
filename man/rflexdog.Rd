@@ -21,6 +21,10 @@ each individual has.}
 \item{od}{The overdispersion parameter. See the
 Details of the \code{rho} variable in \code{\link{betabinom}}.}
 }
+\value{
+A vector the same length as \code{sizevec}. The ith element
+    is the number of reference counts for individual i.
+}
 \description{
 This will take a vector of genotypes and a vector of total read-counts, then generate a vector of reference
 counts. To get the genotypes, you could use \code{\link{rgeno}}.

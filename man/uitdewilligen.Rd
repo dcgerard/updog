@@ -16,6 +16,9 @@
 \usage{
 uitdewilligen
 }
+\value{
+A list. See the Format Section.
+}
 \description{
 A list containing a matrix of reference counts, a matrix of total counts, and the ploidy level (4) of the species.
 This is a subset of the data from Uitdewilligen et al (2013).

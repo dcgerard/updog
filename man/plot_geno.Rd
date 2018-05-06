@@ -46,6 +46,9 @@ the modal genotype.}
 \item{use_colorblind}{A logical. Should we use a colorblind safe palette (\code{TRUE}),
 or not (\code{FALSE})? Only allowed if \code{ploidy <= 6}.}
 }
+\value{
+A \code{\link[ggplot2]{ggplot}} object for the genotype plot.
+}
 \description{
 The x-axis is the counts of the non-reference allele,
 and the y-axis is the counts of the reference allele.

@@ -14,6 +14,9 @@ dpen_dh(h, mu_h, sigma2_h)
 
 \item{sigma2_h}{The variance of the log-bias.}
 }
+\value{
+A double.
+}
 \description{
 Derivative of \deqn{-log(h) - (log(h) - \mu_h)^2 / (2\sigma_h^2)} with respect
 to \eqn{h}.

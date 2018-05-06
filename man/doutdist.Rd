@@ -15,6 +15,9 @@ doutdist(x, n, logp)
 
 \item{logp}{Return the log density \code{TRUE} or not \code{FALSE}?}
 }
+\value{
+A double. The outlier density value.
+}
 \description{
 The outlier distribution we use. Right now it is just a
 beta binomial with mean 1/2 and od 1/3 (so underlying beta

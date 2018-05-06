@@ -23,6 +23,9 @@ post_prob(dosage, ploidy, mu, sigma2, alpha, rho)
 
 \item{rho}{The individual's overdispersion parameter.}
 }
+\value{
+The posterior probability of having \code{dosage} A alleles.
+}
 \description{
 Variational posterior probability of having \code{dosage} A alleles
 when the ploidy is \code{ploidy}, the allele frequency is

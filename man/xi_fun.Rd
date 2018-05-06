@@ -15,6 +15,10 @@ or the same length as p.}
 \item{h}{The allele bias. Must either be of length 1 or the same length
 as p.}
 }
+\value{
+A vector of prababilities of the reference read adjusted
+    by both the sequencing error rate and the allele bias.
+}
 \description{
 Adjusts allele dosage \code{p} by the sequencing error rate \code{eps} and the allele bias \code{h}.
 }

@@ -15,6 +15,9 @@ if the ploidy is less than or equal to 6.}
 
 \item{...}{Not used.}
 }
+\value{
+A \code{\link[ggplot2]{ggplot}} object for the genotype plot.
+}
 \description{
 Draw a genotype plot from the output of \code{\link{flexdog}}.
 }

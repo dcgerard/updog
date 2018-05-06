@@ -16,6 +16,10 @@ underlying beta. The second term is the current overdispersion parameter.}
 \item{weight_vec}{A vector of length \code{ploidy + 1} that contains the weights
 for each component beta-binomial.}
 }
+\value{
+A double. The objective when updating the beta-binomial genotype
+    distribution in \code{\link{mupdog}}.
+}
 \description{
 Objective function for updating the beta-binomial genotype distribution when
 \code{model = "bb"} in \code{\link{flex_update_pivec}}.

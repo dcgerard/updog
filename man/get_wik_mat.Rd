@@ -22,6 +22,11 @@ individual.}
 
 \item{od}{The starting value of the overdispersion parameter.}
 }
+\value{
+A matrix of numerics. The rows index the individuals and the 
+    columns index the genotype. These weights are used in the EM algorithm
+    (and is indeed the E-step) in \code{\link{flexdog_full}}.
+}
 \description{
 E-step in \code{\link{flexdog}}.
 }

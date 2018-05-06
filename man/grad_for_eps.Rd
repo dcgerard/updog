@@ -38,6 +38,9 @@ but sets the first element to \code{0.0} in \code{\link{grad_for_eps}}.}
 \item{update_od}{A logical. This is not used in \code{obj_for_eps},
 but sets the third element to \code{0.0} in \code{\link{grad_for_eps}}.}
 }
+\value{
+A double.
+}
 \description{
 Gradient for \code{\link{obj_for_eps}}.
 }

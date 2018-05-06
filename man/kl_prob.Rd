@@ -16,6 +16,10 @@ kl_prob(dist, ploidy, sigma2, alpha)
 
 \item{alpha}{The probability of success.}
 }
+\value{
+A double. The KL-divergence between \code{dist} and the
+    Guassian-Binomial.
+}
 \description{
 KL-divergence between a provided distribution and a Gaussian-Binomial distribution.
 }

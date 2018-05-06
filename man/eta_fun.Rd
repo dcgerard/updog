@@ -12,6 +12,10 @@ eta_fun(p, eps)
 \item{eps}{The sequencing error rate. Must either be of length 1
 or the same length as p.}
 }
+\value{
+A vector of probabilities of a reference read adjusted
+    by the sequencing error rate.
+}
 \description{
 Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
 }

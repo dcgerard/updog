@@ -13,6 +13,10 @@ xi_double(p, eps, h)
 
 \item{h}{The allele bias.}
 }
+\value{
+The probability of a reference read adjusted by both the allele 
+    bias and the sequencing error rate.
+}
 \description{
 Adjusts allele dosage \code{p} by the sequencing error rate \code{eps} and the allele bias \code{h}.
 }

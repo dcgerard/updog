@@ -756,6 +756,8 @@ flexdog_full <- function(refvec,
 #'   \item{\code{\link{plot_geno}}}{The underlying plotting function.}
 #'   \item{\code{\link{flexdog}}}{Creates a \code{flexpdog} object.}
 #' }
+#' 
+#' @return A \code{\link[ggplot2]{ggplot}} object for the genotype plot.
 #'
 #' @export
 plot.flexdog <- function(x, use_colorblind = TRUE, ...) {
@@ -815,6 +817,9 @@ is.flexdog <- function(x) {
 #' @inheritParams flexdog_full
 #'
 #' @seealso \code{\link{flexdog}} for where this is used.
+#' 
+#' @return A vector of numerics. The initial value of \code{pivec}
+#'     used in \code{\link{flexdog_full}}.
 #'
 #' @author David Gerard
 initialize_pivec <- function(ploidy, mode, model = c("hw", "bb", "norm", "ash", "f1", "s1", "flex", "uniform")) {
@@ -1034,6 +1039,12 @@ flex_update_pivec <- function(weight_vec, model = c("hw", "bb", "norm", "ash", "
 #'
 #' @seealso \code{\link{get_probk_vec}} with option \code{model = "ash"}
 #'     for the inverse of this function.
+#'     
+#' @return A list with the following elements
+#' \describe{
+#' \item{\code{pivec}}{The mixing weights for the unimodal representation.}
+#' \item{\code{mode}}{The central value of the unimodal distribution.}
+#' }
 #'
 #' @author David Gerard
 #'
@@ -1072,6 +1083,8 @@ get_uni_rep <- function(probvec) {
 #' @param lambda The penalty.
 #' @param pivec The vector of mixing proportions for the component
 #'     discrete uniform distributions.
+#'     
+#' @return A penalty on the ash mixing weights.
 #'
 #' @author David Gerard
 #'

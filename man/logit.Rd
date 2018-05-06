@@ -9,6 +9,9 @@ logit(x)
 \arguments{
 \item{x}{A double between 0 and 1.}
 }
+\value{
+The logit of \code{x}.
+}
 \description{
 The logit function.
 }

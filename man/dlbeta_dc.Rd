@@ -18,6 +18,9 @@ dlbeta_dc(x, n, xi, c)
 \item{c}{\eqn{(1 - \tau)/\tau} where \eqn{\tau}
 is the overdispersion parameter.}
 }
+\value{
+A double.
+}
 \description{
 Derivative of the log-beta density with
 respect to c where \eqn{c = (1 - \tau)/\tau}

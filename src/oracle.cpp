@@ -25,6 +25,8 @@
 //' @param bias The allele-bias.
 //' @param od The overdispersion parameter.
 //' @param dist The distribution of the alleles.
+//' 
+//' @return A double. The oracle misclassification error rate.
 //'
 //' @author David Gerard
 //' 

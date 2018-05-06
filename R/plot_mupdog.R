@@ -39,6 +39,8 @@
 #'
 #' @author David Gerard
 #' 
+#' @return A \code{\link[ggplot2]{ggplot}} object for the genotype plot.
+#' 
 #' @examples 
 #' data("snpdat")
 #' refvec  <- snpdat$counts[snpdat$snp == "SNP1"]
@@ -211,6 +213,8 @@ plot_geno <- function(refvec,
 #' }
 #'
 #' @author David Gerard
+#' 
+#' @return A \code{\link[ggplot2]{ggplot}} object for the genotype plot.
 #'
 #' @examples
 #' data("mupout")

@@ -42,6 +42,11 @@
 #' @useDynLib updog
 #' @importFrom Rcpp sourceCpp
 #' @importFrom RcppArmadillo armadillo_version
+#' @importFrom ggplot2 ggplot
+#' @importFrom assertthat assert_that
+#' @importFrom doParallel registerDoParallel
+#' @importFrom ggthemes colorblind_pal
+#' @importFrom foreach %dopar%
 #'
 #' @docType package
 #' @name updog
@@ -91,6 +96,11 @@ NULL
 #' @name betabinom
 #'
 #' @author David Gerard
+#' 
+#' @return Either a random sample (\code{rbetabinom}), 
+#'     the density (\code{dbetabinom}), the tail 
+#'     probability (\code{pbetabinom}), or the quantile
+#'     (\code{qbetabinom}) of the beta-binomial distribution.
 #' 
 #' @examples 
 #' x <- rbetabinom(n = 10, size = 10, mu = 0.1, rho = 0.01)

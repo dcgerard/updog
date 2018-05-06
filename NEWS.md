@@ -1,4 +1,4 @@
-# updog 0.99.0
+# updog 1.0.0
 
 * This is a complete re-working of the code in `updog`. The old version may be found in the [`updogAlpha` package](https://github.com/dcgerard/updogAlpha).
 * The main function is now `flexdog`.

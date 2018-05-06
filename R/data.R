@@ -2,7 +2,7 @@
 #'
 #' A list containing a matrix of reference counts, a matrix of total counts, and the ploidy level (4) of the species.
 #' This is a subset of the data from Uitdewilligen et al (2013).
-#'
+#' 
 #' @format A list containing three objects. Two matrices and a numeric scalar:
 #' \describe{
 #'   \item{refmat}{A matrix of read counts containing the reference allele. The rows index the individuals and the columns index the SNPs.}
@@ -12,6 +12,7 @@
 #'
 #' @references Uitdewilligen, J. G., Wolters, A. M. A., Bjorn, B., Borm, T. J., Visser, R. G., & van Eck, H. J. (2013). \href{https://doi.org/10.1371/journal.pone.0062355}{A next-generation sequencing method for genotyping-by-sequencing of highly heterozygous autotetraploid potato.} PLoS One, 8(5), e62355.
 #'
+#' @return A list. See the Format Section.
 #'
 #' @source \url{https://doi.org/10.1371/journal.pone.0062355}
 #'
@@ -23,6 +24,8 @@
 #' A mupdog fit of the \code{\link{uitdewilligen}} data.
 #'
 #' @format An object of class \code{\link{mupdog}}.
+#' 
+#' @return See the Format Section.
 #'
 #' @source The raw data that this was fit to can be found in \code{\link{uitdewilligen}}.
 #'
@@ -48,6 +51,8 @@
 #'     \item{counts}{The number of read-counts that support the reference allele.}
 #'     \item{size}{The total number of read-counts at a given SNP.}
 #' }
+#' 
+#' @return A \code{\link[tibble]{tibble}}. See the Format Section.
 #'
 #' @source \url{http://sweetpotato-garden.kazusa.or.jp/}
 #'

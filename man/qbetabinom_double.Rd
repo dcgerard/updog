@@ -16,6 +16,9 @@ qbetabinom_double(p, size, mu, rho)
 
 \item{rho}{The overdispersion parameter of the beta.}
 }
+\value{
+The quantile of the beta-binomial.
+}
 \description{
 The quantile function of the beta-binomial distribution parameterized
 by mean and overdispersion parameter.

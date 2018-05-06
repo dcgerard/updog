@@ -3,6 +3,12 @@
 //' Gradient for \code{\link{obj_for_mu_sigma2}} with respect for \code{mu} and \code{sigma2}.
 //'
 //' @inheritParams obj_for_mu_sigma2
+//' 
+//' @return A vector of length 2 * nind of numerics. 
+//'     The first element n elements are the partial derivatives with respect
+//'     to \code{mu} and the second n elements are the 
+//'     partial derivatives with respect to \code{sigma2}
+//'     in \code{\link{obj_for_mu_sigma2}}.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -78,8 +84,12 @@ NumericVector grad_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2,
 //' Gradient for \code{\link{obj_for_mu_sigma2_wrapper}} with respect for \code{muSigma2}
 //' and a wrapper for \code{\link{grad_for_mu_sigma2}}
 //'
+//'
+//' @inherit grad_for_mu_sigma2 return
 //' @inheritParams obj_for_mu_sigma2
 //' @param muSigma2 A vector. The first half are mu and the second half are sigma2.
+//'
+//'
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -99,8 +109,9 @@ NumericVector grad_for_mu_sigma2_wrapper(arma::Col<double> muSigma2, NumericMatr
 //' @param mu_h The mean of the log-bias.
 //' @param sigma2_h The variance of the log-bias.
 //'
-//'
 //' @seealso \code{\link{pen_bias}} which this is a derivative for.
+//' 
+//' @return A double.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -123,6 +134,8 @@ double dpen_dh(double h, double mu_h, double sigma2_h) {
 //' @param sigma2_eps The variance of the logit of the sequencing error rate.
 //'
 //' @seealso \code{\link{pen_seq_error}} which this is a derivative for.
+//' 
+//' @return A double.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -148,6 +161,7 @@ double dpen_deps(double eps, double mu_eps, double sigma2_eps) {
 //' @param c \eqn{(1 - \tau)/\tau} where \eqn{\tau}
 //'     is the overdispersion parameter.
 //'
+//' @return A double.
 //'
 //' @seealso \code{\link{dbetabinom_double}}, \code{\link{dlbeta_dtau}},
 //'     \code{\link{dc_dtau}}.
@@ -168,6 +182,8 @@ double dlbeta_dc(int x, int n, double xi, double c) {
 //' Derivative of \eqn{c = (1 - \tau) / \tau} with respect to \eqn{\tau}.
 //'
 //' @param tau The overdispersion parameter.
+//' 
+//' @return A double.
 //'
 //' @seealso \code{\link{dlbeta_dc}}, \code{\link{dlbeta_dtau}}
 //'
@@ -187,6 +203,8 @@ double dc_dtau(double tau) {
 //' @param p The allele dosage.
 //' @param eps The sequencing error rate
 //' @param h The bias parameter.
+//' 
+//' @return A double.
 //'
 //' @seealso \code{\link{dlbeta_dc}}, \code{\link{dc_dtau}},
 //'     \code{\link{dbetabinom_double}}.
@@ -204,6 +222,8 @@ double dlbeta_dtau(int x, int n, double p, double eps, double h, double tau) {
 
 //' Derivative of the log-betabinomial density with respect to the
 //' mean of the underlying beta.
+//' 
+//' @return A double.
 //'
 //' @inheritParams dlbeta_dtau
 //' @param xi The mean of the underlying beta.
@@ -220,6 +240,8 @@ double dlbeta_dxi(int x, int n, double xi, double tau) {
 }
 
 //' Derivative of xi-function with respect to bias parameter.
+//' 
+//' @return A double.
 //'
 //' @param p The dosage (between 0 and 1).
 //' @param eps The sequencing error rate.
@@ -236,6 +258,8 @@ double dxi_dh(double p, double eps, double h) {
 //' Derivative of log-betabinomial density with respect to bias parameter.
 //'
 //' @inheritParams dlbeta_dtau
+//' 
+//' @return A double.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -251,6 +275,8 @@ double dlbeta_dh(int x, int n, double p, double eps, double h, double tau) {
 //'
 //' @param h The bias parameter.
 //' @param f The post-sequencing error rate adjusted probability of an A.
+//' 
+//' @return A double.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -263,6 +289,8 @@ double dxi_df(double h, double f) {
 //'
 //' @param p The allele dosage.
 //' @param eps The sequencing error rate.
+//' 
+//' @return A double.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -275,6 +303,8 @@ double df_deps(double p, double eps) {
 //' sequencing error rate.
 //'
 //' @inheritParams dlbeta_dtau
+//' 
+//' @return A double.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -290,6 +320,8 @@ double dlbeta_deps(int x, int n, double p, double eps, double h, double tau) {
 
 
 //' Gradient for \code{\link{obj_for_eps}}.
+//' 
+//' @return A double.
 //'
 //' @inheritParams obj_for_eps
 //'

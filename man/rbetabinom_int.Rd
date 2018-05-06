@@ -14,6 +14,9 @@ rbetabinom_int(size, mu, rho)
 
 \item{rho}{The overdispersion parameter of the beta.}
 }
+\value{
+A random sample from the beta-binomial.
+}
 \description{
 One draw from the beta-binomial distribution parameterized
 by mean and overdispersion parameter.

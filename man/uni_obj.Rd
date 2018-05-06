@@ -16,6 +16,10 @@ to a column of \code{lmat}.}
 
 \item{lambda}{The penalty on the pi's. Should be greater than 0 and really really small.}
 }
+\value{
+The objective optimized by \code{\link{uni_em}} during
+    that separate unimodal EM algorithm.
+}
 \description{
 Objective function optimized by \code{\link{uni_em}}.
 }

@@ -11,6 +11,9 @@ The raw data that this was fit to can be found in \code{\link{uitdewilligen}}.
 \usage{
 mupout
 }
+\value{
+See the Format Section.
+}
 \description{
 A mupdog fit of the \code{\link{uitdewilligen}} data.
 }

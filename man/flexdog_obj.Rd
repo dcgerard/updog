@@ -33,6 +33,10 @@ error rate.}
 \item{var_seq}{The prior variance of the logit of the sequencing
 error rate.}
 }
+\value{
+The objective (marginal log-likelihood) used in 
+    \code{\link{flexdog_full}}.
+}
 \description{
 Log-likelihood that \code{\link{flexdog}} maximizes.
 }

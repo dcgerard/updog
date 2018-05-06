@@ -6,6 +6,8 @@
 #' @inheritParams dbetabinom_double
 #' @param alpha The first shape parameter.
 #' @param beta The second shape paramter.
+#' 
+#' @return The density of the beta-binomial.
 #'
 #' @author David Gerard
 dbetabinom_alpha_beta_double <- function(x, size, alpha, beta, log) {
@@ -15,6 +17,8 @@ dbetabinom_alpha_beta_double <- function(x, size, alpha, beta, log) {
 #' Special case of betabinomial where the beta is bernoulli mu.
 #'
 #' @inheritParams dbetabinom_double
+#' 
+#' @return The density of the Bernoulli-binomial.
 #'
 #' @author David Gerard
 dbernbinom <- function(x, size, mu, log) {
@@ -29,6 +33,8 @@ dbernbinom <- function(x, size, mu, log) {
 #' @param rho The overdispersion parameter of the beta.
 #' @param log A logical. Should we return the log of the
 #'     density \code{TRUE} or not \code{FALSE}?
+#'     
+#' @return The density of the beta-binomial.
 #'
 #' @author David Gerard
 dbetabinom_double <- function(x, size, mu, rho, log) {
@@ -50,6 +56,8 @@ dbetabinom <- function(x, size, mu, rho, log) {
 #' @param q A quantile.
 #' @param log_p A logical. Should return the log-probability
 #'     \code{TRUE} or not \code{FALSE}?
+#'     
+#' @return The tail-probability of the beta-binomial.
 #'
 #' @author David Gerard
 pbetabinom_double <- function(q, size, mu, rho, log_p) {
@@ -69,6 +77,8 @@ pbetabinom <- function(q, size, mu, rho, log_p) {
 #'
 #' @inheritParams dbetabinom_double
 #' @param p The lower tail probability.
+#' 
+#' @return The quantile of the beta-binomial.
 #'
 #' @author David Gerard
 qbetabinom_double <- function(p, size, mu, rho) {
@@ -87,6 +97,8 @@ qbetabinom <- function(p, size, mu, rho) {
 #' by mean and overdispersion parameter.
 #'
 #' @inheritParams dbetabinom_double
+#' 
+#' @return A random sample from the beta-binomial.
 #'
 #' @author David Gerard
 rbetabinom_int <- function(size, mu, rho) {
@@ -107,6 +119,8 @@ rbetabinom <- function(n, size, mu, rho) {
 #' @param pivec The mixing probability of the i'th discrete uniform distribution.
 #'
 #' @author David Gerard
+#' 
+#' @return A vector of numerics. Element k is the probability of genotype k.
 #'
 #' @seealso \code{\link{flexdog}} where this is used.
 #'
@@ -119,6 +133,9 @@ get_probk_vec <- function(pivec, model, mode) {
 #' The (i,k)th element is \eqn{1(k \in F(a, i)) / |F(a,i)|}.
 #'
 #' @inheritParams flexdog_full
+#' 
+#' @return A matrix of numerics. The weights used for the 
+#'    weighted EM algorithm in \code{\link{flexdog_full}}.
 #'
 #' @author David Gerard
 #'
@@ -131,6 +148,10 @@ get_inner_weights <- function(ploidy, mode) {
 #' @inheritParams flexdog_full
 #' @param probk_vec The vector of current prior probabilities of each genotype.
 #'
+#'
+#' @return A matrix of numerics. The rows index the individuals and the 
+#'     columns index the genotype. These weights are used in the EM algorithm
+#'     (and is indeed the E-step) in \code{\link{flexdog_full}}.
 #'
 #' @author David Gerard
 #'
@@ -146,6 +167,9 @@ get_wik_mat <- function(probk_vec, refvec, sizevec, ploidy, seq, bias, od) {
 #' @param probk_vec The kth element is the prior probability of genotype k (when starting to count from 0).
 #'
 #' @author David Gerard
+#' 
+#' @return The objective (marginal log-likelihood) used in 
+#'     \code{\link{flexdog_full}}.
 #'
 flexdog_obj <- function(probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq) {
     .Call('_updog_flexdog_obj', PACKAGE = 'updog', probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq)
@@ -157,6 +181,9 @@ flexdog_obj <- function(probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_
 #' @param pivec The current parameters.
 #'
 #' @author David Gerard
+#' 
+#' @return The objective optimized by \code{\link{uni_em}} during
+#'     that separate unimodal EM algorithm.
 #'
 uni_obj <- function(pivec, weight_vec, lmat, lambda) {
     .Call('_updog_uni_obj', PACKAGE = 'updog', pivec, weight_vec, lmat, lambda)
@@ -178,6 +205,9 @@ uni_obj <- function(pivec, weight_vec, lmat, lambda) {
 #' @param lambda The penalty on the pi's. Should be greater than 0 and really really small.
 #'
 #'
+#' @return A vector of numerics. The update of \code{pivec} in
+#'     \code{\link{flexdog_full}}.
+#'
 #' @author David Gerard
 #'
 uni_em <- function(weight_vec, lmat, pi_init, lambda, itermax, obj_tol) {
@@ -190,6 +220,9 @@ uni_em <- function(weight_vec, lmat, pi_init, lambda, itermax, obj_tol) {
 #' @param pvec The known distribtuion (e.g. from assuming an
 #'     F1 population).
 #' @param weight_vec A vector of weights.
+#' 
+#' @return The objective when updating \code{pivec} when \code{model = "f1"}
+#'     or \code{model = "s1"} in \code{\link{flexdog_full}}.
 #'
 #' @author David Gerard
 #'
@@ -200,6 +233,12 @@ f1_obj <- function(alpha, pvec, weight_vec) {
 #' Gradient for \code{\link{obj_for_mu_sigma2}} with respect for \code{mu} and \code{sigma2}.
 #'
 #' @inheritParams obj_for_mu_sigma2
+#' 
+#' @return A vector of length 2 * nind of numerics. 
+#'     The first element n elements are the partial derivatives with respect
+#'     to \code{mu} and the second n elements are the 
+#'     partial derivatives with respect to \code{sigma2}
+#'     in \code{\link{obj_for_mu_sigma2}}.
 #'
 #' @author David Gerard
 grad_for_mu_sigma2 <- function(mu, sigma2, phifk_mat, cor_inv, log_bb_dense) {
@@ -209,8 +248,12 @@ grad_for_mu_sigma2 <- function(mu, sigma2, phifk_mat, cor_inv, log_bb_dense) {
 #' Gradient for \code{\link{obj_for_mu_sigma2_wrapper}} with respect for \code{muSigma2}
 #' and a wrapper for \code{\link{grad_for_mu_sigma2}}
 #'
+#'
+#' @inherit grad_for_mu_sigma2 return
 #' @inheritParams obj_for_mu_sigma2
 #' @param muSigma2 A vector. The first half are mu and the second half are sigma2.
+#'
+#'
 #'
 #' @author David Gerard
 grad_for_mu_sigma2_wrapper <- function(muSigma2, phifk_mat, cor_inv, log_bb_dense) {
@@ -224,8 +267,9 @@ grad_for_mu_sigma2_wrapper <- function(muSigma2, phifk_mat, cor_inv, log_bb_dens
 #' @param mu_h The mean of the log-bias.
 #' @param sigma2_h The variance of the log-bias.
 #'
-#'
 #' @seealso \code{\link{pen_bias}} which this is a derivative for.
+#' 
+#' @return A double.
 #'
 #' @author David Gerard
 dpen_dh <- function(h, mu_h, sigma2_h) {
@@ -240,6 +284,8 @@ dpen_dh <- function(h, mu_h, sigma2_h) {
 #' @param sigma2_eps The variance of the logit of the sequencing error rate.
 #'
 #' @seealso \code{\link{pen_seq_error}} which this is a derivative for.
+#' 
+#' @return A double.
 #'
 #' @author David Gerard
 dpen_deps <- function(eps, mu_eps, sigma2_eps) {
@@ -256,6 +302,7 @@ dpen_deps <- function(eps, mu_eps, sigma2_eps) {
 #' @param c \eqn{(1 - \tau)/\tau} where \eqn{\tau}
 #'     is the overdispersion parameter.
 #'
+#' @return A double.
 #'
 #' @seealso \code{\link{dbetabinom_double}}, \code{\link{dlbeta_dtau}},
 #'     \code{\link{dc_dtau}}.
@@ -267,6 +314,8 @@ dlbeta_dc <- function(x, n, xi, c) {
 #' Derivative of \eqn{c = (1 - \tau) / \tau} with respect to \eqn{\tau}.
 #'
 #' @param tau The overdispersion parameter.
+#' 
+#' @return A double.
 #'
 #' @seealso \code{\link{dlbeta_dc}}, \code{\link{dlbeta_dtau}}
 #'
@@ -284,6 +333,8 @@ dc_dtau <- function(tau) {
 #' @param p The allele dosage.
 #' @param eps The sequencing error rate
 #' @param h The bias parameter.
+#' 
+#' @return A double.
 #'
 #' @seealso \code{\link{dlbeta_dc}}, \code{\link{dc_dtau}},
 #'     \code{\link{dbetabinom_double}}.
@@ -295,6 +346,8 @@ dlbeta_dtau <- function(x, n, p, eps, h, tau) {
 
 #' Derivative of the log-betabinomial density with respect to the
 #' mean of the underlying beta.
+#' 
+#' @return A double.
 #'
 #' @inheritParams dlbeta_dtau
 #' @param xi The mean of the underlying beta.
@@ -305,6 +358,8 @@ dlbeta_dxi <- function(x, n, xi, tau) {
 }
 
 #' Derivative of xi-function with respect to bias parameter.
+#' 
+#' @return A double.
 #'
 #' @param p The dosage (between 0 and 1).
 #' @param eps The sequencing error rate.
@@ -318,6 +373,8 @@ dxi_dh <- function(p, eps, h) {
 #' Derivative of log-betabinomial density with respect to bias parameter.
 #'
 #' @inheritParams dlbeta_dtau
+#' 
+#' @return A double.
 #'
 #' @author David Gerard
 dlbeta_dh <- function(x, n, p, eps, h, tau) {
@@ -328,6 +385,8 @@ dlbeta_dh <- function(x, n, p, eps, h, tau) {
 #'
 #' @param h The bias parameter.
 #' @param f The post-sequencing error rate adjusted probability of an A.
+#' 
+#' @return A double.
 #'
 #' @author David Gerard
 dxi_df <- function(h, f) {
@@ -338,6 +397,8 @@ dxi_df <- function(h, f) {
 #'
 #' @param p The allele dosage.
 #' @param eps The sequencing error rate.
+#' 
+#' @return A double.
 #'
 #' @author David Gerard
 df_deps <- function(p, eps) {
@@ -348,6 +409,8 @@ df_deps <- function(p, eps) {
 #' sequencing error rate.
 #'
 #' @inheritParams dlbeta_dtau
+#' 
+#' @return A double.
 #'
 #' @author David Gerard
 dlbeta_deps <- function(x, n, p, eps, h, tau) {
@@ -355,6 +418,8 @@ dlbeta_deps <- function(x, n, p, eps, h, tau) {
 }
 
 #' Gradient for \code{\link{obj_for_eps}}.
+#' 
+#' @return A double.
 #'
 #' @inheritParams obj_for_eps
 #'
@@ -400,6 +465,8 @@ grad_for_weighted_lnorm <- function(parvec, ploidy, weight_vec) {
 #' @param sigma2 The variational variance (not standard devation).
 #' @param alpha The allele frequency.
 #' @param rho The individual's overdispersion parameter.
+#' 
+#' @return The posterior probability of having \code{dosage} A alleles.
 #'
 #' @author David
 #'
@@ -417,6 +484,10 @@ post_prob <- function(dosage, ploidy, mu, sigma2, alpha, rho) {
 #'     The rows index the individuals and the columns index the SNPs.
 #' @param alpha A vector of allele frequencies for all SNPs.
 #' @param rho A vector of inbreeding coefficients for all individuals.
+#' 
+#' @return An array. The rows index the individuals, the columns index the 
+#'     SNPS, and the third dimension indexes the genotypes. Element (i, j, k)
+#'     is the return of \code{\link{post_prob}}.
 #'
 #' @author David Gerard
 #'
@@ -428,7 +499,10 @@ compute_all_post_prob <- function(ploidy, mu, sigma2, alpha, rho) {
 #'
 #' @inheritParams mupdog
 #'
-#'
+#' @return A three dimensional array. The rows index the individuals, the 
+#'     columns index the SNPs, and the third dimension indexes the 
+#'     genotypes. This is the log-likelihood for each individual/snp/genotype
+#'     combination.
 #'
 compute_all_log_bb <- function(refmat, sizemat, ploidy, seq, bias, od) {
     .Call('_updog_compute_all_log_bb', PACKAGE = 'updog', refmat, sizemat, ploidy, seq, bias, od)
@@ -439,6 +513,10 @@ compute_all_log_bb <- function(refmat, sizemat, ploidy, seq, bias, od) {
 #' @param alpha A vector whose jth element is the allele frequency of SNP j.
 #' @param rho A vector whose ith element is the inbreeding coefficient of individual i.
 #' @param ploidy The ploidy of the species.
+#' 
+#' @return A three dimensional array. The rows index the individuals,
+#'     the columns index the SNPs, and the third dimension indexes the
+#'     genotypes. Computes the "continuous genotype".
 #'
 #' @author David Gerard
 compute_all_phifk <- function(alpha, rho, ploidy) {
@@ -451,7 +529,9 @@ compute_all_phifk <- function(alpha, rho, ploidy) {
 #'     greater than 0. A value of 1 means no bias.
 #' @param mu_h The prior mean of the log-bias parameter.
 #' @param sigma2_h The prior variance (not standard deviation)
-#'     of the log-bias parameter.
+#'     of the log-bias parameter. Set to to \code{Inf} to return \code{0}.
+#'     
+#' @return A double. The default penalty on the allelic bias parameter.
 #'
 #' @author David Gerard
 pen_bias <- function(h, mu_h, sigma2_h) {
@@ -464,7 +544,10 @@ pen_bias <- function(h, mu_h, sigma2_h) {
 #'     Must be between 0 and 1.
 #' @param mu_eps The prior mean of the logit sequencing error rate.
 #' @param sigma2_eps The prior variance (not standard deviation)
-#'     of the logit sequencing error rate.
+#'     of the logit sequencing error rate. Set this to \code{Inf} to
+#'     return \code{0}.
+#'     
+#' @return A double. The default penalty on the sequencing error rate.
 #'
 #' @author David Gerard
 pen_seq_error <- function(eps, mu_eps, sigma2_eps) {
@@ -483,6 +566,9 @@ pen_seq_error <- function(eps, mu_eps, sigma2_eps) {
 #' @param log_bb_dense A matrix of log posterior densities. The
 #'     rows index the SNPs and the columns index the dosage.
 #' @param ploidy The ploidy of the species.
+#' 
+#' @return A double. The objective when updating 
+#'     \code{rho} in \code{\link{mupdog}}.
 #'
 #'
 #' @author David Gerard
@@ -499,6 +585,9 @@ obj_for_rho <- function(rho, mu, sigma2, alpha, log_bb_dense, ploidy) {
 #' @param log_bb_dense A matrix of log-densities of the beta binomial. The rows index the individuals and the columns index the allele dosage.
 #' @param ploidy The ploidy of the species.
 #'
+#'
+#' @return A double. The objective when updating \code{alpha} in
+#'     \code{\link{mupdog}}.
 #'
 #'
 #' @author David Gerard
@@ -526,6 +615,9 @@ obj_for_alpha <- function(mu, sigma2, alpha, rho, log_bb_dense, ploidy) {
 #'     but sets the second element to \code{0.0} in \code{\link{grad_for_eps}}.
 #' @param update_od A logical. This is not used in \code{obj_for_eps},
 #'     but sets the third element to \code{0.0} in \code{\link{grad_for_eps}}.
+#'     
+#' @return A double. The objective when updating \code{eps} in
+#'     \code{\link{mupdog}}.
 #'
 #' @author David Gerard
 obj_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat, update_bias = TRUE, update_seq = TRUE, update_od = TRUE) {
@@ -541,7 +633,9 @@ obj_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, me
 #' @param cor_inv The inverse of the underlying correlation matrix.
 #' @param log_bb_dense A matrix of log-densities of the beta binomial. The rows index the individuals and the columns index the allele dosage.
 #'     Allele dosage goes from -1 to ploidy, so there are ploidy + 2 elements.
-#'
+#' 
+#' @return A double. The objective when updating \code{mu} and \code{sigma2}
+#'     in \code{\link{mupdog}}.
 #'
 #' @author David Gerard
 obj_for_mu_sigma2 <- function(mu, sigma2, phifk_mat, cor_inv, log_bb_dense) {
@@ -552,6 +646,7 @@ obj_for_mu_sigma2 <- function(mu, sigma2, phifk_mat, cor_inv, log_bb_dense) {
 #'
 #' @inheritParams obj_for_mu_sigma2
 #' @param muSigma2 A vector. The first half are mu and the second half are sigma2.
+#' @inherit obj_for_mu_sigma2 return
 #'
 #'
 #' @author David Gerard
@@ -577,7 +672,8 @@ obj_for_mu_sigma2_wrapper <- function(muSigma2, phifk_mat, cor_inv, log_bb_dense
 #' @param var_seq The prior variance on the logit of the sequencing error rate.
 #' @param ploidy The ploidy of the species.
 #'
-#'
+#' @return A double. The evidence lower-bound that \code{\link{mupdog}}
+#'     maximizes.
 #'
 #'
 #' @author David Gerard
@@ -593,6 +689,9 @@ elbo <- function(warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mea
 #' @param ploidy The ploidy of the species.
 #' @param weight_vec A vector of length \code{ploidy + 1} that contains the weights
 #'     for each component beta-binomial.
+#'     
+#' @return A double. The objective when updating the beta-binomial genotype
+#'     distribution in \code{\link{mupdog}}.
 #'
 #' @author David Gerard
 obj_for_weighted_lbb <- function(parvec, ploidy, weight_vec) {
@@ -608,6 +707,9 @@ obj_for_weighted_lbb <- function(parvec, ploidy, weight_vec) {
 #' @param ploidy The ploidy of the species.
 #' @param weight_vec A vector of length \code{ploidy + 1} that contains the weights
 #'     for each component beta-binomial.
+#'     
+#' @return A double. The objective when updating the normal 
+#'     genotype distribution in \code{\link{mupdog}}.
 #'
 #' @author David Gerard
 #'
@@ -638,6 +740,8 @@ obj_for_weighted_lnorm <- function(parvec, ploidy, weight_vec) {
 #' @param bias The allele-bias.
 #' @param od The overdispersion parameter.
 #' @param dist The distribution of the alleles.
+#' 
+#' @return A double. The oracle misclassification error rate.
 #'
 #' @author David Gerard
 #' 
@@ -674,6 +778,8 @@ oracle_mis <- function(n, ploidy, seq, bias, od, dist) {
 #' @param x The number of reference counts.
 #' @param n The total number of read-counts.
 #' @param logp Return the log density \code{TRUE} or not \code{FALSE}?
+#' 
+#' @return A double. The outlier density value.
 #'
 #'
 #' @author David Gerard
@@ -695,6 +801,9 @@ doutdist <- function(x, n, logp) {
 #'     \code{\link{get_wik_mat}} for the equivalent function
 #'     without outliers. \code{\link{doutdist}} for the outlier
 #'     density function.
+#'     
+#' @return Same as \code{\link{get_wik_mat}} but the last column is
+#'     for the outlier class.
 #'
 get_wik_mat_out <- function(probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od) {
     .Call('_updog_get_wik_mat_out', PACKAGE = 'updog', probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od)
@@ -706,6 +815,9 @@ get_wik_mat_out <- function(probk_vec, out_prop, refvec, sizevec, ploidy, seq, b
 #' @inheritParams flexdog_full
 #' @param probk_vec The kth element is the prior probability of genotype k (when starting to count from 0).
 #' @param out_prop The probability of being an outlier.
+#' 
+#' @return A double. The \code{\link{flexdog}} objective when 
+#'     \code{outliers = TRUE}.
 #'
 #' @author David Gerard
 #'
@@ -719,6 +831,9 @@ flexdog_obj_out <- function(probk_vec, out_prop, refvec, sizevec, ploidy, seq, b
 #'
 #' @param p The allele dosage.
 #' @param eps The sequencing error rate.
+#' 
+#' @return The probability of a reference reed adjusted by the 
+#'     sequencing error rate.
 #'
 #' @author David Gerard
 eta_double <- function(p, eps) {
@@ -728,6 +843,9 @@ eta_double <- function(p, eps) {
 #' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
 #'
 #' @inheritParams xi_fun
+#' 
+#' @return A vector of probabilities of a reference read adjusted
+#'     by the sequencing error rate.
 #'
 #' @author David Gerard
 eta_fun <- function(p, eps) {
@@ -739,6 +857,9 @@ eta_fun <- function(p, eps) {
 #' @param p The allele dosage.
 #' @param eps The sequencing error rate.
 #' @param h The allele bias.
+#' 
+#' @return The probability of a reference read adjusted by both the allele 
+#'     bias and the sequencing error rate.
 #'
 #' @author David Gerard
 xi_double <- function(p, eps, h) {
@@ -752,6 +873,9 @@ xi_double <- function(p, eps, h) {
 #'     or the same length as p.
 #' @param h The allele bias. Must either be of length 1 or the same length
 #'     as p.
+#'     
+#' @return A vector of prababilities of the reference read adjusted
+#'     by both the sequencing error rate and the allele bias.
 #'
 #' @author David Gerard
 xi_fun <- function(p, eps, h) {
@@ -786,6 +910,8 @@ log_sum_exp_2 <- function(x, y) {
 #' The logit function.
 #'
 #' @param x A double between 0 and 1.
+#' 
+#' @return The logit of \code{x}.
 #'
 #' @author David Gerard
 logit <- function(x) {
@@ -795,6 +921,8 @@ logit <- function(x) {
 #' The expit (logistic) function.
 #'
 #' @param x A double.
+#' 
+#' @return The expit (logistic) of \code{x}.
 #'
 #' @author David Gerard
 expit <- function(x) {

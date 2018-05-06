@@ -23,6 +23,10 @@ rows index the SNPs and the columns index the dosage.}
 
 \item{ploidy}{The ploidy of the species.}
 }
+\value{
+A double. The objective when updating 
+    \code{rho} in \code{\link{mupdog}}.
+}
 \description{
 Objective function when updating a single inbreeding coefficient.
 }

@@ -11,6 +11,9 @@ df_deps(p, eps)
 
 \item{eps}{The sequencing error rate.}
 }
+\value{
+A double.
+}
 \description{
 Derivative of f with respect to eps.
 }

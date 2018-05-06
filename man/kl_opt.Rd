@@ -13,6 +13,10 @@ kl_opt(dist, ploidy)
 
 \item{ploidy}{The ploidy of the individual.}
 }
+\value{
+A list containing the fitted distribution along with the 
+    fitted parameters.
+}
 \description{
 The Gaussian-Binomial distribution is defined here by the hierarchical model
 \deqn{z ~ N(0, \sigma^2),}

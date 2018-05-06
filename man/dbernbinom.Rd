@@ -16,6 +16,9 @@ dbernbinom(x, size, mu, log)
 \item{log}{A logical. Should we return the log of the
 density \code{TRUE} or not \code{FALSE}?}
 }
+\value{
+The density of the Bernoulli-binomial.
+}
 \description{
 Special case of betabinomial where the beta is bernoulli mu.
 }

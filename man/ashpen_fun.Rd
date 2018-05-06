@@ -12,6 +12,9 @@ ashpen_fun(lambda, pivec)
 \item{pivec}{The vector of mixing proportions for the component
 discrete uniform distributions.}
 }
+\value{
+A penalty on the ash mixing weights.
+}
 \description{
 Penalty on pivec used when \code{model = "ash"} in \code{\link{flexdog}}.
 }

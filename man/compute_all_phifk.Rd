@@ -13,6 +13,11 @@ compute_all_phifk(alpha, rho, ploidy)
 
 \item{ploidy}{The ploidy of the species.}
 }
+\value{
+A three dimensional array. The rows index the individuals,
+    the columns index the SNPs, and the third dimension indexes the
+    genotypes. Computes the "continuous genotype".
+}
 \description{
 Computes \deqn{\Phi^{-1}(F(k|K,\alpha_j,\rho_i))} for all possible (i,j,k).
 }

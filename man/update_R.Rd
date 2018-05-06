@@ -13,6 +13,10 @@ individuals and the columns index the SNPs.}
 \item{postvar}{The matrix of posterior variances. The rows index
 the individuals and the columns index the SNPs.}
 }
+\value{
+A symmetric matrix of numerics. The update of the underlying
+    correlation matrix.
+}
 \description{
 Update the underlying correlation matrix.
 }

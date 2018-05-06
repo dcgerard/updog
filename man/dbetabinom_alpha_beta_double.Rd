@@ -18,6 +18,9 @@ dbetabinom_alpha_beta_double(x, size, alpha, beta, log)
 \item{log}{A logical. Should we return the log of the
 density \code{TRUE} or not \code{FALSE}?}
 }
+\value{
+The density of the beta-binomial.
+}
 \description{
 Density function of betabinomial with the shape parameterizations
 }

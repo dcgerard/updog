@@ -11,6 +11,9 @@ dxi_df(h, f)
 
 \item{f}{The post-sequencing error rate adjusted probability of an A.}
 }
+\value{
+A double.
+}
 \description{
 Derivative of xi with respect to f.
 }

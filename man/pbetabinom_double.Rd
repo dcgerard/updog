@@ -19,6 +19,9 @@ pbetabinom_double(q, size, mu, rho, log_p)
 \item{log_p}{A logical. Should return the log-probability
 \code{TRUE} or not \code{FALSE}?}
 }
+\value{
+The tail-probability of the beta-binomial.
+}
 \description{
 The distribution function of the betabinomial. This is generally
 only adviseable if q is relatively small.

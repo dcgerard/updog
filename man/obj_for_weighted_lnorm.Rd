@@ -17,6 +17,10 @@ underlying normal. The second term is the current standard deviation
 \item{weight_vec}{A vector of length \code{ploidy + 1} that contains the weights
 for each component beta-binomial.}
 }
+\value{
+A double. The objective when updating the normal 
+    genotype distribution in \code{\link{mupdog}}.
+}
 \description{
 Objective funtion for updating discrete normal genotype distribution
 when \code{model = "normal"} in \code{\link{flex_update_pivec}}.

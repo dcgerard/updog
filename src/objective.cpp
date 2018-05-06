@@ -14,6 +14,8 @@
 //' @param sigma2 The variational variance (not standard devation).
 //' @param alpha The allele frequency.
 //' @param rho The individual's overdispersion parameter.
+//' 
+//' @return The posterior probability of having \code{dosage} A alleles.
 //'
 //' @author David
 //'
@@ -56,6 +58,10 @@ double post_prob(int dosage, int ploidy, double mu, double sigma2,
 //'     The rows index the individuals and the columns index the SNPs.
 //' @param alpha A vector of allele frequencies for all SNPs.
 //' @param rho A vector of inbreeding coefficients for all individuals.
+//' 
+//' @return An array. The rows index the individuals, the columns index the 
+//'     SNPS, and the third dimension indexes the genotypes. Element (i, j, k)
+//'     is the return of \code{\link{post_prob}}.
 //'
 //' @author David Gerard
 //'
@@ -99,7 +105,10 @@ arma::Cube<double> compute_all_post_prob(int ploidy,
 //'
 //' @inheritParams mupdog
 //'
-//'
+//' @return A three dimensional array. The rows index the individuals, the 
+//'     columns index the SNPs, and the third dimension indexes the 
+//'     genotypes. This is the log-likelihood for each individual/snp/genotype
+//'     combination.
 //'
 // [[Rcpp::export]]
 arma::Cube<double> compute_all_log_bb(NumericMatrix refmat, NumericMatrix sizemat,
@@ -150,6 +159,10 @@ arma::Cube<double> compute_all_log_bb(NumericMatrix refmat, NumericMatrix sizema
 //' @param alpha A vector whose jth element is the allele frequency of SNP j.
 //' @param rho A vector whose ith element is the inbreeding coefficient of individual i.
 //' @param ploidy The ploidy of the species.
+//' 
+//' @return A three dimensional array. The rows index the individuals,
+//'     the columns index the SNPs, and the third dimension indexes the
+//'     genotypes. Computes the "continuous genotype".
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -177,7 +190,9 @@ arma::Cube<double> compute_all_phifk(NumericVector alpha, NumericVector rho, int
 //'     greater than 0. A value of 1 means no bias.
 //' @param mu_h The prior mean of the log-bias parameter.
 //' @param sigma2_h The prior variance (not standard deviation)
-//'     of the log-bias parameter.
+//'     of the log-bias parameter. Set to to \code{Inf} to return \code{0}.
+//'     
+//' @return A double. The default penalty on the allelic bias parameter.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -206,7 +221,10 @@ double pen_bias(double h, double mu_h, double sigma2_h) {
 //'     Must be between 0 and 1.
 //' @param mu_eps The prior mean of the logit sequencing error rate.
 //' @param sigma2_eps The prior variance (not standard deviation)
-//'     of the logit sequencing error rate.
+//'     of the logit sequencing error rate. Set this to \code{Inf} to
+//'     return \code{0}.
+//'     
+//' @return A double. The default penalty on the sequencing error rate.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -241,6 +259,9 @@ double pen_seq_error(double eps, double mu_eps, double sigma2_eps) {
 //' @param log_bb_dense A matrix of log posterior densities. The
 //'     rows index the SNPs and the columns index the dosage.
 //' @param ploidy The ploidy of the species.
+//' 
+//' @return A double. The objective when updating 
+//'     \code{rho} in \code{\link{mupdog}}.
 //'
 //'
 //' @author David Gerard
@@ -293,6 +314,9 @@ double obj_for_rho(double rho,
 //' @param log_bb_dense A matrix of log-densities of the beta binomial. The rows index the individuals and the columns index the allele dosage.
 //' @param ploidy The ploidy of the species.
 //'
+//'
+//' @return A double. The objective when updating \code{alpha} in
+//'     \code{\link{mupdog}}.
 //'
 //'
 //' @author David Gerard
@@ -359,6 +383,9 @@ double obj_for_alpha(arma::Col<double> mu,
 //'     but sets the second element to \code{0.0} in \code{\link{grad_for_eps}}.
 //' @param update_od A logical. This is not used in \code{obj_for_eps},
 //'     but sets the third element to \code{0.0} in \code{\link{grad_for_eps}}.
+//'     
+//' @return A double. The objective when updating \code{eps} in
+//'     \code{\link{mupdog}}.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -429,7 +456,9 @@ double obj_for_eps(NumericVector parvec,
 //' @param cor_inv The inverse of the underlying correlation matrix.
 //' @param log_bb_dense A matrix of log-densities of the beta binomial. The rows index the individuals and the columns index the allele dosage.
 //'     Allele dosage goes from -1 to ploidy, so there are ploidy + 2 elements.
-//'
+//' 
+//' @return A double. The objective when updating \code{mu} and \code{sigma2}
+//'     in \code{\link{mupdog}}.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -481,6 +510,7 @@ double obj_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2, Numeric
 //'
 //' @inheritParams obj_for_mu_sigma2
 //' @param muSigma2 A vector. The first half are mu and the second half are sigma2.
+//' @inherit obj_for_mu_sigma2 return
 //'
 //'
 //' @author David Gerard
@@ -512,7 +542,8 @@ double obj_for_mu_sigma2_wrapper(arma::Col<double> muSigma2, NumericMatrix phifk
 //' @param var_seq The prior variance on the logit of the sequencing error rate.
 //' @param ploidy The ploidy of the species.
 //'
-//'
+//' @return A double. The evidence lower-bound that \code{\link{mupdog}}
+//'     maximizes.
 //'
 //'
 //' @author David Gerard
@@ -618,6 +649,9 @@ double elbo(arma::Cube<double> warray, arma::Cube<double> lbeta_array,
 //' @param ploidy The ploidy of the species.
 //' @param weight_vec A vector of length \code{ploidy + 1} that contains the weights
 //'     for each component beta-binomial.
+//'     
+//' @return A double. The objective when updating the beta-binomial genotype
+//'     distribution in \code{\link{mupdog}}.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -650,6 +684,9 @@ double obj_for_weighted_lbb(NumericVector parvec,
 //' @param ploidy The ploidy of the species.
 //' @param weight_vec A vector of length \code{ploidy + 1} that contains the weights
 //'     for each component beta-binomial.
+//'     
+//' @return A double. The objective when updating the normal 
+//'     genotype distribution in \code{\link{mupdog}}.
 //'
 //' @author David Gerard
 //'

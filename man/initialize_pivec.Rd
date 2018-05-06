@@ -19,6 +19,10 @@ the allele frequency if \code{model = "hw"}. This should be
 \item{model}{What form should the prior (genotype distribution) take?
 See Details for possible values.}
 }
+\value{
+A vector of numerics. The initial value of \code{pivec}
+    used in \code{\link{flexdog_full}}.
+}
 \description{
 The key idea here is choosing the pi's so that the two modes
 have equal probability.

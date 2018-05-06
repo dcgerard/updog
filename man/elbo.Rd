@@ -35,6 +35,10 @@ at SNP j.}
 
 \item{ploidy}{The ploidy of the species.}
 }
+\value{
+A double. The evidence lower-bound that \code{\link{mupdog}}
+    maximizes.
+}
 \description{
 The evidence lower bound
 }

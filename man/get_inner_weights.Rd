@@ -15,6 +15,10 @@ individual.}
 the allele frequency if \code{model = "hw"}. This should be
 \code{NULL} for all other options of \code{model}.}
 }
+\value{
+A matrix of numerics. The weights used for the 
+   weighted EM algorithm in \code{\link{flexdog_full}}.
+}
 \description{
 The (i,k)th element is \eqn{1(k \in F(a, i)) / |F(a,i)|}.
 }

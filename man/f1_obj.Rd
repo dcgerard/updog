@@ -14,6 +14,10 @@ F1 population).}
 
 \item{weight_vec}{A vector of weights.}
 }
+\value{
+The objective when updating \code{pivec} when \code{model = "f1"}
+    or \code{model = "s1"} in \code{\link{flexdog_full}}.
+}
 \description{
 Objective for mixture of known dist and uniform dist.
 }

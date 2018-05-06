@@ -24,6 +24,10 @@ individual.}
 
 \item{od}{The starting value of the overdispersion parameter.}
 }
+\value{
+Same as \code{\link{get_wik_mat}} but the last column is
+    for the outlier class.
+}
 \description{
 E-step in \code{\link{flexdog}} where we now allow an outlier distribution.
 }

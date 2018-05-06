@@ -18,6 +18,13 @@ The rows index the individuals and the columns index the dosages.}
 \item{log_bb_dense}{A matrix of log-densities of the beta binomial. The rows index the individuals and the columns index the allele dosage.
 Allele dosage goes from -1 to ploidy, so there are ploidy + 2 elements.}
 }
+\value{
+A vector of length 2 * nind of numerics. 
+    The first element n elements are the partial derivatives with respect
+    to \code{mu} and the second n elements are the 
+    partial derivatives with respect to \code{sigma2}
+    in \code{\link{obj_for_mu_sigma2}}.
+}
 \description{
 Gradient for \code{\link{obj_for_mu_sigma2_wrapper}} with respect for \code{muSigma2}
 and a wrapper for \code{\link{grad_for_mu_sigma2}}

@@ -19,6 +19,10 @@ obj_for_alpha(mu, sigma2, alpha, rho, log_bb_dense, ploidy)
 
 \item{ploidy}{The ploidy of the species.}
 }
+\value{
+A double. The objective when updating \code{alpha} in
+    \code{\link{mupdog}}.
+}
 \description{
 Objective function when updating alpha
 }

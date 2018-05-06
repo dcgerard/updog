@@ -11,6 +11,10 @@ eta_double(p, eps)
 
 \item{eps}{The sequencing error rate.}
 }
+\value{
+The probability of a reference reed adjusted by the 
+    sequencing error rate.
+}
 \description{
 Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
 }

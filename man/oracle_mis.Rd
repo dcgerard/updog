@@ -19,6 +19,9 @@ oracle_mis(n, ploidy, seq, bias, od, dist)
 
 \item{dist}{The distribution of the alleles.}
 }
+\value{
+A double. The oracle misclassification error rate.
+}
 \description{
 Given perfect knowledge of the data generating parameters, 
 \code{oracle_mis} calculates the misclassification error

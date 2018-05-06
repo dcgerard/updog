@@ -14,6 +14,9 @@ dpen_deps(eps, mu_eps, sigma2_eps)
 
 \item{sigma2_eps}{The variance of the logit of the sequencing error rate.}
 }
+\value{
+A double.
+}
 \description{
 Derivative of \deqn{-log(\epsilon(1 - \epsilon)) - (logit(\epsilon) - \mu_{\epsilon})^2 / (2\sigma_{\epsilon}^2)}
 with respect to \eqn{\epsilon}.

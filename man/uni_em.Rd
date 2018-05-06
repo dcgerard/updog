@@ -21,6 +21,10 @@ corresponds to a row of \code{lmat}.}
 
 \item{obj_tol}{The objective stopping criterion.}
 }
+\value{
+A vector of numerics. The update of \code{pivec} in
+    \code{\link{flexdog_full}}.
+}
 \description{
 Solves the following optimization problem
 \deqn{\max_{\pi} \sum_k w_k \log(\sum_j \pi_j \ell_jk).}

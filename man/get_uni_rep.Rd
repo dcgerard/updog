@@ -10,6 +10,13 @@ get_uni_rep(probvec)
 \item{probvec}{A probability vector. It assumes the probabilities
 are ordered according to the ordering of the discrete set.}
 }
+\value{
+A list with the following elements
+\describe{
+\item{\code{pivec}}{The mixing weights for the unimodal representation.}
+\item{\code{mode}}{The central value of the unimodal distribution.}
+}
+}
 \description{
 NB: In \code{get_uni_rep}, we count the mode starting at 1.
     In \code{\link{get_probk_vec}}, we count the mode starting at 0.

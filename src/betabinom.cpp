@@ -7,6 +7,8 @@ double TOL = 10.0 * DBL_EPSILON; // defined here, used everywhere
 //' @inheritParams dbetabinom_double
 //' @param alpha The first shape parameter.
 //' @param beta The second shape paramter.
+//' 
+//' @return The density of the beta-binomial.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -26,6 +28,8 @@ double dbetabinom_alpha_beta_double(int x, int size, double alpha, double beta, 
 //' Special case of betabinomial where the beta is bernoulli mu.
 //'
 //' @inheritParams dbetabinom_double
+//' 
+//' @return The density of the Bernoulli-binomial.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -68,6 +72,8 @@ double dbernbinom(int x, int size, double mu, bool log) {
 //' @param rho The overdispersion parameter of the beta.
 //' @param log A logical. Should we return the log of the
 //'     density \code{TRUE} or not \code{FALSE}?
+//'     
+//' @return The density of the beta-binomial.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -189,6 +195,8 @@ NumericVector dbetabinom(IntegerVector x, IntegerVector size,
 //' @param q A quantile.
 //' @param log_p A logical. Should return the log-probability
 //'     \code{TRUE} or not \code{FALSE}?
+//'     
+//' @return The tail-probability of the beta-binomial.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -306,6 +314,8 @@ NumericVector pbetabinom(IntegerVector q, IntegerVector size,
 //'
 //' @inheritParams dbetabinom_double
 //' @param p The lower tail probability.
+//' 
+//' @return The quantile of the beta-binomial.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -408,6 +418,8 @@ IntegerVector qbetabinom(NumericVector p, IntegerVector size,
 //' by mean and overdispersion parameter.
 //'
 //' @inheritParams dbetabinom_double
+//' 
+//' @return A random sample from the beta-binomial.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]

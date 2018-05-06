@@ -15,6 +15,8 @@ NumericMatrix get_wik_mat(NumericVector probk_vec,
 //' @param x The number of reference counts.
 //' @param n The total number of read-counts.
 //' @param logp Return the log density \code{TRUE} or not \code{FALSE}?
+//' 
+//' @return A double. The outlier density value.
 //'
 //'
 //' @author David Gerard
@@ -38,6 +40,9 @@ double doutdist(int x, int n, bool logp) {
 //'     \code{\link{get_wik_mat}} for the equivalent function
 //'     without outliers. \code{\link{doutdist}} for the outlier
 //'     density function.
+//'     
+//' @return Same as \code{\link{get_wik_mat}} but the last column is
+//'     for the outlier class.
 //'
 // [[Rcpp::export]]
 NumericMatrix get_wik_mat_out(NumericVector probk_vec,
@@ -111,6 +116,9 @@ NumericMatrix get_wik_mat_out(NumericVector probk_vec,
 //' @inheritParams flexdog_full
 //' @param probk_vec The kth element is the prior probability of genotype k (when starting to count from 0).
 //' @param out_prop The probability of being an outlier.
+//' 
+//' @return A double. The \code{\link{flexdog}} objective when 
+//'     \code{outliers = TRUE}.
 //'
 //' @author David Gerard
 //'

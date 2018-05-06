@@ -13,7 +13,11 @@ Must be between 0 and 1.}
 \item{mu_eps}{The prior mean of the logit sequencing error rate.}
 
 \item{sigma2_eps}{The prior variance (not standard deviation)
-of the logit sequencing error rate.}
+of the logit sequencing error rate. Set this to \code{Inf} to
+return \code{0}.}
+}
+\value{
+A double. The default penalty on the sequencing error rate.
 }
 \description{
 Penalty on sequencing error rate.

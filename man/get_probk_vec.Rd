@@ -17,6 +17,9 @@ See Details for possible values.}
 the allele frequency if \code{model = "hw"}. This should be
 \code{NULL} for all other options of \code{model}.}
 }
+\value{
+A vector of numerics. Element k is the probability of genotype k.
+}
 \description{
 Obtain the genotype distribution given the distribution of discrete uniforms.
 }
