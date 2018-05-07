@@ -69,7 +69,7 @@ flexdog <- function(refvec,
 
   fout <- list()
   fout$llike <- -Inf
-  for (bias_index in 1:length(bias_init)) {
+  for (bias_index in seq_along(bias_init)) {
     if (verbose) {
       cat("         Fit:", bias_index, "of", length(bias_init), "\n")
       cat("Initial Bias:", bias_init[bias_index], "\n")
@@ -460,7 +460,7 @@ flexdog_full <- function(refvec,
 
   ## Run EM for each mode in `mode_vec` -----------------------
   return_list <- list(llike = -Inf)
-  for (em_index in 1:length(mode_vec)) {
+  for (em_index in seq_along(mode_vec)) {
     mode <- mode_vec[em_index]
 
     if (verbose) {
@@ -522,7 +522,7 @@ flexdog_full <- function(refvec,
                                     seq       = seq,
                                     bias      = bias,
                                     od        = od)
-        wik_mat <- wik_temp[, 1:(ploidy + 1), drop = FALSE]
+        wik_mat <- wik_temp[, seq_len(ploidy + 1), drop = FALSE]
         prob_outlier <- wik_temp[, ploidy + 2]
       }
 
@@ -695,7 +695,7 @@ flexdog_full <- function(refvec,
 
   ## Summaries --------------------------------------------------------
   return_list$geno          <- apply(return_list$postmat, 1, which.max) - 1
-  return_list$maxpostprob   <- return_list$postmat[cbind(1:nrow(return_list$postmat), return_list$geno + 1)]
+  return_list$maxpostprob   <- return_list$postmat[cbind(seq_len(nrow(return_list$postmat)), return_list$geno + 1)]
   return_list$postmean      <- c(return_list$postmat %*% 0:ploidy)
   return_list$input$refvec  <- refvec
   return_list$input$sizevec <- sizevec
@@ -1056,18 +1056,18 @@ get_uni_rep <- function(probvec) {
   n    <- length(probvec)
 
   if (mode < n) {
-    fak_vec <- c(mode:1, 1:(n - mode))
+    fak_vec <- c(mode:1, seq_len(n - mode))
   } else {
     fak_vec <- n:1
   }
 
   if (mode < n) {
     aug_probvec <- c(0, probvec, 0)
-    diffvec <- c(aug_probvec[2:(mode + 1)] - aug_probvec[1:mode],
+    diffvec <- c(aug_probvec[2:(mode + 1)] - aug_probvec[seq_len(mode)],
                  aug_probvec[(mode + 2):(n + 1)] - aug_probvec[(mode + 3):(n + 2)])
   } else {
     aug_probvec <- c(0, probvec)
-    diffvec <- aug_probvec[2:(n + 1)] - aug_probvec[1:n]
+    diffvec <- aug_probvec[2:(n + 1)] - aug_probvec[seq_len(n)]
   }
 
   return_list <- list()
@@ -1162,10 +1162,10 @@ get_q_array <- function(ploidy) {
 #'
 #'
 get_dimname <- function(ploidy) {
-  dimvec <- sapply(mapply(FUN = c, lapply(X = 0:ploidy, FUN = rep.int, x = "A"),
+  dimvec <- vapply(mapply(FUN = c, lapply(X = 0:ploidy, FUN = rep.int, x = "A"),
                           lapply(X = ploidy:0, FUN = rep.int, x = "a"),
                           SIMPLIFY = FALSE),
-                   FUN = paste, collapse = "")
+                   FUN = paste, collapse = "", FUN.VALUE = "character")
   return(dimvec)
 }
 

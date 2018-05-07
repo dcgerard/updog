@@ -92,21 +92,21 @@
 #' @export
 #'
 #' @author David Gerard
-#' 
+#'
 #' @return A list with some or all of the following elements:
 #' \describe{
-#'     \item{\code{map_dosage}}{A matrix of numerics containting 
+#'     \item{\code{map_dosage}}{A matrix of numerics containting
 #'         the variational maximum-a-posterior (MAP) genotypes
 #'         (allele dosages) for each individual at each SNP. Element
 #'         (i, j) is the MAP genotype for individual i at SNP j.}
 #'     \item{\code{maxpostprob}}{A matrix of numerics containing
 #'         the variational maximum posterior probabilites for each
-#'         individual at each SNP. The (i, j)th element is the 
+#'         individual at each SNP. The (i, j)th element is the
 #'         variational posterior
-#'         probability that individual i is genotyped correctly at 
+#'         probability that individual i is genotyped correctly at
 #'         SNP j.}
 #'     \item{\code{postprob}}{A three-way array of numerics. Element (i, j, k) is
-#'         the variational posterior probability that individual i has genotype 
+#'         the variational posterior probability that individual i has genotype
 #'         k-1 at SNP j.}
 #'     \item{\code{seq}}{A vector of numerics. Element j is the estimated
 #'         sequencing error rate for SNP j.}
@@ -119,13 +119,13 @@
 #'     \item{\code{inbreeding}}{A vector of numerics. Element i is the
 #'         estimated inbreeding coefficient for individual i.}
 #'     \item{\code{cor_mat}}{A symmetric matrix of numerics. Element (i, j)
-#'         is the estimated _latent_ correlation between individual 
+#'         is the estimated _latent_ correlation between individual
 #'         i and individual j.}
-#'     \item{\code{postmean}}{A matrix of numerics. Element (i, j) is the 
+#'     \item{\code{postmean}}{A matrix of numerics. Element (i, j) is the
 #'         variational posterior mean for individual i at SNP j.}
 #'     \item{\code{postvar}}{A matrix of numerics. Element (i, j) is the
 #'         variational posterior variance for individual i at SNP j.}
-#'     \item{\code{input$refmat}}{A matrix of numerics. 
+#'     \item{\code{input$refmat}}{A matrix of numerics.
 #'         The inputted \code{refmat}.}
 #'     \item{\code{input$sizemat}}{A matrix of numerics. The inputted
 #'         \code{sizemat}.}
@@ -363,7 +363,7 @@ mupdog <- function(refmat,
     }
 
     index <- NA ## stupid workaround to get rid of CRAN note.
-    fout <- foreach::foreach(index = 1:nsnps, .combine = cbind,
+    fout <- foreach::foreach(index = seq_len(nsnps), .combine = cbind,
                              .export = c("obj_for_mu_sigma2_wrapper",
                                          "grad_for_mu_sigma2_wrapper")) %dopar% {
       oout <- stats::optim(par = c(postmean[, index], postvar[, index]),
@@ -378,7 +378,7 @@ mupdog <- function(refmat,
                            log_bb_dense = lbeta_array[, index, ])
       oout$par
     }
-    postmean <- fout[1:nind, ]
+    postmean <- fout[seq_len(nind), ]
     postvar  <- fout[(nind + 1):(2 * nind), ]
 
 
@@ -388,7 +388,7 @@ mupdog <- function(refmat,
       if (verbose) {
         cat("Updating allele_freq.\n\n")
       }
-      allele_freq <- foreach::foreach(index = 1:nsnps, .combine = c,
+      allele_freq <- foreach::foreach(index = seq_len(nsnps), .combine = c,
                        .export = "obj_for_alpha") %dopar% {
         oout <- stats::optim(par = allele_freq[index],
                              fn = obj_for_alpha,
@@ -411,7 +411,7 @@ mupdog <- function(refmat,
       if (verbose) {
         cat("Updating inbreeding.\n\n")
       }
-      inbreeding <- foreach::foreach(index = 1:nind, .combine = c,
+      inbreeding <- foreach::foreach(index = seq_len(nind), .combine = c,
                                      .export = "obj_for_rho") %dopar% {
         oout <- stats::optim(par = inbreeding[index],
                              fn = obj_for_rho,
@@ -449,7 +449,7 @@ mupdog <- function(refmat,
     if (verbose) {
       cat("Updating seq, bias, and od.\n\n")
     }
-    fout_seq <- foreach::foreach(index = 1:nsnps, .combine = cbind,
+    fout_seq <- foreach::foreach(index = seq_len(nsnps), .combine = cbind,
                                  .export = c("obj_for_eps",
                                              "grad_for_eps")) %dopar% {
       oout <- stats::optim(par = c(seq[index], bias[index], od[index]),
@@ -531,7 +531,7 @@ mupdog <- function(refmat,
 #'     individuals and the columns index the SNPs.
 #' @param postvar The matrix of posterior variances. The rows index
 #'     the individuals and the columns index the SNPs.
-#'     
+#'
 #' @return A symmetric matrix of numerics. The update of the underlying
 #'     correlation matrix.
 #'
@@ -550,8 +550,8 @@ update_R <- function(postmean, postvar) {
 #' @return A logical. \code{TRUE} if \code{x} is a mupdog object, and \code{FALSE} otherwise.
 #'
 #' @author David Gerard
-#' 
-#' @examples 
+#'
+#' @examples
 #' is.mupdog("anything")
 #' # FALSE
 #'
