@@ -7,7 +7,7 @@ bibliography: "genobib.bib"
 nocite: |
   @gerard2018harnessing
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Parallelized Genotyping using Updog}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

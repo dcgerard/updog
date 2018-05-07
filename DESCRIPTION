@@ -3,16 +3,16 @@ Title: Flexible Genotyping for Autopolyploids
 Version: 0.99.0
 Date: 2018-05-02
 Authors@R: person("David", "Gerard", email = "gerard.1787@gmail.com", role = c("aut", "cre"))
-biocViews: Software, StatisticalMethod, Bayesian, Classification, Sequencing, DNASeq, VariantDetection
+biocViews: StatisticalMethod, Bayesian, Classification, Sequencing, DNASeq, VariantDetection
 Description: Implements empirical Bayes approaches to genotype
        autopolyploids from next generation sequencing data while
        accounting for allelic bias, overdispersion, and sequencing
        error. The main function is flexdog, which allows the specification
        of many different genotype distributions. An experimental
-       function that takes into account varying leves of relatedness
+       function that takes into account varying levels of relatedness
        is implemented in mupdog. Also provided are functions to 
        simulate genotypes (rgeno) and read-counts (rflexdog).
-Depends: R (>= 3.5.0)
+Depends: R (>= 3.4.4)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

@@ -1,10 +1,10 @@
 ---
-title: "Simulate NGS Data"
+title: "Simulate Next-Generation Sequencing Data"
 author: "David Gerard"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Simulate Next-Generation Sequencing Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

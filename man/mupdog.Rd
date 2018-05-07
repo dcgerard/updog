@@ -101,18 +101,18 @@ See \code{\link[stats]{optim}} for details on these optimizers.}
 \value{
 A list with some or all of the following elements:
 \describe{
-    \item{\code{map_dosage}}{A matrix of numerics containting 
+    \item{\code{map_dosage}}{A matrix of numerics containting
         the variational maximum-a-posterior (MAP) genotypes
         (allele dosages) for each individual at each SNP. Element
         (i, j) is the MAP genotype for individual i at SNP j.}
     \item{\code{maxpostprob}}{A matrix of numerics containing
         the variational maximum posterior probabilites for each
-        individual at each SNP. The (i, j)th element is the 
+        individual at each SNP. The (i, j)th element is the
         variational posterior
-        probability that individual i is genotyped correctly at 
+        probability that individual i is genotyped correctly at
         SNP j.}
     \item{\code{postprob}}{A three-way array of numerics. Element (i, j, k) is
-        the variational posterior probability that individual i has genotype 
+        the variational posterior probability that individual i has genotype
         k-1 at SNP j.}
     \item{\code{seq}}{A vector of numerics. Element j is the estimated
         sequencing error rate for SNP j.}
@@ -125,13 +125,13 @@ A list with some or all of the following elements:
     \item{\code{inbreeding}}{A vector of numerics. Element i is the
         estimated inbreeding coefficient for individual i.}
     \item{\code{cor_mat}}{A symmetric matrix of numerics. Element (i, j)
-        is the estimated _latent_ correlation between individual 
+        is the estimated _latent_ correlation between individual
         i and individual j.}
-    \item{\code{postmean}}{A matrix of numerics. Element (i, j) is the 
+    \item{\code{postmean}}{A matrix of numerics. Element (i, j) is the
         variational posterior mean for individual i at SNP j.}
     \item{\code{postvar}}{A matrix of numerics. Element (i, j) is the
         variational posterior variance for individual i at SNP j.}
-    \item{\code{input$refmat}}{A matrix of numerics. 
+    \item{\code{input$refmat}}{A matrix of numerics.
         The inputted \code{refmat}.}
     \item{\code{input$sizemat}}{A matrix of numerics. The inputted
         \code{sizemat}.}

@@ -719,12 +719,13 @@ obj_for_weighted_lnorm <- function(parvec, ploidy, weight_vec) {
 
 #' Calculate oracle misclassification error rate.
 #'
-#' Given perfect knowledge of the data generating parameters, 
+#' Given perfect knowledge of the data generating parameters,
 #' \code{oracle_mis} calculates the misclassification error
-#' rate, where the error rate is taken over both the data generation 
+#' rate, where the error rate is taken over both the data generation
 #' process and the allele-distribution.
 #' This is an ideal level of the misclassification error rate and
-#' any real method will have a larger rate than this.
+#' any real method will have a larger rate than this. This is a useful
+#' approximation when you have a lot of individuals.
 #'
 #' To come up with \code{dist}, you need some additional assumptions.
 #' For example, if the population is in Hardy-Weinberg equilibrium and
@@ -740,35 +741,137 @@ obj_for_weighted_lnorm <- function(parvec, ploidy, weight_vec) {
 #' @param bias The allele-bias.
 #' @param od The overdispersion parameter.
 #' @param dist The distribution of the alleles.
-#' 
+#'
 #' @return A double. The oracle misclassification error rate.
 #'
 #' @author David Gerard
-#' 
+#'
 #' @examples
 #' ## Hardy-Weinberg population with allele-frequency of 0.75.
 #' ## Moderate bias and moderate overdispersion.
-#' ## See how oracle misclassification error rates change as we 
+#' ## See how oracle misclassification error rates change as we
 #' ## increase the ploidy.
 #' ploidy <- 2
 #' dist <- stats::dbinom(0:ploidy, ploidy, 0.75)
-#' oracle_mis(n = 100, ploidy = ploidy, seq = 0.001, 
+#' oracle_mis(n = 100, ploidy = ploidy, seq = 0.001,
 #'            bias = 0.7, od = 0.01, dist = dist)
-#' 
+#'
 #' ploidy <- 4
 #' dist <- stats::dbinom(0:ploidy, ploidy, 0.75)
-#' oracle_mis(n = 100, ploidy = ploidy, seq = 0.001, 
+#' oracle_mis(n = 100, ploidy = ploidy, seq = 0.001,
 #'            bias = 0.7, od = 0.01, dist = dist)
-#'            
+#'
 #' ploidy <- 6
 #' dist <- stats::dbinom(0:ploidy, ploidy, 0.75)
-#' oracle_mis(n = 100, ploidy = ploidy, seq = 0.001, 
+#' oracle_mis(n = 100, ploidy = ploidy, seq = 0.001,
 #'            bias = 0.7, od = 0.01, dist = dist)
-#' 
+#'
 #' @export
 #'
 oracle_mis <- function(n, ploidy, seq, bias, od, dist) {
     .Call('_updog_oracle_mis', PACKAGE = 'updog', n, ploidy, seq, bias, od, dist)
+}
+
+#' Returns the oracle misclassification rates for each genotype.
+#'
+#' Given perfect knowledge of the data generating parameters,
+#' \code{oracle_mis_vec} calculates the misclassification error
+#' rate at each genotype. This differs from \code{\link{oracle_mis}}
+#' in that this will _not_ average over the genotype distribution to
+#' get an overall misclassification error rate. That is, \code{oracle_mis_vec}
+#' returns a vector of misclassification error rates _conditional_ on
+#' each genotype.
+#'
+#' This is an ideal level of the misclassification error rate and
+#' any real method will have a larger rate than this. This is a useful
+#' approximation when you have a lot of individuals.
+#'
+#' To come up with \code{dist}, you need some additional assumptions.
+#' For example, if the population is in Hardy-Weinberg equilibrium and
+#' the allele frequency is \code{alpha} then you could calculate
+#' \code{dist} using the R code: \code{dbinom(x = 0:ploidy, size = ploidy, prob = alpha)}.
+#' Alternatively, if you know the genotypes of the individual's two parents are, say,
+#' \code{ref_count1} and \code{ref_count2}, then you could use the \code{\link[updog]{get_q_array}}
+#' function from the updog package: \code{get_q_array(ploidy)[ref_count1 + 1, ref_count2 + 1, ]}.
+#'
+#'
+#' @inheritParams oracle_mis
+#'
+#' @return A vector of numerics. Element i is the oracle misclassification
+#'     error rate when genotyping an individual with actual
+#'     genotype i + 1.
+#'
+#' @export
+#'
+#' @examples
+#' ## Hardy-Weinberg population with allele-frequency of 0.75.
+#' ## Moderate bias and moderate overdispersion.
+#' ploidy <- 4
+#' dist <- stats::dbinom(0:ploidy, ploidy, 0.75)
+#' om <- oracle_mis_vec(n = 100, ploidy = ploidy, seq = 0.001,
+#'                      bias = 0.7, od = 0.01, dist = dist)
+#' om
+#'
+#' ## Get same output as oracle_mis this way:
+#' sum(dist * om)
+#' oracle_mis(n = 100, ploidy = ploidy, seq = 0.001,
+#'            bias = 0.7, od = 0.01, dist = dist)
+#'
+#' @author David Gerard
+oracle_mis_vec <- function(n, ploidy, seq, bias, od, dist) {
+    .Call('_updog_oracle_mis_vec', PACKAGE = 'updog', n, ploidy, seq, bias, od, dist)
+}
+
+#' The joint probability of the genotype and the genotype estimate
+#' of an oracle estimator.
+#'
+#' This returns the joint distribution of the true genotypes and an oracle
+#' estimator given perfect knowledge of the data generating process. This is a useful
+#' approximation when you have a lot of individuals.
+#'
+#' To come up with \code{dist}, you need some additional assumptions.
+#' For example, if the population is in Hardy-Weinberg equilibrium and
+#' the allele frequency is \code{alpha} then you could calculate
+#' \code{dist} using the R code: \code{dbinom(x = 0:ploidy, size = ploidy, prob = alpha)}.
+#' Alternatively, if you know the genotypes of the individual's two parents are, say,
+#' \code{ref_count1} and \code{ref_count2}, then you could use the \code{\link[updog]{get_q_array}}
+#' function from the updog package: \code{get_q_array(ploidy)[ref_count1 + 1, ref_count2 + 1, ]}.
+#'
+#' See the Examples to see how to reconcile the output of \code{oracle_joint}
+#' with \code{\link{oracle_mis}} and \code{\link{oracle_mis_vec}}.
+#'
+#' @inheritParams oracle_mis
+#'
+#' @return A matrix. Element (i, j) is the joint probability of estimating
+#'     the genotype to be i+1 when the true genotype is j+1. That is, the
+#'     estimated genotype indexes the rows and the true genotype indexes
+#'     the columns. This is when
+#'     using an oracle estimator.
+#'
+#' @examples
+#' ## Hardy-Weinberg population with allele-frequency of 0.75.
+#' ## Moderate bias and moderate overdispersion.
+#' ploidy <- 4
+#' dist <- stats::dbinom(0:ploidy, ploidy, 0.75)
+#' jd <- oracle_joint(n = 100, ploidy = ploidy, seq = 0.001,
+#'                    bias = 0.7, od = 0.01, dist = dist)
+#' jd
+#'
+#' ## Get same output as oracle_mis this way:
+#' 1 - sum(diag(jd))
+#' oracle_mis(n = 100, ploidy = ploidy, seq = 0.001,
+#'            bias = 0.7, od = 0.01, dist = dist)
+#'
+#' ## Get same output as oracle_mis_vec this way:
+#' 1 - diag(sweep(x = jd, MARGIN = 2, STATS = colSums(jd), FUN = "/"))
+#' oracle_mis_vec(n = 100, ploidy = ploidy, seq = 0.001,
+#'                bias = 0.7, od = 0.01, dist = dist)
+#'
+#' @export
+#'
+#' @author David Gerard
+oracle_joint <- function(n, ploidy, seq, bias, od, dist) {
+    .Call('_updog_oracle_joint', PACKAGE = 'updog', n, ploidy, seq, bias, od, dist)
 }
 
 #' The outlier distribution we use. Right now it is just a

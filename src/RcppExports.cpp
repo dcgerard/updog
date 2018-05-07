@@ -716,6 +716,38 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// oracle_mis_vec
+NumericVector oracle_mis_vec(int n, int ploidy, double seq, double bias, double od, NumericVector dist);
+RcppExport SEXP _updog_oracle_mis_vec(SEXP nSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP distSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< double >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< double >::type bias(biasSEXP);
+    Rcpp::traits::input_parameter< double >::type od(odSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type dist(distSEXP);
+    rcpp_result_gen = Rcpp::wrap(oracle_mis_vec(n, ploidy, seq, bias, od, dist));
+    return rcpp_result_gen;
+END_RCPP
+}
+// oracle_joint
+NumericMatrix oracle_joint(int n, int ploidy, double seq, double bias, double od, NumericVector dist);
+RcppExport SEXP _updog_oracle_joint(SEXP nSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP distSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< double >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< double >::type bias(biasSEXP);
+    Rcpp::traits::input_parameter< double >::type od(odSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type dist(distSEXP);
+    rcpp_result_gen = Rcpp::wrap(oracle_joint(n, ploidy, seq, bias, od, dist));
+    return rcpp_result_gen;
+END_RCPP
+}
 // doutdist
 double doutdist(int x, int n, bool logp);
 RcppExport SEXP _updog_doutdist(SEXP xSEXP, SEXP nSEXP, SEXP logpSEXP) {
@@ -914,6 +946,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_updog_obj_for_weighted_lbb", (DL_FUNC) &_updog_obj_for_weighted_lbb, 3},
     {"_updog_obj_for_weighted_lnorm", (DL_FUNC) &_updog_obj_for_weighted_lnorm, 3},
     {"_updog_oracle_mis", (DL_FUNC) &_updog_oracle_mis, 6},
+    {"_updog_oracle_mis_vec", (DL_FUNC) &_updog_oracle_mis_vec, 6},
+    {"_updog_oracle_joint", (DL_FUNC) &_updog_oracle_joint, 6},
     {"_updog_doutdist", (DL_FUNC) &_updog_doutdist, 3},
     {"_updog_get_wik_mat_out", (DL_FUNC) &_updog_get_wik_mat_out, 8},
     {"_updog_flexdog_obj_out", (DL_FUNC) &_updog_flexdog_obj_out, 12},
