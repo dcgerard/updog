@@ -142,7 +142,7 @@ An object of class \code{flexdog}, which consists
   \item{\code{input$p2size}}{The value of \code{p2size} provided by the user.}
   \item{\code{prop_mis}}{The posterior proportion of individuals
       misclassified.}
-  \item{\code{out_prop}}{The estimated proportion of points that 
+  \item{\code{out_prop}}{The estimated proportion of points that
       are outliers. Only available if \code{outliers = TRUE}.}
   \item{\code{prob_out}}{The ith element is the posterior probability
       that individual i is an outlier. Only available if
@@ -203,15 +203,15 @@ multiple initializations of the bias as is the default
 in \code{\link{flexdog}}.
 
 The value of \code{prop_mis} is a very intuitive measure for
-the quality of the SNP. \code{prop_mis} is the posterior 
+the quality of the SNP. \code{prop_mis} is the posterior
 proportion of individuals mis-genotyped. So if you want to
 accurately genotype, say, 95\% of the individuals, you could
 discard all SNPs with a \code{prop_mis} under \code{0.95}.
 
 The value of \code{maxpostprob} is a very intuitive measure
-for the quality of the genotype estimate of an individual. 
-This is the posterior probability of correctly genotyping 
-the individual when using \code{ogeno} (the posterior mode) 
+for the quality of the genotype estimate of an individual.
+This is the posterior probability of correctly genotyping
+the individual when using \code{ogeno} (the posterior mode)
 as the genotype estimate.
 
 In most datasets I've examined, allelic bias is a major issue. However,

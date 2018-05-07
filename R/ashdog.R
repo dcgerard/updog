@@ -27,7 +27,7 @@
 #'                    p1size   = sizevec[1],
 #'                    outliers = TRUE)
 #' plot(fout)
-#' 
+#'
 #' }
 #'
 #' ## A natural population. We will assume a
@@ -162,18 +162,18 @@ flexdog <- function(refvec,
 #' (say, \eqn{< 10 * (ploidy + 1)}). This is if you use
 #' multiple initializations of the bias as is the default
 #' in \code{\link{flexdog}}.
-#' 
+#'
 #' The value of \code{prop_mis} is a very intuitive measure for
-#' the quality of the SNP. \code{prop_mis} is the posterior 
+#' the quality of the SNP. \code{prop_mis} is the posterior
 #' proportion of individuals mis-genotyped. So if you want to
 #' accurately genotype, say, 95\% of the individuals, you could
 #' discard all SNPs with a \code{prop_mis} under \code{0.95}.
-#' 
+#'
 #' The value of \code{maxpostprob} is a very intuitive measure
-#' for the quality of the genotype estimate of an individual. 
-#' This is the posterior probability of correctly genotyping 
-#' the individual when using \code{ogeno} (the posterior mode) 
-#' as the genotype estimate. 
+#' for the quality of the genotype estimate of an individual.
+#' This is the posterior probability of correctly genotyping
+#' the individual when using \code{ogeno} (the posterior mode)
+#' as the genotype estimate.
 #'
 #' In most datasets I've examined, allelic bias is a major issue. However,
 #' you may fit the model assuming no allelic bias by setting
@@ -296,7 +296,7 @@ flexdog <- function(refvec,
 #'   \item{\code{input$p2size}}{The value of \code{p2size} provided by the user.}
 #'   \item{\code{prop_mis}}{The posterior proportion of individuals
 #'       misclassified.}
-#'   \item{\code{out_prop}}{The estimated proportion of points that 
+#'   \item{\code{out_prop}}{The estimated proportion of points that
 #'       are outliers. Only available if \code{outliers = TRUE}.}
 #'   \item{\code{prob_out}}{The ith element is the posterior probability
 #'       that individual i is an outlier. Only available if
@@ -304,8 +304,8 @@ flexdog <- function(refvec,
 #' }
 #'
 #' @author David Gerard
-#' 
-#' @examples 
+#'
+#' @examples
 #' ## A natural population. We will assume a
 #' ## normal prior since there are so few
 #' ## individuals.
@@ -756,7 +756,7 @@ flexdog_full <- function(refvec,
 #'   \item{\code{\link{plot_geno}}}{The underlying plotting function.}
 #'   \item{\code{\link{flexdog}}}{Creates a \code{flexpdog} object.}
 #' }
-#' 
+#'
 #' @return A \code{\link[ggplot2]{ggplot}} object for the genotype plot.
 #'
 #' @export
@@ -772,7 +772,7 @@ plot.flexdog <- function(x, use_colorblind = TRUE, ...) {
     p1geno <- NULL
     p2geno <- NULL
   }
-  
+
   pl <- plot_geno(refvec         = x$input$refvec,
                   sizevec        = x$input$sizevec,
                   ploidy         = x$input$ploidy,
@@ -799,11 +799,11 @@ plot.flexdog <- function(x, use_colorblind = TRUE, ...) {
 #' @author David Gerard
 #'
 #' @export
-#' 
-#' @examples 
+#'
+#' @examples
 #' is.flexdog("anything")
 #' # FALSE
-#' 
+#'
 is.flexdog <- function(x) {
   inherits(x, "flexdog")
 }
@@ -817,7 +817,7 @@ is.flexdog <- function(x) {
 #' @inheritParams flexdog_full
 #'
 #' @seealso \code{\link{flexdog}} for where this is used.
-#' 
+#'
 #' @return A vector of numerics. The initial value of \code{pivec}
 #'     used in \code{\link{flexdog_full}}.
 #'
@@ -932,17 +932,17 @@ flex_update_pivec <- function(weight_vec, model = c("hw", "bb", "norm", "ash", "
                                   pvec = pvec,
                                   weight_vec = weight_vec)
         optim_out$par   <- control$fs1_alpha
-      }
-      if (!is.null(control$p1_lbb)) {
-        optim_out$value <- optim_out$value + control$p1_lbb[i + 1]
-      }
-      if (!is.null(control$p2_lbb)) {
-        optim_out$value <- optim_out$value + control$p2_lbb[j + 1]
-      }
-      if (optim_out$value > optim_best$value) {
-        optim_best <- optim_out
-        optim_best$ell1 <- i
-        optim_best$ell2 <- j
+        if (!is.null(control$p1_lbb)) {
+          optim_out$value <- optim_out$value + control$p1_lbb[i + 1]
+        }
+        if (!is.null(control$p2_lbb)) {
+          optim_out$value <- optim_out$value + control$p2_lbb[j + 1]
+        }
+        if (optim_out$value > optim_best$value) {
+          optim_best <- optim_out
+          optim_best$ell1 <- i
+          optim_best$ell2 <- j
+        }
       }
     }
     return_list$pivec <- (1 - optim_best$par) * control$qarray[optim_best$ell1 + 1, optim_best$ell2 + 1, ] +
@@ -1039,7 +1039,7 @@ flex_update_pivec <- function(weight_vec, model = c("hw", "bb", "norm", "ash", "
 #'
 #' @seealso \code{\link{get_probk_vec}} with option \code{model = "ash"}
 #'     for the inverse of this function.
-#'     
+#'
 #' @return A list with the following elements
 #' \describe{
 #' \item{\code{pivec}}{The mixing weights for the unimodal representation.}
@@ -1083,7 +1083,7 @@ get_uni_rep <- function(probvec) {
 #' @param lambda The penalty.
 #' @param pivec The vector of mixing proportions for the component
 #'     discrete uniform distributions.
-#'     
+#'
 #' @return A penalty on the ash mixing weights.
 #'
 #' @author David Gerard
@@ -1105,7 +1105,7 @@ ashpen_fun <- function(lambda, pivec) {
 #'     alleles given that parent 1 has i - 1 refrerence alleles and
 #'     parent 2 has j - 1 reference alleles. Each dimension of the
 #'     array is \code{ploidy + 1}. In the dimension names, "A" stands
-#'     for the reference allele and "a" stands for the 
+#'     for the reference allele and "a" stands for the
 #'     alternative allele.
 #'
 #' @examples
