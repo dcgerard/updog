@@ -20,7 +20,7 @@ The rows index the individuals and the columns index the SNPs.
 Should have the same dimensions as \code{refmat}.}
 
 \item{ploidy}{The ploidy of the species. To estimate the ploidy,
-re-run updog at various ploidy levels and choose the one with
+re-run \code{mupdog} at various ploidy levels and choose the one with
 the largest ELBO. This assumes that the ploidy is the same for
 all individuals in the sample.}
 

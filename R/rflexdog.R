@@ -41,20 +41,26 @@
 #'
 #' @return A vector of length \code{n} with the genotypes of the sampled individuals.
 #'
+#' @references Gerard, David, Luis Felipe Ventorim Ferrao,
+#' Antonio Augusto Franco Garcia, and Matthew Stephens. 2018.
+#' "Harnessing Empirical Bayes and Mendelian Segregation
+#' for Genotyping Autopolyploids from Messy Sequencing Data."
+#' \emph{bioRxiv}. Cold Spring Harbor Laboratory. doi:10.1101/281550.
+#'
 #' @export
 #'
 #' @author David Gerard
-#' 
-#' @examples 
+#'
+#' @examples
 #' ## F1 Population where parent 1 has 1 copy of the referenc allele
 #' ## and parent 2 has 4 copies of the reference allele.
 #' ploidy <- 6
 #' rgeno(n = 10, ploidy = ploidy, model = "f1", p1geno = 1, p2geno = 4)
-#' 
-#' ## A population in Hardy-Weinberge equilibrium with an 
+#'
+#' ## A population in Hardy-Weinberge equilibrium with an
 #' ## allele frequency of 0.75
 #' rgeno(n = 10, ploidy = ploidy, model = "hw", allele_freq = 0.75)
-#' 
+#'
 rgeno <- function(n,
                   ploidy,
                   model       = c("hw", "bb", "norm", "ash", "f1", "s1", "flex", "uniform"),
@@ -238,11 +244,19 @@ rgeno <- function(n,
 #'
 #' @seealso \code{\link{rgeno}} for a way to generate genotypes of individuals. \code{\link{rbetabinom}}
 #'     for how we generate the read-counts.
-#'     
+#'
 #' @return A vector the same length as \code{sizevec}. The ith element
 #'     is the number of reference counts for individual i.
 #'
+#' @references Gerard, David, Luis Felipe Ventorim Ferrao,
+#' Antonio Augusto Franco Garcia, and Matthew Stephens. 2018.
+#' "Harnessing Empirical Bayes and Mendelian Segregation
+#' for Genotyping Autopolyploids from Messy Sequencing Data."
+#' \emph{bioRxiv}. Cold Spring Harbor Laboratory. doi:10.1101/281550.
+#'
 #' @export
+#'
+#' @author David Gerard
 #'
 #' @examples
 #' set.seed(1)

@@ -31,6 +31,12 @@
 //'
 //' @author David Gerard
 //'
+//' @references Gerard, David, Luis Felipe Ventorim Ferrao,
+//' Antonio Augusto Franco Garcia, and Matthew Stephens. 2018.
+//' Harnessing Empirical Bayes and Mendelian Segregation
+//' for Genotyping Autopolyploids from Messy Sequencing Data."
+//' \emph{bioRxiv}. Cold Spring Harbor Laboratory. doi:10.1101/281550.
+//'
 //' @examples
 //' ## Hardy-Weinberg population with allele-frequency of 0.75.
 //' ## Moderate bias and moderate overdispersion.
@@ -148,6 +154,12 @@ double oracle_mis(int n,
 //'
 //' @export
 //'
+//' @references Gerard, David, Luis Felipe Ventorim Ferrao,
+//' Antonio Augusto Franco Garcia, and Matthew Stephens. 2018.
+//' Harnessing Empirical Bayes and Mendelian Segregation
+//' for Genotyping Autopolyploids from Messy Sequencing Data."
+//' \emph{bioRxiv}. Cold Spring Harbor Laboratory. doi:10.1101/281550.
+//'
 //' @examples
 //' ## Hardy-Weinberg population with allele-frequency of 0.75.
 //' ## Moderate bias and moderate overdispersion.
@@ -242,6 +254,12 @@ NumericVector oracle_mis_vec(int n,
 //'     estimated genotype indexes the rows and the true genotype indexes
 //'     the columns. This is when
 //'     using an oracle estimator.
+//'
+//' @references Gerard, David, Luis Felipe Ventorim Ferrao,
+//' Antonio Augusto Franco Garcia, and Matthew Stephens. 2018.
+//' Harnessing Empirical Bayes and Mendelian Segregation
+//' for Genotyping Autopolyploids from Messy Sequencing Data."
+//' \emph{bioRxiv}. Cold Spring Harbor Laboratory. doi:10.1101/281550.
 //'
 //' @examples
 //' ## Hardy-Weinberg population with allele-frequency of 0.75.

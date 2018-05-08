@@ -67,10 +67,17 @@ can be non-\code{NULL}.
 ploidy <- 6
 rgeno(n = 10, ploidy = ploidy, model = "f1", p1geno = 1, p2geno = 4)
 
-## A population in Hardy-Weinberge equilibrium with an 
+## A population in Hardy-Weinberge equilibrium with an
 ## allele frequency of 0.75
 rgeno(n = 10, ploidy = ploidy, model = "hw", allele_freq = 0.75)
 
+}
+\references{
+Gerard, David, Luis Felipe Ventorim Ferrao,
+Antonio Augusto Franco Garcia, and Matthew Stephens. 2018.
+"Harnessing Empirical Bayes and Mendelian Segregation
+for Genotyping Autopolyploids from Messy Sequencing Data."
+\emph{bioRxiv}. Cold Spring Harbor Laboratory. doi:10.1101/281550.
 }
 \author{
 David Gerard

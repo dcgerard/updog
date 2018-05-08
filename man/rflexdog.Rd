@@ -58,7 +58,17 @@ plot_geno(refvec = refvec, sizevec = sizevec,
           ploidy = ploidy, seq = 0.001, bias = 0.5)
 
 }
+\references{
+Gerard, David, Luis Felipe Ventorim Ferrao,
+Antonio Augusto Franco Garcia, and Matthew Stephens. 2018.
+"Harnessing Empirical Bayes and Mendelian Segregation
+for Genotyping Autopolyploids from Messy Sequencing Data."
+\emph{bioRxiv}. Cold Spring Harbor Laboratory. doi:10.1101/281550.
+}
 \seealso{
 \code{\link{rgeno}} for a way to generate genotypes of individuals. \code{\link{rbetabinom}}
     for how we generate the read-counts.
+}
+\author{
+David Gerard
 }
