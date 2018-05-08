@@ -3,6 +3,9 @@ title: "Simulate Next-Generation Sequencing Data"
 author: "David Gerard"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
+bibliography: "genobib.bib"
+nocite: |
+  @gerard2018harnessing
 vignette: >
   %\VignetteIndexEntry{Simulate Next-Generation Sequencing Data}
   %\VignetteEngine{knitr::rmarkdown}
@@ -26,11 +29,13 @@ We demonstrate how to simulate NGS data under various genotype distributions, th
 
 Let's suppose that we have 100 hexaploid individuals, with varying levels of read-depth.
 ```{r}
-set.seed(15342)
+set.seed(1)
 library(updog)
 nind    <- 100
 ploidy  <- 6
-sizevec <- stats::rpois(n = nind, lambda = 100)
+sizevec <- round(stats::runif(n   = nind, 
+                              min = 50, 
+                              max = 200))
 ```
 
 We can simulate their read-counts under various genotype distributions, allele biases, overdispersions, and sequencing error rates using the `rgeno` and `rflexdog` functions.
@@ -117,7 +122,7 @@ mean(fout$geno != true_geno)
 fout$par$alpha
 ```
 
-
+# References
 
 
 
