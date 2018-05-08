@@ -1,7 +1,7 @@
 Package: updog
 Title: Flexible Genotyping for Autopolyploids
 Version: 0.99.0
-Date: 2018-05-02
+Date: 2018-05-08
 Authors@R: person("David", "Gerard", email = "gerard.1787@gmail.com", role = c("aut", "cre"))
 biocViews: StatisticalMethod, Bayesian, Classification, Sequencing, DNASeq, VariantDetection
 Description: Implements empirical Bayes approaches to genotype
@@ -14,6 +14,7 @@ Description: Implements empirical Bayes approaches to genotype
        simulate genotypes (rgeno) and read-counts (rflexdog).
 Depends: R (>= 3.5.0)
 License: GPL-3
+BugReports: http://github.com/dcgerard/updog/issues
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
