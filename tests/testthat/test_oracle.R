@@ -111,3 +111,26 @@ test_that("oracle_cor works", {
              od     = od,
              dist   = dist)
 })
+
+
+test_that("oracle_from_joint works", {
+  ploidy <- 6
+  dist <- stats::dbinom(0:ploidy, ploidy, 0.75)
+  jd <- oracle_joint(n = 100, ploidy = ploidy, seq = 0.001,
+                     bias = 0.7, od = 0.01, dist = dist)
+
+  mv1 <- oracle_mis_vec_from_joint(jd = jd)
+  m1 <- oracle_mis_from_joint(jd = jd)
+  c1 <- oracle_cor_from_joint(jd = jd)
+
+  mv2 <- oracle_mis_vec(n = 100, ploidy = ploidy, seq = 0.001,
+                        bias = 0.7, od = 0.01, dist = dist)
+  m2 <- oracle_mis(n = 100, ploidy = ploidy, seq = 0.001,
+                   bias = 0.7, od = 0.01, dist = dist)
+  c2 <- oracle_cor(n = 100, ploidy = ploidy, seq = 0.001,
+                   bias = 0.7, od = 0.01, dist = dist)
+  expect_equal(mv1, mv2)
+  expect_equal(m1, m2)
+  expect_equal(c1, c2)
+
+})
