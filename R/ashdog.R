@@ -464,10 +464,18 @@ flexdog_full <- function(refvec,
     ashpen <- boundary_tol
   }
 
+  ## since re-write these
+  bias_init <- bias
+  seq_init  <- seq
+  od_init   <- od
+
   ## Run EM for each mode in `mode_vec` -----------------------
   return_list <- list(llike = -Inf)
   for (em_index in seq_along(mode_vec)) {
     mode <- mode_vec[em_index]
+    bias <- bias_init
+    seq  <- seq_init
+    od   <- od_init
 
     if (verbose) {
       cat("Mode:", mode, "\n")
@@ -531,7 +539,6 @@ flexdog_full <- function(refvec,
         wik_mat <- wik_temp[, seq_len(ploidy + 1), drop = FALSE]
         prob_outlier <- wik_temp[, ploidy + 2]
       }
-
 
       ## Update seq, bias, and od ----
       oout <- stats::optim(par         = c(seq, bias, od),
@@ -647,8 +654,6 @@ flexdog_full <- function(refvec,
 
       if (model == "ash" & !use_cvxr) { ## add small penalty if "ash"
         llike <- llike + ashpen_fun(lambda = ashpen, pivec = pivec)
-      } else if (((model == "f1") | (model == "s1")) & outliers) {
-
       }
 
       err        <- abs(llike - llike_old)
@@ -852,6 +857,19 @@ initialize_pivec <- function(ploidy, mode, model = c("hw", "bb", "norm", "ash", 
                                  prob = floor(mode) / ploidy)
       pivec <- get_uni_rep(pvec_init)$pivec + 10 ^-6
       pivec <- pivec / sum(pivec)
+    } else if (init_type == "unif") {
+      stopifnot((mode > 0) & (mode < ploidy))
+
+      pvec_init <- rep(1 / (ploidy + 1), length = ploidy + 1)
+      floor_mode <- max(floor(mode), 0)
+      if (floor_mode > ploidy) {
+        floor_mode <- ploidy
+      }
+      pvec_init[floor_mode + 1] <- pvec_init[floor_mode + 1] + 10^-2
+      pvec_init <- pvec_init / sum(pvec_init)
+      pivec <- get_uni_rep(pvec_init)$pivec
+    } else if (init_type == "piunif") {
+      pivec <- rep(1 / (ploidy + 1), length = ploidy + 1)
     }
   } else if (model == "hw" | model == "f1" | model == "s1" | model == "bb" | model == "norm") {
     if (mode < 0 | mode > 1) {
