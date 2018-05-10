@@ -25,8 +25,11 @@
 #'       \code{\link{flexdog}}.}
 #'   \item{\code{\link{plot.mupdog}}}{Plotting the output of
 #'       \code{\link{mupdog}}.}
-#'   \item{\code{\link{summary.mupdog}}}{Providing some summaries
-#'       of the output of \code{\link{mupdog}}.}
+#'   \item{\code{\link{oracle_joint}}}{The joint distribution of the true genotype
+#'       and an oracle estimator.}
+#'   \item{\code{\link{oracle_plot}}}{Visualize the output of \code{\link{oracle_joint}}.}
+#'   \item{\code{\link{oracle_mis}}}{The oracle misclassification error rate (Bayes rate).}
+#'   \item{\code{\link{oracle_cor}}}{Correlation between the true genotype and the oracle estimated genotype.}
 #' }
 #'
 #' @section \code{updog} Datasets:
