@@ -13,7 +13,7 @@ the oracle estimator. Usually, this is obtained by a call from \code{\link{oracl
 \value{
 A \code{\link[ggplot2]{ggplot}} object containing the oracle plot. The x-axis indexes
     the possible values of the estimated genotype. The y-axis indexes the possible values of
-    the true genotype. The numbers in cell (i, j) is the probability that an individual will have
+    the true genotype. The number in cell (i, j) is the probability that an individual will have
     true genotype i but is estimated to have genotype j. This is when using an oracle estimator.
     The cells are also color-coded by the size of the probability in each cell. At the top are
     listed the oracle misclassification error rate and the correlation of the true genotype
@@ -23,6 +23,15 @@ A \code{\link[ggplot2]{ggplot}} object containing the oracle plot. The x-axis in
 After obtaining the joint distribution of the true genotype with the estimated genotype from
 the oracle estimator using \code{\link{oracle_joint}}, you can use \code{oracle_plot} to
 visualize this joint distribution.
+}
+\examples{
+ploidy <- 6
+dist <- stats::dbinom(0:ploidy, ploidy, 0.75)
+jd <- oracle_joint(n = 100, ploidy = ploidy, seq = 0.001,
+                   bias = 0.7, od = 0.01, dist = dist)
+pl <- oracle_plot(jd = jd)
+print(pl)
+
 }
 \seealso{
 \code{\link{oracle_joint}} for obtaining \code{jd}.
