@@ -211,3 +211,54 @@ oracle_mis_vec_from_joint <- function(jd) {
 
   return(1 - diag(jd) / colSums(jd))
 }
+
+
+
+#' Construct an oracle plot from the output of \code{\link{oracle_joint}}.
+#'
+#' After obtaining the joint distribution of the true genotype with the estimated genotype from
+#' the oracle estimator using \code{\link{oracle_joint}}, you can use \code{oracle_plot} to
+#' visualize this joint distribution.
+#'
+#' @param jd A matrix containing the joint distribution of the true genotype and
+#'     the oracle estimator. Usually, this is obtained by a call from \code{\link{oracle_joint}}.
+#'
+#' @author David Gerard
+#'
+#' @return A \code{\link[ggplot2]{ggplot}} object containing the oracle plot. The x-axis indexes
+#'     the possible values of the estimated genotype. The y-axis indexes the possible values of
+#'     the true genotype. The numbers in cell (i, j) is the probability that an individual will have
+#'     true genotype i but is estimated to have genotype j. This is when using an oracle estimator.
+#'     The cells are also color-coded by the size of the probability in each cell. At the top are
+#'     listed the oracle misclassification error rate and the correlation of the true genotype
+#'     with the estimated genotype. Both of these quantities may be derived from the joint distribution.
+#'
+#' @export
+#'
+#' @seealso \code{\link{oracle_joint}} for obtaining \code{jd}.
+#'
+oracle_plot <- function(jd) {
+  mat_text <- format(round(jd, digits = 2), digits = 2)
+  probability_text <- stringr::str_replace(stringr::str_replace(mat_text, "0.00", "0"), "0\\.", "\\.")
+
+  dfdat <- cbind(expand.grid(x = seq_len(nrow(jd)) - 1, y = seq_len(nrow(jd)) - 1),
+        probability_text,
+        probability = c(jd))
+
+  omiss <- oracle_mis_from_joint(jd = jd)
+  ocorr <- oracle_cor_from_joint(jd = jd)
+
+  ggplot2::ggplot(data = dfdat, mapping = ggplot2::aes_string(x = "x", y = "y", fill = "probability")) +
+    ggplot2::geom_tile() +
+    ggplot2::geom_text(ggplot2::aes_string(label = "probability_text")) +
+    ggplot2::xlab("yhat") +
+    ggplot2::ylab("y") +
+    ggplot2::ggtitle(paste0("Misclassification Error Rate: ",
+                            round(omiss, digits = 3),
+                            "\nCorrelation: ",
+                            round(ocorr, digits = 3))) +
+    ggplot2::scale_fill_gradient2() +
+    ggplot2::theme_bw() ->
+    pl
+  return(pl)
+}

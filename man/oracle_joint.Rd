@@ -71,6 +71,17 @@ Harnessing Empirical Bayes and Mendelian Segregation
 for Genotyping Autopolyploids from Messy Sequencing Data."
 \emph{bioRxiv}. Cold Spring Harbor Laboratory. doi:10.1101/281550.
 }
+\seealso{
+\describe{
+  \item{\code{\link{oracle_plot}}}{For visualizing the joint distribution output from \code{oracle_joint}.}
+  \item{\code{\link{oracle_mis_from_joint}}}{For obtaining the same results as \code{\link{oracle_mis}}
+      directly from the output of \code{oracle_joint}.}
+  \item{\code{\link{oracle_mis_vec_from_joint}}}{For obtaining the same results as \code{\link{oracle_mis_vec}}
+      directly from the output of \code{oracle_joint}.}
+  \item{\code{\link{oracle_cor_from_joint}}}{For obtaining the same results as \code{\link{oracle_cor}}
+      directly from the output of \code{oracle_joint}.}
+}
+}
 \author{
 David Gerard
 }

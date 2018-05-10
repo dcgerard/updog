@@ -9,7 +9,7 @@
 Implements empirical Bayes approaches to genotype
 autopolyploids from next generation sequencing data while
 accounting for allelic bias, overdispersion, and sequencing
-error. The main function is \code{\link{flexdog}}, which 
+error. The main function is \code{\link{flexdog}}, which
 allows the specification
 of many different genotype distributions. An experimental
 function that takes into account varying leves of relatedness
@@ -26,13 +26,13 @@ is implemented in \code{\link{mupdog}}.
       relatedness between the individuals in the sample.}
   \item{\code{\link{rgeno}}}{simulate the genotypes of a sample
       from one of the models allowed in \code{\link{flexdog}}.}
-  \item{\code{\link{rflexdog}}}{Simulate from the 
+  \item{\code{\link{rflexdog}}}{Simulate from the
       \code{\link{flexdog}} model.}
   \item{\code{\link{plot.flexdog}}}{Plotting the output of
       \code{\link{flexdog}}.}
-  \item{\code{\link{plot.mupdog}}}{Plotting the output of 
+  \item{\code{\link{plot.mupdog}}}{Plotting the output of
       \code{\link{mupdog}}.}
-  \item{\code{\link{summary.mupdog}}}{Providing some summaries 
+  \item{\code{\link{summary.mupdog}}}{Providing some summaries
       of the output of \code{\link{mupdog}}.}
 }
 }
@@ -42,9 +42,9 @@ is implemented in \code{\link{mupdog}}.
 \describe{
   \item{\code{\link{snpdat}}}{A small example dataset for using
       \code{\link{flexdog}}.}
-  \item{\code{\link{uitdewilligen}}}{A small example dataset 
+  \item{\code{\link{uitdewilligen}}}{A small example dataset
       for using \code{\link{mupdog}}.}
-  \item{\code{\link{mupout}}}{The output from fitting 
+  \item{\code{\link{mupout}}}{The output from fitting
       \code{\link{mupdog}} to \code{\link{uitdewilligen}}.}
 }
 }

@@ -134,3 +134,24 @@ test_that("oracle_from_joint works", {
   expect_equal(c1, c2)
 
 })
+
+
+test_that("no NaN in oracle_joint", {
+  ploidy <- 4
+  seq    <- 0.001
+  bias   <- 0.9
+  od     <- 0.007
+  p1geno <- 3
+  p2geno <- 2
+  dist   <- get_q_array(ploidy = ploidy)[p1geno + 1, p2geno + 1, ]
+  depth  <- 10
+  jd <- oracle_joint(n = depth,
+                     ploidy = ploidy,
+                     seq = seq,
+                     bias = bias,
+                     od = od,
+                     dist = dist)
+  expect_true(all(!is.nan(jd)))
+
+  oracle_plot(jd = jd)
+})

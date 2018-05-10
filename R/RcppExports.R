@@ -887,6 +887,17 @@ oracle_mis_vec <- function(n, ploidy, seq, bias, od, dist) {
 #'
 #' @export
 #'
+#' @seealso
+#' \describe{
+#'   \item{\code{\link{oracle_plot}}}{For visualizing the joint distribution output from \code{oracle_joint}.}
+#'   \item{\code{\link{oracle_mis_from_joint}}}{For obtaining the same results as \code{\link{oracle_mis}}
+#'       directly from the output of \code{oracle_joint}.}
+#'   \item{\code{\link{oracle_mis_vec_from_joint}}}{For obtaining the same results as \code{\link{oracle_mis_vec}}
+#'       directly from the output of \code{oracle_joint}.}
+#'   \item{\code{\link{oracle_cor_from_joint}}}{For obtaining the same results as \code{\link{oracle_cor}}
+#'       directly from the output of \code{oracle_joint}.}
+#' }
+#'
 #' @author David Gerard
 oracle_joint <- function(n, ploidy, seq, bias, od, dist) {
     .Call('_updog_oracle_joint', PACKAGE = 'updog', n, ploidy, seq, bias, od, dist)
@@ -952,8 +963,8 @@ flexdog_obj_out <- function(probk_vec, out_prop, refvec, sizevec, ploidy, seq, b
 #'
 #' @param p The allele dosage.
 #' @param eps The sequencing error rate.
-#' 
-#' @return The probability of a reference reed adjusted by the 
+#'
+#' @return The probability of a reference reed adjusted by the
 #'     sequencing error rate.
 #'
 #' @author David Gerard
@@ -964,7 +975,7 @@ eta_double <- function(p, eps) {
 #' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
 #'
 #' @inheritParams xi_fun
-#' 
+#'
 #' @return A vector of probabilities of a reference read adjusted
 #'     by the sequencing error rate.
 #'
@@ -978,8 +989,8 @@ eta_fun <- function(p, eps) {
 #' @param p The allele dosage.
 #' @param eps The sequencing error rate.
 #' @param h The allele bias.
-#' 
-#' @return The probability of a reference read adjusted by both the allele 
+#'
+#' @return The probability of a reference read adjusted by both the allele
 #'     bias and the sequencing error rate.
 #'
 #' @author David Gerard
@@ -994,7 +1005,7 @@ xi_double <- function(p, eps, h) {
 #'     or the same length as p.
 #' @param h The allele bias. Must either be of length 1 or the same length
 #'     as p.
-#'     
+#'
 #' @return A vector of prababilities of the reference read adjusted
 #'     by both the sequencing error rate and the allele bias.
 #'
@@ -1031,7 +1042,7 @@ log_sum_exp_2 <- function(x, y) {
 #' The logit function.
 #'
 #' @param x A double between 0 and 1.
-#' 
+#'
 #' @return The logit of \code{x}.
 #'
 #' @author David Gerard
@@ -1042,7 +1053,7 @@ logit <- function(x) {
 #' The expit (logistic) function.
 #'
 #' @param x A double.
-#' 
+#'
 #' @return The expit (logistic) of \code{x}.
 #'
 #' @author David Gerard

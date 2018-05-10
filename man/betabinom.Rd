@@ -43,8 +43,8 @@ its length is that of \code{x} and \code{size}).}
 \item{n}{The number of observations.}
 }
 \value{
-Either a random sample (\code{rbetabinom}), 
-    the density (\code{dbetabinom}), the tail 
+Either a random sample (\code{rbetabinom}),
+    the density (\code{dbetabinom}), the tail
     probability (\code{pbetabinom}), or the quantile
     (\code{qbetabinom}) of the beta-binomial distribution.
 }

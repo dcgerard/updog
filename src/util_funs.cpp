@@ -4,8 +4,8 @@
 //'
 //' @param p The allele dosage.
 //' @param eps The sequencing error rate.
-//' 
-//' @return The probability of a reference reed adjusted by the 
+//'
+//' @return The probability of a reference reed adjusted by the
 //'     sequencing error rate.
 //'
 //' @author David Gerard
@@ -24,7 +24,7 @@ double eta_double(double p, double eps) {
 //' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
 //'
 //' @inheritParams xi_fun
-//' 
+//'
 //' @return A vector of probabilities of a reference read adjusted
 //'     by the sequencing error rate.
 //'
@@ -60,8 +60,8 @@ NumericVector eta_fun(NumericVector p, NumericVector eps) {
 //' @param p The allele dosage.
 //' @param eps The sequencing error rate.
 //' @param h The allele bias.
-//' 
-//' @return The probability of a reference read adjusted by both the allele 
+//'
+//' @return The probability of a reference read adjusted by both the allele
 //'     bias and the sequencing error rate.
 //'
 //' @author David Gerard
@@ -82,7 +82,7 @@ double xi_double(double p, double eps, double h) {
 //'     or the same length as p.
 //' @param h The allele bias. Must either be of length 1 or the same length
 //'     as p.
-//'     
+//'
 //' @return A vector of prababilities of the reference read adjusted
 //'     by both the sequencing error rate and the allele bias.
 //'
@@ -156,14 +156,19 @@ double log_sum_exp(NumericVector x) {
 // [[Rcpp::export]]
 double log_sum_exp_2(double x, double y) {
   double z = std::max(x, y);
-  double finalval = std::log(std::exp(x - z) + std::exp(y - z)) + z;
+  double finalval;
+  if (z == R_NegInf) {
+    finalval = R_NegInf;
+  } else {
+    finalval = std::log(std::exp(x - z) + std::exp(y - z)) + z;
+  }
   return finalval;
 }
 
 //' The logit function.
 //'
 //' @param x A double between 0 and 1.
-//' 
+//'
 //' @return The logit of \code{x}.
 //'
 //' @author David Gerard
@@ -179,7 +184,7 @@ double logit(double x) {
 //' The expit (logistic) function.
 //'
 //' @param x A double.
-//' 
+//'
 //' @return The expit (logistic) of \code{x}.
 //'
 //' @author David Gerard

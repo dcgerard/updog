@@ -10,9 +10,9 @@ Description: Implements empirical Bayes approaches to genotype
        error. The main function is flexdog, which allows the specification
        of many different genotype distributions. An experimental
        function that takes into account varying levels of relatedness
-       is implemented in mupdog. Also provided are functions to 
+       is implemented in mupdog. Also provided are functions to
        simulate genotypes (rgeno) and read-counts (rflexdog).
-Depends: R (>= 3.5.0)
+Depends: R (>= 3.4.0)
 License: GPL-3
 BugReports: http://github.com/dcgerard/updog/issues
 Encoding: UTF-8
@@ -26,7 +26,8 @@ Imports: Rcpp (>= 0.12.16),
     foreach,
     doParallel,
     ggplot2,
-    ggthemes
+    ggthemes,
+    stringr
 Suggests: covr,
     testthat,
     SuppDists,

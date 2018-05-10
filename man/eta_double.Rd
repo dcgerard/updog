@@ -12,7 +12,7 @@ eta_double(p, eps)
 \item{eps}{The sequencing error rate.}
 }
 \value{
-The probability of a reference reed adjusted by the 
+The probability of a reference reed adjusted by the
     sequencing error rate.
 }
 \description{

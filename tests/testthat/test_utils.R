@@ -50,3 +50,10 @@ test_that("log_sum_exp and log_sum_exp_2 are equal", {
                log_sum_exp_2(0.1, 0.2))
 }
 )
+
+test_that("log_sum_exp and log_sum_exp_2 works with -Inf", {
+  expect_true(!is.nan(log_sum_exp(c(-Inf, -Inf))))
+  expect_true(!is.nan(log_sum_exp_2(-Inf, -Inf)))
+  expect_true(is.infinite(log_sum_exp(c(-Inf, -Inf))))
+  expect_true(is.infinite(log_sum_exp_2(-Inf, -Inf)))
+})

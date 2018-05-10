@@ -14,7 +14,7 @@ xi_double(p, eps, h)
 \item{h}{The allele bias.}
 }
 \value{
-The probability of a reference read adjusted by both the allele 
+The probability of a reference read adjusted by both the allele
     bias and the sequencing error rate.
 }
 \description{
