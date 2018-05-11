@@ -4,7 +4,7 @@
 \alias{flexdog}
 \title{Flexible genotyping for autopolyploids from next-generation sequencing data.}
 \usage{
-flexdog(refvec, sizevec, ploidy, model = c("flex", "norm", "hw", "bb", "ash",
+flexdog(refvec, sizevec, ploidy, model = c("norm", "flex", "hw", "bb", "ash",
   "f1", "s1", "uniform"), p1ref = NULL, p1size = NULL, p2ref = NULL,
   p2size = NULL, bias_init = exp(c(-1, -0.5, 0, 0.5, 1)), verbose = TRUE,
   outliers = FALSE, ...)
@@ -142,13 +142,6 @@ are approximately uniform (since we are assuming that they are approximately
 uniform). This will usually result in unintuitive genotyping since most
 populations don't have a uniform genotype distribution.
 I include it as an option only for completeness. Please, please don't use it.
-
-Generally, good defaults are to use \code{model = "flex"} if you have
-a lot of individuals (say, \eqn{> 10 * (ploidy + 1)}) and
-\code{model = "norm"} if you do not have a lot of individuals
-(say, \eqn{< 10 * (ploidy + 1)}). This is if you use
-multiple initializations of the bias as is the default
-in \code{\link{flexdog}}.
 
 The value of \code{prop_mis} is a very intuitive measure for
 the quality of the SNP. \code{prop_mis} is the posterior
