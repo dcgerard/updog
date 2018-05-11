@@ -12,6 +12,7 @@ bioc_packages:
 
 addons:
   apt:
+    update: true
     packages:
     - libmpfr-dev
 
