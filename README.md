@@ -21,6 +21,11 @@ See also [ebg](https://github.com/pblischak/polyploid-genotyping), [fitPoly](htt
 
 See [NEWS.md](NEWS.md) for the latest updates on the package.
 
+Vignettes
+---------
+
+I've included many vignettes in `updog`, which you can access online [here](https://dcgerard.github.io/updog/).
+
 Bug Reports
 -----------
 
