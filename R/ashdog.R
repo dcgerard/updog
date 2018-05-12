@@ -62,7 +62,7 @@ flexdog <- function(refvec,
   model <- match.arg(model)
 
   if (verbose) {
-    if (length(refvec) < (10 * (ploidy + 1))) {
+    if ((length(refvec) < (10 * (ploidy + 1))) & (model == "flex")) {
       cat('Very few individuals for model = "flex"\nYou might want to try model = "norm" instead.\n\n')
     }
   }
