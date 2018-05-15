@@ -41,6 +41,15 @@ You can install updog from Github with:
 devtools::install_github("dcgerard/updog")
 ```
 
+An experimental wrapper (called `vcfdog`) for accepting VCF files as input (using the [VariantAnnotation](https://doi.org/doi:10.18129/B9.bioc.VariantAnnotation) package) is implemented in the vcf repo. You can install from this repo using
+
+``` r
+# install.packages("devtools")
+devtools::install_github("dcgerard/updog", ref = "vcf")
+```
+
+### CVXR
+
 If you want to use the `use_cvxr = TRUE` option in `flexdog` (not generally recommended), you will need to install the [CVXR](https://cran.r-project.org/package=CVXR) package. Before I could install CVXR in Ubuntu, I had to run in the terminal
 
 ``` bash
