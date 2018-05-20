@@ -113,6 +113,26 @@ rbetabinom <- function(n, size, mu, rho) {
     .Call('_updog_rbetabinom', PACKAGE = 'updog', n, size, mu, rho)
 }
 
+wem_fixp <- function(pivec, lmat, etamat, nind, nclass, weight_vec, nvec, lambda) {
+    invisible(.Call('_updog_wem_fixp', PACKAGE = 'updog', pivec, lmat, etamat, nind, nclass, weight_vec, nvec, lambda))
+}
+
+wem_obj <- function(pivec, weight_vec, lmat, lambda) {
+    .Call('_updog_wem_obj', PACKAGE = 'updog', pivec, weight_vec, lmat, lambda)
+}
+
+#' Generalized version of \code{\link{uni_em}}.
+#' 
+#' @inherit uni_em
+#' 
+#' @author David Gerard
+#' 
+#' @export
+#'
+wem <- function(weight_vec, lmat, pi_init, lambda, itermax, obj_tol) {
+    .Call('_updog_wem', PACKAGE = 'updog', weight_vec, lmat, pi_init, lambda, itermax, obj_tol)
+}
+
 #' Obtain the genotype distribution given the distribution of discrete uniforms.
 #'
 #' @inheritParams flexdog_full

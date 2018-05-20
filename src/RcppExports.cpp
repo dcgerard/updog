@@ -150,6 +150,53 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// wem_fixp
+void wem_fixp(arma::vec& pivec, const arma::mat& lmat, arma::mat& etamat, const int& nind, const int& nclass, const arma::vec& weight_vec, arma::vec& nvec, const long double& lambda);
+RcppExport SEXP _updog_wem_fixp(SEXP pivecSEXP, SEXP lmatSEXP, SEXP etamatSEXP, SEXP nindSEXP, SEXP nclassSEXP, SEXP weight_vecSEXP, SEXP nvecSEXP, SEXP lambdaSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type pivec(pivecSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lmat(lmatSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type etamat(etamatSEXP);
+    Rcpp::traits::input_parameter< const int& >::type nind(nindSEXP);
+    Rcpp::traits::input_parameter< const int& >::type nclass(nclassSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type weight_vec(weight_vecSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type nvec(nvecSEXP);
+    Rcpp::traits::input_parameter< const long double& >::type lambda(lambdaSEXP);
+    wem_fixp(pivec, lmat, etamat, nind, nclass, weight_vec, nvec, lambda);
+    return R_NilValue;
+END_RCPP
+}
+// wem_obj
+double wem_obj(const arma::vec& pivec, const arma::vec& weight_vec, const arma::mat& lmat, const long double& lambda);
+RcppExport SEXP _updog_wem_obj(SEXP pivecSEXP, SEXP weight_vecSEXP, SEXP lmatSEXP, SEXP lambdaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type pivec(pivecSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type weight_vec(weight_vecSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lmat(lmatSEXP);
+    Rcpp::traits::input_parameter< const long double& >::type lambda(lambdaSEXP);
+    rcpp_result_gen = Rcpp::wrap(wem_obj(pivec, weight_vec, lmat, lambda));
+    return rcpp_result_gen;
+END_RCPP
+}
+// wem
+arma::vec wem(arma::vec weight_vec, arma::mat lmat, arma::vec pi_init, long double lambda, int itermax, double obj_tol);
+RcppExport SEXP _updog_wem(SEXP weight_vecSEXP, SEXP lmatSEXP, SEXP pi_initSEXP, SEXP lambdaSEXP, SEXP itermaxSEXP, SEXP obj_tolSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type lmat(lmatSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type pi_init(pi_initSEXP);
+    Rcpp::traits::input_parameter< long double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< int >::type itermax(itermaxSEXP);
+    Rcpp::traits::input_parameter< double >::type obj_tol(obj_tolSEXP);
+    rcpp_result_gen = Rcpp::wrap(wem(weight_vec, lmat, pi_init, lambda, itermax, obj_tol));
+    return rcpp_result_gen;
+END_RCPP
+}
 // get_probk_vec
 NumericVector get_probk_vec(NumericVector pivec, std::string model, double mode);
 RcppExport SEXP _updog_get_probk_vec(SEXP pivecSEXP, SEXP modelSEXP, SEXP modeSEXP) {
@@ -908,6 +955,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_updog_qbetabinom", (DL_FUNC) &_updog_qbetabinom, 4},
     {"_updog_rbetabinom_int", (DL_FUNC) &_updog_rbetabinom_int, 3},
     {"_updog_rbetabinom", (DL_FUNC) &_updog_rbetabinom, 4},
+    {"_updog_wem_fixp", (DL_FUNC) &_updog_wem_fixp, 8},
+    {"_updog_wem_obj", (DL_FUNC) &_updog_wem_obj, 4},
+    {"_updog_wem", (DL_FUNC) &_updog_wem, 6},
     {"_updog_get_probk_vec", (DL_FUNC) &_updog_get_probk_vec, 3},
     {"_updog_get_inner_weights", (DL_FUNC) &_updog_get_inner_weights, 2},
     {"_updog_get_wik_mat", (DL_FUNC) &_updog_get_wik_mat, 7},

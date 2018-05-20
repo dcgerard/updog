@@ -376,4 +376,3 @@ double f1_obj(double alpha,
   }
   return obj;
 }
-
