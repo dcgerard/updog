@@ -979,6 +979,93 @@ flexdog_obj_out <- function(probk_vec, out_prop, refvec, sizevec, ploidy, seq, b
     .Call('_updog_flexdog_obj_out', PACKAGE = 'updog', probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq)
 }
 
+dist_from_p <- function(p, ploidy) {
+    .Call('_updog_dist_from_p', PACKAGE = 'updog', p, ploidy)
+}
+
+num_pairs <- function(ell, ploidy) {
+    .Call('_updog_num_pairs', PACKAGE = 'updog', ell, ploidy)
+}
+
+get_pname <- function(pvec) {
+    .Call('_updog_get_pname', PACKAGE = 'updog', pvec)
+}
+
+#' Returns segregation probabilities, pairing representation
+#' and number of ref alleles given the ploidy.
+#'
+#'
+#' @param ploidy The ploidy of the individual. Should be even
+#'     and greater than 0.
+#'
+#' @return A list of three elements
+#' \describe{
+#' \item{\code{probmat}}{The rows index the pairing configuration
+#'     and the columns index the number of reference alleles
+#'     segregating. The elements are the probability of
+#'     segregating the given number of reference alleles
+#'     in a given category.}
+#' \item{\code{pmat}}{The pairing representation of the
+#'     configuration.}
+#' \item{\code{lvec}}{The number of reference alleles an individual
+#'     has given their pairing configuration in \code{pmat}.}
+#' }
+#'
+#' @author David Gerard
+#'
+#' @export
+#'
+#' @examples
+#' get_bivalent_probs(4)
+#'
+get_bivalent_probs <- function(ploidy) {
+    .Call('_updog_get_bivalent_probs', PACKAGE = 'updog', ploidy)
+}
+
+count_pairings <- function(ploidy) {
+    .Call('_updog_count_pairings', PACKAGE = 'updog', ploidy)
+}
+
+count_doubles <- function(ell, p2) {
+    .Call('_updog_count_doubles', PACKAGE = 'updog', ell, p2)
+}
+
+count_pairings_given_p <- function(ploidy, pvec) {
+    .Call('_updog_count_pairings_given_p', PACKAGE = 'updog', ploidy, pvec)
+}
+
+#' Return mixture weights needed to obtain a hypergeometric
+#' distribution.
+#'
+#' Obtains the mixing weights for the mixing distributions
+#' of \code{\link{get_bivalent_probs}} to return a hypergeometric
+#' distribution where \code{ploidy} is the population size,
+#' \code{ell} is the number of success states in the population,
+#' and \code{ploidy / 2} is the number of draws. If these
+#' are the mixing weights in the population, then there is no
+#' preferential pairing.
+#'
+#' @param ploidy The ploidy of the individual.
+#' @param ell The number of reference alleles in the individual.
+#'
+#' @return A list with the following two elements:
+#' \describe{
+#' \item{\code{pmat}}{Reach row is a category and the columns
+#'     index either aa, Aa, or AA.}
+#' \item{\code{weightvec}}{The mixing weights for each row of pmat.}
+#' }
+#'
+#' @author David Gerard
+#'
+#' @export
+#'
+#' @examples
+#' get_hyper_weights(4, 2)
+#'
+get_hyper_weights <- function(ploidy, ell) {
+    .Call('_updog_get_hyper_weights', PACKAGE = 'updog', ploidy, ell)
+}
+
 #' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
 #'
 #' @param p The allele dosage.

@@ -848,6 +848,99 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// dist_from_p
+NumericVector dist_from_p(IntegerVector p, int ploidy);
+RcppExport SEXP _updog_dist_from_p(SEXP pSEXP, SEXP ploidySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type p(pSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    rcpp_result_gen = Rcpp::wrap(dist_from_p(p, ploidy));
+    return rcpp_result_gen;
+END_RCPP
+}
+// num_pairs
+int num_pairs(int ell, int ploidy);
+RcppExport SEXP _updog_num_pairs(SEXP ellSEXP, SEXP ploidySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type ell(ellSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    rcpp_result_gen = Rcpp::wrap(num_pairs(ell, ploidy));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_pname
+std::string get_pname(IntegerVector pvec);
+RcppExport SEXP _updog_get_pname(SEXP pvecSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type pvec(pvecSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_pname(pvec));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_bivalent_probs
+List get_bivalent_probs(int ploidy);
+RcppExport SEXP _updog_get_bivalent_probs(SEXP ploidySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    rcpp_result_gen = Rcpp::wrap(get_bivalent_probs(ploidy));
+    return rcpp_result_gen;
+END_RCPP
+}
+// count_pairings
+int count_pairings(int ploidy);
+RcppExport SEXP _updog_count_pairings(SEXP ploidySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    rcpp_result_gen = Rcpp::wrap(count_pairings(ploidy));
+    return rcpp_result_gen;
+END_RCPP
+}
+// count_doubles
+int count_doubles(int ell, int p2);
+RcppExport SEXP _updog_count_doubles(SEXP ellSEXP, SEXP p2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type ell(ellSEXP);
+    Rcpp::traits::input_parameter< int >::type p2(p2SEXP);
+    rcpp_result_gen = Rcpp::wrap(count_doubles(ell, p2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// count_pairings_given_p
+int count_pairings_given_p(int ploidy, IntegerVector pvec);
+RcppExport SEXP _updog_count_pairings_given_p(SEXP ploidySEXP, SEXP pvecSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type pvec(pvecSEXP);
+    rcpp_result_gen = Rcpp::wrap(count_pairings_given_p(ploidy, pvec));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_hyper_weights
+List get_hyper_weights(int ploidy, int ell);
+RcppExport SEXP _updog_get_hyper_weights(SEXP ploidySEXP, SEXP ellSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< int >::type ell(ellSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_hyper_weights(ploidy, ell));
+    return rcpp_result_gen;
+END_RCPP
+}
 // eta_double
 double eta_double(double p, double eps);
 RcppExport SEXP _updog_eta_double(SEXP pSEXP, SEXP epsSEXP) {
@@ -1001,6 +1094,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_updog_doutdist", (DL_FUNC) &_updog_doutdist, 3},
     {"_updog_get_wik_mat_out", (DL_FUNC) &_updog_get_wik_mat_out, 8},
     {"_updog_flexdog_obj_out", (DL_FUNC) &_updog_flexdog_obj_out, 12},
+    {"_updog_dist_from_p", (DL_FUNC) &_updog_dist_from_p, 2},
+    {"_updog_num_pairs", (DL_FUNC) &_updog_num_pairs, 2},
+    {"_updog_get_pname", (DL_FUNC) &_updog_get_pname, 1},
+    {"_updog_get_bivalent_probs", (DL_FUNC) &_updog_get_bivalent_probs, 1},
+    {"_updog_count_pairings", (DL_FUNC) &_updog_count_pairings, 1},
+    {"_updog_count_doubles", (DL_FUNC) &_updog_count_doubles, 2},
+    {"_updog_count_pairings_given_p", (DL_FUNC) &_updog_count_pairings_given_p, 2},
+    {"_updog_get_hyper_weights", (DL_FUNC) &_updog_get_hyper_weights, 2},
     {"_updog_eta_double", (DL_FUNC) &_updog_eta_double, 2},
     {"_updog_eta_fun", (DL_FUNC) &_updog_eta_fun, 2},
     {"_updog_xi_double", (DL_FUNC) &_updog_xi_double, 3},
