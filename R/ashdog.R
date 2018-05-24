@@ -49,7 +49,7 @@
 flexdog <- function(refvec,
                     sizevec,
                     ploidy,
-                    model       = c("norm", "flex", "hw", "bb", "ash", "f1", "s1", "uniform"),
+                    model       = c("norm", "flex", "hw", "bb", "ash", "f1", "s1", "f1pp", "s1pp", "uniform"),
                     p1ref       = NULL,
                     p1size      = NULL,
                     p2ref       = NULL,
@@ -127,7 +127,9 @@ flexdog <- function(refvec,
 #'       version of "hw" and can be derived from a special case of the Balding-Nichols model.}
 #'   \item{\code{"norm"}}{A distribution whose genotype frequencies are proportional
 #'       to the density value of a normal with some mean and some standard deviation.
-#'       Unlike the "bb" option, this will allow for distributions less dispersed than a binomial.}
+#'       Unlike the "bb" option, this will allow for distributions less dispersed than a binomial.
+#'       This seems to be the most robust to violations in modeling assumptions, and so is the
+#'       default.}
 #'   \item{\code{"ash"}}{Any unimodal prior. This will run \code{ploidy} EM algorithms
 #'       with a different center during each optimization. It returns the center (and its fit)
 #'       with the highest likelihood.}
@@ -138,10 +140,13 @@ flexdog <- function(refvec,
 #'       from one generation of selfing. I.e. there is only one parent.
 #'       Since this is a pretty strong and well-founded prior,
 #'       we allow \code{outliers = TRUE} when \code{model = "s1"}.}
-#'   \item{\code{"flex"}}{Generically any categorical distribution. This works well if
-#'       you have a lot of individuals, and so is the default. Though we
-#'       recommend \code{model = "norm"} (and provide a warning concerning this)
-#'       if you have too few individuals.}
+#'   \item{\code{"f1pp"}}{The same as \code{"f1"} but accounts for possible preferential
+#'       pairing during meiosis.}
+#'   \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for possible preferential
+#'       pairing during meiosis.}
+#'   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
+#'       this works well if you have a lot of individuals. In practice, it seems to
+#'       be less robust to violations in modeling assumptions.}
 #'   \item{\code{"uniform"}}{A discrete uniform distribution. This should never
 #'       be used in practice. Please don't email me that \code{flexdog} doesn't
 #'       work if you use this option.}
@@ -322,7 +327,7 @@ flexdog <- function(refvec,
 flexdog_full <- function(refvec,
                          sizevec,
                          ploidy,
-                         model       = c("hw", "bb", "norm", "ash", "f1", "s1", "flex", "uniform"),
+                         model       = c("hw", "bb", "norm", "ash", "f1", "s1", "f1pp", "s1pp", "flex", "uniform"),
                          verbose     = TRUE,
                          mean_bias   = 0,
                          var_bias    = 0.7 ^ 2,
@@ -386,11 +391,11 @@ flexdog_full <- function(refvec,
   assertthat::assert_that(fs1_alpha <= 1, fs1_alpha >= 0)
 
   ## Check p1ref, p2ref, p1size, p2size ----------------------------
-  if ((!is.null(p1ref) | !is.null(p1size)) & (model != "f1" & model != "s1")) {
-    stop("flexdog: if model is not 'f1' or 's1', then p1ref and p1size both need to be NULL.")
+  if ((!is.null(p1ref) | !is.null(p1size)) & (model != "f1" & model != "s1" & model != "f1pp" & model != "s1pp")) {
+    stop("flexdog: if model is not 'f1', 's1', 'f1pp', or 's1pp' then p1ref and p1size both need to be NULL.")
   }
-  if ((!is.null(p2ref) | !is.null(p2size)) & (model != "f1")) {
-    stop("flexdog: if model is not 'f1', then p2ref and p2size both need to be NULL.")
+  if ((!is.null(p2ref) | !is.null(p2size)) & (model != "f1" & model != "f1pp")) {
+    stop("flexdog: if model is not 'f1' or 'f1pp', then p2ref and p2size both need to be NULL.")
   }
   if ((is.null(p1ref) & !is.null(p1size)) | (!is.null(p1ref) & is.null(p1size))) {
     stop("flexdog: p1ref and p1size either need to be both NULL or both non-NULL.")
@@ -410,9 +415,9 @@ flexdog_full <- function(refvec,
     stop('flexdog: `model` cannot equal `"flex"` when `mode` is specified.')
   } else if (is.null(mode) & model == "flex") {
     mode_vec <- 0
-  } else if (!is.null(mode) & (model == "f1" | model == "s1" | model == "uniform")) {
-    stop('flexdog: `model` cannot equal `"f1" or "s1"` when `mode` is specified.')
-  } else if (is.null(mode) & (model == "f1" | model == "s1" | model == "uniform")) {
+  } else if (!is.null(mode) & (model == "f1" | model == "s1" | model == "uniform" | model == "f1pp" | model == "s1pp")) {
+    stop('flexdog: `model` cannot equal "f1", "s1", "f1pp", "s1pp", or "uniform" when `mode` is specified.')
+  } else if (is.null(mode) & (model == "f1" | model == "s1" | model == "uniform" | model == "f1pp" | model == "s1pp")) {
     mode_vec <- mean(refvec / sizevec, na.rm = TRUE) ## just to initialize pivec
   } else if (!is.null(mode) & model == "ash") {
     stopifnot(length(mode) == 1)
@@ -494,6 +499,19 @@ flexdog_full <- function(refvec,
     } else if (model == "norm") {
       control$mu    <- mode * ploidy ## initialize mean of normal
       control$sigma <- sqrt(ploidy * mode * (1 - mode)) ## initialize sd of normal
+    } else if (model == "f1pp" | model == "s1pp") {
+      control$blist <- get_bivalent_probs(ploidy = ploidy)
+      control$fs1_alpha <- fs1_alpha
+      control$p1_pair_weights <- list()
+      for (ell in 0:ploidy) { ## initialize bivalent pairing weights
+        control$p1_pair_weights[[ell + 1]] <- get_hyper_weights(ploidy = ploidy, ell = ell)$weightvec
+      }
+      if (model == "f1pp") {
+        control$p2_pair_weights <- list()
+        for (ell in 0:ploidy) {
+          control$p2_pair_weights[[ell + 1]] <- get_hyper_weights(ploidy = ploidy, ell = ell)$weightvec
+        }
+      }
     }
 
     ## Initialize pivec so that two modes have equal prob if model = "ash".
@@ -558,7 +576,7 @@ flexdog_full <- function(refvec,
       od   <- oout$par[3]
 
       ## if F1 or S1, update betabinomial log-likelihood of parent counts
-      if (model == "f1") {
+      if (model == "f1" | model == "f1pp") {
         if (!is.null(p1ref)) {
           xi_vec <- xi_fun(p = 0:ploidy / ploidy, eps = seq, h = bias)
           control$p1_lbb <- dbetabinom(x    = rep(p1ref, ploidy + 1),
@@ -575,7 +593,7 @@ flexdog_full <- function(refvec,
                                        rho  = od,
                                        log  = TRUE)
         }
-      } else if (model == "s1") {
+      } else if (model == "s1" | model == "s1pp") {
         if (!is.null(p1ref)) {
           xi_vec <- xi_fun(p = 0:ploidy / ploidy, eps = seq, h = bias)
           control$p1_lbb <- dbetabinom(x    = rep(p1ref, ploidy + 1),
@@ -826,7 +844,7 @@ is.flexdog <- function(x) {
 #'     used in \code{\link{flexdog_full}}.
 #'
 #' @author David Gerard
-initialize_pivec <- function(ploidy, mode, model = c("hw", "bb", "norm", "ash", "f1", "s1", "flex", "uniform")) {
+initialize_pivec <- function(ploidy, mode, model = c("hw", "bb", "norm", "ash", "f1", "s1", "f1pp", "s1pp", "flex", "uniform")) {
   assertthat::are_equal(1, length(ploidy), length(mode))
   assertthat::are_equal(ploidy %% 1, 0)
 
@@ -864,7 +882,7 @@ initialize_pivec <- function(ploidy, mode, model = c("hw", "bb", "norm", "ash", 
     } else if (init_type == "piunif") {
       pivec <- rep(1 / (ploidy + 1), length = ploidy + 1)
     }
-  } else if (model == "hw" | model == "f1" | model == "s1" | model == "bb" | model == "norm") {
+  } else if (model == "hw" | model == "f1" | model == "s1" | model == "bb" | model == "norm" | model == "f1pp" | model == "s1pp") {
     if (mode < 0 | mode > 1) {
       stop('initialize_pivec: when model = "hw", mode should be between 0 and 1.\n It is the initialization of the allele frequency.')
     }
@@ -881,7 +899,7 @@ initialize_pivec <- function(ploidy, mode, model = c("hw", "bb", "norm", "ash", 
 #' @param weight_vec \code{colSums(wik_mat)} from \code{\link{flexdog}}.
 #'     This is the sum of current posterior probabilities of each individual
 #'     having genotype k.
-#' @param model What model are we assuming.
+#' @param model What model are we assuming? See the description in \code{\link{flexdog}} for details.
 #' @param control A list of anything else needed to be passed.
 #'     E.g. if \code{model = "ash"},
 #'     then \code{inner_weights} needs to be passed through \code{control}
@@ -894,7 +912,7 @@ initialize_pivec <- function(ploidy, mode, model = c("hw", "bb", "norm", "ash", 
 #' }
 #'
 #' @author David Gerard
-flex_update_pivec <- function(weight_vec, model = c("hw", "bb", "norm", "ash", "f1", "s1", "flex", "uniform"), control) {
+flex_update_pivec <- function(weight_vec, model = c("hw", "bb", "norm", "ash", "f1", "s1", "f1pp", "s1pp", "flex", "uniform"), control) {
   ## Check input -------------------------------
   ploidy <- length(weight_vec) - 1
   model <- match.arg(model)

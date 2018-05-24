@@ -1,10 +1,10 @@
 #include "mupdog.h"
 
 // [[Rcpp::export]]
-void wem_fixp(arma::vec & pivec, 
+void wem_fixp(arma::vec & pivec,
               const arma::mat & lmat,
-              arma::mat & etamat, 
-              const int & nind, 
+              arma::mat & etamat,
+              const int & nind,
               const int & nclass,
               const arma::vec & weight_vec,
               arma::vec & nvec,
@@ -46,23 +46,23 @@ double wem_obj(const arma::vec & pivec,
       // do nothing.
     }
   }
-  
+
   // Add the penalty ----
   double pen = 0.0;
   if (lambda > TOL) {
     pen = lambda * arma::sum(arma::log(pivec));
   }
-  
+
   return obj + pen;
 }
 
 
 //' Generalized version of \code{\link{uni_em}}.
-//' 
+//'
 //' @inherit uni_em
-//' 
+//'
 //' @author David Gerard
-//' 
+//'
 //' @export
 //'
 // [[Rcpp::export]]
@@ -90,7 +90,7 @@ arma::vec wem(arma::vec weight_vec,
   if (lambda < 0.0) {
     Rcpp::stop("uni_em: lambda cannot be negative.");
   }
-  
+
   // Run SQUAREM ------------------------------------------------
   int index       = 0;
   double err      = obj_tol + 1.0;
@@ -109,45 +109,45 @@ arma::vec wem(arma::vec weight_vec,
   double wn;
   arma::vec pivec_n1(nclass);
   arma::vec pivec_n2(nclass);
-  
+
   while ((index < itermax) & (err > obj_tol)) {
     old_obj = obj;
     pivec_n2 = pivec;
-    
+
     // update pivec twice
-    wem_fixp(pivec_n2, 
-             lmat, 
-             etamat, 
-             nind, 
-             nclass, 
-             weight_vec, 
-             nvec, 
+    wem_fixp(pivec_n2,
+             lmat,
+             etamat,
+             nind,
+             nclass,
+             weight_vec,
+             nvec,
              lambda);
-    
+
     pivec_n1 = pivec_n2; // one update
-    
-    wem_fixp(pivec_n2, 
-             lmat, 
-             etamat, 
-             nind, 
-             nclass, 
-             weight_vec, 
-             nvec, 
-             lambda); 
+
+    wem_fixp(pivec_n2,
+             lmat,
+             etamat,
+             nind,
+             nclass,
+             weight_vec,
+             nvec,
+             lambda);
     // both updates done.
-    
+
     // get rn and vn ------------------------
     rn = pivec_n1 - pivec;
     vn = pivec_n2 - 2.0 * pivec_n1 + pivec;
-    
-    
+
+
     // get alphas ---------------------------
     dot_rnvn = arma::dot(rn, vn);
     alpha_mpe1 = arma::dot(rn, rn) / dot_rnvn;
     alpha_rre1 = dot_rnvn / arma::dot(vn, vn);
     wn = std::sqrt(alpha_rre1 / alpha_mpe1);
     alpha_hyb = wn * alpha_mpe1 + (1.0 - wn) * alpha_rre1;
-    
+
     // get update ---------------------------
     pivec = pivec - (2.0 * alpha_hyb) * rn + std::pow(alpha_hyb, 2.0) * vn;
 
@@ -156,20 +156,20 @@ arma::vec wem(arma::vec weight_vec,
         pivec(k) = 0.0;
       }
     }
-    
+
     // one last fixed point -----------------
-    wem_fixp(pivec, 
-             lmat, 
-             etamat, 
-             nind, 
-             nclass, 
-             weight_vec, 
-             nvec, 
-             lambda); 
-      
+    wem_fixp(pivec,
+             lmat,
+             etamat,
+             nind,
+             nclass,
+             weight_vec,
+             nvec,
+             lambda);
+
     // calculate objective and update stopping criteria
     obj = wem_obj(pivec, weight_vec, lmat, lambda);
-    
+
     err = std::abs(obj - old_obj);
     index++;
   }

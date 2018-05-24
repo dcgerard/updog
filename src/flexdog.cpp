@@ -9,7 +9,7 @@
 //' @param pivec The mixing probability of the i'th discrete uniform distribution.
 //'
 //' @author David Gerard
-//' 
+//'
 //' @return A vector of numerics. Element k is the probability of genotype k.
 //'
 //' @seealso \code{\link{flexdog}} where this is used.
@@ -18,7 +18,8 @@
 NumericVector get_probk_vec(NumericVector pivec, std::string model, double mode) {
   int K = pivec.length() - 1;
   NumericVector probk_vec(K + 1);
-  if ((model == "flex") | (model == "hw") | (model == "f1") | (model == "s1") | (model == "uniform") | (model == "bb") | (model == "norm")) {
+  if ((model == "flex") | (model == "hw") | (model == "f1") | (model == "s1") | (model == "uniform") |
+    (model == "bb") | (model == "norm") | (model == "f1pp") | (model == "s1pp")) {
     probk_vec = pivec;
   } else if (model == "ash") {
     double denom; // what you divide the pi's by.
@@ -40,7 +41,7 @@ NumericVector get_probk_vec(NumericVector pivec, std::string model, double mode)
       }
     }
   } else {
-    Rcpp::stop("get_probk_vec: model must be one of 'flex', 'ash', 'hw', 'bb', 'norm', 'f1', 's1', or 'uniform'");
+    Rcpp::stop("get_probk_vec: model must be one of 'flex', 'ash', 'hw', 'bb', 'norm', 'f1', 's1', 'f1pp', 's1pp', or 'uniform'");
   }
   return probk_vec;
 }
@@ -50,8 +51,8 @@ NumericVector get_probk_vec(NumericVector pivec, std::string model, double mode)
 //' The (i,k)th element is \eqn{1(k \in F(a, i)) / |F(a,i)|}.
 //'
 //' @inheritParams flexdog_full
-//' 
-//' @return A matrix of numerics. The weights used for the 
+//'
+//' @return A matrix of numerics. The weights used for the
 //'    weighted EM algorithm in \code{\link{flexdog_full}}.
 //'
 //' @author David Gerard
@@ -87,7 +88,7 @@ NumericMatrix get_inner_weights(int ploidy, double mode) {
 //' @param probk_vec The vector of current prior probabilities of each genotype.
 //'
 //'
-//' @return A matrix of numerics. The rows index the individuals and the 
+//' @return A matrix of numerics. The rows index the individuals and the
 //'     columns index the genotype. These weights are used in the EM algorithm
 //'     (and is indeed the E-step) in \code{\link{flexdog_full}}.
 //'
@@ -140,8 +141,8 @@ NumericMatrix get_wik_mat(NumericVector probk_vec,
 //' @param probk_vec The kth element is the prior probability of genotype k (when starting to count from 0).
 //'
 //' @author David Gerard
-//' 
-//' @return The objective (marginal log-likelihood) used in 
+//'
+//' @return The objective (marginal log-likelihood) used in
 //'     \code{\link{flexdog_full}}.
 //'
 // [[Rcpp::export]]
@@ -195,7 +196,7 @@ double flexdog_obj(NumericVector probk_vec,
 //' @param pivec The current parameters.
 //'
 //' @author David Gerard
-//' 
+//'
 //' @return The objective optimized by \code{\link{uni_em}} during
 //'     that separate unimodal EM algorithm.
 //'
@@ -347,7 +348,7 @@ arma::vec uni_em(arma::vec weight_vec,
 //' @param pvec The known distribtuion (e.g. from assuming an
 //'     F1 population).
 //' @param weight_vec A vector of weights.
-//' 
+//'
 //' @return The objective when updating \code{pivec} when \code{model = "f1"}
 //'     or \code{model = "s1"} in \code{\link{flexdog_full}}.
 //'

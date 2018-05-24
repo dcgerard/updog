@@ -16,7 +16,7 @@ the allele frequency if \code{model = "hw"}. This should be
 \code{NULL} for all other options of \code{model}.}
 }
 \value{
-A matrix of numerics. The weights used for the 
+A matrix of numerics. The weights used for the
    weighted EM algorithm in \code{\link{flexdog_full}}.
 }
 \description{

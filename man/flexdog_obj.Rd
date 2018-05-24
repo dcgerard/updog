@@ -34,7 +34,7 @@ error rate.}
 error rate.}
 }
 \value{
-The objective (marginal log-likelihood) used in 
+The objective (marginal log-likelihood) used in
     \code{\link{flexdog_full}}.
 }
 \description{

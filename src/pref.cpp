@@ -247,6 +247,10 @@ List get_hyper_weights(int ploidy, int ell) {
     Rcpp::stop("get_hyper_weights: ell should be between 0 and ploidy (inclusive).");
   }
 
+  if (ploidy > 20) {
+    Rcpp::stop("get_hyper_weights: we run into numerical stability issues that we have not fixed yet when ploidy > 20.");
+  }
+
   int np = count_pairings(ploidy); // number of pairings
   int np_p; //number of pairings given pvec.
   IntegerVector pvec(3);

@@ -37,6 +37,7 @@ test_that("flexdog works", {
   p1size      <- NULL
   p2ref       <- NULL
   p2size      <- NULL
+  outliers    <- FALSE
 
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
                   ploidy = ploidy, model = "f1", verbose = FALSE,
@@ -222,7 +223,7 @@ test_that("get_wik_mat_out has expected behavior", {
                             od        = od)
   expect_true(all(wikmat[1:5, 1:5] == 0))
   expect_true(all(wikmat[, 6] == 1))
-  
+
   wikmat1 <- get_wik_mat_out(probk_vec = probk_vec,
                              out_prop  = 0,
                              refvec    = refvec,
@@ -231,7 +232,7 @@ test_that("get_wik_mat_out has expected behavior", {
                              seq       = seq,
                              bias      = bias,
                              od        = od)
-  
+
   wikmat2 <- get_wik_mat(probk_vec = probk_vec,
                          refvec    = refvec,
                          sizevec   = sizevec,
@@ -239,6 +240,6 @@ test_that("get_wik_mat_out has expected behavior", {
                          seq       = seq,
                          bias      = bias,
                          od        = od)
-  
+
   expect_equal(wikmat1[1:5, 1:5], wikmat2)
 })

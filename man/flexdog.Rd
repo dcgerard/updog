@@ -5,9 +5,9 @@
 \title{Flexible genotyping for autopolyploids from next-generation sequencing data.}
 \usage{
 flexdog(refvec, sizevec, ploidy, model = c("norm", "flex", "hw", "bb", "ash",
-  "f1", "s1", "uniform"), p1ref = NULL, p1size = NULL, p2ref = NULL,
-  p2size = NULL, bias_init = exp(c(-1, -0.5, 0, 0.5, 1)), verbose = TRUE,
-  outliers = FALSE, ...)
+  "f1", "s1", "f1pp", "s1pp", "uniform"), p1ref = NULL, p1size = NULL,
+  p2ref = NULL, p2size = NULL, bias_init = exp(c(-1, -0.5, 0, 0.5, 1)),
+  verbose = TRUE, outliers = FALSE, ...)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads with the reference allele.}
@@ -114,7 +114,9 @@ Possible values of the genotype distribution (values of \code{model}) are:
       version of "hw" and can be derived from a special case of the Balding-Nichols model.}
   \item{\code{"norm"}}{A distribution whose genotype frequencies are proportional
       to the density value of a normal with some mean and some standard deviation.
-      Unlike the "bb" option, this will allow for distributions less dispersed than a binomial.}
+      Unlike the "bb" option, this will allow for distributions less dispersed than a binomial.
+      This seems to be the most robust to violations in modeling assumptions, and so is the
+      default.}
   \item{\code{"ash"}}{Any unimodal prior. This will run \code{ploidy} EM algorithms
       with a different center during each optimization. It returns the center (and its fit)
       with the highest likelihood.}
@@ -125,10 +127,13 @@ Possible values of the genotype distribution (values of \code{model}) are:
       from one generation of selfing. I.e. there is only one parent.
       Since this is a pretty strong and well-founded prior,
       we allow \code{outliers = TRUE} when \code{model = "s1"}.}
-  \item{\code{"flex"}}{Generically any categorical distribution. This works well if
-      you have a lot of individuals, and so is the default. Though we
-      recommend \code{model = "norm"} (and provide a warning concerning this)
-      if you have too few individuals.}
+  \item{\code{"f1pp"}}{The same as \code{"f1"} but accounts for possible preferential
+      pairing during meiosis.}
+  \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for possible preferential
+      pairing during meiosis.}
+  \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
+      this works well if you have a lot of individuals. In practice, it seems to
+      be less robust to violations in modeling assumptions.}
   \item{\code{"uniform"}}{A discrete uniform distribution. This should never
       be used in practice. Please don't email me that \code{flexdog} doesn't
       work if you use this option.}
