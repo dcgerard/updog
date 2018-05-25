@@ -97,7 +97,6 @@ arma::vec wem(arma::vec weight_vec,
   arma::vec pivec = pi_init;
   double obj      = wem_obj(pivec, weight_vec, lmat, lambda);
   double old_obj  = obj;
-  double lsum     = 0.0;
   arma::mat etamat(nclass, nind);
   arma::vec nvec(nclass);
   arma::vec rn(nclass);

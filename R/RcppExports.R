@@ -122,11 +122,11 @@ wem_obj <- function(pivec, weight_vec, lmat, lambda) {
 }
 
 #' Generalized version of \code{\link{uni_em}}.
-#' 
+#'
 #' @inherit uni_em
-#' 
+#'
 #' @author David Gerard
-#' 
+#'
 #' @export
 #'
 wem <- function(weight_vec, lmat, pi_init, lambda, itermax, obj_tol) {
@@ -1166,5 +1166,86 @@ logit <- function(x) {
 #' @author David Gerard
 expit <- function(x) {
     .Call('_updog_expit', PACKAGE = 'updog', x)
+}
+
+#' Objective function optimized by \code{\link{uni_em_const}}.
+#'
+#' @inheritParams uni_em_const
+#' @param pivec The current parameters.
+#'
+#' @author David Gerard
+#'
+#' @return The objective optimized by \code{\link{uni_em_const}} during
+#'     that separate unimodal EM algorithm.
+#'
+uni_obj_const <- function(pivec, alpha, weight_vec, lmat, lambda) {
+    .Call('_updog_uni_obj_const', PACKAGE = 'updog', pivec, alpha, weight_vec, lmat, lambda)
+}
+
+#' EM algorithm to fit weighted ash objective with a uniform
+#' mixing component.
+#'
+#' Solves the following optimization problem
+#' \deqn{\max_{\pi} \sum_k w_k \log(\alpha / (K+1) + (1 - \alpha)\sum_j \pi_j \ell_jk).}
+#' It does this using a weighted EM algorithm.
+#'
+#' @param weight_vec A vector of weights. Each element of \code{weight_vec} corresponds
+#'     to a column of \code{lmat}.
+#' @param lmat A matrix of inner weights. The columns are the "individuals" and the rows are the "classes."
+#' @param pi_init The initial values of \code{pivec}. Each element of \code{pi_init}
+#'     corresponds to a row of \code{lmat}.
+#' @param alpha The mixing weight for the uniform component.
+#'     This should be small (say, less tahn 10^-3).
+#' @param itermax The maximum number of EM iterations to take.
+#' @param obj_tol The objective stopping criterion.
+#' @param lambda The penalty on the pi's. Should be greater than 0 and really really small.
+#'
+#'
+#' @return A vector of numerics. The update of \code{pivec} in
+#'     \code{\link{flexdog_full}}.
+#'
+#' @author David Gerard
+#'
+uni_em_const <- function(weight_vec, lmat, pi_init, alpha, lambda, itermax, obj_tol) {
+    .Call('_updog_uni_em_const', PACKAGE = 'updog', weight_vec, lmat, pi_init, alpha, lambda, itermax, obj_tol)
+}
+
+#' Convolution between two discrete probability mass functions
+#' with support on 0:K.
+#'
+#' @author David Gerard
+#'
+#' @param x The first probability vector. The ith element is the
+#'     probability of i - 1.
+#' @param y The second probability vector. The ith element is the
+#'     probability of i - 1.
+#'
+#' @return A vector that is the convolution of \code{x} and
+#'     \code{y}. The ith element is the probability of i - 1.
+#'
+#'
+convolve <- function(x, y) {
+    .Call('_updog_convolve', PACKAGE = 'updog', x, y)
+}
+
+#' Objective function when doing Brent's method in
+#' \code{\link{update_pp}} when one parent only has
+#' two mixing components.
+#'
+#' @param firstmixweight The mixing weight of the first component.
+#' @param probmat The rows index the components and the columns
+#'     index the segregation amount. Should only have two rows.
+#' @param pvec The distribution of the other parent.
+#' @param weight_vec The weights for each element.
+#' @param alpha The mixing weight on the uniform component.
+#'
+#' @return The objective value, as calculated by taking a
+#'     convolution using \code{\link{convolve}} of the mixing
+#'     distribution and \code{pvec}, then putting that
+#'     probability distribution through \code{\link{f1_obj}}.
+#'
+#' @author David Gerard
+pp_brent_obj <- function(firstmixweight, probmat, pvec, weight_vec, alpha) {
+    .Call('_updog_pp_brent_obj', PACKAGE = 'updog', firstmixweight, probmat, pvec, weight_vec, alpha)
 }
 

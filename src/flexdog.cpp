@@ -356,12 +356,12 @@ arma::vec uni_em(arma::vec weight_vec,
 //'
 // [[Rcpp::export]]
 double f1_obj(double alpha,
-              NumericVector pvec,
-              NumericVector weight_vec) {
+              arma::vec pvec,
+              arma::vec weight_vec) {
 
   // check input ----------------------------------
-  int ploidy = pvec.length() - 1;
-  if (weight_vec.length() != ploidy + 1) {
+  int ploidy = pvec.n_elem - 1;
+  if (weight_vec.n_elem != ploidy + 1) {
     Rcpp::stop("f1_obj: pvec and weight_vec should be the same length.");
   }
   if ((alpha < 0) | (alpha > 1)) {
@@ -372,7 +372,7 @@ double f1_obj(double alpha,
   double obj = 0.0;
   double newp;
   for (int k = 0; k <= ploidy; k++) {
-    newp = (1.0 - alpha) * pvec(k) + alpha * (1 - pvec(k));
+    newp = (1.0 - alpha) * pvec(k) + alpha / ((double)ploidy + 1.0);
     obj = obj + weight_vec(k) * std::log(newp);
   }
   return obj;

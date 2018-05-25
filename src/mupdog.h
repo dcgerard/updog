@@ -18,3 +18,6 @@ double dbetabinom_double(int x, int size, double mu, double rho, bool log);
 // from objective.cpp -----------------------------------------------
 double pen_bias(double h, double mu_h, double sigma2_h);
 double pen_seq_error(double eps, double mu_eps, double sigma2_eps);
+
+// from flexdog.cpp -------------------------------------------------
+double f1_obj(double alpha, arma::vec pvec, arma::vec weight_vec);

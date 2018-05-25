@@ -31,7 +31,7 @@ test_that("uni_em is same as CVXR on problem data.", {
     plot(cout, uout)
     abline(0, 1)
 
-    expect_equal(cout, c(uout), tol = 10^-3)
+    expect_equal(cout, c(uout), tol = 10^-2)
   }
 }
 )

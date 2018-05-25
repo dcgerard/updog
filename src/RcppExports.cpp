@@ -291,14 +291,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // f1_obj
-double f1_obj(double alpha, NumericVector pvec, NumericVector weight_vec);
+double f1_obj(double alpha, arma::vec pvec, arma::vec weight_vec);
 RcppExport SEXP _updog_f1_obj(SEXP alphaSEXP, SEXP pvecSEXP, SEXP weight_vecSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type pvec(pvecSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type weight_vec(weight_vecSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type pvec(pvecSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
     rcpp_result_gen = Rcpp::wrap(f1_obj(alpha, pvec, weight_vec));
     return rcpp_result_gen;
 END_RCPP
@@ -1036,6 +1036,65 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// uni_obj_const
+double uni_obj_const(arma::vec pivec, double alpha, arma::vec weight_vec, arma::mat lmat, long double lambda);
+RcppExport SEXP _updog_uni_obj_const(SEXP pivecSEXP, SEXP alphaSEXP, SEXP weight_vecSEXP, SEXP lmatSEXP, SEXP lambdaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type pivec(pivecSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type lmat(lmatSEXP);
+    Rcpp::traits::input_parameter< long double >::type lambda(lambdaSEXP);
+    rcpp_result_gen = Rcpp::wrap(uni_obj_const(pivec, alpha, weight_vec, lmat, lambda));
+    return rcpp_result_gen;
+END_RCPP
+}
+// uni_em_const
+arma::vec uni_em_const(arma::vec weight_vec, arma::mat lmat, arma::vec pi_init, double alpha, long double lambda, int itermax, double obj_tol);
+RcppExport SEXP _updog_uni_em_const(SEXP weight_vecSEXP, SEXP lmatSEXP, SEXP pi_initSEXP, SEXP alphaSEXP, SEXP lambdaSEXP, SEXP itermaxSEXP, SEXP obj_tolSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type lmat(lmatSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type pi_init(pi_initSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< long double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< int >::type itermax(itermaxSEXP);
+    Rcpp::traits::input_parameter< double >::type obj_tol(obj_tolSEXP);
+    rcpp_result_gen = Rcpp::wrap(uni_em_const(weight_vec, lmat, pi_init, alpha, lambda, itermax, obj_tol));
+    return rcpp_result_gen;
+END_RCPP
+}
+// convolve
+arma::vec convolve(arma::vec x, arma::vec y);
+RcppExport SEXP _updog_convolve(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(convolve(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pp_brent_obj
+double pp_brent_obj(double firstmixweight, arma::mat probmat, arma::vec pvec, arma::vec weight_vec, double alpha);
+RcppExport SEXP _updog_pp_brent_obj(SEXP firstmixweightSEXP, SEXP probmatSEXP, SEXP pvecSEXP, SEXP weight_vecSEXP, SEXP alphaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type firstmixweight(firstmixweightSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type probmat(probmatSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type pvec(pvecSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    rcpp_result_gen = Rcpp::wrap(pp_brent_obj(firstmixweight, probmat, pvec, weight_vec, alpha));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_updog_dbetabinom_alpha_beta_double", (DL_FUNC) &_updog_dbetabinom_alpha_beta_double, 5},
@@ -1110,6 +1169,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_updog_log_sum_exp_2", (DL_FUNC) &_updog_log_sum_exp_2, 2},
     {"_updog_logit", (DL_FUNC) &_updog_logit, 1},
     {"_updog_expit", (DL_FUNC) &_updog_expit, 1},
+    {"_updog_uni_obj_const", (DL_FUNC) &_updog_uni_obj_const, 5},
+    {"_updog_uni_em_const", (DL_FUNC) &_updog_uni_em_const, 7},
+    {"_updog_convolve", (DL_FUNC) &_updog_convolve, 2},
+    {"_updog_pp_brent_obj", (DL_FUNC) &_updog_pp_brent_obj, 5},
     {NULL, NULL, 0}
 };
 

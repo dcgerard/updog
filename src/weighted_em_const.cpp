@@ -3,14 +3,14 @@
 // Functions for solving weighted EM with a uniform mixing component.
 
 
-//' Objective function optimized by \code{\link{uni_em}}.
+//' Objective function optimized by \code{\link{uni_em_const}}.
 //'
 //' @inheritParams uni_em_const
 //' @param pivec The current parameters.
 //'
 //' @author David Gerard
 //'
-//' @return The objective optimized by \code{\link{uni_em}} during
+//' @return The objective optimized by \code{\link{uni_em_const}} during
 //'     that separate unimodal EM algorithm.
 //'
 // [[Rcpp::export]]
@@ -99,11 +99,11 @@ arma::vec uni_em_const(arma::vec weight_vec,
   int index       = 0;
   double err      = obj_tol + 1.0;
   arma::vec pivec = pi_init;
-  double obj      = uni_obj_const(pivec, weight_vec, lmat, lambda);
+  double obj      = uni_obj_const(pivec, alpha, weight_vec, lmat, lambda);
   double old_obj  = obj;
   double lsum     = 0.0;
-  arma::mat etamat(nind, nind);
-  arma::vec nvec(nind);
+  arma::mat etamat(nclass, nind);
+  arma::vec nvec(nclass);
 
   while ((index < itermax) & (err > obj_tol)) {
     old_obj = obj;
@@ -114,7 +114,7 @@ arma::vec uni_em_const(arma::vec weight_vec,
         etamat(j, k) = (1.0 - alpha) * pivec(j) * lmat(j, k);
         lsum = lsum + etamat(j, k);
       }
-      lsum = lsum + alpha / (double)nind
+      lsum = lsum + alpha / (double)nind;
       for (int j = 0; j < nclass; j++) {
         etamat(j, k) = etamat(j, k) / lsum;
       }
@@ -124,7 +124,7 @@ arma::vec uni_em_const(arma::vec weight_vec,
     // normalize to get pi_j's ------------------
     pivec = nvec / arma::sum(nvec);
     // calculate objective and update stopping criteria
-    obj = uni_obj_const(pivec, weight_vec, lmat, lambda);
+    obj = uni_obj_const(pivec, alpha, weight_vec, lmat, lambda);
     if (obj < old_obj - TOL) {
       Rcpp::stop("uni_em: Objective is not increasing.\n");
     }
@@ -132,4 +132,94 @@ arma::vec uni_em_const(arma::vec weight_vec,
     index++;
   }
   return pivec;
+}
+
+//' Convolution between two discrete probability mass functions
+//' with support on 0:K.
+//'
+//' @author David Gerard
+//'
+//' @param x The first probability vector. The ith element is the
+//'     probability of i - 1.
+//' @param y The second probability vector. The ith element is the
+//'     probability of i - 1.
+//'
+//' @return A vector that is the convolution of \code{x} and
+//'     \code{y}. The ith element is the probability of i - 1.
+//'
+//'
+// [[Rcpp::export]]
+arma::vec convolve(arma::vec x, arma::vec y) {
+  if (x.n_elem != y.n_elem) {
+    Rcpp::stop("convolve: x and y should have the same number of values.");
+  }
+
+  int nval = x.n_elem;
+  arma::mat joint(nval, nval);
+
+  for (int i = 0; i < nval; i++) {
+    for (int j = 0; j < nval; j++) {
+      joint(i, nval - j - 1) = x(i) * y(j);
+    }
+  }
+
+  arma::vec conv(2 * nval - 1);
+  for (int i = 0; i < (2 * nval - 1); i++) {
+    conv(2 * nval - 2 - i) = arma::accu(joint.diag(i - nval + 1));
+  }
+
+  return(conv);
+}
+
+
+
+//' Objective function when doing Brent's method in
+//' \code{\link{update_pp}} when one parent only has
+//' two mixing components.
+//'
+//' @param firstmixweight The mixing weight of the first component.
+//' @param probmat The rows index the components and the columns
+//'     index the segregation amount. Should only have two rows.
+//' @param pvec The distribution of the other parent.
+//' @param weight_vec The weights for each element.
+//' @param alpha The mixing weight on the uniform component.
+//'
+//' @return The objective value, as calculated by taking a
+//'     convolution using \code{\link{convolve}} of the mixing
+//'     distribution and \code{pvec}, then putting that
+//'     probability distribution through \code{\link{f1_obj}}.
+//'
+//' @author David Gerard
+// [[Rcpp::export]]
+double pp_brent_obj(double firstmixweight,
+                    arma::mat probmat,
+                    arma::vec pvec,
+                    arma::vec weight_vec,
+                    double alpha) {
+  int ploidy = weight_vec.n_elem - 1;
+
+  if (probmat.n_rows != 2) {
+    Rcpp::stop("pp_brent_obj: probmat should have two rows.");
+  }
+  if (probmat.n_cols != (ploidy / 2 + 1)) {
+    Rcpp::stop("pp_brent_obj: probmat should have ploidy / 2 + 1 columns.");
+  }
+  if (probmat.n_cols != pvec.n_elem) {
+    Rcpp::stop("pp_brent_obj: probmat.n_cols should equal pvec.n_elem.");
+  }
+  if ((alpha < 0.0) | (alpha > 1.0 - TOL)) {
+    Rcpp::stop("pp_brent_obj: alpha should be in [0, 1)");
+  }
+  if ((firstmixweight < 0.0) | (firstmixweight > 1.0)) {
+    Rcpp::stop("pp_brent_obj: firstmixweight should be in [0, 1]");
+  }
+
+  arma::vec pvec_new = firstmixweight * probmat.row(0).t() +
+    (1.0 - firstmixweight) * probmat.row(1).t();
+
+  arma::vec pvec_final = convolve(pvec_new, pvec);
+
+  double obj = f1_obj(alpha, pvec_final, weight_vec);
+
+  return obj;
 }
