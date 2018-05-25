@@ -47,7 +47,7 @@
 #'     If \code{model = "f1pp"} then this is for the first parent.
 #'     If \code{model = "s1pp"}, then this is for the only parent.
 #'     This should be \code{NULL} for all other values of \code{model}.
-#' @param p1_pair_weights If \code{model = "s1pp"},
+#' @param p2_pair_weights If \code{model = "s1pp"},
 #'     these are the mixing weights for the bivalent
 #'     pairs output in \code{\link{get_bivalent_probs}} at the
 #'     \code{lvec} level of \code{p2geno} for the second
