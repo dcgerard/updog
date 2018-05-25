@@ -67,3 +67,13 @@ test_that("pp_brent_obj works", {
 
   f1_obj(alpha = alpha, pvec = c(0.1, 0.2, 0.3, 0.2, 0.2), weight_vec = weight_vec)
 })
+
+test_that("rgeno works with pp", {
+  temp <- rgeno(n = 1,
+                ploidy = 6,
+                model = "f1pp",
+                p1geno = 1,
+                p2geno = 3,
+                p1_pair_weights = 1,
+                p2_pair_weights = c(0.3, 0.7))
+})

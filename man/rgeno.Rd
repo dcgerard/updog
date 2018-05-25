@@ -4,9 +4,10 @@
 \alias{rgeno}
 \title{Simulate individual genotypes from one of the supported \code{\link{flexdog}} models.}
 \usage{
-rgeno(n, ploidy, model = c("hw", "bb", "norm", "ash", "f1", "s1", "flex",
-  "uniform"), allele_freq = NULL, od = NULL, p1geno = NULL,
-  p2geno = NULL, mode = NULL, pivec = NULL, mu = NULL, sigma = NULL)
+rgeno(n, ploidy, model = c("hw", "bb", "norm", "ash", "f1", "s1", "f1pp",
+  "s1pp", "flex", "uniform"), allele_freq = NULL, od = NULL,
+  p1geno = NULL, p2geno = NULL, mode = NULL, pivec = NULL, mu = NULL,
+  sigma = NULL, p1_pair_weights = NULL, p2_pair_weights = NULL)
 }
 \arguments{
 \item{n}{The number of observations.}
@@ -22,10 +23,13 @@ For any other model, this should be \code{NULL}.}
 distribution. See \code{\link{betabinom}} for details. For any other model, this should be
 \code{NULL}.}
 
-\item{p1geno}{Either the first parent's genotype if \code{model = "f1"}, or the only parent's
-genotype if \code{model = "s1"}. For any other model, this should be \code{NULL}.}
+\item{p1geno}{Either the first parent's genotype if \code{model = "f1"}
+(or \code{model = "f1pp"}), or the only parent's
+genotype if \code{model = "s1"} (or \code{model = "s1pp"}).
+For any other model, this should be \code{NULL}.}
 
-\item{p2geno}{The second parent's genotype if \code{model = "f1"}.
+\item{p2geno}{The second parent's genotype if \code{model = "f1"}
+(or \code{model = "f1pp"}).
 For any other model, this should be \code{NULL}.}
 
 \item{mode}{If \code{model = "ash"}, this is the center of the distribution. This should be a non-integer value
@@ -42,6 +46,20 @@ For any other model, this should be \code{NULL}.}
 
 \item{sigma}{If \code{model = "norm"}, this is the standard deviation of the normal.
 For any other model, this should be \code{NULL}.}
+
+\item{p1_pair_weights}{The mixing weights for the bivalent
+pairs output in \code{\link{get_bivalent_probs}}
+at the \code{lvec} level of \code{p1geno}.
+If \code{model = "f1pp"} then this is for the first parent.
+If \code{model = "s1pp"}, then this is for the only parent.
+This should be \code{NULL} for all other values of \code{model}.}
+
+\item{p1_pair_weights}{If \code{model = "s1pp"},
+these are the mixing weights for the bivalent
+pairs output in \code{\link{get_bivalent_probs}} at the
+\code{lvec} level of \code{p2geno} for the second
+parent.
+This should be \code{NULL} for all other values of \code{model}.}
 }
 \value{
 A vector of length \code{n} with the genotypes of the sampled individuals.
