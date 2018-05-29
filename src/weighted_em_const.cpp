@@ -148,6 +148,16 @@ arma::vec uni_em_const(arma::vec weight_vec,
 //'     \code{y}. The ith element is the probability of i - 1.
 //'
 //' @export
+//'
+//' @seealso \code{\link[stats]{convolve}} for a more generic convolution
+//'     function.
+//'
+//' @examples
+//' x <- c(1 / 6, 2 / 6, 3 / 6)
+//' y <- c(1 / 9, 2 / 9, 6 / 9)
+//' convolve(x, y)
+//' stats::convolve(x, rev(y), type = "o")
+//'
 // [[Rcpp::export]]
 arma::vec convolve(arma::vec x, arma::vec y) {
   if (x.n_elem != y.n_elem) {
