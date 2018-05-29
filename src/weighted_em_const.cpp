@@ -147,7 +147,7 @@ arma::vec uni_em_const(arma::vec weight_vec,
 //' @return A vector that is the convolution of \code{x} and
 //'     \code{y}. The ith element is the probability of i - 1.
 //'
-//'
+//' @export
 // [[Rcpp::export]]
 arma::vec convolve(arma::vec x, arma::vec y) {
   if (x.n_elem != y.n_elem) {

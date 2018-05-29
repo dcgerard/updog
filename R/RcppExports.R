@@ -1223,7 +1223,7 @@ uni_em_const <- function(weight_vec, lmat, pi_init, alpha, lambda, itermax, obj_
 #' @return A vector that is the convolution of \code{x} and
 #'     \code{y}. The ith element is the probability of i - 1.
 #'
-#'
+#' @export
 convolve <- function(x, y) {
     .Call('_updog_convolve', PACKAGE = 'updog', x, y)
 }
