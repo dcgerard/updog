@@ -459,7 +459,7 @@ get_conv_inner_weights <- function(psegprob, psegmat) {
   lmat <- matrix(NA,
                  ncol = length(psegprob) * 2 - 1,
                  nrow = nrow(psegmat))
-  for (index in 1:nrow(psegmat)) {
+  for (index in seq_len(nrow(psegmat))) {
     lmat[index, ] <- c(convolve(psegprob, psegmat[index, ]))
   }
   return(lmat)
