@@ -126,9 +126,14 @@ An object of class \code{flexdog}, which consists
       the allele frequency, and \code{tau}, the overdispersion parameter.
       If \code{model = "norm"} then this will consist of \code{mu}, the
       normal mean, and \code{sigma}, the normal standard devation (not variance).}
-  \item{\code{geno}}{The posterior mode genotype.}
-  \item{\code{maxpostprob}}{The maximum posterior probability.}
-  \item{\code{postmean}}{The posterior mean genotype.}
+  \item{\code{geno}}{The posterior mode genotype. These are your
+      genotype estimates.}
+  \item{\code{maxpostprob}}{The maximum posterior probability. This
+      is equivalent to the posterior probability of correctly
+      genotyping each individual.}
+  \item{\code{postmean}}{The posterior mean genotype. In downstream
+      association studies, you might want to consider using these
+      estimates.}
   \item{\code{input$refvec}}{The value of \code{refvec} provided by
       the user.}
   \item{\code{input$sizevec}}{The value of \code{sizevec} provided
@@ -142,7 +147,7 @@ An object of class \code{flexdog}, which consists
   \item{\code{input$p2ref}}{The value of \code{p2ref} provided by the user.}
   \item{\code{input$p2size}}{The value of \code{p2size} provided by the user.}
   \item{\code{prop_mis}}{The posterior proportion of individuals
-      misclassified.}
+      genotyped incorrectly.}
   \item{\code{out_prop}}{The estimated proportion of points that
       are outliers. Only available if \code{outliers = TRUE}.}
   \item{\code{prob_out}}{The ith element is the posterior probability
@@ -203,15 +208,17 @@ I include it as an option only for completeness. Please, please don't use it.
 
 The value of \code{prop_mis} is a very intuitive measure for
 the quality of the SNP. \code{prop_mis} is the posterior
-proportion of individuals mis-genotyped. So if you want to
-accurately genotype, say, 95\% of the individuals, you could
+proportion of individuals mis-genotyped. So if you want only SNPS
+that accurately genotype, say, 95\% of the individuals, you could
 discard all SNPs with a \code{prop_mis} under \code{0.95}.
 
 The value of \code{maxpostprob} is a very intuitive measure
 for the quality of the genotype estimate of an individual.
 This is the posterior probability of correctly genotyping
 the individual when using \code{ogeno} (the posterior mode)
-as the genotype estimate.
+as the genotype estimate. So if you want to correctly genotype,
+say, 95\% of individuals, you could discard all individuals
+with a \code{maxpostprob} of under \code{0.95}.
 
 In most datasets I've examined, allelic bias is a major issue. However,
 you may fit the model assuming no allelic bias by setting

@@ -129,6 +129,24 @@ wem_obj <- function(pivec, weight_vec, lmat, lambda) {
 #'
 #' @export
 #'
+#' @examples
+#' set.seed(2)
+#' n <- 3
+#' p <- 5
+#' lmat <- matrix(stats::runif(n * p), nrow = n)
+#' weight_vec <- seq_len(p)
+#' pi_init <- stats::runif(n)
+#' pi_init <- pi_init / sum(pi_init)
+#' wem(weight_vec = weight_vec,
+#'     lmat       = lmat,
+#'     pi_init    = pi_init,
+#'     lambda     = 0,
+#'     itermax    = 100,
+#'     obj_tol    = 10^-6)
+#'
+#' @seealso \code{\link{uni_em}} for a description of the
+#'     optimization problem.
+#'
 wem <- function(weight_vec, lmat, pi_init, lambda, itermax, obj_tol) {
     .Call('_updog_wem', PACKAGE = 'updog', weight_vec, lmat, pi_init, lambda, itermax, obj_tol)
 }

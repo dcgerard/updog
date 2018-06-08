@@ -1,18 +1,46 @@
-#' \code{updog} Flexible Genotyping for Autopolyploids
+#' \code{updog} Flexible Genotyping for Polyploids
 #'
 #' Implements empirical Bayes approaches to genotype
-#' autopolyploids from next generation sequencing data while
+#' polyploids from next generation sequencing data while
 #' accounting for allelic bias, overdispersion, and sequencing
-#' error. The main function is \code{\link{flexdog}}, which
-#' allows the specification
-#' of many different genotype distributions. An experimental
-#' function that takes into account varying leves of relatedness
-#' is implemented in \code{\link{mupdog}}.
+#' error. The main function is \code{\link{flexdog}}, which allows
+#' the specification of many different genotype distributions.
+#' An experimental function that takes into account varying
+#' levels of relatedness is implemented in \code{\link{mupdog}}.
+#' Also provided are functions to simulate genotypes
+#' (\code{\link{rgeno}}) and read-counts
+#' (\code{\link{rflexdog}}), as well as functions to calculate
+#' oracle genotyping error rates (\code{\link{oracle_mis}}) and
+#' correlation with the true genotypes (\code{\link{oracle_cor}}).
+#' These latter two functions are useful for read depth calculations.
+#' Run \code{browseVignettes(package = "updog")} in R
+#' for example usage.
+#'
+#' The package is named \code{updog} for "Using
+#' Parental Data for Offspring Genotyping" because
+#' we originally developed the
+#' method for full-sib populations, but it works
+#' now for more general populations.
+#'
+#' Our best competitor is probably the \code{fitPoly} package,
+#' which you can check out at
+#' \url{https://cran.r-project.org/package=fitPoly}. Though, we think
+#' that \code{updog} returns better calibrated measures of uncertainty
+#' when you have next-generation sequencing data.
+#'
+#' If you find a bug or want an enhancement, please submit an
+#' issue at \url{http://github.com/dcgerard/updog/issues}.
+#'
+#' @references Gerard, David, Luis Felipe Ventorim Ferrao,
+#' Antonio Augusto Franco Garcia, and Matthew Stephens. 2018.
+#' "Harnessing Empirical Bayes and Mendelian Segregation
+#' for Genotyping Autopolyploids from Messy Sequencing Data."
+#' \emph{bioRxiv}. Cold Spring Harbor Laboratory. doi:10.1101/281550.
 #'
 #' @section \code{updog} Functions:
 #' \describe{
 #'   \item{\code{\link{flexdog}}}{The main function that
-#'       fits an empirical Bayes approach to genotype autopolyploids
+#'       fits an empirical Bayes approach to genotype polyploids
 #'       from next generation sequencing data.}
 #'   \item{\code{\link{mupdog}}}{An experimental approach to genotype
 #'       autopolyploids that accounts for varying levels of
