@@ -10,7 +10,7 @@ flexdog_obj(probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_bias,
 \arguments{
 \item{probk_vec}{The kth element is the prior probability of genotype k (when starting to count from 0).}
 
-\item{refvec}{A vector of counts of reads with the reference allele.}
+\item{refvec}{A vector of counts of reads of the reference allele.}
 
 \item{sizevec}{A vector of total counts.}
 

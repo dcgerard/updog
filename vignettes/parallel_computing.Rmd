@@ -36,7 +36,7 @@ library(doParallel)
 ```
 
 Of course, we'll need to load the `updog` package to actually do the genotyping.
-```{r}
+```{r, message=FALSE}
 library(updog)
 ```
 

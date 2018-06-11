@@ -33,7 +33,7 @@ For any other model, this should be \code{NULL}.}
 For any other model, this should be \code{NULL}.}
 
 \item{mode}{If \code{model = "ash"}, this is the center of the distribution. This should be a non-integer value
-(so the mode is either the floor or the cieling of \code{mode}).
+(so the mode is either the floor or the ceiling of \code{mode}).
 For any other model, this should be \code{NULL}.}
 
 \item{pivec}{A vector of probabilities. If \code{model = "ash"}, then this represents

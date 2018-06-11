@@ -4,7 +4,8 @@
 \alias{get_q_array}
 \title{Return the probabilities of an offspring's genotype given its
 parental genotypes for all possible combinations of parental and
-offspring genotypes.}
+offspring genotypes. This is for species with polysomal inheritance
+and bivalent, non-preferential pairing.}
 \usage{
 get_q_array(ploidy)
 }
@@ -14,7 +15,7 @@ get_q_array(ploidy)
 \value{
 An three-way array of proportions. The (i, j, k)th element
     is the probability of an offspring having k - 1 reference
-    alleles given that parent 1 has i - 1 refrerence alleles and
+    alleles given that parent 1 has i - 1 reference alleles and
     parent 2 has j - 1 reference alleles. Each dimension of the
     array is \code{ploidy + 1}. In the dimension names, "A" stands
     for the reference allele and "a" stands for the
@@ -23,7 +24,8 @@ An three-way array of proportions. The (i, j, k)th element
 \description{
 Return the probabilities of an offspring's genotype given its
 parental genotypes for all possible combinations of parental and
-offspring genotypes.
+offspring genotypes. This is for species with polysomal inheritance
+and bivalent, non-preferential pairing.
 }
 \examples{
 qarray <- get_q_array(6)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ashdog.R
 \name{flexdog}
 \alias{flexdog}
-\title{Flexible genotyping for autopolyploids from next-generation sequencing data.}
+\title{Flexible genotyping for polyploids from next-generation sequencing data.}
 \usage{
 flexdog(refvec, sizevec, ploidy, model = c("norm", "flex", "hw", "bb", "ash",
   "f1", "s1", "f1pp", "s1pp", "uniform"), p1ref = NULL, p1size = NULL,
@@ -10,7 +10,7 @@ flexdog(refvec, sizevec, ploidy, model = c("norm", "flex", "hw", "bb", "ash",
   verbose = TRUE, outliers = FALSE, ...)
 }
 \arguments{
-\item{refvec}{A vector of counts of reads with the reference allele.}
+\item{refvec}{A vector of counts of reads of the reference allele.}
 
 \item{sizevec}{A vector of total counts.}
 
@@ -21,16 +21,20 @@ individual.}
 See Details for possible values.}
 
 \item{p1ref}{The reference counts for the first parent if
-\code{model = "f1"}, or for the only parent if \code{model = "s1"}.}
+\code{model = "f1"} (or \code{model = "f1pp"}), or for
+the only parent if \code{model = "s1"} (or
+\code{model = "s1pp"}).}
 
 \item{p1size}{The total counts for the first parent if
-\code{model = "f1"}, or for the only parent if \code{model = "s1"}.}
+\code{model = "f1"} (or \code{model = "f1pp"}),
+or for the only parent if \code{model = "s1"}
+(or \code{model = "s1pp"}).}
 
 \item{p2ref}{The reference counts for the second parent if
-\code{model = "f1"}.}
+\code{model = "f1"} (or \code{model = "f1pp"}).}
 
 \item{p2size}{The total counts for the second parent if
-\code{model = "f1"}.}
+\code{model = "f1"} (or \code{model = "f1pp"}).}
 
 \item{bias_init}{A vector of initial values for the bias parameter
 over the multiple runs of \code{flexdog_full}.}
@@ -72,7 +76,7 @@ An object of class \code{flexdog}, which consists
       \code{model = "bb"} then this will consist of \code{alpha},
       the allele frequency, and \code{tau}, the overdispersion parameter.
       If \code{model = "norm"} then this will consist of \code{mu}, the
-      normal mean, and \code{sigma}, the normal standard devation (not variance).}
+      normal mean, and \code{sigma}, the normal standard deviation (not variance).}
   \item{\code{geno}}{The posterior mode genotype. These are your
       genotype estimates.}
   \item{\code{maxpostprob}}{The maximum posterior probability. This
@@ -125,16 +129,30 @@ Possible values of the genotype distribution (values of \code{model}) are:
   \item{\code{"ash"}}{Any unimodal prior. This will run \code{ploidy} EM algorithms
       with a different center during each optimization. It returns the center (and its fit)
       with the highest likelihood.}
-  \item{\code{"f1"}}{This prior assumes the individuals are all full-siblings resulting
-      from one generation of a bi-parental cross. Since this is a pretty strong
-      and well-founded prior, we allow \code{outliers = TRUE} when \code{model = "f1"}.}
-  \item{\code{"s1"}}{This prior assumes the individuals are all full-siblings resulting
-      from one generation of selfing. I.e. there is only one parent.
+  \item{\code{"f1"}}{This prior assumes the individuals are all
+      full-siblings resulting
+      from one generation of a bi-parental cross.
+      This model assumes
+      a particular type of meiotic behavior: polysomic
+      inheritance with
+      bivalent, non-preferential pairing. Since this is
+      a pretty strong
+      and well-founded prior, we allow \code{outliers = TRUE}
+      when \code{model = "f1"}.}
+  \item{\code{"s1"}}{This prior assumes the individuals are
+      all full-siblings resulting
+      from one generation of selfing. I.e. there is only
+      one parent. This model assumes
+      a particular type of meiotic behavior: polysomic
+      inheritance with
+      bivalent, non-preferential pairing.
       Since this is a pretty strong and well-founded prior,
       we allow \code{outliers = TRUE} when \code{model = "s1"}.}
-  \item{\code{"f1pp"}}{The same as \code{"f1"} but accounts for possible preferential
+  \item{\code{"f1pp"}}{The same as \code{"f1"} but accounts for possible
+      (and arbitrary levels of) preferential
       pairing during meiosis.}
-  \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for possible preferential
+  \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for
+      possible preferential (and arbitrary levels of)
       pairing during meiosis.}
   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
       this works well if you have a lot of individuals. In practice, it seems to
@@ -162,7 +180,7 @@ discard all SNPs with a \code{prop_mis} under \code{0.95}.
 The value of \code{maxpostprob} is a very intuitive measure
 for the quality of the genotype estimate of an individual.
 This is the posterior probability of correctly genotyping
-the individual when using \code{ogeno} (the posterior mode)
+the individual when using \code{geno} (the posterior mode)
 as the genotype estimate. So if you want to correctly genotype,
 say, 95\% of individuals, you could discard all individuals
 with a \code{maxpostprob} of under \code{0.95}.
@@ -229,7 +247,26 @@ for Genotyping Autopolyploids from Messy Sequencing Data."
 \emph{bioRxiv}. Cold Spring Harbor Laboratory. doi:10.1101/281550.
 }
 \seealso{
-\code{\link{flexdog_full}} For additional parameter options.
+Run \code{browseVignettes(package = "updog")} in R for example usage.
+    Other useful functions include:
+\describe{
+    \item{\code{\link{flexdog_full}}}{For additional parameter options
+          when running \code{flexdog}.}
+    \item{\code{\link{rgeno}}}{For simulating genotypes under the allowable
+          prior models in \code{flexdog}.}
+    \item{\code{\link{rflexdog}}}{For simulating read-counts under the
+          assumed likelihood model in \code{flexdog}.}
+    \item{\code{\link{plot.flexdog}}}{For plotting the output of
+          \code{flexdog}.}
+    \item{\code{\link{oracle_mis}}}{For calculating the oracle genotyping
+          error rates. This is useful for read-depth calculations
+          \emph{before} collecting data. After you have data, using
+          the value of \code{prop_mis} is better.}
+    \item{\code{\link{oracle_cor}}}{For calculating the correlation
+          between the true genotypes and an oracle estimator
+          (useful for read-depth calculations \emph{before}
+          collecting data).}
+}
 }
 \author{
 David Gerard

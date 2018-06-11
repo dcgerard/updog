@@ -3,7 +3,7 @@
 \name{oracle_cor}
 \alias{oracle_cor}
 \title{Calculates the correlation between the true genotype and an
-oracle esitmator.}
+oracle estimator.}
 \usage{
 oracle_cor(n, ploidy, seq, bias, od, dist)
 }
@@ -21,7 +21,7 @@ oracle_cor(n, ploidy, seq, bias, od, dist)
 \item{dist}{The distribution of the alleles.}
 }
 \value{
-The Pearson correlation between the true genotype and the oracle etimator.
+The Pearson correlation between the true genotype and the oracle estimator.
 }
 \description{
 Calculates the correlation between the oracle MAP estimator (where we have perfect

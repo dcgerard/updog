@@ -30,7 +30,7 @@ distribution of the genotypes in your sample.
 
 Also provided are:
 
-- An experimental function `mupdog`, which allows for correlation between the individuals' genotypes while jointly estimating the genotypes of the individuals at all provided SNPs. The implementation uses a variational approximation. This is designed for samples where the individuals share a complex relatedness structure (e.g. siblings, cousins, uncles, half-siblings, etc). Right now there are no gaurantees about this function's performance.
+- An experimental function `mupdog`, which allows for correlation between the individuals' genotypes while jointly estimating the genotypes of the individuals at all provided SNPs. The implementation uses a variational approximation. This is designed for samples where the individuals share a complex relatedness structure (e.g. siblings, cousins, uncles, half-siblings, etc). Right now there are no guarantees about this function's performance.
 - Functions to simulate genotypes (`rgeno`) and read-counts (`rflexdog`). These support all of the models available in `flexdog`.
 - Functions to evaluate oracle genotyping performance: `oracle_joint`, `oracle_mis`, `oracle_mis_vec`, and `oracle_cor`. We mean "oracle" in the sense that we assume that the entire data generation process is known (i.e. the genotype distribution, sequencing error rate, allelic bias, and overdispersion are all known). These are good approximations when there are a lot of individuals (but not necessarily large read-depth).
 

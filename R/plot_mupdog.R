@@ -13,19 +13,23 @@
 #' a small black dot will also indicate their position.
 #'
 #' @param refvec A vector of non-negative integers. The number of
-#'     reference reads observed in the offspring.
+#'     reference reads observed in the individuals
 #' @param sizevec A vector of positive integers. The total number of
-#'     reads in the offspring.
+#'     reads in the individuals.
 #' @param p1ref A vector of non-negative integers. The number of
-#'     reference reads observed in parent 1.
+#'     reference reads observed in parent 1 (if the individuals are
+#'     all siblings).
 #' @param p1size A vector of positive integers. The total number of
-#'     reads in parent 1.
+#'     reads in parent 1 (if the individuals are
+#'     all siblings).
 #' @param p2ref A vector of non-negative integers. The number of
-#'     reference reads observed in parent 2.
+#'     reference reads observed in parent 2 (if the individuals are
+#'     all siblings).
 #' @param p2size A vector of positive integers. The total number of
-#'     reads in parent 2.
+#'     reads in parent 2 (if the individuals are
+#'     all siblings).
 #' @param ploidy A non-negative integer. The ploidy of the species.
-#' @param geno The individual genotypes
+#' @param geno The individual genotypes.
 #' @param seq The sequencing error rate.
 #' @param bias The bias parameter.
 #' @param maxpostprob A vector of the posterior probabilities of being at
@@ -38,10 +42,10 @@
 #' @export
 #'
 #' @author David Gerard
-#' 
+#'
 #' @return A \code{\link[ggplot2]{ggplot}} object for the genotype plot.
-#' 
-#' @examples 
+#'
+#' @examples
 #' data("snpdat")
 #' refvec  <- snpdat$counts[snpdat$snp == "SNP1"]
 #' sizevec <- snpdat$size[snpdat$snp == "SNP1"]
@@ -213,7 +217,7 @@ plot_geno <- function(refvec,
 #' }
 #'
 #' @author David Gerard
-#' 
+#'
 #' @return A \code{\link[ggplot2]{ggplot}} object for the genotype plot.
 #'
 #' @examples

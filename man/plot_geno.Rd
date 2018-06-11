@@ -11,26 +11,30 @@ plot_geno(refvec, sizevec, ploidy, p1ref = NULL, p1size = NULL,
 }
 \arguments{
 \item{refvec}{A vector of non-negative integers. The number of
-reference reads observed in the offspring.}
+reference reads observed in the individuals}
 
 \item{sizevec}{A vector of positive integers. The total number of
-reads in the offspring.}
+reads in the individuals.}
 
 \item{ploidy}{A non-negative integer. The ploidy of the species.}
 
 \item{p1ref}{A vector of non-negative integers. The number of
-reference reads observed in parent 1.}
+reference reads observed in parent 1 (if the individuals are
+all siblings).}
 
 \item{p1size}{A vector of positive integers. The total number of
-reads in parent 1.}
+reads in parent 1 (if the individuals are
+all siblings).}
 
 \item{p2ref}{A vector of non-negative integers. The number of
-reference reads observed in parent 2.}
+reference reads observed in parent 2 (if the individuals are
+all siblings).}
 
 \item{p2size}{A vector of positive integers. The total number of
-reads in parent 2.}
+reads in parent 2 (if the individuals are
+all siblings).}
 
-\item{geno}{The individual genotypes}
+\item{geno}{The individual genotypes.}
 
 \item{seq}{The sequencing error rate.}
 

@@ -6,7 +6,26 @@
 #'     over the multiple runs of \code{flexdog_full}.
 #' @param ... Additional parameters to pass to \code{\link{flexdog_full}}.
 #'
-#' @seealso \code{\link{flexdog_full}} For additional parameter options.
+#' @seealso Run \code{browseVignettes(package = "updog")} in R for example usage.
+#'     Other useful functions include:
+#' \describe{
+#'     \item{\code{\link{flexdog_full}}}{For additional parameter options
+#'           when running \code{flexdog}.}
+#'     \item{\code{\link{rgeno}}}{For simulating genotypes under the allowable
+#'           prior models in \code{flexdog}.}
+#'     \item{\code{\link{rflexdog}}}{For simulating read-counts under the
+#'           assumed likelihood model in \code{flexdog}.}
+#'     \item{\code{\link{plot.flexdog}}}{For plotting the output of
+#'           \code{flexdog}.}
+#'     \item{\code{\link{oracle_mis}}}{For calculating the oracle genotyping
+#'           error rates. This is useful for read-depth calculations
+#'           \emph{before} collecting data. After you have data, using
+#'           the value of \code{prop_mis} is better.}
+#'     \item{\code{\link{oracle_cor}}}{For calculating the correlation
+#'           between the true genotypes and an oracle estimator
+#'           (useful for read-depth calculations \emph{before}
+#'           collecting data).}
+#' }
 #'
 #' @author David Gerard
 #'
@@ -110,7 +129,7 @@ flexdog <- function(refvec,
   return(fout)
 }
 
-#' Flexible genotyping for autopolyploids from next-generation sequencing data.
+#' Flexible genotyping for polyploids from next-generation sequencing data.
 #'
 #' Genotype polyploid individuals from next generation
 #' sequencing (NGS) data while assuming the genotype distribution is one of
@@ -133,16 +152,30 @@ flexdog <- function(refvec,
 #'   \item{\code{"ash"}}{Any unimodal prior. This will run \code{ploidy} EM algorithms
 #'       with a different center during each optimization. It returns the center (and its fit)
 #'       with the highest likelihood.}
-#'   \item{\code{"f1"}}{This prior assumes the individuals are all full-siblings resulting
-#'       from one generation of a bi-parental cross. Since this is a pretty strong
-#'       and well-founded prior, we allow \code{outliers = TRUE} when \code{model = "f1"}.}
-#'   \item{\code{"s1"}}{This prior assumes the individuals are all full-siblings resulting
-#'       from one generation of selfing. I.e. there is only one parent.
+#'   \item{\code{"f1"}}{This prior assumes the individuals are all
+#'       full-siblings resulting
+#'       from one generation of a bi-parental cross.
+#'       This model assumes
+#'       a particular type of meiotic behavior: polysomic
+#'       inheritance with
+#'       bivalent, non-preferential pairing. Since this is
+#'       a pretty strong
+#'       and well-founded prior, we allow \code{outliers = TRUE}
+#'       when \code{model = "f1"}.}
+#'   \item{\code{"s1"}}{This prior assumes the individuals are
+#'       all full-siblings resulting
+#'       from one generation of selfing. I.e. there is only
+#'       one parent. This model assumes
+#'       a particular type of meiotic behavior: polysomic
+#'       inheritance with
+#'       bivalent, non-preferential pairing.
 #'       Since this is a pretty strong and well-founded prior,
 #'       we allow \code{outliers = TRUE} when \code{model = "s1"}.}
-#'   \item{\code{"f1pp"}}{The same as \code{"f1"} but accounts for possible preferential
+#'   \item{\code{"f1pp"}}{The same as \code{"f1"} but accounts for possible
+#'       (and arbitrary levels of) preferential
 #'       pairing during meiosis.}
-#'   \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for possible preferential
+#'   \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for
+#'       possible preferential (and arbitrary levels of)
 #'       pairing during meiosis.}
 #'   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
 #'       this works well if you have a lot of individuals. In practice, it seems to
@@ -170,7 +203,7 @@ flexdog <- function(refvec,
 #' The value of \code{maxpostprob} is a very intuitive measure
 #' for the quality of the genotype estimate of an individual.
 #' This is the posterior probability of correctly genotyping
-#' the individual when using \code{ogeno} (the posterior mode)
+#' the individual when using \code{geno} (the posterior mode)
 #' as the genotype estimate. So if you want to correctly genotype,
 #' say, 95\% of individuals, you could discard all individuals
 #' with a \code{maxpostprob} of under \code{0.95}.
@@ -193,7 +226,7 @@ flexdog <- function(refvec,
 #' read-counts, then the resulting genotype estimates
 #' will be the estimated allele dosage of the alternative allele.
 #'
-#' @param refvec A vector of counts of reads with the reference allele.
+#' @param refvec A vector of counts of reads of the reference allele.
 #' @param sizevec A vector of total counts.
 #' @param ploidy The ploidy of the species. Assumed to be the same for each
 #'     individual.
@@ -216,8 +249,7 @@ flexdog <- function(refvec,
 #'     \code{NULL} for all other options of \code{model}.
 #' @param itermax The maximum number of EM iterations to run for each mode
 #'     (if \code{model = "ash"}) or the total number of EM iterations to
-#'     run (if \code{model = "flex"}, \code{model = "hw"},
-#'     \code{model = "f1"}, \code{model = "s1"}, or \code{model = "uniform"}).
+#'     run (for any other value of \code{model}).
 #' @param tol The tolerance stopping criterion. The EM algorithm will stop
 #'     if the difference in the log-likelihoods between two consecutive
 #'     iterations is less than \code{tol}.
@@ -234,19 +266,26 @@ flexdog <- function(refvec,
 #' @param update_od A logical. Should we update \code{od}
 #'     (\code{TRUE}), or not (\code{FALSE})?
 #' @param fs1_alpha The value at which to fix
-#'     the mixing proportion for the uniform compnent
-#'      when \code{model = "f1"} or
-#'     \code{model = "s1"}. I would recommend some small
+#'     the mixing proportion for the uniform component
+#'      when \code{model = "f1"}, \code{model = "f1pp"},
+#'     \code{model = "s1"}, or \code{model = "s1pp"}.
+#'     I would recommend some small
 #'     value such at \code{10^-3}.
 #' @param p1ref The reference counts for the first parent if
-#'     \code{model = "f1"}, or for the only parent if \code{model = "s1"}.
+#'     \code{model = "f1"} (or \code{model = "f1pp"}), or for
+#'     the only parent if \code{model = "s1"} (or
+#'     \code{model = "s1pp"}).
 #' @param p1size The total counts for the first parent if
-#'     \code{model = "f1"}, or for the only parent if \code{model = "s1"}.
+#'     \code{model = "f1"} (or \code{model = "f1pp"}),
+#'     or for the only parent if \code{model = "s1"}
+#'     (or \code{model = "s1pp"}).
 #' @param p2ref The reference counts for the second parent if
-#'     \code{model = "f1"}.
+#'     \code{model = "f1"} (or \code{model = "f1pp"}).
 #' @param p2size The total counts for the second parent if
-#'     \code{model = "f1"}.
+#'     \code{model = "f1"} (or \code{model = "f1pp"}).
 #' @param ashpen The penalty to put on the unimodal prior.
+#'     Larger values shrink the unimodal prior towards the
+#'     discrete uniform distribution.
 #' @param outliers A logical. Should we allow for the inclusion of outliers
 #'     (\code{TRUE}) or not (\code{FALSE}). Only supported when
 #'     \code{model = "f1"} or \code{model = "s1"}. I wouldn't
@@ -278,7 +317,7 @@ flexdog <- function(refvec,
 #'       \code{model = "bb"} then this will consist of \code{alpha},
 #'       the allele frequency, and \code{tau}, the overdispersion parameter.
 #'       If \code{model = "norm"} then this will consist of \code{mu}, the
-#'       normal mean, and \code{sigma}, the normal standard devation (not variance).}
+#'       normal mean, and \code{sigma}, the normal standard deviation (not variance).}
 #'   \item{\code{geno}}{The posterior mode genotype. These are your
 #'       genotype estimates.}
 #'   \item{\code{maxpostprob}}{The maximum posterior probability. This
@@ -799,7 +838,7 @@ flexdog_full <- function(refvec,
 #' @seealso
 #' \describe{
 #'   \item{\code{\link{plot_geno}}}{The underlying plotting function.}
-#'   \item{\code{\link{flexdog}}}{Creates a \code{flexpdog} object.}
+#'   \item{\code{\link{flexdog}}}{Creates a \code{flexdog} object.}
 #' }
 #'
 #' @return A \code{\link[ggplot2]{ggplot}} object for the genotype plot.
@@ -1171,7 +1210,8 @@ ashpen_fun <- function(lambda, pivec) {
 
 #' Return the probabilities of an offspring's genotype given its
 #' parental genotypes for all possible combinations of parental and
-#' offspring genotypes.
+#' offspring genotypes. This is for species with polysomal inheritance
+#' and bivalent, non-preferential pairing.
 #'
 #' @param ploidy A positive integer. The ploidy of the species.
 #'
@@ -1179,7 +1219,7 @@ ashpen_fun <- function(lambda, pivec) {
 #'
 #' @return An three-way array of proportions. The (i, j, k)th element
 #'     is the probability of an offspring having k - 1 reference
-#'     alleles given that parent 1 has i - 1 refrerence alleles and
+#'     alleles given that parent 1 has i - 1 reference alleles and
 #'     parent 2 has j - 1 reference alleles. Each dimension of the
 #'     array is \code{ploidy + 1}. In the dimension names, "A" stands
 #'     for the reference allele and "a" stands for the

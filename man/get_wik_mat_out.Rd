@@ -11,7 +11,7 @@ get_wik_mat_out(probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od)
 
 \item{out_prop}{The probability of being an outlier.}
 
-\item{refvec}{A vector of counts of reads with the reference allele.}
+\item{refvec}{A vector of counts of reads of the reference allele.}
 
 \item{sizevec}{A vector of total counts.}
 

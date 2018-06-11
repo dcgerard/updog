@@ -2,7 +2,7 @@
 % Please edit documentation in R/ashdog.R
 \name{flexdog_full}
 \alias{flexdog_full}
-\title{Flexible genotyping for autopolyploids from next-generation sequencing data.}
+\title{Flexible genotyping for polyploids from next-generation sequencing data.}
 \usage{
 flexdog_full(refvec, sizevec, ploidy, model = c("hw", "bb", "norm", "ash",
   "f1", "s1", "f1pp", "s1pp", "flex", "uniform"), verbose = TRUE,
@@ -14,7 +14,7 @@ flexdog_full(refvec, sizevec, ploidy, model = c("hw", "bb", "norm", "ash",
   outliers = FALSE)
 }
 \arguments{
-\item{refvec}{A vector of counts of reads with the reference allele.}
+\item{refvec}{A vector of counts of reads of the reference allele.}
 
 \item{sizevec}{A vector of total counts.}
 
@@ -66,32 +66,38 @@ Only available if CVXR is installed. Setting \code{use_cvxr} to
 
 \item{itermax}{The maximum number of EM iterations to run for each mode
 (if \code{model = "ash"}) or the total number of EM iterations to
-run (if \code{model = "flex"}, \code{model = "hw"},
-\code{model = "f1"}, \code{model = "s1"}, or \code{model = "uniform"}).}
+run (for any other value of \code{model}).}
 
 \item{tol}{The tolerance stopping criterion. The EM algorithm will stop
 if the difference in the log-likelihoods between two consecutive
 iterations is less than \code{tol}.}
 
 \item{fs1_alpha}{The value at which to fix
-the mixing proportion for the uniform compnent
- when \code{model = "f1"} or
-\code{model = "s1"}. I would recommend some small
+the mixing proportion for the uniform component
+ when \code{model = "f1"}, \code{model = "f1pp"},
+\code{model = "s1"}, or \code{model = "s1pp"}.
+I would recommend some small
 value such at \code{10^-3}.}
 
-\item{ashpen}{The penalty to put on the unimodal prior.}
+\item{ashpen}{The penalty to put on the unimodal prior.
+Larger values shrink the unimodal prior towards the
+discrete uniform distribution.}
 
 \item{p1ref}{The reference counts for the first parent if
-\code{model = "f1"}, or for the only parent if \code{model = "s1"}.}
+\code{model = "f1"} (or \code{model = "f1pp"}), or for
+the only parent if \code{model = "s1"} (or
+\code{model = "s1pp"}).}
 
 \item{p1size}{The total counts for the first parent if
-\code{model = "f1"}, or for the only parent if \code{model = "s1"}.}
+\code{model = "f1"} (or \code{model = "f1pp"}),
+or for the only parent if \code{model = "s1"}
+(or \code{model = "s1pp"}).}
 
 \item{p2ref}{The reference counts for the second parent if
-\code{model = "f1"}.}
+\code{model = "f1"} (or \code{model = "f1pp"}).}
 
 \item{p2size}{The total counts for the second parent if
-\code{model = "f1"}.}
+\code{model = "f1"} (or \code{model = "f1pp"}).}
 
 \item{outliers}{A logical. Should we allow for the inclusion of outliers
 (\code{TRUE}) or not (\code{FALSE}). Only supported when
@@ -125,7 +131,7 @@ An object of class \code{flexdog}, which consists
       \code{model = "bb"} then this will consist of \code{alpha},
       the allele frequency, and \code{tau}, the overdispersion parameter.
       If \code{model = "norm"} then this will consist of \code{mu}, the
-      normal mean, and \code{sigma}, the normal standard devation (not variance).}
+      normal mean, and \code{sigma}, the normal standard deviation (not variance).}
   \item{\code{geno}}{The posterior mode genotype. These are your
       genotype estimates.}
   \item{\code{maxpostprob}}{The maximum posterior probability. This
@@ -178,16 +184,30 @@ Possible values of the genotype distribution (values of \code{model}) are:
   \item{\code{"ash"}}{Any unimodal prior. This will run \code{ploidy} EM algorithms
       with a different center during each optimization. It returns the center (and its fit)
       with the highest likelihood.}
-  \item{\code{"f1"}}{This prior assumes the individuals are all full-siblings resulting
-      from one generation of a bi-parental cross. Since this is a pretty strong
-      and well-founded prior, we allow \code{outliers = TRUE} when \code{model = "f1"}.}
-  \item{\code{"s1"}}{This prior assumes the individuals are all full-siblings resulting
-      from one generation of selfing. I.e. there is only one parent.
+  \item{\code{"f1"}}{This prior assumes the individuals are all
+      full-siblings resulting
+      from one generation of a bi-parental cross.
+      This model assumes
+      a particular type of meiotic behavior: polysomic
+      inheritance with
+      bivalent, non-preferential pairing. Since this is
+      a pretty strong
+      and well-founded prior, we allow \code{outliers = TRUE}
+      when \code{model = "f1"}.}
+  \item{\code{"s1"}}{This prior assumes the individuals are
+      all full-siblings resulting
+      from one generation of selfing. I.e. there is only
+      one parent. This model assumes
+      a particular type of meiotic behavior: polysomic
+      inheritance with
+      bivalent, non-preferential pairing.
       Since this is a pretty strong and well-founded prior,
       we allow \code{outliers = TRUE} when \code{model = "s1"}.}
-  \item{\code{"f1pp"}}{The same as \code{"f1"} but accounts for possible preferential
+  \item{\code{"f1pp"}}{The same as \code{"f1"} but accounts for possible
+      (and arbitrary levels of) preferential
       pairing during meiosis.}
-  \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for possible preferential
+  \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for
+      possible preferential (and arbitrary levels of)
       pairing during meiosis.}
   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
       this works well if you have a lot of individuals. In practice, it seems to
@@ -215,7 +235,7 @@ discard all SNPs with a \code{prop_mis} under \code{0.95}.
 The value of \code{maxpostprob} is a very intuitive measure
 for the quality of the genotype estimate of an individual.
 This is the posterior probability of correctly genotyping
-the individual when using \code{ogeno} (the posterior mode)
+the individual when using \code{geno} (the posterior mode)
 as the genotype estimate. So if you want to correctly genotype,
 say, 95\% of individuals, you could discard all individuals
 with a \code{maxpostprob} of under \code{0.95}.

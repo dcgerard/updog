@@ -31,7 +31,7 @@ individual's genotype. Thus, we are less certain of the genotype of more transpa
 \seealso{
 \describe{
   \item{\code{\link{plot_geno}}}{The underlying plotting function.}
-  \item{\code{\link{flexdog}}}{Creates a \code{flexpdog} object.}
+  \item{\code{\link{flexdog}}}{Creates a \code{flexdog} object.}
 }
 }
 \author{

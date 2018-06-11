@@ -35,7 +35,7 @@
 #'     \code{model = "flex"}, then element \code{i} is the probability of genotype \code{i - 1}.
 #'     For any other model, this should be \code{NULL}.
 #' @param mode If \code{model = "ash"}, this is the center of the distribution. This should be a non-integer value
-#'     (so the mode is either the floor or the cieling of \code{mode}).
+#'     (so the mode is either the floor or the ceiling of \code{mode}).
 #'     For any other model, this should be \code{NULL}.
 #' @param mu If \code{model = "norm"}, this is the mean of the normal.
 #'     For any other model, this should be \code{NULL}.

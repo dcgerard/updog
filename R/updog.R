@@ -47,7 +47,7 @@
 #'       relatedness between the individuals in the sample.}
 #'   \item{\code{\link{rgeno}}}{simulate the genotypes of a sample
 #'       from one of the models allowed in \code{\link{flexdog}}.}
-#'   \item{\code{\link{rflexdog}}}{Simulate from the
+#'   \item{\code{\link{rflexdog}}}{Simulate read-counts from the
 #'       \code{\link{flexdog}} model.}
 #'   \item{\code{\link{plot.flexdog}}}{Plotting the output of
 #'       \code{\link{flexdog}}.}

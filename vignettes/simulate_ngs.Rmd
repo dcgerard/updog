@@ -28,7 +28,7 @@ We demonstrate how to simulate NGS data under various genotype distributions, th
 # Analysis
 
 Let's suppose that we have 100 hexaploid individuals, with varying levels of read-depth.
-```{r}
+```{r, message=FALSE}
 set.seed(1)
 library(updog)
 nind    <- 100

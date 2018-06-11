@@ -37,7 +37,7 @@ In this vignette, we will go through one example of fitting `flexdog` on an S1 p
 
 Load `updog` and the `snpdat` dataset. The data frame `snpdat` contains three example SNPs (single nucleotide polymorphisms) from the study of @shirasawa2017high. The individuals in this dataset resulted from a single generation of selfing (an S1 population). You can read more about it by typing `?snpdat`.
 
-```{r}
+```{r, message=FALSE}
 set.seed(1)
 library(updog)
 data("snpdat")

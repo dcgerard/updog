@@ -5,8 +5,8 @@
 #'
 #' @inheritParams dbetabinom_double
 #' @param alpha The first shape parameter.
-#' @param beta The second shape paramter.
-#' 
+#' @param beta The second shape parameter.
+#'
 #' @return The density of the beta-binomial.
 #'
 #' @author David Gerard
@@ -17,7 +17,7 @@ dbetabinom_alpha_beta_double <- function(x, size, alpha, beta, log) {
 #' Special case of betabinomial where the beta is bernoulli mu.
 #'
 #' @inheritParams dbetabinom_double
-#' 
+#'
 #' @return The density of the Bernoulli-binomial.
 #'
 #' @author David Gerard
@@ -33,7 +33,7 @@ dbernbinom <- function(x, size, mu, log) {
 #' @param rho The overdispersion parameter of the beta.
 #' @param log A logical. Should we return the log of the
 #'     density \code{TRUE} or not \code{FALSE}?
-#'     
+#'
 #' @return The density of the beta-binomial.
 #'
 #' @author David Gerard
@@ -56,7 +56,7 @@ dbetabinom <- function(x, size, mu, rho, log) {
 #' @param q A quantile.
 #' @param log_p A logical. Should return the log-probability
 #'     \code{TRUE} or not \code{FALSE}?
-#'     
+#'
 #' @return The tail-probability of the beta-binomial.
 #'
 #' @author David Gerard
@@ -77,7 +77,7 @@ pbetabinom <- function(q, size, mu, rho, log_p) {
 #'
 #' @inheritParams dbetabinom_double
 #' @param p The lower tail probability.
-#' 
+#'
 #' @return The quantile of the beta-binomial.
 #'
 #' @author David Gerard
@@ -97,7 +97,7 @@ qbetabinom <- function(p, size, mu, rho) {
 #' by mean and overdispersion parameter.
 #'
 #' @inheritParams dbetabinom_double
-#' 
+#'
 #' @return A random sample from the beta-binomial.
 #'
 #' @author David Gerard
@@ -821,9 +821,9 @@ oracle_mis <- function(n, ploidy, seq, bias, od, dist) {
 #' Given perfect knowledge of the data generating parameters,
 #' \code{oracle_mis_vec} calculates the misclassification error
 #' rate at each genotype. This differs from \code{\link{oracle_mis}}
-#' in that this will _not_ average over the genotype distribution to
+#' in that this will \emph{not} average over the genotype distribution to
 #' get an overall misclassification error rate. That is, \code{oracle_mis_vec}
-#' returns a vector of misclassification error rates _conditional_ on
+#' returns a vector of misclassification error rates \emph{conditional} on
 #' each genotype.
 #'
 #' This is an ideal level of the misclassification error rate and

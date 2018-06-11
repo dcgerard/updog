@@ -13,7 +13,7 @@ of genotype i - 1 and estimated genotype j - 1. This is usually
 obtained from \code{\link{oracle_joint}}.}
 }
 \value{
-The Pearson correlation between the true genotype and the oracle etimator.
+The Pearson correlation between the true genotype and the oracle estimator.
 }
 \description{
 Calculates the correlation between the oracle MAP estimator (where we have perfect

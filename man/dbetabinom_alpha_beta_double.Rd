@@ -13,7 +13,7 @@ dbetabinom_alpha_beta_double(x, size, alpha, beta, log)
 
 \item{alpha}{The first shape parameter.}
 
-\item{beta}{The second shape paramter.}
+\item{beta}{The second shape parameter.}
 
 \item{log}{A logical. Should we return the log of the
 density \code{TRUE} or not \code{FALSE}?}

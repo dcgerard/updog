@@ -28,9 +28,9 @@ A vector of numerics. Element i is the oracle misclassification
 Given perfect knowledge of the data generating parameters,
 \code{oracle_mis_vec} calculates the misclassification error
 rate at each genotype. This differs from \code{\link{oracle_mis}}
-in that this will _not_ average over the genotype distribution to
+in that this will \emph{not} average over the genotype distribution to
 get an overall misclassification error rate. That is, \code{oracle_mis_vec}
-returns a vector of misclassification error rates _conditional_ on
+returns a vector of misclassification error rates \emph{conditional} on
 each genotype.
 }
 \details{

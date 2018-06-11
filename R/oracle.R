@@ -1,7 +1,7 @@
 ## Functions for oracle calculations
 
 #' Calculates the correlation between the true genotype and an
-#' oracle esitmator.
+#' oracle estimator.
 #'
 #' Calculates the correlation between the oracle MAP estimator (where we have perfect
 #' knowledge about the data generation process) and the true genotype. This is a useful
@@ -27,7 +27,7 @@
 #'
 #' @author David Gerard
 #'
-#' @return The Pearson correlation between the true genotype and the oracle etimator.
+#' @return The Pearson correlation between the true genotype and the oracle estimator.
 #'
 #' @examples
 #' ## Hardy-Weinberg population with allele-frequency of 0.75.

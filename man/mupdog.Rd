@@ -101,12 +101,12 @@ See \code{\link[stats]{optim}} for details on these optimizers.}
 \value{
 A list with some or all of the following elements:
 \describe{
-    \item{\code{map_dosage}}{A matrix of numerics containting
+    \item{\code{map_dosage}}{A matrix of numerics containing
         the variational maximum-a-posterior (MAP) genotypes
         (allele dosages) for each individual at each SNP. Element
         (i, j) is the MAP genotype for individual i at SNP j.}
     \item{\code{maxpostprob}}{A matrix of numerics containing
-        the variational maximum posterior probabilites for each
+        the variational maximum posterior probabilities for each
         individual at each SNP. The (i, j)th element is the
         variational posterior
         probability that individual i is genotyped correctly at
@@ -150,7 +150,8 @@ on the genotypes. Using a different generative model, Gerard et al (2018)
 accounted for common issues in sequencing data ignored by previous researchers.
 Mupdog unites and extends these two approaches:
 \itemize{
-\item{Unite: We account for locus-specific allele-bias, locus-specific sequencing error, and locus-specific overdispersion while marginally assuming a Balding-Nichols generative model on the genotypes.}
+\item{Unite: We account for locus-specific allele-bias, locus-specific sequencing error,
+      and locus-specific overdispersion while marginally assuming a Balding-Nichols generative model on the genotypes.}
 \item{Extend: We account for underlying correlations between the individuals using a Gaussian copula model.}
 }
 Mupdog uses a variational Bayes approach to estimate all parameters of interest and
