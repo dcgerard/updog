@@ -1,7 +1,7 @@
 Package: updog
 Title: Flexible Genotyping for Polyploids
 Version: 0.99.0
-Date: 2018-05-08
+Date: 2018-06-11
 Authors@R: person("David", "Gerard", email = "gerard.1787@gmail.com", role = c("aut", "cre"))
 biocViews: StatisticalMethod, Bayesian, Classification, Sequencing, DNASeq, VariantDetection
 Description: Implements empirical Bayes approaches to genotype
@@ -16,7 +16,7 @@ Description: Implements empirical Bayes approaches to genotype
        correlation with the true genotypes (`oracle_cor`). These latter two
        functions are useful for read depth calculations. Run
        `browseVignettes(package = "updog")` in R for example usage.
-Depends: R (>= 3.4.0)
+Depends: R (>= 3.5.0)
 License: GPL-3
 BugReports: http://github.com/dcgerard/updog/issues
 Encoding: UTF-8
