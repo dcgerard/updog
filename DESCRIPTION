@@ -6,15 +6,17 @@ Authors@R: person("David", "Gerard", email = "gerard.1787@gmail.com", role = c("
 Description: Implements empirical Bayes approaches to genotype
        polyploids from next generation sequencing data while
        accounting for allelic bias, overdispersion, and sequencing
-       error. The main function is `flexdog`, which allows the specification
+       error. The main function is 'flexdog', which allows the specification
        of many different genotype distributions. An experimental
        function that takes into account varying levels of relatedness
-       is implemented in `mupdog`. Also provided are functions to
-       simulate genotypes (`rgeno`) and read-counts (`rflexdog`), as well as
-       functions to calculate oracle genotyping error rates (`oracle_mis`) and
-       correlation with the true genotypes (`oracle_cor`). These latter two
+       is implemented in 'mupdog'. Also provided are functions to
+       simulate genotypes ('rgeno') and read-counts ('rflexdog'), as well as
+       functions to calculate oracle genotyping error rates ('oracle_mis') and
+       correlation with the true genotypes ('oracle_cor'). These latter two
        functions are useful for read depth calculations. Run
-       `browseVignettes(package = "updog")` in R for example usage.
+       'browseVignettes(package = "updog")' in R for example usage. See also
+       Gerard et al. (2018) <doi:10.1101/281550> for details on the
+       implemented methods.
 Depends: R (>= 3.4.0)
 License: GPL-3
 BugReports: http://github.com/dcgerard/updog/issues
