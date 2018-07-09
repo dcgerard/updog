@@ -30,7 +30,7 @@
 #' @author David Gerard
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'
 #' ## An S1 population where the first individual
 #' ## is the parent. Fit assuming outliers.

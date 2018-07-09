@@ -204,7 +204,7 @@ read-counts, then the resulting genotype estimates
 will be the estimated allele dosage of the alternative allele.
 }
 \examples{
-\dontrun{
+\donttest{
 
 ## An S1 population where the first individual
 ## is the parent. Fit assuming outliers.

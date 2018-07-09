@@ -136,7 +136,7 @@
 #'
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data(uitdewilligen)
 #' mout <- mupdog(refmat = uitdewilligen$refmat,
 #'                sizemat = uitdewilligen$sizemat,
