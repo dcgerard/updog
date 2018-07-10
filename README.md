@@ -34,7 +34,13 @@ If you find a bug or want an enhancement, please submit an issue [here](http://g
 Installation
 ------------
 
-You can install updog from Github with:
+You can install updog from [CRAN](https://cran.r-project.org/package=updog) in the usual way:
+
+``` r
+install.packages("updog")
+```
+
+You can install the current (unstable) version of updog from Github with:
 
 ``` r
 # install.packages("devtools")
