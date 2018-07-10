@@ -1,3 +1,14 @@
+# Errata
+
+* The original documentation of `flexdog` says
+
+    > The value of prop_mis is a very intuitive measure for the quality of the SNP. prop_mis is the posterior proportion of individuals mis-genotyped. So if you want only SNPS that accurately genotype, say, 95% of the individuals, you could discard all SNPs with a prop_mis under 0.95.
+
+    This should instead say
+    
+    > The value of prop_mis is a very intuitive measure for the quality of the SNP. prop_mis is the posterior proportion of individuals mis-genotyped. So if you want only SNPS that accurately genotype, say, 95% of the individuals, you could discard all SNPs with a prop_mis **over 0.05**.
+
+
 # updog 0.99.0
 
 * This is a complete re-working of the code in `updog`. The old version may be found in the [`updogAlpha` package](https://github.com/dcgerard/updogAlpha).

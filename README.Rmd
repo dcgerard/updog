@@ -17,6 +17,8 @@ knitr::opts_chunk$set(
 [![Appveyor Build status](https://ci.appveyor.com/api/projects/status/c80fdy61ead6s3vr?svg=true)](https://ci.appveyor.com/project/dcgerard/updog-06s8t)
 [![codecov](https://codecov.io/gh/dcgerard/updog/branch/master/graph/badge.svg)](https://codecov.io/gh/dcgerard/updog)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/updog)](https://cran.r-project.org/package=updog)
+[![](https://cranlogs.r-pkg.org/badges/updog)](https://cran.r-project.org/package=updog)
 
 Updog provides a suite of methods for genotyping polyploids from next-generation sequencing (NGS) data. It does this while accounting for 
 many common features of NGS data: allelic bias, overdispersion, sequencing
@@ -39,7 +41,7 @@ The original `updog` package is now named `updogAlpha` and may be found [here](h
 See also [ebg](https://github.com/pblischak/polyploid-genotyping),
 [fitPoly](https://cran.r-project.org/package=fitPoly), and [TET](http://www.g3journal.org/content/suppl/2017/01/19/g3.117.039008.DC1). Our best "competitor" is probably [fitPoly](https://cran.r-project.org/package=fitPoly).
 
-See [NEWS](./inst/NEWS.md) for the latest updates on the package.
+See [NEWS](./inst/NEWS.md) for errata and the latest updates on the package.
 
 ## Vignettes
 
