@@ -198,7 +198,7 @@ flexdog <- function(refvec,
 #' the quality of the SNP. \code{prop_mis} is the posterior
 #' proportion of individuals mis-genotyped. So if you want only SNPS
 #' that accurately genotype, say, 95\% of the individuals, you could
-#' discard all SNPs with a \code{prop_mis} under \code{0.95}.
+#' discard all SNPs with a \code{prop_mis} over \code{0.05}.
 #'
 #' The value of \code{maxpostprob} is a very intuitive measure
 #' for the quality of the genotype estimate of an individual.
