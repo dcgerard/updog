@@ -238,7 +238,7 @@ This is the posterior probability of correctly genotyping
 the individual when using \code{geno} (the posterior mode)
 as the genotype estimate. So if you want to correctly genotype,
 say, 95\% of individuals, you could discard all individuals
-with a \code{maxpostprob} of over \code{0.05}.
+with a \code{maxpostprob} of under \code{0.95}.
 
 In most datasets I've examined, allelic bias is a major issue. However,
 you may fit the model assuming no allelic bias by setting
