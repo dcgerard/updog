@@ -1216,7 +1216,12 @@ uni_obj_const <- function(pivec, alpha, weight_vec, lmat, lambda) {
 #'     This should be small (say, less tahn 10^-3).
 #' @param itermax The maximum number of EM iterations to take.
 #' @param obj_tol The objective stopping criterion.
-#' @param lambda The penalty on the pi's. Should be greater than 0 and really really small.
+#' @param lambda A vector of penalties on the pi's (corresponding to the rows
+#'     of \code{lmat}). 
+#'     This can either be of length 1, in which case the same penalty is applied
+#'     to each of the pi's. Or it can be the same length of \code{pivec}, in 
+#'     which case a different penalty is applied to each of the pi's. Larger
+#'     penalties generally increase the value of the pi's, not shrink them.
 #'
 #'
 #' @return A vector of numerics. The update of \code{pivec} in

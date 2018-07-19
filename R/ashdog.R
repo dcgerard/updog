@@ -68,7 +68,7 @@
 flexdog <- function(refvec,
                     sizevec,
                     ploidy,
-                    model       = c("norm", "flex", "hw", "bb", "ash", "f1", "s1", "f1pp", "s1pp", "uniform"),
+                    model       = c("norm", "flex", "hw", "bb", "ash", "f1", "s1", "f1pp", "s1pp", "f1ppdr", "s1ppdr", "uniform"),
                     p1ref       = NULL,
                     p1size      = NULL,
                     p2ref       = NULL,
@@ -175,7 +175,7 @@ flexdog <- function(refvec,
 #'       (and arbitrary levels of) preferential
 #'       pairing during meiosis.}
 #'   \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for
-#'       possible preferential (and arbitrary levels of)
+#'       possible (and arbitrary levels of) preferential
 #'       pairing during meiosis.}
 #'   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
 #'       this works well if you have a lot of individuals. In practice, it seems to
@@ -373,7 +373,7 @@ flexdog <- function(refvec,
 flexdog_full <- function(refvec,
                          sizevec,
                          ploidy,
-                         model       = c("hw", "bb", "norm", "ash", "f1", "s1", "f1pp", "s1pp", "flex", "uniform"),
+                         model       = c("hw", "bb", "norm", "ash", "f1", "s1", "f1pp", "s1pp", "f1ppdr", "s1ppdr", "flex", "uniform"),
                          verbose     = TRUE,
                          mean_bias   = 0,
                          var_bias    = 0.7 ^ 2,
@@ -406,6 +406,9 @@ flexdog_full <- function(refvec,
     if ((model != "s1") & (model != "f1")) {
       stop('flexdog: outliers = TRUE only supported when model = "f1" or model = "s1".')
     }
+  }
+  if ((model == "f1pp" | model == "s1pp" | model == "f1ppdr" | model == "s1ppdr") & ploidy == 2) {
+    stop("flexdog: preferential pairing and double reduction cannot occur in diploids.\nTry using f1 or s1 instead.")
   }
 
   assertthat::are_equal(length(refvec), length(sizevec))
@@ -461,9 +464,9 @@ flexdog_full <- function(refvec,
     stop('flexdog: `model` cannot equal `"flex"` when `mode` is specified.')
   } else if (is.null(mode) & model == "flex") {
     mode_vec <- 0
-  } else if (!is.null(mode) & (model == "f1" | model == "s1" | model == "uniform" | model == "f1pp" | model == "s1pp")) {
-    stop('flexdog: `model` cannot equal "f1", "s1", "f1pp", "s1pp", or "uniform" when `mode` is specified.')
-  } else if (is.null(mode) & (model == "f1" | model == "s1" | model == "uniform" | model == "f1pp" | model == "s1pp")) {
+  } else if (!is.null(mode) & (model == "f1" | model == "s1" | model == "uniform" | model == "f1pp" | model == "s1pp" | model == "f1ppdr" | model == "s1ppdr")) {
+    stop('flexdog: `model` cannot equal "f1", "s1", "f1pp", "s1pp", "f1ppdr", "s1ppdr", or "uniform" when `mode` is specified.')
+  } else if (is.null(mode) & (model == "f1" | model == "s1" | model == "uniform" | model == "f1pp" | model == "s1pp" | model == "f1ppdr" | model == "s1ppdr")) {
     mode_vec <- mean(refvec / sizevec, na.rm = TRUE) ## just to initialize pivec
   } else if (!is.null(mode) & model == "ash") {
     stopifnot(length(mode) == 1)
@@ -561,6 +564,24 @@ flexdog_full <- function(refvec,
       if (ploidy > 6) {
         warning("flexdog has not been extensively tested\nfor f1pp and s1pp when ploidy > 6.\nUse at your own risk.")
       }
+    } else if (model == "f1ppdr" | model == "s1ppdr") {
+      control$blist <- get_bivalent_probs_dr(ploidy = ploidy)
+      control$fs1_alpha <- fs1_alpha
+      control$p1_pair_weights <- list()
+      for (ell in 0:ploidy) { ## initialize bivalent pairing weights
+        control$p1_pair_weights[[ell + 1]] <- rep(0, length = sum(control$blist$lvec == ell))
+        control$p1_pair_weights[[ell + 1]][control$blist$penvec[control$blist$lvec == ell]] <- get_hyper_weights(ploidy = ploidy, ell = ell)$weightvec
+        control$p1_pair_weights[[ell + 1]] <- control$p1_pair_weights[[ell + 1]] * 0.99 + 0.01 / length(control$p1_pair_weights[[ell + 1]])
+      }
+      if (model == "f1ppdr") {
+        control$p2_pair_weights <- list()
+        for (ell in 0:ploidy) {
+          control$p2_pair_weights[[ell + 1]] <- rep(0, length = sum(control$blist$lvec == ell))
+          control$p2_pair_weights[[ell + 1]][control$blist$penvec[control$blist$lvec == ell]] <- get_hyper_weights(ploidy = ploidy, ell = ell)$weightvec
+          control$p2_pair_weights[[ell + 1]] <- control$p2_pair_weights[[ell + 1]] * 0.99 + 0.01 / length(control$p2_pair_weights[[ell + 1]])
+        }
+      }
+      control$mixing_pen <- control$blist$penvec * 1 ## The penalties to use on the mixing weights of the ppdr model.
     }
 
     ## Initialize pivec so that two modes have equal prob if model = "ash".
@@ -625,7 +646,7 @@ flexdog_full <- function(refvec,
       od   <- oout$par[3]
 
       ## if F1 or S1, update betabinomial log-likelihood of parent counts
-      if (model == "f1" | model == "f1pp") {
+      if (model == "f1" | model == "f1pp" | model == "f1ppdr") {
         if (!is.null(p1ref)) {
           xi_vec <- xi_fun(p = 0:ploidy / ploidy, eps = seq, h = bias)
           control$p1_lbb <- dbetabinom(x    = rep(p1ref, ploidy + 1),
@@ -642,7 +663,7 @@ flexdog_full <- function(refvec,
                                        rho  = od,
                                        log  = TRUE)
         }
-      } else if (model == "s1" | model == "s1pp") {
+      } else if (model == "s1" | model == "s1pp" | model == "s1ppdr") {
         if (!is.null(p1ref)) {
           xi_vec <- xi_fun(p = 0:ploidy / ploidy, eps = seq, h = bias)
           control$p1_lbb <- dbetabinom(x    = rep(p1ref, ploidy + 1),
@@ -676,12 +697,12 @@ flexdog_full <- function(refvec,
       } else if (((model == "f1") | (model == "s1")) & outliers) {
         out_prop         <- fupdate_out$par$out_prop
         control$out_prop <- fupdate_out$par$out_prop
-      } else if (model == "f1pp") {
+      } else if (model == "f1pp" | model == "f1ppdr") {
         control$p1_pair_weights[[fupdate_out$par$p1geno + 1]] <-
           fupdate_out$par$p1_pair_weights
         control$p2_pair_weights[[fupdate_out$par$p2geno + 1]] <-
           fupdate_out$par$p2_pair_weights
-      } else if (model == "s1pp") {
+      } else if (model == "s1pp" | model == "s1ppdr") {
         control$p1_pair_weights[[fupdate_out$par$p1geno + 1]] <-
           fupdate_out$par$p1_pair_weights
       }
@@ -910,6 +931,7 @@ initialize_pivec <- function(ploidy,
                              mode,
                              model = c("hw", "bb", "norm", "ash",
                                        "f1", "s1", "f1pp", "s1pp",
+                                       "f1ppdr", "s1ppdr",
                                        "flex", "uniform")) {
   assertthat::are_equal(1, length(ploidy), length(mode))
   assertthat::are_equal(ploidy %% 1, 0)
@@ -948,7 +970,7 @@ initialize_pivec <- function(ploidy,
     } else if (init_type == "piunif") {
       pivec <- rep(1 / (ploidy + 1), length = ploidy + 1)
     }
-  } else if (model == "hw" | model == "f1" | model == "s1" | model == "bb" | model == "norm" | model == "f1pp" | model == "s1pp") {
+  } else if (model == "hw" | model == "f1" | model == "s1" | model == "bb" | model == "norm" | model == "f1pp" | model == "s1pp" | model == "f1ppdr" | model == "s1ppdr") {
     if (mode < 0 | mode > 1) {
       stop('initialize_pivec: when model = "hw", mode should be between 0 and 1.\n It is the initialization of the allele frequency.')
     }
@@ -981,8 +1003,9 @@ initialize_pivec <- function(ploidy,
 flex_update_pivec <- function(weight_vec,
                               model = c("hw", "bb", "norm",
                                         "ash", "f1", "s1",
-                                        "f1pp", "s1pp", "flex",
-                                        "uniform"),
+                                        "f1pp", "s1pp",
+                                        "f1ppdr", "s1ppdr",
+                                        "flex", "uniform"),
                               control) {
   ## Check input -------------------------------
   ploidy <- length(weight_vec) - 1

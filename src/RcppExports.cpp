@@ -1037,7 +1037,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // uni_obj_const
-double uni_obj_const(arma::vec pivec, double alpha, arma::vec weight_vec, arma::mat lmat, long double lambda);
+double uni_obj_const(arma::vec pivec, double alpha, arma::vec weight_vec, arma::mat lmat, arma::vec lambda);
 RcppExport SEXP _updog_uni_obj_const(SEXP pivecSEXP, SEXP alphaSEXP, SEXP weight_vecSEXP, SEXP lmatSEXP, SEXP lambdaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -1046,13 +1046,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type lmat(lmatSEXP);
-    Rcpp::traits::input_parameter< long double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type lambda(lambdaSEXP);
     rcpp_result_gen = Rcpp::wrap(uni_obj_const(pivec, alpha, weight_vec, lmat, lambda));
     return rcpp_result_gen;
 END_RCPP
 }
 // uni_em_const
-arma::vec uni_em_const(arma::vec weight_vec, arma::mat lmat, arma::vec pi_init, double alpha, long double lambda, int itermax, double obj_tol);
+arma::vec uni_em_const(arma::vec weight_vec, arma::mat lmat, arma::vec pi_init, double alpha, arma::vec lambda, int itermax, double obj_tol);
 RcppExport SEXP _updog_uni_em_const(SEXP weight_vecSEXP, SEXP lmatSEXP, SEXP pi_initSEXP, SEXP alphaSEXP, SEXP lambdaSEXP, SEXP itermaxSEXP, SEXP obj_tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -1061,7 +1061,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::mat >::type lmat(lmatSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type pi_init(pi_initSEXP);
     Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< long double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type lambda(lambdaSEXP);
     Rcpp::traits::input_parameter< int >::type itermax(itermaxSEXP);
     Rcpp::traits::input_parameter< double >::type obj_tol(obj_tolSEXP);
     rcpp_result_gen = Rcpp::wrap(uni_em_const(weight_vec, lmat, pi_init, alpha, lambda, itermax, obj_tol));

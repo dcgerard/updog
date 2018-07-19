@@ -18,6 +18,8 @@
 #' }
 #'
 #' @author David Gerard
+#'
+#' @seealso \code{\link{update_dr}}
 update_pp <- function(weight_vec,
                       model = c("f1pp", "s1pp"),
                       control) {
@@ -381,7 +383,7 @@ update_pp <- function(weight_vec,
           lmat <- get_conv_inner_weights(psegprob = p1_seg_prob,
                                          psegmat  = p2_seg_prob_mat)
 
-          p1_weight_vec <- c(uni_em_const(weight_vec = weight_vec,
+          p2_weight_vec <- c(uni_em_const(weight_vec = weight_vec,
                                           lmat       = lmat,
                                           pi_init    = p2_weight_vec,
                                           alpha      = control$fs1_alpha,
@@ -396,6 +398,9 @@ update_pp <- function(weight_vec,
                                      lmat = lmat,
                                      lambda = 0)
           brent_err <- abs(brent_obj - brent_obj_old)
+          if (brent_obj < brent_obj_old) {
+            stop("update_dr: objective not increasing")
+          }
           brent_iter <- brent_iter + 1
         }
 
