@@ -381,7 +381,7 @@ update_pp <- function(weight_vec,
           lmat <- get_conv_inner_weights(psegprob = p1_seg_prob,
                                          psegmat  = p2_seg_prob_mat)
 
-          p1_weight_vec <- c(uni_em_const(weight_vec = weight_vec,
+          p2_weight_vec <- c(uni_em_const(weight_vec = weight_vec,
                                           lmat       = lmat,
                                           pi_init    = p2_weight_vec,
                                           alpha      = control$fs1_alpha,
