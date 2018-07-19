@@ -5,7 +5,7 @@
 \title{Flexible genotyping for polyploids from next-generation sequencing data.}
 \usage{
 flexdog_full(refvec, sizevec, ploidy, model = c("hw", "bb", "norm", "ash",
-  "s1", "f1", "f1pp", "f1ppdr", "flex", "uniform"), verbose = TRUE,
+  "s1", "s1pp", "f1", "f1pp", "f1ppdr", "flex", "uniform"), verbose = TRUE,
   mean_bias = 0, var_bias = 0.7^2, mean_seq = -4.7, var_seq = 1,
   seq = 0.005, bias = 1, od = 0.001, update_bias = TRUE,
   update_seq = TRUE, update_od = TRUE, mode = NULL, use_cvxr = FALSE,
@@ -201,6 +201,9 @@ Possible values of the genotype distribution (values of \code{model}) are:
       bivalent, non-preferential pairing.
       Since this is a pretty strong and well-founded prior,
       we allow \code{outliers = TRUE} when \code{model = "s1"}.}
+      \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for possible
+      (and arbitrary levels of) preferential
+      pairing during meiosis.}
   \item{\code{"f1pp"}}{The same as \code{"f1"} but accounts for possible
       (and arbitrary levels of) preferential
       pairing during meiosis.}

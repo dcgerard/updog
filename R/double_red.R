@@ -57,12 +57,13 @@ dr_pen <- function(pairweights, mixing_pen) {
 }
 
 
-#' Same as \code{\link{update_pp}} but I exclusively use the EM (instead of also Brent's method),
+#' Same as \code{\link{update_pp_f1}} but I exclusively use the EM (instead of also Brent's method),
 #' and I allow for priors on the mixing proportions.
 #'
-#' @inherit update_pp
+#' @inherit update_pp_f1
+#' @param model The model to assume.
 #'
-#' @seealso \code{\link{update_pp}}
+#' @seealso \code{\link{update_pp_f1}}
 update_dr <- function(weight_vec,
                       model = c("f1pp", "s1pp", "f1ppdr", "s1ppdr"),
                       control) {

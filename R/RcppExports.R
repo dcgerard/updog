@@ -1217,9 +1217,9 @@ uni_obj_const <- function(pivec, alpha, weight_vec, lmat, lambda) {
 #' @param itermax The maximum number of EM iterations to take.
 #' @param obj_tol The objective stopping criterion.
 #' @param lambda A vector of penalties on the pi's (corresponding to the rows
-#'     of \code{lmat}). 
+#'     of \code{lmat}).
 #'     This can either be of length 1, in which case the same penalty is applied
-#'     to each of the pi's. Or it can be the same length of \code{pivec}, in 
+#'     to each of the pi's. Or it can be the same length of \code{pivec}, in
 #'     which case a different penalty is applied to each of the pi's. Larger
 #'     penalties generally increase the value of the pi's, not shrink them.
 #'
@@ -1262,7 +1262,7 @@ convolve <- function(x, y) {
 }
 
 #' Objective function when doing Brent's method in
-#' \code{\link{update_pp}} when one parent only has
+#' \code{\link{update_pp_f1}} when one parent only has
 #' two mixing components.
 #'
 #' @param firstmixweight The mixing weight of the first component.

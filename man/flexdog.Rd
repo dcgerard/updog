@@ -5,9 +5,9 @@
 \title{Flexible genotyping for polyploids from next-generation sequencing data.}
 \usage{
 flexdog(refvec, sizevec, ploidy, model = c("norm", "flex", "hw", "bb", "ash",
-  "s1", "f1", "f1pp", "f1ppdr", "uniform"), p1ref = NULL, p1size = NULL,
-  p2ref = NULL, p2size = NULL, bias_init = exp(c(-1, -0.5, 0, 0.5, 1)),
-  verbose = TRUE, outliers = FALSE, ...)
+  "s1", "s1pp", "f1", "f1pp", "f1ppdr", "uniform"), p1ref = NULL,
+  p1size = NULL, p2ref = NULL, p2size = NULL, bias_init = exp(c(-1,
+  -0.5, 0, 0.5, 1)), verbose = TRUE, outliers = FALSE, ...)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads of the reference allele.}
@@ -146,6 +146,9 @@ Possible values of the genotype distribution (values of \code{model}) are:
       bivalent, non-preferential pairing.
       Since this is a pretty strong and well-founded prior,
       we allow \code{outliers = TRUE} when \code{model = "s1"}.}
+      \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for possible
+      (and arbitrary levels of) preferential
+      pairing during meiosis.}
   \item{\code{"f1pp"}}{The same as \code{"f1"} but accounts for possible
       (and arbitrary levels of) preferential
       pairing during meiosis.}

@@ -68,7 +68,7 @@
 flexdog <- function(refvec,
                     sizevec,
                     ploidy,
-                    model       = c("norm", "flex", "hw", "bb", "ash", "s1", "f1", "f1pp", "f1ppdr", "uniform"),
+                    model       = c("norm", "flex", "hw", "bb", "ash", "s1", "s1pp", "f1", "f1pp", "f1ppdr", "uniform"),
                     p1ref       = NULL,
                     p1size      = NULL,
                     p2ref       = NULL,
@@ -171,6 +171,9 @@ flexdog <- function(refvec,
 #'       bivalent, non-preferential pairing.
 #'       Since this is a pretty strong and well-founded prior,
 #'       we allow \code{outliers = TRUE} when \code{model = "s1"}.}
+#'       \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for possible
+#'       (and arbitrary levels of) preferential
+#'       pairing during meiosis.}
 #'   \item{\code{"f1pp"}}{The same as \code{"f1"} but accounts for possible
 #'       (and arbitrary levels of) preferential
 #'       pairing during meiosis.}
@@ -370,7 +373,7 @@ flexdog <- function(refvec,
 flexdog_full <- function(refvec,
                          sizevec,
                          ploidy,
-                         model       = c("hw", "bb", "norm", "ash", "s1", "f1", "f1pp", "f1ppdr", "flex", "uniform"),
+                         model       = c("hw", "bb", "norm", "ash", "s1", "s1pp", "f1", "f1pp", "f1ppdr", "flex", "uniform"),
                          verbose     = TRUE,
                          mean_bias   = 0,
                          var_bias    = 0.7 ^ 2,
@@ -406,6 +409,9 @@ flexdog_full <- function(refvec,
   }
   if ((model == "f1pp" | model == "s1pp" | model == "f1ppdr" | model == "s1ppdr") & ploidy == 2) {
     stop("flexdog: preferential pairing and double reduction cannot occur in diploids.\nTry using f1 or s1 instead.")
+  }
+  if ((model == "s1pp") & ploidy > 6) {
+    stop("flexdog: `s1pp` is only supported for ploides 4 and 6.")
   }
 
   assertthat::are_equal(length(refvec), length(sizevec))
@@ -604,7 +610,8 @@ flexdog_full <- function(refvec,
                                sizevec   = sizevec,
                                ploidy    = ploidy,
                                seq       = seq,
-                               bias      = bias, od = od)
+                               bias      = bias,
+                               od = od)
       } else {
         wik_temp <- get_wik_mat_out(probk_vec = probk_vec,
                                     out_prop  = control$out_prop,
@@ -1017,7 +1024,6 @@ flex_update_pivec <- function(weight_vec,
   ## Check input -------------------------------
   ploidy <- length(weight_vec) - 1
   model <- match.arg(model)
-  assertthat::are_equal(sum(weight_vec), 1)
   assertthat::assert_that(is.list(control))
 
   ## Get pivec ---------------------------------
@@ -1157,18 +1163,22 @@ flex_update_pivec <- function(weight_vec,
     return_list$par       <- list()
     return_list$par$mu    <- optim_out$par[1]
     return_list$par$sigma <- optim_out$par[2]
-  } else if (model == "f1pp" | model == "s1pp") {
-    temp_list <- update_pp(weight_vec = weight_vec,
-                           model      = model,
-                           control    = control)
+  } else if (model == "f1pp") {
+    temp_list <- update_pp_f1(weight_vec = weight_vec,
+                              control    = control)
     return_list$par                 <- list()
     return_list$pivec               <- temp_list$pivec
     return_list$par$p1geno          <- temp_list$p1geno
     return_list$par$p1_pair_weights <- temp_list$p1_pair_weights[[temp_list$p1geno + 1]]
-    if (model == "f1pp") {
-      return_list$par$p2geno          <- temp_list$p2geno
-      return_list$par$p2_pair_weights <- temp_list$p2_pair_weights[[temp_list$p2geno + 1]]
-    }
+    return_list$par$p2geno          <- temp_list$p2geno
+    return_list$par$p2_pair_weights <- temp_list$p2_pair_weights[[temp_list$p2geno + 1]]
+  } else if (model == "s1pp") {
+    temp_list <- update_pp_s1(weight_vec = weight_vec,
+                              control    = control)
+    return_list$par                 <- list()
+    return_list$pivec               <- temp_list$pivec
+    return_list$par$p1geno          <- temp_list$p1geno
+    return_list$par$p1_pair_weights <- temp_list$p1_pair_weights[[temp_list$p1geno + 1]]
   } else if (model == "f1ppdr" | model == "s1ppdr") {
     temp_list <- update_dr(weight_vec = weight_vec,
                            model      = model,
