@@ -213,8 +213,8 @@ update_dr <- function(weight_vec,
                                      alpha = control$fs1_alpha,
                                      weight_vec = weight_vec,
                                      lmat = lmat,
-                                     lambda = control$mixing_pen[control$blist$lvec == p2geno]) +
-            dr_pen(pairweights = p1_weight_vec, mixing_pen = control$mixing_pen[control$blist$lvec == p1geno])
+                                     lambda = control$mixing_pen[control$blist$lvec == p2geno])
+          brent_obj <- brent_obj + dr_pen(pairweights = p1_weight_vec, mixing_pen = control$mixing_pen[control$blist$lvec == p1geno])
           brent_err <- abs(brent_obj - brent_obj_old)
           if (brent_obj < brent_obj_old) {
             stop("update_dr: objective not increasing")

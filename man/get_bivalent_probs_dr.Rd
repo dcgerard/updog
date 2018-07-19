@@ -11,11 +11,12 @@ get_bivalent_probs_dr(ploidy)
 and greater than 0.}
 }
 \value{
-A list. The same elements as in \code{\link{get_bivalent_probs}}
-    but with the additional element \code{dr_contrib_mat}. This is a logical 
-    matrix where element (i, j) is \code{TRUE} if configuration i should be
-    included if the parental genotype is j + 1, and \code{FALSE} if it should
-    not be included. Inclusion is based on the double reduction model.
+A list. The same elements as in \code{\link{get_bivalent_probs}}, augmented to include
+    more scenarios,
+    but with the additional element \code{penvec}. This is a logical vector that
+    is \code{TRUE} if the corresponding rows of \code{probmat} and \code{pmat} and
+    elements of \code{lvec} would be
+    included in the non-double-reduction-model and is \code{FALSE} otherwise.
 }
 \description{
 Double reduction version of \code{\link{get_bivalent_probs}}.

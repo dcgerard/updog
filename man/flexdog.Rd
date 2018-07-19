@@ -5,7 +5,7 @@
 \title{Flexible genotyping for polyploids from next-generation sequencing data.}
 \usage{
 flexdog(refvec, sizevec, ploidy, model = c("norm", "flex", "hw", "bb", "ash",
-  "f1", "s1", "f1pp", "s1pp", "uniform"), p1ref = NULL, p1size = NULL,
+  "s1", "f1", "f1pp", "f1ppdr", "uniform"), p1ref = NULL, p1size = NULL,
   p2ref = NULL, p2size = NULL, bias_init = exp(c(-1, -0.5, 0, 0.5, 1)),
   verbose = TRUE, outliers = FALSE, ...)
 }
@@ -22,13 +22,11 @@ See Details for possible values.}
 
 \item{p1ref}{The reference counts for the first parent if
 \code{model = "f1"} (or \code{model = "f1pp"}), or for
-the only parent if \code{model = "s1"} (or
-\code{model = "s1pp"}).}
+the only parent if \code{model = "s1"}.}
 
 \item{p1size}{The total counts for the first parent if
 \code{model = "f1"} (or \code{model = "f1pp"}),
-or for the only parent if \code{model = "s1"}
-(or \code{model = "s1pp"}).}
+or for the only parent if \code{model = "s1"}.}
 
 \item{p2ref}{The reference counts for the second parent if
 \code{model = "f1"} (or \code{model = "f1pp"}).}
@@ -151,9 +149,8 @@ Possible values of the genotype distribution (values of \code{model}) are:
   \item{\code{"f1pp"}}{The same as \code{"f1"} but accounts for possible
       (and arbitrary levels of) preferential
       pairing during meiosis.}
-  \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for
-      possible preferential (and arbitrary levels of)
-      pairing during meiosis.}
+  \item{\code{"f1ppdr"}}{The same as \code{"f1pp"}, but also accounts for possible
+      (and arbitrary levels of) double reduction during meiosis.}
   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
       this works well if you have a lot of individuals. In practice, it seems to
       be less robust to violations in modeling assumptions.}

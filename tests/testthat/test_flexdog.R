@@ -60,6 +60,8 @@ test_that("flexdog works", {
                                  ploidy = ploidy, model = "uniform", verbose = FALSE))
   expect_equal(fout$gene_dist, rep(1 / (ploidy + 1), ploidy + 1))
   pl <- plot(fout)
+  fout <- flexdog(refvec = refvec, sizevec = sizevec,
+                  ploidy = ploidy, model = "f1ppdr", verbose = FALSE)
 }
 )
 

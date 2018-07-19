@@ -399,7 +399,7 @@ update_pp <- function(weight_vec,
                                      lambda = 0)
           brent_err <- abs(brent_obj - brent_obj_old)
           if (brent_obj < brent_obj_old) {
-            stop("update_dr: objective not increasing")
+            stop("update_pp: objective not increasing")
           }
           brent_iter <- brent_iter + 1
         }
