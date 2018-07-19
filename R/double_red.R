@@ -65,7 +65,7 @@ dr_pen <- function(pairweights, mixing_pen) {
 #'
 #' @seealso \code{\link{update_pp_f1}}
 update_dr <- function(weight_vec,
-                      model = c("f1pp", "s1pp", "f1ppdr", "s1ppdr"),
+                      model = c("f1pp", "f1ppdr"),
                       control) {
   model <- match.arg(model)
   model <- match.arg(model)

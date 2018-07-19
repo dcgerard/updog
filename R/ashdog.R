@@ -400,7 +400,7 @@ flexdog_full <- function(refvec,
   ## Check input -----------------------------------------------------
   model <- match.arg(model)
   if (model == "uniform") {
-    warning("flexdog: Using model = 'uniform' is almost always a bad idea.\nTry model = 'hw' if you have data from a population study.")
+    warning("flexdog: Using model = 'uniform' is almost always a bad idea.\nTry model = 'hw' or model = 'norm' if you have data from a population study.")
   }
   if (outliers) {
     if ((model != "s1") & (model != "f1")) {
@@ -443,11 +443,11 @@ flexdog_full <- function(refvec,
   assertthat::assert_that(fs1_alpha <= 1, fs1_alpha >= 0)
 
   ## Check p1ref, p2ref, p1size, p2size ----------------------------
-  if ((!is.null(p1ref) | !is.null(p1size)) & (model != "f1" & model != "s1" & model != "f1pp" & model != "s1pp")) {
-    stop("flexdog: if model is not 'f1', 's1', 'f1pp', or 's1pp' then p1ref and p1size both need to be NULL.")
+  if ((!is.null(p1ref) | !is.null(p1size)) & (model != "f1" & model != "s1" & model != "f1pp" & model != "s1pp" & model != "f1ppdr" & model != "s1ppdr")) {
+    stop("flexdog: if model is not 'f1', 's1', 'f1pp', 's1pp', 'f1ppdr', or 's1ppdr' then p1ref and p1size both need to be NULL.")
   }
-  if ((!is.null(p2ref) | !is.null(p2size)) & (model != "f1" & model != "f1pp")) {
-    stop("flexdog: if model is not 'f1' or 'f1pp', then p2ref and p2size both need to be NULL.")
+  if ((!is.null(p2ref) | !is.null(p2size)) & (model != "f1" & model != "f1pp" & model != "f1ppdr")) {
+    stop("flexdog: if model is not 'f1', 'f1pp', or 'f1ppdr' then p2ref and p2size both need to be NULL.")
   }
   if ((is.null(p1ref) & !is.null(p1size)) | (!is.null(p1ref) & is.null(p1size))) {
     stop("flexdog: p1ref and p1size either need to be both NULL or both non-NULL.")
@@ -747,15 +747,15 @@ flexdog_full <- function(refvec,
 
       if (model == "ash" & !use_cvxr) { ## add small penalty if "ash"
         llike <- llike + ashpen_fun(lambda = ashpen, pivec = pivec)
-      } else if (model == "f1ppdr") {
+      } else if (model == "f1ppdr") { ## add more penalties if f1ppdr
         llike <- llike +
           dr_pen(pairweights = fupdate_out$par$p1_pair_weights,
                  mixing_pen = control$mixing_pen[control$blist$lvec == fupdate_out$par$p1geno]) +
           dr_pen(pairweights = fupdate_out$par$p2_pair_weights,
                  mixing_pen = control$mixing_pen[control$blist$lvec == fupdate_out$par$p2geno])
-      } else if (model == "s1ppdr") {
+      } else if (model == "s1ppdr") { ## NEED TO FIX if I ever finally support s1ppdr
         llike <- llike +
-          2 * dr_pen(pairweights = fupdate_out$par$p1_pair_weights,
+          dr_pen(pairweights = fupdate_out$par$p1_pair_weights,
                  mixing_pen = control$mixing_pen[control$blist$lvec == fupdate_out$par$p1geno])
       }
 

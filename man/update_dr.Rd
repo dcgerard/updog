@@ -5,7 +5,7 @@
 \title{Same as \code{\link{update_pp_f1}} but I exclusively use the EM (instead of also Brent's method),
 and I allow for priors on the mixing proportions.}
 \usage{
-update_dr(weight_vec, model = c("f1pp", "s1pp", "f1ppdr", "s1ppdr"), control)
+update_dr(weight_vec, model = c("f1pp", "f1ppdr"), control)
 }
 \arguments{
 \item{weight_vec}{\code{colSums(wik_mat)} from \code{\link{flexdog}}.
