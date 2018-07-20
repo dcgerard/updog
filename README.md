@@ -19,7 +19,7 @@ The original `updog` package is now named `updogAlpha` and may be found [here](h
 
 See also [ebg](https://github.com/pblischak/polyploid-genotyping), [fitPoly](https://cran.r-project.org/package=fitPoly), and [TET](http://www.g3journal.org/content/suppl/2017/01/19/g3.117.039008.DC1). Our best "competitor" is probably [fitPoly](https://cran.r-project.org/package=fitPoly).
 
-See [NEWS](./inst/NEWS.md) for errata and the latest updates on the package.
+See [NEWS](./inst/NEWS.md) for the latest updates on the package.
 
 Vignettes
 ---------

@@ -1,11 +1,13 @@
-# Errata
+# updog 1.0.1
 
-* The original documentation of `flexdog` says
+* Fixes a bug with option `model = "s1pp"` in `flexdog`. I was originally not constraining the levels of preferential pairing to be the same in both segregations of the same parent. This is now fixed. But the downside is that `model = "s1pp"` is now only supported for `ploidy = 4` or `ploidy = 6`. This is because the optimization becomes more difficult for larger ploidy levels.
+* Double reduction is now tentatively supported (though still mostly untested) in `flexdog` in F1 populations with option `model = "f1ppdr"`.
+* I fixed some documentation. Perhaps the biggest error comes from this snippet from the original documentation of `flexdog`:
 
     > The value of `prop_mis` is a very intuitive measure for the quality of the SNP. `prop_mis` is the posterior proportion of individuals mis-genotyped. So if you want only SNPS that accurately genotype, say, 95% of the individuals, you could discard all SNPs with a `prop_mis` under 0.95.
 
     This now says
-    
+
     > The value of prop_mis is a very intuitive measure for the quality of the SNP. prop_mis is the posterior proportion of individuals mis-genotyped. So if you want only SNPS that accurately genotype, say, 95% of the individuals, you could discard all SNPs with a prop_mis **over 0.05**.
 
 
