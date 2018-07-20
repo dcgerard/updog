@@ -1,4 +1,5 @@
 #include "mupdog.h"
+#include <iomanip> // for std::setprecision()
 
 //' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
 //'
@@ -11,10 +12,12 @@
 //' @author David Gerard
 // [[Rcpp::export]]
 double eta_double(double p, double eps) {
-  if ((p < -100.0 * TOL) or (1.0 - p < -100.0 * TOL)) {
+  if ((p < -1.0 * TOL) or (1.0 - p < -1.0 * TOL)) {
+    Rcpp::Rcout << std::setprecision(15) << p << std::endl;
     Rcpp::stop("eta_double: p must be between 0 and 1");
   }
-  if ((eps < -100.0 * TOL) or (1.0 - eps < -100.0 * TOL)) {
+  if ((eps < -1.0 * TOL) or (1.0 - eps < -1.0 * TOL)) {
+    Rcpp::Rcout << std::setprecision(15) << eps << std::endl;
     Rcpp::stop("eta_double: eps must be between 0 and 1");
   }
 
