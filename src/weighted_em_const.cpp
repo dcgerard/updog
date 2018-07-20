@@ -37,7 +37,7 @@ double uni_obj_const(arma::vec pivec,
   for (int k = 0; k < weight_vec.n_elem; k++) {
     if ((weight_vec(k) > TOL) && (lpi(k) > TOL)) {
       obj = obj + weight_vec(k) * std::log(lpi(k));
-    } else if ((weight_vec(k) > TOL * 1000) && (lpi(k) < TOL)) {
+    } else if ((weight_vec(k) > TOL * 10.0) && (lpi(k) < TOL)) {
       obj = R_NegInf;
       break;
     } else {
@@ -158,7 +158,7 @@ arma::vec uni_em_const(arma::vec weight_vec,
     pivec = nvec / arma::sum(nvec);
     // calculate objective and update stopping criteria
     obj = uni_obj_const(pivec, alpha, weight_vec, lmat, lambda_vec);
-    if (obj < old_obj - 100.0 * TOL) {
+    if (obj < old_obj - 10.0 * TOL) {
       Rcpp::Rcout << "Old Objective: "
                   << std::setprecision(15)
                   << old_obj

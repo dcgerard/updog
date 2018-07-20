@@ -216,8 +216,19 @@ update_dr <- function(weight_vec,
                                      lmat = lmat,
                                      lambda = control$mixing_pen[control$blist$lvec == p2geno])
           brent_obj <- brent_obj + dr_pen(pairweights = p1_weight_vec, mixing_pen = control$mixing_pen[control$blist$lvec == p1geno])
+
+          ## Check same as brent_obj
+          # uni_obj_const(pivec = p2_weight_vec,
+          #               alpha = control$fs1_alpha,
+          #               weight_vec = weight_vec,
+          #               lmat = lmat,
+          #               lambda = 0) +
+          #   dr_pen(pairweights = p1_weight_vec, mixing_pen = control$mixing_pen[control$blist$lvec == p1geno]) +
+          #   dr_pen(pairweights = p2_weight_vec, mixing_pen = control$mixing_pen[control$blist$lvec == p2geno])
+
+
           brent_err <- abs(brent_obj - brent_obj_old)
-          if (brent_obj < brent_obj_old) {
+          if (brent_obj < brent_obj_old - 10^-5) {
             stop("update_dr: objective not increasing")
           }
           brent_iter <- brent_iter + 1
@@ -233,21 +244,21 @@ update_dr <- function(weight_vec,
                                               p1weight = return_list$p1_pair_weights[[p1geno + 1]],
                                               p2weight = return_list$p2_pair_weights[[p2geno + 1]])
       }
-    }
-    ## Add parental contributions -------------------
-    if (!is.null(control$p1_lbb)) {
-      temp_list$obj <- temp_list$obj + control$p1_lbb[p1geno + 1]
-    }
-    if (!is.null(control$p2_lbb)) {
-      temp_list$obj <- temp_list$obj + control$p2_lbb[p2geno + 1]
-    }
+      ## Add parental contributions -------------------
+      if (!is.null(control$p1_lbb)) {
+        temp_list$obj <- temp_list$obj + control$p1_lbb[p1geno + 1]
+      }
+      if (!is.null(control$p2_lbb)) {
+        temp_list$obj <- temp_list$obj + control$p2_lbb[p2geno + 1]
+      }
 
-    ## Check to see what has the highest likelihood ----
-    if (temp_list$obj > return_list$obj) {
-      return_list$pivec  <- temp_list$pivec
-      return_list$obj    <- temp_list$obj
-      return_list$p1geno <- p1geno
-      return_list$p2geno <- p2geno
+      ## Check to see what has the highest likelihood ----
+      if (temp_list$obj > return_list$obj) {
+        return_list$pivec  <- temp_list$pivec
+        return_list$obj    <- temp_list$obj
+        return_list$p1geno <- p1geno
+        return_list$p2geno <- p2geno
+      }
     }
   }
   return_list$pivec <- (1 - control$fs1_alpha) * return_list$pivec +

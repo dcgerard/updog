@@ -13,11 +13,11 @@
 // [[Rcpp::export]]
 double eta_double(double p, double eps) {
   if ((p < -1.0 * TOL) or (1.0 - p < -1.0 * TOL)) {
-    Rcpp::Rcout << std::setprecision(15) << p << std::endl;
+    Rcpp::Rcout << "p:" << std::setprecision(15) << p << std::endl;
     Rcpp::stop("eta_double: p must be between 0 and 1");
   }
   if ((eps < -1.0 * TOL) or (1.0 - eps < -1.0 * TOL)) {
-    Rcpp::Rcout << std::setprecision(15) << eps << std::endl;
+    Rcpp::Rcout << "eps: " << std::setprecision(15) << eps << std::endl;
     Rcpp::stop("eta_double: eps must be between 0 and 1");
   }
 

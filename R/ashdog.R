@@ -783,6 +783,8 @@ flexdog_full <- function(refvec,
       if (llike < llike_old - 10 ^ -5) {
         warning(paste0("flexdog: likelihood not increasing.\nDifference is: ",
                        llike - llike_old))
+        cat("Warn:\n")
+        cat("Diff:", llike - llike_old, "\n")
         cat("p1geno:", fupdate_out$par$p1geno, "\n")
         cat("p2geno:", fupdate_out$par$p2geno, "\n")
         cat("llike:", format(llike, digits = 10), "\n")
