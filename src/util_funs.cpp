@@ -11,10 +11,10 @@
 //' @author David Gerard
 // [[Rcpp::export]]
 double eta_double(double p, double eps) {
-  if ((p < -TOL) or (1.0 - p < -TOL)) {
+  if ((p < -TOL) or (1.0 - p < -100.0 * TOL)) {
     Rcpp::stop("eta_double: p must be between 0 and 1");
   }
-  if ((eps < -TOL) or (1.0 - eps < -TOL)) {
+  if ((eps < -TOL) or (1.0 - eps < -100.0 * TOL)) {
     Rcpp::stop("eta_double: eps must be between 0 and 1");
   }
 
