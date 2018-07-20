@@ -70,6 +70,14 @@ test_that("flexdog works", {
 }
 )
 
+test_that("f1ppdr works on SNP3", {
+  data("snpdat")
+  fout <- flexdog(refvec  = snpdat$counts[snpdat$snp == "SNP3"],
+                  sizevec = snpdat$size[snpdat$snp == "SNP3"],
+                  ploidy  = 6,
+                  model   = "f1ppdr")
+})
+
 test_that("get_uni_rep is inverse of get_probk_vec", {
   probvec <- dbinom(0:6, 6, 0.4)
   pout <- get_uni_rep(probvec)

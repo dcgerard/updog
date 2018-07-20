@@ -1,4 +1,5 @@
 #include "mupdog.h"
+#include <iomanip> // for std::setprecision()
 
 // Functions for solving weighted EM with a uniform mixing component.
 
@@ -157,7 +158,15 @@ arma::vec uni_em_const(arma::vec weight_vec,
     pivec = nvec / arma::sum(nvec);
     // calculate objective and update stopping criteria
     obj = uni_obj_const(pivec, alpha, weight_vec, lmat, lambda_vec);
-    if (obj < old_obj - TOL) {
+    if (obj < old_obj - 100.0 * TOL) {
+      Rcpp::Rcout << "Old Objective: "
+                  << std::setprecision(15)
+                  << old_obj
+                  << std::endl
+                  << "New Objective: "
+                  << std::setprecision(15)
+                  << obj
+                  << std::endl;
       Rcpp::stop("uni_em: Objective is not increasing.\n");
     }
     err = std::abs(obj - old_obj);

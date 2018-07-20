@@ -21,18 +21,18 @@ individual.}
 See Details for possible values.}
 
 \item{p1ref}{The reference counts for the first parent if
-\code{model = "f1"} (or \code{model = "f1pp"}), or for
-the only parent if \code{model = "s1"}.}
+\code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}), or for
+the only parent if \code{model = "s1"} (or \code{model = "s1pp"}).}
 
 \item{p1size}{The total counts for the first parent if
-\code{model = "f1"} (or \code{model = "f1pp"}),
-or for the only parent if \code{model = "s1"}.}
+\code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}),
+or for the only parent if \code{model = "s1"} (or \code{model = "s1pp"}).}
 
 \item{p2ref}{The reference counts for the second parent if
-\code{model = "f1"} (or \code{model = "f1pp"}).}
+\code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}).}
 
 \item{p2size}{The total counts for the second parent if
-\code{model = "f1"} (or \code{model = "f1pp"}).}
+\code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}).}
 
 \item{bias_init}{A vector of initial values for the bias parameter
 over the multiple runs of \code{flexdog_full}.}
@@ -146,14 +146,17 @@ Possible values of the genotype distribution (values of \code{model}) are:
       bivalent, non-preferential pairing.
       Since this is a pretty strong and well-founded prior,
       we allow \code{outliers = TRUE} when \code{model = "s1"}.}
-      \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for possible
+  \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for possible
       (and arbitrary levels of) preferential
-      pairing during meiosis.}
+      pairing during meiosis. The only supported values of \code{ploidy} right now for
+      this option are \code{4} and \code{6}.}
   \item{\code{"f1pp"}}{The same as \code{"f1"} but accounts for possible
       (and arbitrary levels of) preferential
-      pairing during meiosis.}
+      pairing during meiosis. This option is mostly untested for values of \code{ploidy}
+      greater than 6.}
   \item{\code{"f1ppdr"}}{The same as \code{"f1pp"}, but also accounts for possible
-      (and arbitrary levels of) double reduction during meiosis.}
+      (and arbitrary levels of) double reduction during meiosis. This is a mostly
+      untested option.}
   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
       this works well if you have a lot of individuals. In practice, it seems to
       be less robust to violations in modeling assumptions.}
@@ -169,7 +172,7 @@ the allele bias and sequencing error rates so that the estimated genotypes
 are approximately uniform (since we are assuming that they are approximately
 uniform). This will usually result in unintuitive genotyping since most
 populations don't have a uniform genotype distribution.
-I include it as an option only for completeness. Please, please don't use it.
+I include it as an option only for completeness. Please don't use it.
 
 The value of \code{prop_mis} is a very intuitive measure for
 the quality of the SNP. \code{prop_mis} is the posterior

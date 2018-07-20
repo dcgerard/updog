@@ -1,5 +1,13 @@
 ## Functions for ashdog and flexdog
 
+#' Flexible genotyping for polyploids from next-generation sequencing data.
+#'
+#' Genotype polyploid individuals from next generation
+#' sequencing (NGS) data while assuming the genotype distribution is one of
+#' several forms. \code{flexdog} does this while accounting for allele bias,
+#' overdispersion, sequencing error, and possibly outlying observations
+#' (if \code{model = "f1"} or \code{model = "s1"}).
+#'
 #' @inherit flexdog_full
 #'
 #' @param bias_init A vector of initial values for the bias parameter
@@ -135,7 +143,8 @@ flexdog <- function(refvec,
 #' sequencing (NGS) data while assuming the genotype distribution is one of
 #' several forms. \code{flexdog} does this while accounting for allele bias,
 #' overdispersion, sequencing error, and possibly outlying observations
-#' (if \code{model = "f1"} or \code{model = "s1"}).
+#' (if \code{model = "f1"} or \code{model = "s1"}). This function has more
+#' options than \code{\link{flexdog}} and is only meant for expert users.
 #'
 #' Possible values of the genotype distribution (values of \code{model}) are:
 #' \describe{
@@ -171,14 +180,17 @@ flexdog <- function(refvec,
 #'       bivalent, non-preferential pairing.
 #'       Since this is a pretty strong and well-founded prior,
 #'       we allow \code{outliers = TRUE} when \code{model = "s1"}.}
-#'       \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for possible
+#'   \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for possible
 #'       (and arbitrary levels of) preferential
-#'       pairing during meiosis.}
+#'       pairing during meiosis. The only supported values of \code{ploidy} right now for
+#'       this option are \code{4} and \code{6}.}
 #'   \item{\code{"f1pp"}}{The same as \code{"f1"} but accounts for possible
 #'       (and arbitrary levels of) preferential
-#'       pairing during meiosis.}
+#'       pairing during meiosis. This option is mostly untested for values of \code{ploidy}
+#'       greater than 6.}
 #'   \item{\code{"f1ppdr"}}{The same as \code{"f1pp"}, but also accounts for possible
-#'       (and arbitrary levels of) double reduction during meiosis.}
+#'       (and arbitrary levels of) double reduction during meiosis. This is a mostly
+#'       untested option.}
 #'   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
 #'       this works well if you have a lot of individuals. In practice, it seems to
 #'       be less robust to violations in modeling assumptions.}
@@ -194,7 +206,7 @@ flexdog <- function(refvec,
 #' are approximately uniform (since we are assuming that they are approximately
 #' uniform). This will usually result in unintuitive genotyping since most
 #' populations don't have a uniform genotype distribution.
-#' I include it as an option only for completeness. Please, please don't use it.
+#' I include it as an option only for completeness. Please don't use it.
 #'
 #' The value of \code{prop_mis} is a very intuitive measure for
 #' the quality of the SNP. \code{prop_mis} is the posterior
@@ -258,7 +270,7 @@ flexdog <- function(refvec,
 #' @param use_cvxr A logical. If \code{model = "ash"}, then do you want
 #'     to use the EM algorithm
 #'     (\code{FALSE}) or a convex optimization program using
-#'     the package CVXR \code{TRUE}?
+#'     the package CVXR (\code{TRUE})?
 #'     Only available if CVXR is installed. Setting \code{use_cvxr} to
 #'     \code{TRUE} is generally slower than setting it to \code{FALSE}.
 #' @param update_bias A logical. Should we update \code{bias}
@@ -270,19 +282,19 @@ flexdog <- function(refvec,
 #' @param fs1_alpha The value at which to fix
 #'     the mixing proportion for the uniform component
 #'      when \code{model = "f1"}, \code{model = "f1pp"}, \code{model = "f1ppdr"},
-#'     or \code{model = "s1"}.
+#'     \code{model = "s1"}, or \code{model = "s1pp"}.
 #'     I would recommend some small
-#'     value such at \code{10^-3}.
+#'     value such as \code{10^-3}.
 #' @param p1ref The reference counts for the first parent if
-#'     \code{model = "f1"} (or \code{model = "f1pp"}), or for
-#'     the only parent if \code{model = "s1"}.
+#'     \code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}), or for
+#'     the only parent if \code{model = "s1"} (or \code{model = "s1pp"}).
 #' @param p1size The total counts for the first parent if
-#'     \code{model = "f1"} (or \code{model = "f1pp"}),
-#'     or for the only parent if \code{model = "s1"}.
+#'     \code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}),
+#'     or for the only parent if \code{model = "s1"} (or \code{model = "s1pp"}).
 #' @param p2ref The reference counts for the second parent if
-#'     \code{model = "f1"} (or \code{model = "f1pp"}).
+#'     \code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}).
 #' @param p2size The total counts for the second parent if
-#'     \code{model = "f1"} (or \code{model = "f1pp"}).
+#'     \code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}).
 #' @param ashpen The penalty to put on the unimodal prior.
 #'     Larger values shrink the unimodal prior towards the
 #'     discrete uniform distribution.
@@ -408,10 +420,19 @@ flexdog_full <- function(refvec,
     }
   }
   if ((model == "f1pp" | model == "s1pp" | model == "f1ppdr" | model == "s1ppdr") & ploidy == 2) {
-    stop("flexdog: preferential pairing and double reduction cannot occur in diploids.\nTry using f1 or s1 instead.")
+    stop("flexdog: preferential pairing and double reduction\ncannot occur in diploids (i.e. when ploidy = 2).\nTry using f1 or s1 instead.")
   }
   if ((model == "s1pp") & ploidy > 6) {
-    stop("flexdog: `s1pp` is only supported for ploides 4 and 6.")
+    stop("flexdog: model = 's1pp' is only supported for ploides 4 and 6.")
+  }
+  if (model == "s1ppdr") {
+    stop("flexdog: model = 's1ppdr' is not supported right now.")
+  }
+  if (model == "f1ppdr") {
+    warning("flexdog: model = 'f1ppdr' is a mostly untested option.\nUse at your own risk.")
+  }
+  if (model == "f1pp" & ploidy > 6) {
+    warning("flexdog: flexdog has not been extensively tested\nfor model = 'f1pp' when ploidy > 6.\nUse at your own risk.")
   }
 
   assertthat::are_equal(length(refvec), length(sizevec))
@@ -563,9 +584,6 @@ flexdog_full <- function(refvec,
         for (ell in 0:ploidy) {
           control$p2_pair_weights[[ell + 1]] <- get_hyper_weights(ploidy = ploidy, ell = ell)$weightvec
         }
-      }
-      if (ploidy > 6) {
-        warning("flexdog has not been extensively tested\nfor f1pp and s1pp when ploidy > 6.\nUse at your own risk.")
       }
     } else if (model == "f1ppdr" | model == "s1ppdr") {
       control$blist <- get_bivalent_probs_dr(ploidy = ploidy)

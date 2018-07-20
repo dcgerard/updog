@@ -444,6 +444,7 @@ update_pp_s1 <- function(weight_vec,
   assertthat::assert_that(!is.null(control$fs1_alpha))
   assertthat::assert_that(!is.null(control$p1_pair_weights))
   assertthat::assert_that(!is.null(control$pivec))
+  assertthat::assert_that(is.null(control$p2_pair_weights))
 
   ploidy <- length(weight_vec) - 1
   if (ploidy != 4 & ploidy != 6) {
