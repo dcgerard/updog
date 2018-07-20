@@ -17,7 +17,12 @@ to a column of \code{lmat}.}
 
 \item{lmat}{A matrix of inner weights. The columns are the "individuals" and the rows are the "classes."}
 
-\item{lambda}{The penalty on the pi's. Should be greater than 0 and really really small.}
+\item{lambda}{A vector of penalties on the pi's (corresponding to the rows
+of \code{lmat}).
+This can either be of length 1, in which case the same penalty is applied
+to each of the pi's. Or it can be the same length of \code{pivec}, in
+which case a different penalty is applied to each of the pi's. Larger
+penalties generally increase the value of the pi's, not shrink them.}
 }
 \value{
 The objective optimized by \code{\link{uni_em_const}} during

@@ -1,4 +1,5 @@
 #include "mupdog.h"
+#include <iomanip> // for std::setprecision()
 
 // Functions for solving weighted EM with a uniform mixing component.
 
@@ -18,7 +19,19 @@ double uni_obj_const(arma::vec pivec,
                      double alpha,
                      arma::vec weight_vec,
                      arma::mat lmat,
-                     long double lambda) {
+                     arma::vec lambda) {
+  arma::vec lambda_vec(pivec.n_elem);
+  if (lambda.n_elem == 1) {
+    for (int i = 0; i < lambda_vec.n_elem; i++) {
+      lambda_vec(i) = lambda(0);
+    }
+  } else if (lambda.n_elem == lambda_vec.n_elem) {
+    lambda_vec = lambda;
+  } else {
+    Rcpp::stop("uni_obj_const: lambda should either have length 1 or the same length as pivec.");
+  }
+
+
   arma::vec lpi = (1.0 - alpha) * lmat.t() * pivec + (alpha / (double)weight_vec.n_elem);
   double obj = 0.0;
   for (int k = 0; k < weight_vec.n_elem; k++) {
@@ -34,8 +47,10 @@ double uni_obj_const(arma::vec pivec,
 
   // Add the penalty ----
   double pen = 0.0;
-  if (lambda > TOL) {
-    pen = lambda * arma::sum(arma::log(pivec));
+  for (int i = 0; i < lambda_vec.n_elem; i++) {
+    if (lambda_vec(i) > TOL) {
+      pen = pen + lambda_vec(i) * std::log(pivec(i));
+    }
   }
 
   return obj + pen;
@@ -57,7 +72,12 @@ double uni_obj_const(arma::vec pivec,
 //'     This should be small (say, less tahn 10^-3).
 //' @param itermax The maximum number of EM iterations to take.
 //' @param obj_tol The objective stopping criterion.
-//' @param lambda The penalty on the pi's. Should be greater than 0 and really really small.
+//' @param lambda A vector of penalties on the pi's (corresponding to the rows
+//'     of \code{lmat}).
+//'     This can either be of length 1, in which case the same penalty is applied
+//'     to each of the pi's. Or it can be the same length of \code{pivec}, in
+//'     which case a different penalty is applied to each of the pi's. Larger
+//'     penalties generally increase the value of the pi's, not shrink them.
 //'
 //'
 //' @return A vector of numerics. The update of \code{pivec} in
@@ -70,7 +90,7 @@ arma::vec uni_em_const(arma::vec weight_vec,
                        arma::mat lmat,
                        arma::vec pi_init,
                        double alpha,
-                       long double lambda,
+                       arma::vec lambda,
                        int itermax,
                        double obj_tol) {
   // check input ----------------------------------------------
@@ -88,18 +108,31 @@ arma::vec uni_em_const(arma::vec weight_vec,
   if (lmat.n_cols != nind) {
     Rcpp::stop("uni_em_const: lmat should have weight_vec.n_elem columns.");
   }
-  if (lambda < 0.0) {
-    Rcpp::stop("uni_em_const: lambda cannot be negative.");
+  for (int i = 0; i < lambda.n_elem; i++) {
+    if (lambda(i) < 0.0) {
+      Rcpp::stop("uni_em_const: lambda cannot be negative.");
+    }
   }
   if ((alpha < 0.0) | (alpha > 1.0 - TOL)) {
     Rcpp::stop("uni_em_const: alpha should be in [0, 1).");
+  }
+
+  arma::vec lambda_vec(pi_init.n_elem);
+  if (lambda.n_elem == 1) {
+    for (int i = 0; i < lambda_vec.n_elem; i++) {
+      lambda_vec(i) = lambda(0);
+    }
+  } else if (lambda.n_elem == lambda_vec.n_elem) {
+    lambda_vec = lambda;
+  } else {
+    Rcpp::stop("uni_obj_const: lambda should either have length 1 or the same length as pivec.");
   }
 
   // Run EM ---------------------------------------------------
   int index       = 0;
   double err      = obj_tol + 1.0;
   arma::vec pivec = pi_init;
-  double obj      = uni_obj_const(pivec, alpha, weight_vec, lmat, lambda);
+  double obj      = uni_obj_const(pivec, alpha, weight_vec, lmat, lambda_vec);
   double old_obj  = obj;
   double lsum     = 0.0;
   arma::mat etamat(nclass, nind);
@@ -120,12 +153,20 @@ arma::vec uni_em_const(arma::vec weight_vec,
       }
     }
     // get n_j's --------------------------------
-    nvec = etamat * weight_vec + lambda;
+    nvec = etamat * weight_vec + lambda_vec;
     // normalize to get pi_j's ------------------
     pivec = nvec / arma::sum(nvec);
     // calculate objective and update stopping criteria
-    obj = uni_obj_const(pivec, alpha, weight_vec, lmat, lambda);
-    if (obj < old_obj - TOL) {
+    obj = uni_obj_const(pivec, alpha, weight_vec, lmat, lambda_vec);
+    if (obj < old_obj - 100.0 * TOL) {
+      Rcpp::Rcout << "Old Objective: "
+                  << std::setprecision(15)
+                  << old_obj
+                  << std::endl
+                  << "New Objective: "
+                  << std::setprecision(15)
+                  << obj
+                  << std::endl;
       Rcpp::stop("uni_em: Objective is not increasing.\n");
     }
     err = std::abs(obj - old_obj);
@@ -184,7 +225,7 @@ arma::vec convolve(arma::vec x, arma::vec y) {
 
 
 //' Objective function when doing Brent's method in
-//' \code{\link{update_pp}} when one parent only has
+//' \code{\link{update_pp_f1}} when one parent only has
 //' two mixing components.
 //'
 //' @param firstmixweight The mixing weight of the first component.

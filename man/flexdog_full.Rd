@@ -5,7 +5,7 @@
 \title{Flexible genotyping for polyploids from next-generation sequencing data.}
 \usage{
 flexdog_full(refvec, sizevec, ploidy, model = c("hw", "bb", "norm", "ash",
-  "f1", "s1", "f1pp", "s1pp", "flex", "uniform"), verbose = TRUE,
+  "s1", "s1pp", "f1", "f1pp", "f1ppdr", "flex", "uniform"), verbose = TRUE,
   mean_bias = 0, var_bias = 0.7^2, mean_seq = -4.7, var_seq = 1,
   seq = 0.005, bias = 1, od = 0.001, update_bias = TRUE,
   update_seq = TRUE, update_od = TRUE, mode = NULL, use_cvxr = FALSE,
@@ -60,7 +60,7 @@ the allele frequency if \code{model = "hw"}. This should be
 \item{use_cvxr}{A logical. If \code{model = "ash"}, then do you want
 to use the EM algorithm
 (\code{FALSE}) or a convex optimization program using
-the package CVXR \code{TRUE}?
+the package CVXR (\code{TRUE})?
 Only available if CVXR is installed. Setting \code{use_cvxr} to
 \code{TRUE} is generally slower than setting it to \code{FALSE}.}
 
@@ -74,30 +74,28 @@ iterations is less than \code{tol}.}
 
 \item{fs1_alpha}{The value at which to fix
 the mixing proportion for the uniform component
- when \code{model = "f1"}, \code{model = "f1pp"},
+ when \code{model = "f1"}, \code{model = "f1pp"}, \code{model = "f1ppdr"},
 \code{model = "s1"}, or \code{model = "s1pp"}.
 I would recommend some small
-value such at \code{10^-3}.}
+value such as \code{10^-3}.}
 
 \item{ashpen}{The penalty to put on the unimodal prior.
 Larger values shrink the unimodal prior towards the
 discrete uniform distribution.}
 
 \item{p1ref}{The reference counts for the first parent if
-\code{model = "f1"} (or \code{model = "f1pp"}), or for
-the only parent if \code{model = "s1"} (or
-\code{model = "s1pp"}).}
+\code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}), or for
+the only parent if \code{model = "s1"} (or \code{model = "s1pp"}).}
 
 \item{p1size}{The total counts for the first parent if
-\code{model = "f1"} (or \code{model = "f1pp"}),
-or for the only parent if \code{model = "s1"}
-(or \code{model = "s1pp"}).}
+\code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}),
+or for the only parent if \code{model = "s1"} (or \code{model = "s1pp"}).}
 
 \item{p2ref}{The reference counts for the second parent if
-\code{model = "f1"} (or \code{model = "f1pp"}).}
+\code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}).}
 
 \item{p2size}{The total counts for the second parent if
-\code{model = "f1"} (or \code{model = "f1pp"}).}
+\code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}).}
 
 \item{outliers}{A logical. Should we allow for the inclusion of outliers
 (\code{TRUE}) or not (\code{FALSE}). Only supported when
@@ -166,7 +164,8 @@ Genotype polyploid individuals from next generation
 sequencing (NGS) data while assuming the genotype distribution is one of
 several forms. \code{flexdog} does this while accounting for allele bias,
 overdispersion, sequencing error, and possibly outlying observations
-(if \code{model = "f1"} or \code{model = "s1"}).
+(if \code{model = "f1"} or \code{model = "s1"}). This function has more
+options than \code{\link{flexdog}} and is only meant for expert users.
 }
 \details{
 Possible values of the genotype distribution (values of \code{model}) are:
@@ -203,12 +202,17 @@ Possible values of the genotype distribution (values of \code{model}) are:
       bivalent, non-preferential pairing.
       Since this is a pretty strong and well-founded prior,
       we allow \code{outliers = TRUE} when \code{model = "s1"}.}
+  \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for possible
+      (and arbitrary levels of) preferential
+      pairing during meiosis. The only supported values of \code{ploidy} right now for
+      this option are \code{4} and \code{6}.}
   \item{\code{"f1pp"}}{The same as \code{"f1"} but accounts for possible
       (and arbitrary levels of) preferential
-      pairing during meiosis.}
-  \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for
-      possible preferential (and arbitrary levels of)
-      pairing during meiosis.}
+      pairing during meiosis. This option is mostly untested for values of \code{ploidy}
+      greater than 6.}
+  \item{\code{"f1ppdr"}}{The same as \code{"f1pp"}, but also accounts for possible
+      (and arbitrary levels of) double reduction during meiosis. This is a mostly
+      untested option.}
   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
       this works well if you have a lot of individuals. In practice, it seems to
       be less robust to violations in modeling assumptions.}
@@ -224,7 +228,7 @@ the allele bias and sequencing error rates so that the estimated genotypes
 are approximately uniform (since we are assuming that they are approximately
 uniform). This will usually result in unintuitive genotyping since most
 populations don't have a uniform genotype distribution.
-I include it as an option only for completeness. Please, please don't use it.
+I include it as an option only for completeness. Please don't use it.
 
 The value of \code{prop_mis} is a very intuitive measure for
 the quality of the SNP. \code{prop_mis} is the posterior

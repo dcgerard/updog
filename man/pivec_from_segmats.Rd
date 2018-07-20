@@ -31,7 +31,7 @@ Function to get the segregation probabilities from the distributions
 of each component and the weights of each component.
 }
 \seealso{
-This is mostly used in \code{\link{update_pp}}.
+This is mostly used in \code{\link{update_pp_f1}}.
 }
 \author{
 David Gerard

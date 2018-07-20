@@ -54,6 +54,22 @@ test_that("uni_em_const gives same results as uni_em when alpha = 0", {
                      lambda     = 10^-8,
                      itermax    = 1000,
                      obj_tol    = 10^-5)
+  
+  u3 <- uni_em_const(weight_vec = weight_vec,
+                     lmat       = lmat,
+                     pi_init    = pi_init,
+                     alpha      = 0,
+                     lambda     = c(rep(100, 3), rep(1, 4)),
+                     itermax    = 1000,
+                     obj_tol    = 10^-5)
+  
+  expect_error(uni_em_const(weight_vec = weight_vec,
+                            lmat       = lmat,
+                            pi_init    = pi_init,
+                            alpha      = 0,
+                            lambda     = c(rep(10^-8, 3), rep(1, )),
+                            itermax    = 1000,
+                            obj_tol    = 10^-5))
 
   expect_equal(u1, u2)
 

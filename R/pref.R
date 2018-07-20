@@ -1,6 +1,6 @@
 ## Functions for updating the preferential pairing model
 
-#' Function to update the parameters in the preferential pairing model.
+#' Function to update the parameters in the preferential pairing F1 model.
 #'
 #' @inheritParams flex_update_pivec
 #'
@@ -18,19 +18,15 @@
 #' }
 #'
 #' @author David Gerard
-update_pp <- function(weight_vec,
-                      model = c("f1pp", "s1pp"),
-                      control) {
-  model <- match.arg(model)
+#'
+#' @seealso \code{\link{update_dr}}
+update_pp_f1 <- function(weight_vec, ## only accepts f1pp now
+                         control) {
   assertthat::assert_that(!is.null(control$blist))
   assertthat::assert_that(!is.null(control$fs1_alpha))
   assertthat::assert_that(!is.null(control$p1_pair_weights))
   assertthat::assert_that(!is.null(control$pivec))
-  if (model == "f1pp") {
-    stopifnot(!is.null(control$p2_pair_weights))
-  } else {
-    control$p2_pair_weights <- control$p1_pair_weights
-  }
+  stopifnot(!is.null(control$p2_pair_weights))
 
   ploidy <- length(weight_vec) - 1
 
@@ -45,12 +41,10 @@ update_pp <- function(weight_vec,
   return_list$pivec           <- rep(NA, length = ploidy + 1)
 
   for (p1geno in 0:ploidy) {
-    if (model == "f1pp" & (!is.null(control$p1_lbb) | !is.null(control$p2_lbb))) {
+    if (!is.null(control$p1_lbb) | !is.null(control$p2_lbb)) {
       p2geno_vec <- 0:ploidy
-    } else if (model == "f1pp") {
-      p2geno_vec <- p1geno:ploidy
     } else {
-      p2geno_vec <- p1geno
+      p2geno_vec <- p1geno:ploidy
     }
     ## for pivec, I don't mix with uniform until very end ----
     for(p2geno in p2geno_vec) {
@@ -396,6 +390,9 @@ update_pp <- function(weight_vec,
                                      lmat = lmat,
                                      lambda = 0)
           brent_err <- abs(brent_obj - brent_obj_old)
+          if (brent_obj < brent_obj_old) {
+            stop("update_pp_f1: objective not increasing")
+          }
           brent_iter <- brent_iter + 1
         }
 
@@ -410,7 +407,7 @@ update_pp <- function(weight_vec,
                                               p2weight = return_list$p2_pair_weights[[p2geno + 1]])
 
       } else {
-        stop("update_pp: how did you get here?")
+        stop("update_pp_f1: how did you get here?")
       }
 
       ## Add parental contributions -------------------
@@ -436,8 +433,95 @@ update_pp <- function(weight_vec,
   return(return_list)
 }
 
+#' Same as \code{\link{update_pp_f1}} but only allow s1.
+#'
+#' @inherit update_pp_f1
+#'
+#' @seealso \code{\link{update_pp_f1}}
+update_pp_s1 <- function(weight_vec,
+                         control) {
+  assertthat::assert_that(!is.null(control$blist))
+  assertthat::assert_that(!is.null(control$fs1_alpha))
+  assertthat::assert_that(!is.null(control$p1_pair_weights))
+  assertthat::assert_that(!is.null(control$pivec))
+  assertthat::assert_that(is.null(control$p2_pair_weights))
 
-#' Get the inner weights used for the em update in \code{\link{update_pp}}
+  ploidy <- length(weight_vec) - 1
+  if (ploidy != 4 & ploidy != 6) {
+    stop("update_pp_s1: for s1pp, only ploidies 4 and 6 are supported.")
+  }
+
+  ## number of mixing components for each genotype
+  num_comp <- table(control$blist$lvec)
+  return_list <- list()
+  return_list$p1_pair_weights <- control$p1_pair_weights
+  return_list$obj             <- -Inf
+  return_list$p1geno          <- NA
+  return_list$pivec           <- rep(NA, length = ploidy + 1)
+
+  for (pgeno in 0:ploidy) {
+    temp_list <- list()
+    if (num_comp[pgeno + 1] == 1) {
+      ## Return likelihood
+      p_seg_prob <- control$blist$probmat[control$blist$lvec == pgeno, , drop = TRUE]
+      temp_list$pivec <- c(convolve(p_seg_prob, p_seg_prob))
+      temp_list$obj <- s1pp_obj(p_seg_prob = p_seg_prob,
+                                weight_vec = weight_vec,
+                                fs1_alpha  = control$fs1_alpha)
+    } else {
+      # Do Brents. OK since ploidy constrained to 4 or 6.
+      oout <- stats::optim(par = return_list$p1_pair_weights[[pgeno + 1]][1],
+                           fn = s1pp_brent_obj,
+                           method = "Brent",
+                           lower = 0,
+                           upper = 1,
+                           control = list(fnscale = -1),
+                           control_list = control,
+                           weight_vec = weight_vec,
+                           pgeno = pgeno)
+      temp_list$obj <- oout$value
+      p_seg_prob <- colSums(control$blist$probmat[control$blist$lvec == pgeno, , drop = FALSE] *
+                              c(oout$par, 1.0 - oout$par))
+      temp_list$pivec <- c(convolve(p_seg_prob, p_seg_prob))
+
+      return_list$p1_pair_weights[[pgeno + 1]][1] <- oout$par
+      return_list$p1_pair_weights[[pgeno + 1]][2] <- 1.0 - oout$par
+    }
+    ## Add parental contributions -------------------
+    if (!is.null(control$p1_lbb)) {
+      temp_list$obj <- temp_list$obj + control$p1_lbb[pgeno + 1]
+    }
+
+    ## Check to see what has the highest likelihood ----
+    if (temp_list$obj > return_list$obj) {
+      return_list$pivec  <- temp_list$pivec
+      return_list$obj    <- temp_list$obj
+      return_list$p1geno <- pgeno
+    }
+  }
+
+  return_list$pivec <- (1 - control$fs1_alpha) * return_list$pivec +
+    control$fs1_alpha / (ploidy + 1)
+  return(return_list)
+}
+
+s1pp_obj <- function(p_seg_prob, weight_vec, fs1_alpha) {
+  pivec <- c(convolve(p_seg_prob, p_seg_prob))
+  f1_obj(alpha = fs1_alpha,
+         pvec = pivec,
+         weight_vec = weight_vec)
+}
+
+s1pp_brent_obj <- function(first_pair_weight, control_list, weight_vec, pgeno) {
+  p_seg_prob <- colSums(control_list$blist$probmat[control_list$blist$lvec == pgeno, , drop = FALSE] *
+                          c(first_pair_weight, 1.0 - first_pair_weight))
+  s1pp_obj(p_seg_prob = p_seg_prob,
+           weight_vec = weight_vec,
+           fs1_alpha  = control_list$fs1_alpha)
+}
+
+
+#' Get the inner weights used for the em update in \code{\link{update_pp_f1}}
 #' when there are more than two bivalent components for one of the parents.
 #'
 #' @param psegprob One of the parents segregation probability vector.
@@ -447,7 +531,7 @@ update_pp <- function(weight_vec,
 #'     in the context of the local problem) and the rows index
 #'     the bivalent components.
 #'
-#' @seealso \code{\link{update_pp}} for where this is used.
+#' @seealso \code{\link{update_pp_f1}} for where this is used.
 #'     \code{\link{uni_em_const}} for where the weights are used
 #'     (equivalent to \code{lmat} there).
 #'
@@ -484,7 +568,7 @@ get_conv_inner_weights <- function(psegprob, psegmat) {
 #' @return A vector. The ith element is the probability of
 #'     segregating i+1 total A alleles.
 #'
-#' @seealso This is mostly used in \code{\link{update_pp}}.
+#' @seealso This is mostly used in \code{\link{update_pp_f1}}.
 #'
 pivec_from_segmats <- function(p1segmat, p2segmat, p1weight, p2weight) {
   assertthat::are_equal(nrow(p1segmat), length(p1weight))

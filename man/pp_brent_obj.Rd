@@ -3,7 +3,7 @@
 \name{pp_brent_obj}
 \alias{pp_brent_obj}
 \title{Objective function when doing Brent's method in
-\code{\link{update_pp}} when one parent only has
+\code{\link{update_pp_f1}} when one parent only has
 two mixing components.}
 \usage{
 pp_brent_obj(firstmixweight, probmat, pvec, weight_vec, alpha)
@@ -28,7 +28,7 @@ The objective value, as calculated by taking a
 }
 \description{
 Objective function when doing Brent's method in
-\code{\link{update_pp}} when one parent only has
+\code{\link{update_pp_f1}} when one parent only has
 two mixing components.
 }
 \author{

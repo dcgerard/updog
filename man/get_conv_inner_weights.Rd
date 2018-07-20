@@ -2,7 +2,7 @@
 % Please edit documentation in R/pref.R
 \name{get_conv_inner_weights}
 \alias{get_conv_inner_weights}
-\title{Get the inner weights used for the em update in \code{\link{update_pp}}
+\title{Get the inner weights used for the em update in \code{\link{update_pp_f1}}
 when there are more than two bivalent components for one of the parents.}
 \usage{
 get_conv_inner_weights(psegprob, psegmat)
@@ -18,11 +18,11 @@ A matrix. The columns index the K components (aka individuals
     the bivalent components.
 }
 \description{
-Get the inner weights used for the em update in \code{\link{update_pp}}
+Get the inner weights used for the em update in \code{\link{update_pp_f1}}
 when there are more than two bivalent components for one of the parents.
 }
 \seealso{
-\code{\link{update_pp}} for where this is used.
+\code{\link{update_pp_f1}} for where this is used.
     \code{\link{uni_em_const}} for where the weights are used
     (equivalent to \code{lmat} there).
 }

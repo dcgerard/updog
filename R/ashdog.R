@@ -1,5 +1,13 @@
 ## Functions for ashdog and flexdog
 
+#' Flexible genotyping for polyploids from next-generation sequencing data.
+#'
+#' Genotype polyploid individuals from next generation
+#' sequencing (NGS) data while assuming the genotype distribution is one of
+#' several forms. \code{flexdog} does this while accounting for allele bias,
+#' overdispersion, sequencing error, and possibly outlying observations
+#' (if \code{model = "f1"} or \code{model = "s1"}).
+#'
 #' @inherit flexdog_full
 #'
 #' @param bias_init A vector of initial values for the bias parameter
@@ -68,7 +76,7 @@
 flexdog <- function(refvec,
                     sizevec,
                     ploidy,
-                    model       = c("norm", "flex", "hw", "bb", "ash", "f1", "s1", "f1pp", "s1pp", "uniform"),
+                    model       = c("norm", "flex", "hw", "bb", "ash", "s1", "s1pp", "f1", "f1pp", "f1ppdr", "uniform"),
                     p1ref       = NULL,
                     p1size      = NULL,
                     p2ref       = NULL,
@@ -135,7 +143,8 @@ flexdog <- function(refvec,
 #' sequencing (NGS) data while assuming the genotype distribution is one of
 #' several forms. \code{flexdog} does this while accounting for allele bias,
 #' overdispersion, sequencing error, and possibly outlying observations
-#' (if \code{model = "f1"} or \code{model = "s1"}).
+#' (if \code{model = "f1"} or \code{model = "s1"}). This function has more
+#' options than \code{\link{flexdog}} and is only meant for expert users.
 #'
 #' Possible values of the genotype distribution (values of \code{model}) are:
 #' \describe{
@@ -171,12 +180,17 @@ flexdog <- function(refvec,
 #'       bivalent, non-preferential pairing.
 #'       Since this is a pretty strong and well-founded prior,
 #'       we allow \code{outliers = TRUE} when \code{model = "s1"}.}
+#'   \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for possible
+#'       (and arbitrary levels of) preferential
+#'       pairing during meiosis. The only supported values of \code{ploidy} right now for
+#'       this option are \code{4} and \code{6}.}
 #'   \item{\code{"f1pp"}}{The same as \code{"f1"} but accounts for possible
 #'       (and arbitrary levels of) preferential
-#'       pairing during meiosis.}
-#'   \item{\code{"s1pp"}}{The same as \code{"s1"} but accounts for
-#'       possible preferential (and arbitrary levels of)
-#'       pairing during meiosis.}
+#'       pairing during meiosis. This option is mostly untested for values of \code{ploidy}
+#'       greater than 6.}
+#'   \item{\code{"f1ppdr"}}{The same as \code{"f1pp"}, but also accounts for possible
+#'       (and arbitrary levels of) double reduction during meiosis. This is a mostly
+#'       untested option.}
 #'   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
 #'       this works well if you have a lot of individuals. In practice, it seems to
 #'       be less robust to violations in modeling assumptions.}
@@ -192,7 +206,7 @@ flexdog <- function(refvec,
 #' are approximately uniform (since we are assuming that they are approximately
 #' uniform). This will usually result in unintuitive genotyping since most
 #' populations don't have a uniform genotype distribution.
-#' I include it as an option only for completeness. Please, please don't use it.
+#' I include it as an option only for completeness. Please don't use it.
 #'
 #' The value of \code{prop_mis} is a very intuitive measure for
 #' the quality of the SNP. \code{prop_mis} is the posterior
@@ -256,7 +270,7 @@ flexdog <- function(refvec,
 #' @param use_cvxr A logical. If \code{model = "ash"}, then do you want
 #'     to use the EM algorithm
 #'     (\code{FALSE}) or a convex optimization program using
-#'     the package CVXR \code{TRUE}?
+#'     the package CVXR (\code{TRUE})?
 #'     Only available if CVXR is installed. Setting \code{use_cvxr} to
 #'     \code{TRUE} is generally slower than setting it to \code{FALSE}.
 #' @param update_bias A logical. Should we update \code{bias}
@@ -267,22 +281,20 @@ flexdog <- function(refvec,
 #'     (\code{TRUE}), or not (\code{FALSE})?
 #' @param fs1_alpha The value at which to fix
 #'     the mixing proportion for the uniform component
-#'      when \code{model = "f1"}, \code{model = "f1pp"},
+#'      when \code{model = "f1"}, \code{model = "f1pp"}, \code{model = "f1ppdr"},
 #'     \code{model = "s1"}, or \code{model = "s1pp"}.
 #'     I would recommend some small
-#'     value such at \code{10^-3}.
+#'     value such as \code{10^-3}.
 #' @param p1ref The reference counts for the first parent if
-#'     \code{model = "f1"} (or \code{model = "f1pp"}), or for
-#'     the only parent if \code{model = "s1"} (or
-#'     \code{model = "s1pp"}).
+#'     \code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}), or for
+#'     the only parent if \code{model = "s1"} (or \code{model = "s1pp"}).
 #' @param p1size The total counts for the first parent if
-#'     \code{model = "f1"} (or \code{model = "f1pp"}),
-#'     or for the only parent if \code{model = "s1"}
-#'     (or \code{model = "s1pp"}).
+#'     \code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}),
+#'     or for the only parent if \code{model = "s1"} (or \code{model = "s1pp"}).
 #' @param p2ref The reference counts for the second parent if
-#'     \code{model = "f1"} (or \code{model = "f1pp"}).
+#'     \code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}).
 #' @param p2size The total counts for the second parent if
-#'     \code{model = "f1"} (or \code{model = "f1pp"}).
+#'     \code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}).
 #' @param ashpen The penalty to put on the unimodal prior.
 #'     Larger values shrink the unimodal prior towards the
 #'     discrete uniform distribution.
@@ -373,7 +385,7 @@ flexdog <- function(refvec,
 flexdog_full <- function(refvec,
                          sizevec,
                          ploidy,
-                         model       = c("hw", "bb", "norm", "ash", "f1", "s1", "f1pp", "s1pp", "flex", "uniform"),
+                         model       = c("hw", "bb", "norm", "ash", "s1", "s1pp", "f1", "f1pp", "f1ppdr", "flex", "uniform"),
                          verbose     = TRUE,
                          mean_bias   = 0,
                          var_bias    = 0.7 ^ 2,
@@ -400,12 +412,27 @@ flexdog_full <- function(refvec,
   ## Check input -----------------------------------------------------
   model <- match.arg(model)
   if (model == "uniform") {
-    warning("flexdog: Using model = 'uniform' is almost always a bad idea.\nTry model = 'hw' if you have data from a population study.")
+    warning("flexdog: Using model = 'uniform' is almost always a bad idea.\nTry model = 'hw' or model = 'norm' if you have data from a population study.")
   }
   if (outliers) {
     if ((model != "s1") & (model != "f1")) {
       stop('flexdog: outliers = TRUE only supported when model = "f1" or model = "s1".')
     }
+  }
+  if ((model == "f1pp" | model == "s1pp" | model == "f1ppdr" | model == "s1ppdr") & ploidy == 2) {
+    stop("flexdog: preferential pairing and double reduction\ncannot occur in diploids (i.e. when ploidy = 2).\nTry using f1 or s1 instead.")
+  }
+  if ((model == "s1pp") & ploidy > 6) {
+    stop("flexdog: model = 's1pp' is only supported for ploides 4 and 6.")
+  }
+  if (model == "s1ppdr") {
+    stop("flexdog: model = 's1ppdr' is not supported right now.")
+  }
+  if (model == "f1ppdr") {
+    warning("flexdog: model = 'f1ppdr' is a mostly untested option.\nUse at your own risk.")
+  }
+  if (model == "f1pp" & ploidy > 6) {
+    warning("flexdog: flexdog has not been extensively tested\nfor model = 'f1pp' when ploidy > 6.\nUse at your own risk.")
   }
 
   assertthat::are_equal(length(refvec), length(sizevec))
@@ -437,11 +464,11 @@ flexdog_full <- function(refvec,
   assertthat::assert_that(fs1_alpha <= 1, fs1_alpha >= 0)
 
   ## Check p1ref, p2ref, p1size, p2size ----------------------------
-  if ((!is.null(p1ref) | !is.null(p1size)) & (model != "f1" & model != "s1" & model != "f1pp" & model != "s1pp")) {
-    stop("flexdog: if model is not 'f1', 's1', 'f1pp', or 's1pp' then p1ref and p1size both need to be NULL.")
+  if ((!is.null(p1ref) | !is.null(p1size)) & (model != "f1" & model != "s1" & model != "f1pp" & model != "s1pp" & model != "f1ppdr" & model != "s1ppdr")) {
+    stop("flexdog: if model is not 'f1', 's1', 'f1pp', 's1pp', 'f1ppdr', or 's1ppdr' then p1ref and p1size both need to be NULL.")
   }
-  if ((!is.null(p2ref) | !is.null(p2size)) & (model != "f1" & model != "f1pp")) {
-    stop("flexdog: if model is not 'f1' or 'f1pp', then p2ref and p2size both need to be NULL.")
+  if ((!is.null(p2ref) | !is.null(p2size)) & (model != "f1" & model != "f1pp" & model != "f1ppdr")) {
+    stop("flexdog: if model is not 'f1', 'f1pp', or 'f1ppdr' then p2ref and p2size both need to be NULL.")
   }
   if ((is.null(p1ref) & !is.null(p1size)) | (!is.null(p1ref) & is.null(p1size))) {
     stop("flexdog: p1ref and p1size either need to be both NULL or both non-NULL.")
@@ -461,9 +488,9 @@ flexdog_full <- function(refvec,
     stop('flexdog: `model` cannot equal `"flex"` when `mode` is specified.')
   } else if (is.null(mode) & model == "flex") {
     mode_vec <- 0
-  } else if (!is.null(mode) & (model == "f1" | model == "s1" | model == "uniform" | model == "f1pp" | model == "s1pp")) {
-    stop('flexdog: `model` cannot equal "f1", "s1", "f1pp", "s1pp", or "uniform" when `mode` is specified.')
-  } else if (is.null(mode) & (model == "f1" | model == "s1" | model == "uniform" | model == "f1pp" | model == "s1pp")) {
+  } else if (!is.null(mode) & (model == "f1" | model == "s1" | model == "uniform" | model == "f1pp" | model == "s1pp" | model == "f1ppdr" | model == "s1ppdr")) {
+    stop('flexdog: `model` cannot equal "f1", "s1", "f1pp", "s1pp", "f1ppdr", "s1ppdr", or "uniform" when `mode` is specified.')
+  } else if (is.null(mode) & (model == "f1" | model == "s1" | model == "uniform" | model == "f1pp" | model == "s1pp" | model == "f1ppdr" | model == "s1ppdr")) {
     mode_vec <- mean(refvec / sizevec, na.rm = TRUE) ## just to initialize pivec
   } else if (!is.null(mode) & model == "ash") {
     stopifnot(length(mode) == 1)
@@ -558,9 +585,24 @@ flexdog_full <- function(refvec,
           control$p2_pair_weights[[ell + 1]] <- get_hyper_weights(ploidy = ploidy, ell = ell)$weightvec
         }
       }
-      if (ploidy > 6) {
-        warning("flexdog has not been extensively tested\nfor f1pp and s1pp when ploidy > 6.\nUse at your own risk.")
+    } else if (model == "f1ppdr" | model == "s1ppdr") {
+      control$blist <- get_bivalent_probs_dr(ploidy = ploidy)
+      control$fs1_alpha <- fs1_alpha
+      control$p1_pair_weights <- list()
+      for (ell in 0:ploidy) { ## initialize bivalent pairing weights
+        control$p1_pair_weights[[ell + 1]] <- rep(0, length = sum(control$blist$lvec == ell))
+        control$p1_pair_weights[[ell + 1]][control$blist$penvec[control$blist$lvec == ell]] <- get_hyper_weights(ploidy = ploidy, ell = ell)$weightvec
+        control$p1_pair_weights[[ell + 1]] <- control$p1_pair_weights[[ell + 1]] * 0.99 + 0.01 / length(control$p1_pair_weights[[ell + 1]])
       }
+      if (model == "f1ppdr") {
+        control$p2_pair_weights <- list()
+        for (ell in 0:ploidy) {
+          control$p2_pair_weights[[ell + 1]] <- rep(0, length = sum(control$blist$lvec == ell))
+          control$p2_pair_weights[[ell + 1]][control$blist$penvec[control$blist$lvec == ell]] <- get_hyper_weights(ploidy = ploidy, ell = ell)$weightvec
+          control$p2_pair_weights[[ell + 1]] <- control$p2_pair_weights[[ell + 1]] * 0.99 + 0.01 / length(control$p2_pair_weights[[ell + 1]])
+        }
+      }
+      control$mixing_pen <- control$blist$penvec * 1 ## The penalties to use on the mixing weights of the ppdr model.
     }
 
     ## Initialize pivec so that two modes have equal prob if model = "ash".
@@ -586,7 +628,8 @@ flexdog_full <- function(refvec,
                                sizevec   = sizevec,
                                ploidy    = ploidy,
                                seq       = seq,
-                               bias      = bias, od = od)
+                               bias      = bias,
+                               od = od)
       } else {
         wik_temp <- get_wik_mat_out(probk_vec = probk_vec,
                                     out_prop  = control$out_prop,
@@ -625,7 +668,7 @@ flexdog_full <- function(refvec,
       od   <- oout$par[3]
 
       ## if F1 or S1, update betabinomial log-likelihood of parent counts
-      if (model == "f1" | model == "f1pp") {
+      if (model == "f1" | model == "f1pp" | model == "f1ppdr") {
         if (!is.null(p1ref)) {
           xi_vec <- xi_fun(p = 0:ploidy / ploidy, eps = seq, h = bias)
           control$p1_lbb <- dbetabinom(x    = rep(p1ref, ploidy + 1),
@@ -642,7 +685,7 @@ flexdog_full <- function(refvec,
                                        rho  = od,
                                        log  = TRUE)
         }
-      } else if (model == "s1" | model == "s1pp") {
+      } else if (model == "s1" | model == "s1pp" | model == "s1ppdr") {
         if (!is.null(p1ref)) {
           xi_vec <- xi_fun(p = 0:ploidy / ploidy, eps = seq, h = bias)
           control$p1_lbb <- dbetabinom(x    = rep(p1ref, ploidy + 1),
@@ -676,12 +719,12 @@ flexdog_full <- function(refvec,
       } else if (((model == "f1") | (model == "s1")) & outliers) {
         out_prop         <- fupdate_out$par$out_prop
         control$out_prop <- fupdate_out$par$out_prop
-      } else if (model == "f1pp") {
+      } else if (model == "f1pp" | model == "f1ppdr") {
         control$p1_pair_weights[[fupdate_out$par$p1geno + 1]] <-
           fupdate_out$par$p1_pair_weights
         control$p2_pair_weights[[fupdate_out$par$p2geno + 1]] <-
           fupdate_out$par$p2_pair_weights
-      } else if (model == "s1pp") {
+      } else if (model == "s1pp" | model == "s1ppdr") {
         control$p1_pair_weights[[fupdate_out$par$p1geno + 1]] <-
           fupdate_out$par$p1_pair_weights
       }
@@ -722,6 +765,16 @@ flexdog_full <- function(refvec,
 
       if (model == "ash" & !use_cvxr) { ## add small penalty if "ash"
         llike <- llike + ashpen_fun(lambda = ashpen, pivec = pivec)
+      } else if (model == "f1ppdr") { ## add more penalties if f1ppdr
+        llike <- llike +
+          dr_pen(pairweights = fupdate_out$par$p1_pair_weights,
+                 mixing_pen = control$mixing_pen[control$blist$lvec == fupdate_out$par$p1geno]) +
+          dr_pen(pairweights = fupdate_out$par$p2_pair_weights,
+                 mixing_pen = control$mixing_pen[control$blist$lvec == fupdate_out$par$p2geno])
+      } else if (model == "s1ppdr") { ## NEED TO FIX if I ever finally support s1ppdr
+        llike <- llike +
+          dr_pen(pairweights = fupdate_out$par$p1_pair_weights,
+                 mixing_pen = control$mixing_pen[control$blist$lvec == fupdate_out$par$p1geno])
       }
 
       err        <- abs(llike - llike_old)
@@ -910,6 +963,7 @@ initialize_pivec <- function(ploidy,
                              mode,
                              model = c("hw", "bb", "norm", "ash",
                                        "f1", "s1", "f1pp", "s1pp",
+                                       "f1ppdr", "s1ppdr",
                                        "flex", "uniform")) {
   assertthat::are_equal(1, length(ploidy), length(mode))
   assertthat::are_equal(ploidy %% 1, 0)
@@ -948,7 +1002,7 @@ initialize_pivec <- function(ploidy,
     } else if (init_type == "piunif") {
       pivec <- rep(1 / (ploidy + 1), length = ploidy + 1)
     }
-  } else if (model == "hw" | model == "f1" | model == "s1" | model == "bb" | model == "norm" | model == "f1pp" | model == "s1pp") {
+  } else if (model == "hw" | model == "f1" | model == "s1" | model == "bb" | model == "norm" | model == "f1pp" | model == "s1pp" | model == "f1ppdr" | model == "s1ppdr") {
     if (mode < 0 | mode > 1) {
       stop('initialize_pivec: when model = "hw", mode should be between 0 and 1.\n It is the initialization of the allele frequency.')
     }
@@ -981,13 +1035,13 @@ initialize_pivec <- function(ploidy,
 flex_update_pivec <- function(weight_vec,
                               model = c("hw", "bb", "norm",
                                         "ash", "f1", "s1",
-                                        "f1pp", "s1pp", "flex",
-                                        "uniform"),
+                                        "f1pp", "s1pp",
+                                        "f1ppdr", "s1ppdr",
+                                        "flex", "uniform"),
                               control) {
   ## Check input -------------------------------
   ploidy <- length(weight_vec) - 1
   model <- match.arg(model)
-  assertthat::are_equal(sum(weight_vec), 1)
   assertthat::assert_that(is.list(control))
 
   ## Get pivec ---------------------------------
@@ -1127,17 +1181,35 @@ flex_update_pivec <- function(weight_vec,
     return_list$par       <- list()
     return_list$par$mu    <- optim_out$par[1]
     return_list$par$sigma <- optim_out$par[2]
-  } else if (model == "f1pp" | model == "s1pp") {
-    temp_list <- update_pp(weight_vec = weight_vec,
-                           model      = model,
-                           control    = control)
+  } else if (model == "f1pp") {
+    temp_list <- update_pp_f1(weight_vec = weight_vec,
+                              control    = control)
     return_list$par                 <- list()
     return_list$pivec               <- temp_list$pivec
     return_list$par$p1geno          <- temp_list$p1geno
     return_list$par$p1_pair_weights <- temp_list$p1_pair_weights[[temp_list$p1geno + 1]]
-    if (model == "f1pp") {
-      return_list$par$p2geno          <- temp_list$p2geno
-      return_list$par$p2_pair_weights <- temp_list$p2_pair_weights[[temp_list$p2geno + 1]]
+    return_list$par$p2geno          <- temp_list$p2geno
+    return_list$par$p2_pair_weights <- temp_list$p2_pair_weights[[temp_list$p2geno + 1]]
+  } else if (model == "s1pp") {
+    temp_list <- update_pp_s1(weight_vec = weight_vec,
+                              control    = control)
+    return_list$par                 <- list()
+    return_list$pivec               <- temp_list$pivec
+    return_list$par$p1geno          <- temp_list$p1geno
+    return_list$par$p1_pair_weights <- temp_list$p1_pair_weights[[temp_list$p1geno + 1]]
+  } else if (model == "f1ppdr" | model == "s1ppdr") {
+    temp_list <- update_dr(weight_vec = weight_vec,
+                           model      = model,
+                           control    = control)
+    return_list$par                  <- list()
+    return_list$pivec                <- temp_list$pivec
+    return_list$par$p1geno           <- temp_list$p1geno
+    return_list$par$p1_pair_weights  <- temp_list$p1_pair_weights[[temp_list$p1geno + 1]]
+    return_list$par$p1_dr_proportion <- sum(temp_list$p1_pair_weights[[temp_list$p1geno + 1]][!control$blist$penvec[control$blist$lvec == temp_list$p1geno]])
+    if (model == "f1ppdr") {
+      return_list$par$p2geno           <- temp_list$p2geno
+      return_list$par$p2_pair_weights  <- temp_list$p2_pair_weights[[temp_list$p2geno + 1]]
+      return_list$par$p2_dr_proportion <- sum(temp_list$p2_pair_weights[[temp_list$p2geno + 1]][!control$blist$penvec[control$blist$lvec == temp_list$p2geno]])
     }
   } else {
     stop("flex_update_pivec: how did you get here?")
