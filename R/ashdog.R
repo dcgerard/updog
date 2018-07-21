@@ -422,7 +422,7 @@ flexdog_full <- function(refvec,
   if ((model == "f1pp" | model == "s1pp" | model == "f1ppdr" | model == "s1ppdr") & ploidy == 2) {
     stop("flexdog: preferential pairing and double reduction\ncannot occur in diploids (i.e. when ploidy = 2).\nTry using f1 or s1 instead.")
   }
-  if ((model == "s1pp") & ploidy > 6) {
+  if ((model == "s1pp") & (ploidy != 6) & (ploidy != 4)) {
     stop("flexdog: model = 's1pp' is only supported for ploides 4 and 6.")
   }
   if (model == "s1ppdr") {
