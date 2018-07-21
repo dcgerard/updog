@@ -156,7 +156,7 @@ Possible values of the genotype distribution (values of \code{model}) are:
       greater than 6.}
   \item{\code{"f1ppdr"}}{The same as \code{"f1pp"}, but also accounts for possible
       (and arbitrary levels of) double reduction during meiosis. This is a mostly
-      untested option.}
+      untested option, so use at your own peril.}
   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
       this works well if you have a lot of individuals. In practice, it seems to
       be less robust to violations in modeling assumptions.}
