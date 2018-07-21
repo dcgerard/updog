@@ -76,7 +76,7 @@
 flexdog <- function(refvec,
                     sizevec,
                     ploidy,
-                    model       = c("norm", "flex", "hw", "bb", "ash", "s1", "s1pp", "f1", "f1pp", "f1ppdr", "uniform"),
+                    model       = c("norm", "flex", "hw", "bb", "ash", "s1", "s1pp", "f1", "f1pp", "uniform"),
                     p1ref       = NULL,
                     p1size      = NULL,
                     p2ref       = NULL,
@@ -188,9 +188,6 @@ flexdog <- function(refvec,
 #'       (and arbitrary levels of) preferential
 #'       pairing during meiosis. This option is mostly untested for values of \code{ploidy}
 #'       greater than 6.}
-#'   \item{\code{"f1ppdr"}}{The same as \code{"f1pp"}, but also accounts for possible
-#'       (and arbitrary levels of) double reduction during meiosis. This is a mostly
-#'       untested option, so use at your own peril.}
 #'   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
 #'       this works well if you have a lot of individuals. In practice, it seems to
 #'       be less robust to violations in modeling assumptions.}
@@ -281,20 +278,20 @@ flexdog <- function(refvec,
 #'     (\code{TRUE}), or not (\code{FALSE})?
 #' @param fs1_alpha The value at which to fix
 #'     the mixing proportion for the uniform component
-#'      when \code{model = "f1"}, \code{model = "f1pp"}, \code{model = "f1ppdr"},
+#'      when \code{model = "f1"}, \code{model = "f1pp"},
 #'     \code{model = "s1"}, or \code{model = "s1pp"}.
 #'     I would recommend some small
 #'     value such as \code{10^-3}.
 #' @param p1ref The reference counts for the first parent if
-#'     \code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}), or for
+#'     \code{model = "f1"} (or \code{model = "f1pp"}), or for
 #'     the only parent if \code{model = "s1"} (or \code{model = "s1pp"}).
 #' @param p1size The total counts for the first parent if
-#'     \code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}),
+#'     \code{model = "f1"} (or \code{model = "f1pp"}),
 #'     or for the only parent if \code{model = "s1"} (or \code{model = "s1pp"}).
 #' @param p2ref The reference counts for the second parent if
-#'     \code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}).
+#'     \code{model = "f1"} (or \code{model = "f1pp"}).
 #' @param p2size The total counts for the second parent if
-#'     \code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}).
+#'     \code{model = "f1"} (or \code{model = "f1pp"}).
 #' @param ashpen The penalty to put on the unimodal prior.
 #'     Larger values shrink the unimodal prior towards the
 #'     discrete uniform distribution.
@@ -385,7 +382,7 @@ flexdog <- function(refvec,
 flexdog_full <- function(refvec,
                          sizevec,
                          ploidy,
-                         model       = c("hw", "bb", "norm", "ash", "s1", "s1pp", "f1", "f1pp", "f1ppdr", "flex", "uniform"),
+                         model       = c("hw", "bb", "norm", "ash", "s1", "s1pp", "f1", "f1pp", "flex", "uniform"),
                          verbose     = TRUE,
                          mean_bias   = 0,
                          var_bias    = 0.7 ^ 2,

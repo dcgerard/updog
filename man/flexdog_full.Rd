@@ -5,7 +5,7 @@
 \title{Flexible genotyping for polyploids from next-generation sequencing data.}
 \usage{
 flexdog_full(refvec, sizevec, ploidy, model = c("hw", "bb", "norm", "ash",
-  "s1", "s1pp", "f1", "f1pp", "f1ppdr", "flex", "uniform"), verbose = TRUE,
+  "s1", "s1pp", "f1", "f1pp", "flex", "uniform"), verbose = TRUE,
   mean_bias = 0, var_bias = 0.7^2, mean_seq = -4.7, var_seq = 1,
   seq = 0.005, bias = 1, od = 0.001, update_bias = TRUE,
   update_seq = TRUE, update_od = TRUE, mode = NULL, use_cvxr = FALSE,
@@ -74,7 +74,7 @@ iterations is less than \code{tol}.}
 
 \item{fs1_alpha}{The value at which to fix
 the mixing proportion for the uniform component
- when \code{model = "f1"}, \code{model = "f1pp"}, \code{model = "f1ppdr"},
+ when \code{model = "f1"}, \code{model = "f1pp"},
 \code{model = "s1"}, or \code{model = "s1pp"}.
 I would recommend some small
 value such as \code{10^-3}.}
@@ -84,18 +84,18 @@ Larger values shrink the unimodal prior towards the
 discrete uniform distribution.}
 
 \item{p1ref}{The reference counts for the first parent if
-\code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}), or for
+\code{model = "f1"} (or \code{model = "f1pp"}), or for
 the only parent if \code{model = "s1"} (or \code{model = "s1pp"}).}
 
 \item{p1size}{The total counts for the first parent if
-\code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}),
+\code{model = "f1"} (or \code{model = "f1pp"}),
 or for the only parent if \code{model = "s1"} (or \code{model = "s1pp"}).}
 
 \item{p2ref}{The reference counts for the second parent if
-\code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}).}
+\code{model = "f1"} (or \code{model = "f1pp"}).}
 
 \item{p2size}{The total counts for the second parent if
-\code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}).}
+\code{model = "f1"} (or \code{model = "f1pp"}).}
 
 \item{outliers}{A logical. Should we allow for the inclusion of outliers
 (\code{TRUE}) or not (\code{FALSE}). Only supported when
@@ -210,9 +210,6 @@ Possible values of the genotype distribution (values of \code{model}) are:
       (and arbitrary levels of) preferential
       pairing during meiosis. This option is mostly untested for values of \code{ploidy}
       greater than 6.}
-  \item{\code{"f1ppdr"}}{The same as \code{"f1pp"}, but also accounts for possible
-      (and arbitrary levels of) double reduction during meiosis. This is a mostly
-      untested option, so use at your own peril.}
   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
       this works well if you have a lot of individuals. In practice, it seems to
       be less robust to violations in modeling assumptions.}

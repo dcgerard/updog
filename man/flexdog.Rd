@@ -5,9 +5,9 @@
 \title{Flexible genotyping for polyploids from next-generation sequencing data.}
 \usage{
 flexdog(refvec, sizevec, ploidy, model = c("norm", "flex", "hw", "bb", "ash",
-  "s1", "s1pp", "f1", "f1pp", "f1ppdr", "uniform"), p1ref = NULL,
-  p1size = NULL, p2ref = NULL, p2size = NULL, bias_init = exp(c(-1,
-  -0.5, 0, 0.5, 1)), verbose = TRUE, outliers = FALSE, ...)
+  "s1", "s1pp", "f1", "f1pp", "uniform"), p1ref = NULL, p1size = NULL,
+  p2ref = NULL, p2size = NULL, bias_init = exp(c(-1, -0.5, 0, 0.5, 1)),
+  verbose = TRUE, outliers = FALSE, ...)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads of the reference allele.}
@@ -21,18 +21,18 @@ individual.}
 See Details for possible values.}
 
 \item{p1ref}{The reference counts for the first parent if
-\code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}), or for
+\code{model = "f1"} (or \code{model = "f1pp"}), or for
 the only parent if \code{model = "s1"} (or \code{model = "s1pp"}).}
 
 \item{p1size}{The total counts for the first parent if
-\code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}),
+\code{model = "f1"} (or \code{model = "f1pp"}),
 or for the only parent if \code{model = "s1"} (or \code{model = "s1pp"}).}
 
 \item{p2ref}{The reference counts for the second parent if
-\code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}).}
+\code{model = "f1"} (or \code{model = "f1pp"}).}
 
 \item{p2size}{The total counts for the second parent if
-\code{model = "f1"} (or \code{model = "f1pp"} or \code{model = "f1ppdr"}).}
+\code{model = "f1"} (or \code{model = "f1pp"}).}
 
 \item{bias_init}{A vector of initial values for the bias parameter
 over the multiple runs of \code{flexdog_full}.}
@@ -154,9 +154,6 @@ Possible values of the genotype distribution (values of \code{model}) are:
       (and arbitrary levels of) preferential
       pairing during meiosis. This option is mostly untested for values of \code{ploidy}
       greater than 6.}
-  \item{\code{"f1ppdr"}}{The same as \code{"f1pp"}, but also accounts for possible
-      (and arbitrary levels of) double reduction during meiosis. This is a mostly
-      untested option, so use at your own peril.}
   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
       this works well if you have a lot of individuals. In practice, it seems to
       be less robust to violations in modeling assumptions.}
