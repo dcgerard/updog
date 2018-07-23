@@ -4,7 +4,7 @@
 \alias{flexdog_full}
 \title{Flexible genotyping for polyploids from next-generation sequencing data.}
 \usage{
-flexdog_full(refvec, sizevec, ploidy, model = c("hw", "bb", "norm", "ash",
+flexdog_full(refvec, sizevec, ploidy, model = c("norm", "hw", "bb", "ash",
   "s1", "s1pp", "f1", "f1pp", "flex", "uniform"), verbose = TRUE,
   mean_bias = 0, var_bias = 0.7^2, mean_seq = -4.7, var_seq = 1,
   seq = 0.005, bias = 1, od = 0.001, update_bias = TRUE,
@@ -120,16 +120,40 @@ An object of class \code{flexdog}, which consists
       genotype \code{i-1}. If \code{outliers = TRUE}, then this
       is conditional on the point not being an outlier.}
   \item{\code{par}}{A list of the final estimates of the parameters
-      of the genotype distribution. If \code{model = "hw"} then
-      this will consist of \code{alpha}, the allele frequency.
-      If \code{model = "f1"} or \code{model = "s1"} then this will
-      consist of the parent genotype(s), the value of \code{fs1_alpha}
-      (now just called \code{alpha}), and possibly the outlier
-      proportion \code{out_prop}. If
-      \code{model = "bb"} then this will consist of \code{alpha},
-      the allele frequency, and \code{tau}, the overdispersion parameter.
-      If \code{model = "norm"} then this will consist of \code{mu}, the
-      normal mean, and \code{sigma}, the normal standard deviation (not variance).}
+      of the genotype distribution. The elements included in \code{par}
+      depends on the value of \code{model}:
+      \describe{
+      \item{\code{model = "norm"}:}{\code{mu} is the normal mean and \code{sigma}
+          is the normal standard deviation (not variance).}
+      \item{\code{model = "hw"}:}{\code{alpha} is the major allele frequency.}
+      \item{\code{model = "bb"}:}{\code{alpha} is the major allele frequency and
+          \code{tau} is the overdisperion parameter (see the description of
+          \code{rho} in the Details of \code{\link{betabinom}}).}
+      \item{\code{model = "ash"}:}{\code{par} is an empty list.}
+      \item{\code{model = "s1"}:}{\code{pgeno} is the allele dosage of the parent and
+          \code{alpha} is the mixture proportion of the discrete uniform (included and
+          fixed at a small value mostly for numerical stability reasons). See the description
+          of \code{fs1_alpha} in \code{\link{flexdog_full}}.}
+      \item{\code{model = "s1pp"}:}{\code{pgeno} is the allele dosage of the parent and
+          \code{p1_pair_weights} contains a vector of mixing weights where element \code{i} is the
+          mixing proportion for the segregation distribution in row \code{i} of
+          \code{get_bivalent_probs(ploidy)$probmat[get_bivalent_probs(ploidy)$lvec == pgeno, , drop = FALSE]}.}
+      \item{\code{model = "f1"}:}{\code{p1geno} is the allele dosage of the first parent,
+          \code{p2geno} is the allele dosage of the second parent, and \code{alpha}
+          is the mixture proportion of the discrete uniform (included and
+          fixed at a small value mostly for numerical stability reasons). See the description
+          of \code{fs1_alpha} in \code{\link{flexdog_full}}.}
+      \item{\code{model = "f1pp"}:}{\code{p1geno} is the allele dosage of the first parent,
+          \code{p2geno} is the allele dosage of the second parent,
+          \code{p1_pair_weights} contains a vector of mixing weights where element \code{i} is the
+          mixing proportion for the segregation distribution for parent 1 in row \code{i} of
+          \code{get_bivalent_probs(ploidy)$probmat[get_bivalent_probs(ploidy)$lvec == p1geno, , drop = FALSE]},
+          and \code{p2_pair_weights} contains a vector of mixing weights where element \code{i} is the
+          mixing proportion for the segregation distribution for parent 2 in row \code{i} of
+          \code{get_bivalent_probs(ploidy)$probmat[get_bivalent_probs(ploidy)$lvec == p2geno, , drop = FALSE]}.}
+      \item{\code{model = "flex"}:}{\code{par} is an empty list.}
+      \item{\code{model = "uniform"}:}{\code{par} is an empty list.}
+      }}
   \item{\code{geno}}{The posterior mode genotype. These are your
       genotype estimates.}
   \item{\code{maxpostprob}}{The maximum posterior probability. This
@@ -170,29 +194,19 @@ options than \code{\link{flexdog}} and is only meant for expert users.
 \details{
 Possible values of the genotype distribution (values of \code{model}) are:
 \describe{
+  \item{\code{"norm"}}{A distribution whose genotype frequencies are proportional
+      to the density value of a normal with some mean and some standard deviation.
+      Unlike the \code{"bb"} and \code{"hw"} options, this will allow for
+      distributions both more and less dispersed than a binomial.
+      This seems to be the most robust to violations in modeling assumptions, and so is the
+      default.}
   \item{\code{"hw"}}{A binomial distribution that results from assuming that
       the population is in Hardy-Weinberg equilibrium (HWE). This actually does
       pretty well even when there are minor to moderate deviations from HWE.}
-  \item{\code{"bb"}}{A beta-binomial distribution. This is a overdispersed
-      version of "hw" and can be derived from a special case of the Balding-Nichols model.}
-  \item{\code{"norm"}}{A distribution whose genotype frequencies are proportional
-      to the density value of a normal with some mean and some standard deviation.
-      Unlike the "bb" option, this will allow for distributions less dispersed than a binomial.
-      This seems to be the most robust to violations in modeling assumptions, and so is the
-      default.}
-  \item{\code{"ash"}}{Any unimodal prior. This will run \code{ploidy} EM algorithms
-      with a different center during each optimization. It returns the center (and its fit)
-      with the highest likelihood.}
-  \item{\code{"f1"}}{This prior assumes the individuals are all
-      full-siblings resulting
-      from one generation of a bi-parental cross.
-      This model assumes
-      a particular type of meiotic behavior: polysomic
-      inheritance with
-      bivalent, non-preferential pairing. Since this is
-      a pretty strong
-      and well-founded prior, we allow \code{outliers = TRUE}
-      when \code{model = "f1"}.}
+  \item{\code{"bb"}}{A beta-binomial distribution. This is an overdispersed
+      version of \code{"hw"} and can be derived from a special case of the Balding-Nichols model.}
+  \item{\code{"ash"}}{Any unimodal prior. This can sometimes be sensitive to violations
+      in modeling assumptions, but tends to work better than the \code{"flex"} option.}
   \item{\code{"s1"}}{This prior assumes the individuals are
       all full-siblings resulting
       from one generation of selfing. I.e. there is only
@@ -206,10 +220,20 @@ Possible values of the genotype distribution (values of \code{model}) are:
       (and arbitrary levels of) preferential
       pairing during meiosis. The only supported values of \code{ploidy} right now for
       this option are \code{4} and \code{6}.}
+  \item{\code{"f1"}}{This prior assumes the individuals are all
+      full-siblings resulting
+      from one generation of a bi-parental cross.
+      This model assumes
+      a particular type of meiotic behavior: polysomic
+      inheritance with
+      bivalent, non-preferential pairing. Since this is
+      a pretty strong
+      and well-founded prior, we allow \code{outliers = TRUE}
+      when \code{model = "f1"}.}
   \item{\code{"f1pp"}}{The same as \code{"f1"} but accounts for possible
       (and arbitrary levels of) preferential
       pairing during meiosis. This option is mostly untested for values of \code{ploidy}
-      greater than 6.}
+      greater than \code{6}.}
   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
       this works well if you have a lot of individuals. In practice, it seems to
       be less robust to violations in modeling assumptions.}
@@ -239,7 +263,11 @@ This is the posterior probability of correctly genotyping
 the individual when using \code{geno} (the posterior mode)
 as the genotype estimate. So if you want to correctly genotype,
 say, 95\% of individuals, you could discard all individuals
-with a \code{maxpostprob} of under \code{0.95}.
+with a \code{maxpostprob} of under \code{0.95}. However, if you are
+just going to impute missing genotypes later, you might consider
+not discarding any individuals as \code{flexdog}'s genotype estimates will
+probably be more accurate than other more naive approaches, such
+as imputing using the grand mean.
 
 In most datasets I've examined, allelic bias is a major issue. However,
 you may fit the model assuming no allelic bias by setting
