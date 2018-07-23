@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 [![codecov](https://codecov.io/gh/dcgerard/updog/branch/master/graph/badge.svg)](https://codecov.io/gh/dcgerard/updog)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/updog)](https://cran.r-project.org/package=updog)
-[![](https://cranlogs.r-pkg.org/badges/updog)](https://cran.r-project.org/package=updog)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/updog)](https://cran.r-project.org/package=updog)
 
 Updog provides a suite of methods for genotyping polyploids from next-generation sequencing (NGS) data. It does this while accounting for 
 many common features of NGS data: allelic bias, overdispersion, sequencing
