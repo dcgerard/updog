@@ -1,3 +1,5 @@
+// [[Rcpp::interfaces(r, cpp)]]
+
 #include "mupdog.h"
 
 // functions for oracle misclassification rates

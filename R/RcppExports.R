@@ -1282,3 +1282,7 @@ pp_brent_obj <- function(firstmixweight, probmat, pvec, weight_vec, alpha) {
     .Call('_updog_pp_brent_obj', PACKAGE = 'updog', firstmixweight, probmat, pvec, weight_vec, alpha)
 }
 
+# Register entry points for exported C++ functions
+methods::setLoadAction(function(ns) {
+    .Call('_updog_RcppExport_registerCCallable', PACKAGE = 'updog')
+})

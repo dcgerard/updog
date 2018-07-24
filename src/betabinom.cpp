@@ -1,3 +1,5 @@
+// [[Rcpp::interfaces(r, cpp)]]
+
 #include "mupdog.h"
 
 double TOL = 10.0 * DBL_EPSILON; // defined here, used everywhere

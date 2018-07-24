@@ -1,3 +1,5 @@
+// [[Rcpp::interfaces(r, cpp)]]
+
 #include "mupdog.h"
 #include <iomanip> // for std::setprecision()
 
