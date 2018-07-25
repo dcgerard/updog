@@ -136,6 +136,8 @@ NumericVector xi_fun(NumericVector p, NumericVector eps, NumericVector h) {
 //'     of the elements in \code{x}.
 //'
 //' @author David Gerard
+//'
+//' @export
 // [[Rcpp::export]]
 double log_sum_exp(NumericVector x) {
   double max_x = Rcpp::max(x);
@@ -158,6 +160,7 @@ double log_sum_exp(NumericVector x) {
 //'
 //' @author David Gerard
 //'
+//' @export
 // [[Rcpp::export]]
 double log_sum_exp_2(double x, double y) {
   double z = std::max(x, y);
@@ -177,6 +180,7 @@ double log_sum_exp_2(double x, double y) {
 //' @return The logit of \code{x}.
 //'
 //' @author David Gerard
+//'
 // [[Rcpp::export]]
 double logit(double x) {
   if ((x < TOL) | ((1.0 - x) < TOL)) {

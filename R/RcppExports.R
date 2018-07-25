@@ -1147,6 +1147,8 @@ xi_fun <- function(p, eps, h) {
 #'     of the elements in \code{x}.
 #'
 #' @author David Gerard
+#'
+#' @export
 log_sum_exp <- function(x) {
     .Call('_updog_log_sum_exp', PACKAGE = 'updog', x)
 }
@@ -1160,6 +1162,7 @@ log_sum_exp <- function(x) {
 #'
 #' @author David Gerard
 #'
+#' @export
 log_sum_exp_2 <- function(x, y) {
     .Call('_updog_log_sum_exp_2', PACKAGE = 'updog', x, y)
 }
@@ -1171,6 +1174,7 @@ log_sum_exp_2 <- function(x, y) {
 #' @return The logit of \code{x}.
 #'
 #' @author David Gerard
+#'
 logit <- function(x) {
     .Call('_updog_logit', PACKAGE = 'updog', x)
 }
