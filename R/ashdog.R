@@ -192,8 +192,7 @@ flexdog <- function(refvec,
 #'       this works well if you have a lot of individuals. In practice, it seems to
 #'       be less robust to violations in modeling assumptions.}
 #'   \item{\code{"uniform"}}{A discrete uniform distribution. This should never
-#'       be used in practice. Please don't email me that \code{flexdog} doesn't
-#'       work if you use this option.}
+#'       be used in practice.}
 #' }
 #'
 #' You might think a good default is \code{model = "uniform"} because it is
@@ -391,6 +390,28 @@ flexdog <- function(refvec,
 #' "Harnessing Empirical Bayes and Mendelian Segregation
 #' for Genotyping Autopolyploids from Messy Sequencing Data."
 #' \emph{bioRxiv}. Cold Spring Harbor Laboratory. doi:10.1101/281550.
+#'
+#' @seealso
+#' Run \code{browseVignettes(package = "updog")} in R for example usage.
+#'     Other useful functions include:
+#' \describe{
+#'     \item{\code{\link{flexdog}}}{For a more user-friendly version of
+#'           \code{flexdog_full}.}
+#'     \item{\code{\link{rgeno}}}{For simulating genotypes under the allowable
+#'           prior models in \code{flexdog}.}
+#'     \item{\code{\link{rflexdog}}}{For simulating read-counts under the
+#'           assumed likelihood model in \code{flexdog}.}
+#'     \item{\code{\link{plot.flexdog}}}{For plotting the output of
+#'           \code{flexdog}.}
+#'     \item{\code{\link{oracle_mis}}}{For calculating the oracle genotyping
+#'           error rates. This is useful for read-depth calculations
+#'           \emph{before} collecting data. After you have data, using
+#'           the value of \code{prop_mis} is better.}
+#'     \item{\code{\link{oracle_cor}}}{For calculating the correlation
+#'           between the true genotypes and an oracle estimator
+#'           (useful for read-depth calculations \emph{before}
+#'           collecting data).}
+#' }
 #'
 #' @examples
 #' ## A natural population. We will assume a

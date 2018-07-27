@@ -182,8 +182,7 @@ Possible values of the genotype distribution (values of \code{model}) are:
       this works well if you have a lot of individuals. In practice, it seems to
       be less robust to violations in modeling assumptions.}
   \item{\code{"uniform"}}{A discrete uniform distribution. This should never
-      be used in practice. Please don't email me that \code{flexdog} doesn't
-      work if you use this option.}
+      be used in practice.}
 }
 
 You might think a good default is \code{model = "uniform"} because it is
