@@ -169,7 +169,7 @@ arma::vec uni_em_const(arma::vec weight_vec,
                   << std::endl;
       Rcpp::stop("uni_em: Objective is not increasing.\n");
     }
-    err = std::abs(obj - old_obj);
+    err = std::fabs(obj - old_obj);
     index++;
   }
   return pivec;

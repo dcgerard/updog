@@ -69,7 +69,7 @@ double oracle_mis(int n,
                   double od,
                   NumericVector dist) {
 
-  if (std::abs(Rcpp::sum(dist) - 1) > TOL) {
+  if (std::fabs(Rcpp::sum(dist) - 1.0) > TOL) {
     Rcpp::stop("oracle_miss: elements in dist must sum to one.");
   }
   if (dist.length() != ploidy + 1) {
@@ -184,7 +184,7 @@ NumericVector oracle_mis_vec(int n,
                              double bias,
                              double od,
                              NumericVector dist) {
-  if (std::abs(Rcpp::sum(dist) - 1) > TOL) {
+  if (std::fabs(Rcpp::sum(dist) - 1.0) > TOL) {
     Rcpp::stop("oracle_miss_vec: elements in dist must sum to one.");
   }
   if (dist.length() != ploidy + 1) {
@@ -303,7 +303,7 @@ NumericMatrix oracle_joint(int n,
                            double bias,
                            double od,
                            NumericVector dist) {
-  if (std::abs(Rcpp::sum(dist) - 1) > TOL) {
+  if (std::fabs(Rcpp::sum(dist) - 1.0) > TOL) {
     Rcpp::stop("oracle_miss_vec: elements in dist must sum to one.");
   }
   if (dist.length() != ploidy + 1) {

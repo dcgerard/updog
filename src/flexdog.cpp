@@ -25,7 +25,7 @@ NumericVector get_probk_vec(NumericVector pivec, std::string model, double mode)
   } else if (model == "ash") {
     double denom; // what you divide the pi's by.
     for (int i = 0; i <= K; i++) { // iterate through pivec
-      if (abs((double)i - mode) < TOL) {
+      if (std::fabs((double)i - mode) < TOL) {
         probk_vec(i) += pivec(i);
       } else if (i < mode) {
         denom = (double)(std::floor(mode) - i + 1);
@@ -63,7 +63,7 @@ NumericMatrix get_inner_weights(int ploidy, double mode) {
   NumericMatrix inner_weights(ploidy + 1, ploidy + 1);
   double denom;
   for (int i = 0; i <= ploidy; i++) {
-    if (std::abs((double)i - mode) < TOL) {
+    if (std::fabs((double)i - mode) < TOL) {
       inner_weights(i, i) = 1.0;
     } else if (i < mode) {
       denom = (double)(std::floor(mode) - i + 1);
@@ -335,7 +335,7 @@ arma::vec uni_em(arma::vec weight_vec,
                   << std::endl;
       Rcpp::stop("uni_em: Objective is not increasing.\n");
     }
-    err = std::abs(obj - old_obj);
+    err = std::fabs(obj - old_obj);
     index++;
 
   }

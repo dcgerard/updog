@@ -187,7 +187,7 @@ arma::vec wem(arma::vec weight_vec,
     // calculate objective and update stopping criteria
     obj = wem_obj(pivec, weight_vec, lmat, lambda);
 
-    err = std::abs(obj - old_obj);
+    err = std::fabs(obj - old_obj);
     index++;
   }
   return pivec;
