@@ -81,13 +81,13 @@ install.packages("Rmpfr")
 
 Please cite
 
-> Gerard, D., Ferr&atilde;o L.F.V., Garcia, A.A.F., & Stephens, M. (2018). Harnessing Empirical Bayes and Mendelian Segregation for Genotyping Autopolyploids from Messy Sequencing Data. *bioRxiv*. doi: [10.1101/281550](https://doi.org/10.1101/281550).
+> Gerard, D., Ferr&atilde;o L.F.V., Garcia, A.A.F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *bioRxiv*. doi: [10.1101/281550](https://doi.org/10.1101/281550).
 
 Or, using BibTex:
 ``` tex
 @article {gerard2018harnessing,
 	author = {Gerard, David and Ferr{\~a}o, Luis Felipe Ventorim and Garcia, Antonio Augusto Franco and Stephens, Matthew},
-	title = {Harnessing Empirical Bayes and Mendelian Segregation for Genotyping Autopolyploids from Messy Sequencing Data},
+	title = {Genotyping Polyploids from Messy Sequencing Data},
 	year = {2018},
 	doi = {10.1101/281550},
 	publisher = {Cold Spring Harbor Laboratory},

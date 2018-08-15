@@ -1,0 +1,9 @@
+pandoc: 2.2.3.2
+pkgdown: 1.1.0
+pkgdown_sha: ~
+articles:
+  oracle_calculations: oracle_calculations.html
+  parallel_computing: parallel_computing.html
+  simulate_ngs: simulate_ngs.html
+  smells_like_updog: smells_like_updog.html
+
