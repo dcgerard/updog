@@ -42,7 +42,9 @@ test_that("flexdog works", {
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
                   ploidy = ploidy, model = "f1", verbose = FALSE,
                   p1ref = 1, p1size = 2,
-                  p2ref = 5, p2size = 10)
+                  p2ref = 5, p2size = 10,
+                  snpname = "abcdefg")
+  expect_equal(fout$input$snpname, "abcdefg")
   pl <- plot(fout)
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
                   ploidy = ploidy, model = "flex", verbose = FALSE)

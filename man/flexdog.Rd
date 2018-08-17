@@ -6,8 +6,8 @@
 \usage{
 flexdog(refvec, sizevec, ploidy, model = c("norm", "hw", "bb", "ash", "s1",
   "s1pp", "f1", "f1pp", "flex", "uniform"), p1ref = NULL, p1size = NULL,
-  p2ref = NULL, p2size = NULL, bias_init = exp(c(-1, -0.5, 0, 0.5, 1)),
-  verbose = TRUE, outliers = FALSE, ...)
+  p2ref = NULL, p2size = NULL, snpname = NULL, bias_init = exp(c(-1,
+  -0.5, 0, 0.5, 1)), verbose = TRUE, outliers = FALSE, ...)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads of the reference allele.}
@@ -33,6 +33,9 @@ or for the only parent if \code{model = "s1"} (or \code{model = "s1pp"}).}
 
 \item{p2size}{The total counts for the second parent if
 \code{model = "f1"} (or \code{model = "f1pp"}).}
+
+\item{snpname}{A string. The name of the SNP under consideration.
+This is just returned in the \code{input} list for your reference.}
 
 \item{bias_init}{A vector of initial values for the bias parameter
 over the multiple runs of \code{flexdog_full}.}
@@ -119,6 +122,7 @@ An object of class \code{flexdog}, which consists
   \item{\code{input$p1size}}{The value of \code{p1size} provided by the user.}
   \item{\code{input$p2ref}}{The value of \code{p2ref} provided by the user.}
   \item{\code{input$p2size}}{The value of \code{p2size} provided by the user.}
+  \item{\code{input$snpname}}{The value of \code{snpname} provided by the user.}
   \item{\code{prop_mis}}{The posterior proportion of individuals
       genotyped incorrectly.}
   \item{\code{out_prop}}{The estimated proportion of points that

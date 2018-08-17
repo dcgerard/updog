@@ -81,6 +81,7 @@ flexdog <- function(refvec,
                     p1size      = NULL,
                     p2ref       = NULL,
                     p2size      = NULL,
+                    snpname     = NULL,
                     bias_init   = exp(c(-1, -0.5, 0, 0.5, 1)),
                     verbose     = TRUE,
                     outliers    = FALSE,
@@ -110,6 +111,7 @@ flexdog <- function(refvec,
                              p1size   = p1size,
                              p2ref    = p2ref,
                              p2size   = p2size,
+                             snpname  = snpname,
                              bias     = bias_init[bias_index],
                              verbose  = FALSE,
                              outliers = outliers,
@@ -295,6 +297,8 @@ flexdog <- function(refvec,
 #'     \code{model = "f1"} (or \code{model = "f1pp"}).
 #' @param p2size The total counts for the second parent if
 #'     \code{model = "f1"} (or \code{model = "f1pp"}).
+#' @param snpname A string. The name of the SNP under consideration.
+#'     This is just returned in the \code{input} list for your reference.
 #' @param ashpen The penalty to put on the unimodal prior.
 #'     Larger values shrink the unimodal prior towards the
 #'     discrete uniform distribution.
@@ -374,6 +378,7 @@ flexdog <- function(refvec,
 #'   \item{\code{input$p1size}}{The value of \code{p1size} provided by the user.}
 #'   \item{\code{input$p2ref}}{The value of \code{p2ref} provided by the user.}
 #'   \item{\code{input$p2size}}{The value of \code{p2size} provided by the user.}
+#'   \item{\code{input$snpname}}{The value of \code{snpname} provided by the user.}
 #'   \item{\code{prop_mis}}{The posterior proportion of individuals
 #'       genotyped incorrectly.}
 #'   \item{\code{out_prop}}{The estimated proportion of points that
@@ -453,6 +458,7 @@ flexdog_full <- function(refvec,
                          p1size      = NULL,
                          p2ref       = NULL,
                          p2size      = NULL,
+                         snpname     = NULL,
                          outliers    = FALSE) {
 
   ## Check input -----------------------------------------------------
@@ -527,6 +533,10 @@ flexdog_full <- function(refvec,
   }
   if (!is.null(p2ref)) {
     stopifnot(p2ref >= 0, p2size >= p2ref)
+  }
+  if (!is.null(snpname)) {
+    stopifnot(is.character(snpname))
+    stopifnot(length(snpname) == 1)
   }
 
   ## check and set mode under various models -----------------------
@@ -890,6 +900,7 @@ flexdog_full <- function(refvec,
   return_list$input$p1size  <- p1size
   return_list$input$p2ref   <- p2ref
   return_list$input$p2size  <- p2size
+  return_list$input$snpname <- snpname
   return_list$prop_mis      <- 1 - mean(return_list$maxpostprob)
 
   ## Add back missingness ---------------------------------------------

@@ -11,7 +11,7 @@ flexdog_full(refvec, sizevec, ploidy, model = c("norm", "hw", "bb", "ash",
   update_seq = TRUE, update_od = TRUE, mode = NULL, use_cvxr = FALSE,
   itermax = 200, tol = 10^-4, fs1_alpha = 10^-3, ashpen = 10^-6,
   p1ref = NULL, p1size = NULL, p2ref = NULL, p2size = NULL,
-  outliers = FALSE)
+  snpname = NULL, outliers = FALSE)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads of the reference allele.}
@@ -97,6 +97,9 @@ or for the only parent if \code{model = "s1"} (or \code{model = "s1pp"}).}
 \item{p2size}{The total counts for the second parent if
 \code{model = "f1"} (or \code{model = "f1pp"}).}
 
+\item{snpname}{A string. The name of the SNP under consideration.
+This is just returned in the \code{input} list for your reference.}
+
 \item{outliers}{A logical. Should we allow for the inclusion of outliers
 (\code{TRUE}) or not (\code{FALSE}). Only supported when
 \code{model = "f1"} or \code{model = "s1"}. I wouldn't
@@ -174,6 +177,7 @@ An object of class \code{flexdog}, which consists
   \item{\code{input$p1size}}{The value of \code{p1size} provided by the user.}
   \item{\code{input$p2ref}}{The value of \code{p2ref} provided by the user.}
   \item{\code{input$p2size}}{The value of \code{p2size} provided by the user.}
+  \item{\code{input$snpname}}{The value of \code{snpname} provided by the user.}
   \item{\code{prop_mis}}{The posterior proportion of individuals
       genotyped incorrectly.}
   \item{\code{out_prop}}{The estimated proportion of points that
