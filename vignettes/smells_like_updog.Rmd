@@ -27,7 +27,7 @@ Updog wields the power of hierarchical modeling to account for some key features
 
 To efficiently account for these features, updog needs to know the distribution of the individual genotypes in the population. The function `flexdog` can accurately estimate this distribution under a wide variety of situations.
 
-You can read more about the updog method in @gerard2018harnessing.
+You can read more about the updog method in @gerard2018genotyping.
 
 In this vignette, we will go through one example of fitting `flexdog` on an S1 population of individuals.
 

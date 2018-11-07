@@ -2,7 +2,7 @@
 #'
 #' A list containing a matrix of reference counts, a matrix of total counts, and the ploidy level (4) of the species.
 #' This is a subset of the data from Uitdewilligen et al (2013).
-#' 
+#'
 #' @format A list containing three objects. Two matrices and a numeric scalar:
 #' \describe{
 #'   \item{refmat}{A matrix of read counts containing the reference allele. The rows index the individuals and the columns index the SNPs.}
@@ -24,7 +24,7 @@
 #' A mupdog fit of the \code{\link{uitdewilligen}} data.
 #'
 #' @format An object of class \code{\link{mupdog}}.
-#' 
+#'
 #' @return See the Format Section.
 #'
 #' @source The raw data that this was fit to can be found in \code{\link{uitdewilligen}}.
@@ -51,14 +51,14 @@
 #'     \item{counts}{The number of read-counts that support the reference allele.}
 #'     \item{size}{The total number of read-counts at a given SNP.}
 #' }
-#' 
+#'
 #' @return A \code{\link[tibble]{tibble}}. See the Format Section.
 #'
 #' @source \url{http://sweetpotato-garden.kazusa.or.jp/}
 #'
 #' @references Shirasawa, Kenta, Masaru Tanaka, Yasuhiro Takahata, Daifu Ma, Qinghe Cao, Qingchang Liu, Hong Zhai et al. "A high-density SNP genetic map consisting of a complete set of homologous groups in autohexaploid sweetpotato (Ipomoea batatas)." Scientific Reports 7 (2017). DOI: 10.1038/srep44207
 #'
-#'   Gerard, David, Luis Felipe Ventorim Ferrão, and Matthew Stephens. 2017. "Harnessing Empirical Bayes and Mendelian Segregation for Genotyping Autopolyploids with Messy Sequencing Data." Overleaf Preprint.
+#'   Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).
 #'
 "snpdat"
 

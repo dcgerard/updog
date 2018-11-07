@@ -26,7 +26,9 @@ A vector of numerics. The update of \code{pivec} in
     \code{\link{flexdog_full}}.
 }
 \description{
-Generalized version of \code{\link{uni_em}}.
+Solves the following optimization problem
+\deqn{\max_{\pi} \sum_k w_k \log(\sum_j \pi_j \ell_jk).}
+It does this using a weighted EM algorithm.
 }
 \examples{
 set.seed(2)

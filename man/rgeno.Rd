@@ -6,8 +6,9 @@
 \usage{
 rgeno(n, ploidy, model = c("hw", "bb", "norm", "ash", "f1", "s1", "f1pp",
   "s1pp", "flex", "uniform"), allele_freq = NULL, od = NULL,
-  p1geno = NULL, p2geno = NULL, mode = NULL, pivec = NULL, mu = NULL,
-  sigma = NULL, p1_pair_weights = NULL, p2_pair_weights = NULL)
+  p1geno = NULL, p2geno = NULL, mode = NULL, pivec = NULL,
+  mu = NULL, sigma = NULL, p1_pair_weights = NULL,
+  p2_pair_weights = NULL)
 }
 \arguments{
 \item{n}{The number of observations.}
@@ -91,11 +92,7 @@ rgeno(n = 10, ploidy = ploidy, model = "hw", allele_freq = 0.75)
 
 }
 \references{
-Gerard, David, Luis Felipe Ventorim Ferrao,
-Antonio Augusto Franco Garcia, and Matthew Stephens. 2018.
-"Harnessing Empirical Bayes and Mendelian Segregation
-for Genotyping Autopolyploids from Messy Sequencing Data."
-\emph{bioRxiv}. Cold Spring Harbor Laboratory. doi:10.1101/281550.
+Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).
 }
 \author{
 David Gerard

@@ -134,14 +134,14 @@ options than <code><a href='flexdog.html'>flexdog</a></code> and is only meant f
     
     </div>
 
-    <pre class="usage"><span class='fu'>flexdog_full</span>(<span class='no'>refvec</span>, <span class='no'>sizevec</span>, <span class='no'>ploidy</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"norm"</span>, <span class='st'>"hw"</span>, <span class='st'>"bb"</span>, <span class='st'>"ash"</span>,
-  <span class='st'>"s1"</span>, <span class='st'>"s1pp"</span>, <span class='st'>"f1"</span>, <span class='st'>"f1pp"</span>, <span class='st'>"flex"</span>, <span class='st'>"uniform"</span>), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+    <pre class="usage"><span class='fu'>flexdog_full</span>(<span class='no'>refvec</span>, <span class='no'>sizevec</span>, <span class='no'>ploidy</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"norm"</span>, <span class='st'>"hw"</span>, <span class='st'>"bb"</span>,
+  <span class='st'>"ash"</span>, <span class='st'>"s1"</span>, <span class='st'>"s1pp"</span>, <span class='st'>"f1"</span>, <span class='st'>"f1pp"</span>, <span class='st'>"flex"</span>, <span class='st'>"uniform"</span>), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>mean_bias</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>var_bias</span> <span class='kw'>=</span> <span class='fl'>0.7</span>^<span class='fl'>2</span>, <span class='kw'>mean_seq</span> <span class='kw'>=</span> -<span class='fl'>4.7</span>, <span class='kw'>var_seq</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>seq</span> <span class='kw'>=</span> <span class='fl'>0.005</span>, <span class='kw'>bias</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>od</span> <span class='kw'>=</span> <span class='fl'>0.001</span>, <span class='kw'>update_bias</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>update_seq</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>update_od</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>use_cvxr</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>itermax</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>10</span>^-<span class='fl'>4</span>, <span class='kw'>fs1_alpha</span> <span class='kw'>=</span> <span class='fl'>10</span>^-<span class='fl'>3</span>, <span class='kw'>ashpen</span> <span class='kw'>=</span> <span class='fl'>10</span>^-<span class='fl'>6</span>,
-  <span class='kw'>p1ref</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>p1size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>p2ref</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>p2size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>outliers</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='kw'>update_seq</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>update_od</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>use_cvxr</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>itermax</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>10</span>^-<span class='fl'>4</span>, <span class='kw'>fs1_alpha</span> <span class='kw'>=</span> <span class='fl'>10</span>^-<span class='fl'>3</span>,
+  <span class='kw'>ashpen</span> <span class='kw'>=</span> <span class='fl'>10</span>^-<span class='fl'>6</span>, <span class='kw'>p1ref</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>p1size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>p2ref</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>p2size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>snpname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>outliers</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -280,6 +280,11 @@ or for the only parent if <code>model = "s1"</code> (or <code>model = "s1pp"</co
 <code>model = "f1"</code> (or <code>model = "f1pp"</code>).</p></td>
     </tr>
     <tr>
+      <th>snpname</th>
+      <td><p>A string. The name of the SNP under consideration.
+This is just returned in the <code>input</code> list for your reference.</p></td>
+    </tr>
+    <tr>
       <th>outliers</th>
       <td><p>A logical. Should we allow for the inclusion of outliers
 (<code>TRUE</code>) or not (<code>FALSE</code>). Only supported when
@@ -360,6 +365,7 @@ recommend it for any other model anyway.</p></td>
   <dt><code>input$p1size</code></dt><dd><p>The value of <code>p1size</code> provided by the user.</p></dd>
   <dt><code>input$p2ref</code></dt><dd><p>The value of <code>p2ref</code> provided by the user.</p></dd>
   <dt><code>input$p2size</code></dt><dd><p>The value of <code>p2size</code> provided by the user.</p></dd>
+  <dt><code>input$snpname</code></dt><dd><p>The value of <code>snpname</code> provided by the user.</p></dd>
   <dt><code>prop_mis</code></dt><dd><p>The posterior proportion of individuals
       genotyped incorrectly.</p></dd>
   <dt><code>out_prop</code></dt><dd><p>The estimated proportion of points that
@@ -461,10 +467,7 @@ will be the estimated allele dosage of the alternative allele.</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Gerard, David, Luis Felipe Ventorim Ferrao,
-Antonio Augusto Franco Garcia, and Matthew Stephens. 2018.
-"Harnessing Empirical Bayes and Mendelian Segregation
-for Genotyping Autopolyploids from Messy Sequencing Data."
+    <p>Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., &amp; Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).
 <em>bioRxiv</em>. Cold Spring Harbor Laboratory. doi:10.1101/281550.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>

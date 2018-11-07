@@ -4,10 +4,11 @@
 \alias{flexdog}
 \title{Flexible genotyping for polyploids from next-generation sequencing data.}
 \usage{
-flexdog(refvec, sizevec, ploidy, model = c("norm", "hw", "bb", "ash", "s1",
-  "s1pp", "f1", "f1pp", "flex", "uniform"), p1ref = NULL, p1size = NULL,
-  p2ref = NULL, p2size = NULL, snpname = NULL, bias_init = exp(c(-1,
-  -0.5, 0, 0.5, 1)), verbose = TRUE, outliers = FALSE, ...)
+flexdog(refvec, sizevec, ploidy, model = c("norm", "hw", "bb", "ash",
+  "s1", "s1pp", "f1", "f1pp", "flex", "uniform"), p1ref = NULL,
+  p1size = NULL, p2ref = NULL, p2size = NULL, snpname = NULL,
+  bias_init = exp(c(-1, -0.5, 0, 0.5, 1)), verbose = TRUE,
+  outliers = FALSE, ...)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads of the reference allele.}
@@ -271,11 +272,7 @@ plot(fout)
 
 }
 \references{
-Gerard, David, Luis Felipe Ventorim Ferrao,
-Antonio Augusto Franco Garcia, and Matthew Stephens. 2018.
-"Harnessing Empirical Bayes and Mendelian Segregation
-for Genotyping Autopolyploids from Messy Sequencing Data."
-\emph{bioRxiv}. Cold Spring Harbor Laboratory. doi:10.1101/281550.
+Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).
 }
 \seealso{
 Run \code{browseVignettes(package = "updog")} in R for example usage.

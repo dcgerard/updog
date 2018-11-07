@@ -17,12 +17,7 @@
 #'
 #' @inheritParams oracle_mis
 #'
-#' @references Gerard, David, Luis Felipe Ventorim Ferrao,
-#' Antonio Augusto Franco Garcia, and Matthew Stephens. 2018.
-#' "Harnessing Empirical Bayes and Mendelian Segregation
-#' for Genotyping Autopolyploids from Messy Sequencing Data."
-#' \emph{bioRxiv}. Cold Spring Harbor Laboratory. doi:10.1101/281550.
-#'
+#' @references Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).
 #' @export
 #'
 #' @author David Gerard

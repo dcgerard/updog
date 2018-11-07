@@ -21,6 +21,10 @@ A list. The same elements as in \code{\link{get_bivalent_probs}}, augmented to i
 \description{
 Double reduction version of \code{\link{get_bivalent_probs}}.
 }
+\examples{
+get_bivalent_probs(4)
+
+}
 \seealso{
 \code{\link{get_bivalent_probs}}.
 }

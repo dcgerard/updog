@@ -15,14 +15,14 @@ Description: Implements empirical Bayes approaches to genotype
        correlation with the true genotypes, oracle_cor(). These latter two
        functions are useful for read depth calculations. Run
        browseVignettes(package = "updog") in R for example usage. See also
-       Gerard et al. (2018) <doi:10.1101/281550> for details on the
+       Gerard et al. (2018) <doi:10.1534/genetics.118.301468> for details on the
        implemented methods.
 Depends: R (>= 3.4.0)
 License: GPL-3
 BugReports: http://github.com/dcgerard/updog/issues
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 LinkingTo: Rcpp,
     RcppArmadillo
 Imports: Rcpp (>= 0.12.16),

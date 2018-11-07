@@ -22,7 +22,7 @@
        correlation with the true genotypes, oracle_cor(). These latter two
        functions are useful for read depth calculations. Run
        browseVignettes(package = "updog") in R for example usage. See also
-       Gerard et al. (2018) &lt;doi:10.1101/281550&gt; for details on the
+       Gerard et al. (2018) &lt;doi:10.1534/genetics.118.301468&gt; for details on the
        implemented methods.'>
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -99,7 +99,7 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#updog" class="anchor"></a>updog</h1></div>
 
-<p>Updog provides a suite of methods for genotyping polyploids from next-generation sequencing (NGS) data. It does this while accounting for many common features of NGS data: allelic bias, overdispersion, sequencing error, and (possibly) outlying observations. It is named updog for “Using Parental Data for Offspring Genotyping” because we originally developed the method for full-sib populations, but it works now for more general populations.</p>
+<p>Updog provides a suite of methods for genotyping polyploids from next-generation sequencing (NGS) data. It does this while accounting for many common features of NGS data: allelic bias, overdispersion, sequencing error, and (possibly) outlying observations. It is named updog for “Using Parental Data for Offspring Genotyping” because we originally developed the method for full-sib populations, but it works now for more general populations. The method is described in detail <a href="https://doi.org/10.1534/genetics.118.301468">here</a> and <a href="https://doi.org/10.1101/281550">here</a>.</p>
 <p>The main function is <code>flexdog</code>, which provides many options for the distribution of the genotypes in your sample.</p>
 <p>Also provided are:</p>
 <ul>
@@ -108,7 +108,7 @@
 <li>Functions to evaluate oracle genotyping performance: <code>oracle_joint</code>, <code>oracle_mis</code>, <code>oracle_mis_vec</code>, and <code>oracle_cor</code>. We mean “oracle” in the sense that we assume that the entire data generation process is known (i.e. the genotype distribution, sequencing error rate, allelic bias, and overdispersion are all known). These are good approximations when there are a lot of individuals (but not necessarily large read-depth).</li>
 </ul>
 <p>The original <code>updog</code> package is now named <code>updogAlpha</code> and may be found <a href="https://github.com/dcgerard/updogAlpha">here</a>.</p>
-<p>See also <a href="https://github.com/pblischak/polyploid-genotyping">ebg</a>, <a href="https://cran.r-project.org/package=fitPoly">fitPoly</a>, and <a href="http://www.g3journal.org/content/suppl/2017/01/19/g3.117.039008.DC1">TET</a>. Our best “competitor” is probably <a href="https://cran.r-project.org/package=fitPoly">fitPoly</a>.</p>
+<p>See also <a href="https://github.com/pblischak/polyploid-genotyping">ebg</a>, <a href="https://cran.r-project.org/package=fitPoly">fitPoly</a>, and <a href="http://www.g3journal.org/content/suppl/2017/01/19/g3.117.039008.DC1">TET</a>, and <a href="https://cran.r-project.org/package=polyRAD">polyRAD</a>. Our best “competitor” is probably <a href="https://cran.r-project.org/package=fitPoly">fitPoly</a>.</p>
 <p>See <a href="./inst/NEWS.html">NEWS</a> for the latest updates on the package.</p>
 <div id="vignettes" class="section level2">
 <h2 class="hasAnchor">
@@ -142,19 +142,22 @@
 <a href="#how-to-cite" class="anchor"></a>How to Cite</h2>
 <p>Please cite</p>
 <blockquote>
-<p>Gerard, D., Ferrão L.F.V., Garcia, A.A.F., &amp; Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. <em>bioRxiv</em>. doi: <a href="https://doi.org/10.1101/281550">10.1101/281550</a>.</p>
+<p>Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., &amp; Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. <em>Genetics</em>, 210(3), 789-807. doi: <a href="https://doi.org/10.1534/genetics.118.301468">10.1534/genetics.118.301468</a>.</p>
 </blockquote>
 <p>Or, using BibTex:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode tex"><code class="sourceCode latex"><a class="sourceLine" id="cb5-1" data-line-number="1">@article {gerard2018harnessing,</a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode tex"><code class="sourceCode latex"><a class="sourceLine" id="cb5-1" data-line-number="1">@article {gerard2018genotyping,</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">    author = {Gerard, David and Ferr{<span class="fu">\~</span>a}o, Luis Felipe Ventorim and Garcia, Antonio Augusto Franco and Stephens, Matthew},</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3">    title = {Genotyping Polyploids from Messy Sequencing Data},</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">    year = {2018},</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">    doi = {10.1101/281550},</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">    publisher = {Cold Spring Harbor Laboratory},</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">    URL = {https://www.biorxiv.org/content/early/2018/03/16/281550},</a>
-<a class="sourceLine" id="cb5-8" data-line-number="8">    eprint = {https://www.biorxiv.org/content/early/2018/03/16/281550.full.pdf},</a>
-<a class="sourceLine" id="cb5-9" data-line-number="9">    journal = {bioRxiv}</a>
-<a class="sourceLine" id="cb5-10" data-line-number="10">}</a></code></pre></div>
+<a class="sourceLine" id="cb5-4" data-line-number="4">    volume = {210},</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">    number = {3},</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">    pages = {789--807},</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">    year = {2018},</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">    doi = {10.1534/genetics.118.301468},</a>
+<a class="sourceLine" id="cb5-9" data-line-number="9">    publisher = {Genetics},</a>
+<a class="sourceLine" id="cb5-10" data-line-number="10">    issn = {0016-6731},</a>
+<a class="sourceLine" id="cb5-11" data-line-number="11">    URL = {https://doi.org/10.1534/genetics.118.301468},</a>
+<a class="sourceLine" id="cb5-12" data-line-number="12">    journal = {Genetics}</a>
+<a class="sourceLine" id="cb5-13" data-line-number="13">}</a></code></pre></div>
 </div>
 <div id="code-of-conduct" class="section level2">
 <h2 class="hasAnchor">
@@ -200,7 +203,6 @@
 <li><a href="https://ci.appveyor.com/project/dcgerard/updog-06s8t"><img src="https://ci.appveyor.com/api/projects/status/c80fdy61ead6s3vr?svg=true" alt="Appveyor Build status"></a></li>
 <li><a href="https://codecov.io/gh/dcgerard/updog"><img src="https://codecov.io/gh/dcgerard/updog/branch/master/graph/badge.svg" alt="codecov"></a></li>
 <li><a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" alt="License: GPL v3"></a></li>
-<li><a href="http://www.rdocumentation.org/packages/updog"><img src="http://www.rdocumentation.org/badges/version/updog" alt="Rdoc"></a></li>
 <li><a href="https://cran.r-project.org/package=updog"><img src="http://www.r-pkg.org/badges/version/updog" alt="CRAN_Status_Badge"></a></li>
 <li><a href="https://cran.r-project.org/package=updog"><img src="http://cranlogs.r-pkg.org/badges/grand-total/updog"></a></li>
 </ul>

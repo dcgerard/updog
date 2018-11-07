@@ -4,14 +4,14 @@
 \alias{flexdog_full}
 \title{Flexible genotyping for polyploids from next-generation sequencing data.}
 \usage{
-flexdog_full(refvec, sizevec, ploidy, model = c("norm", "hw", "bb", "ash",
-  "s1", "s1pp", "f1", "f1pp", "flex", "uniform"), verbose = TRUE,
+flexdog_full(refvec, sizevec, ploidy, model = c("norm", "hw", "bb",
+  "ash", "s1", "s1pp", "f1", "f1pp", "flex", "uniform"), verbose = TRUE,
   mean_bias = 0, var_bias = 0.7^2, mean_seq = -4.7, var_seq = 1,
   seq = 0.005, bias = 1, od = 0.001, update_bias = TRUE,
-  update_seq = TRUE, update_od = TRUE, mode = NULL, use_cvxr = FALSE,
-  itermax = 200, tol = 10^-4, fs1_alpha = 10^-3, ashpen = 10^-6,
-  p1ref = NULL, p1size = NULL, p2ref = NULL, p2size = NULL,
-  snpname = NULL, outliers = FALSE)
+  update_seq = TRUE, update_od = TRUE, mode = NULL,
+  use_cvxr = FALSE, itermax = 200, tol = 10^-4, fs1_alpha = 10^-3,
+  ashpen = 10^-6, p1ref = NULL, p1size = NULL, p2ref = NULL,
+  p2size = NULL, snpname = NULL, outliers = FALSE)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads of the reference allele.}
@@ -306,11 +306,7 @@ plot(fout)
 
 }
 \references{
-Gerard, David, Luis Felipe Ventorim Ferrao,
-Antonio Augusto Franco Garcia, and Matthew Stephens. 2018.
-"Harnessing Empirical Bayes and Mendelian Segregation
-for Genotyping Autopolyploids from Messy Sequencing Data."
-\emph{bioRxiv}. Cold Spring Harbor Laboratory. doi:10.1101/281550.
+Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).
 }
 \seealso{
 Run \code{browseVignettes(package = "updog")} in R for example usage.

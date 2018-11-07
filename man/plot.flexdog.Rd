@@ -19,7 +19,7 @@ if the ploidy is less than or equal to 6.}
 A \code{\link[ggplot2]{ggplot}} object for the genotype plot.
 }
 \description{
-Draw a genotype plot from the output of \code{\link{flexdog}}.
+A wrapper for \code{\link{plot_geno}}. This will create a genotype plot for a single SNP.
 }
 \details{
 On a genotype plot, the x-axis contains the counts of the non-reference allele and the y-axis
