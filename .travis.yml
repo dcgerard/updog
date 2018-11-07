@@ -6,6 +6,9 @@ sudo: false
 warnings_are_errors: true
 cache: packages
 
+before_install:
+ - echo "options(repos = c(CRAN = "https://cran.rstudio.com"))" >.Rprofile
+
 bioc_packages: 
   - BiocInstaller
   - BiocCheck
