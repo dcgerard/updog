@@ -1,15 +1,9 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
-r: bioc-devel
 sudo: false
 warnings_are_errors: true
 cache: packages
-
-bioc_packages:
-  - BiocManager
-  - BiocInstaller
-  - BiocCheck
 
 addons:
   apt:
@@ -19,4 +13,3 @@ addons:
 
 after_success:
   - Rscript -e 'covr::codecov()'
-  - R CMD BiocCheck --new-package --no-check-vignettes updog*.tar.gz
