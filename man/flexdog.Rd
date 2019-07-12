@@ -5,10 +5,10 @@
 \title{Flexible genotyping for polyploids from next-generation sequencing data.}
 \usage{
 flexdog(refvec, sizevec, ploidy, model = c("norm", "hw", "bb", "ash",
-  "s1", "s1pp", "f1", "f1pp", "flex", "uniform"), p1ref = NULL,
+  "s1", "s1pp", "f1", "f1pp", "flex", "uniform", "custom"), p1ref = NULL,
   p1size = NULL, p2ref = NULL, p2size = NULL, snpname = NULL,
   bias_init = exp(c(-1, -0.5, 0, 0.5, 1)), verbose = TRUE,
-  outliers = FALSE, ...)
+  outliers = FALSE, prior_vec = NULL, ...)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads of the reference allele.}
@@ -48,6 +48,11 @@ over the multiple runs of \code{flexdog_full}.}
 (\code{TRUE}) or not (\code{FALSE}). Only supported when
 \code{model = "f1"} or \code{model = "s1"}. I wouldn't
 recommend it for any other model anyway.}
+
+\item{prior_vec}{The pre-specified genotype distribution. Only used if
+\code{model = "custom"} and must otherwise be \code{NULL}. If specified,
+then it should be a vector of length \code{ploidy + 1} with
+non-negative elements that sum to 1.}
 
 \item{...}{Additional parameters to pass to \code{\link{flexdog_full}}.}
 }
@@ -102,6 +107,7 @@ An object of class \code{flexdog}, which consists
           \code{get_bivalent_probs(ploidy)$probmat[get_bivalent_probs(ploidy)$lvec == p2geno, , drop = FALSE]}.}
       \item{\code{model = "flex"}:}{\code{par} is an empty list.}
       \item{\code{model = "uniform"}:}{\code{par} is an empty list.}
+      \item{\code{model = "custom"}:}{\code{par} is an empty list.}
       }}
   \item{\code{geno}}{The posterior mode genotype. These are your
       genotype estimates.}
@@ -188,6 +194,9 @@ Possible values of the genotype distribution (values of \code{model}) are:
       be less robust to violations in modeling assumptions.}
   \item{\code{"uniform"}}{A discrete uniform distribution. This should never
       be used in practice.}
+  \item{\code{"custom"}}{A pre-specified prior distribution. You specify
+      it using the \code{prior_vec} argument. You should almost never
+      use this option in practice.}
 }
 
 You might think a good default is \code{model = "uniform"} because it is

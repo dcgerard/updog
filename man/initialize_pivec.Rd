@@ -5,7 +5,7 @@
 \title{Initialize \code{pivec} for \code{\link{flexdog}} EM algorithm.}
 \usage{
 initialize_pivec(ploidy, mode, model = c("hw", "bb", "norm", "ash", "f1",
-  "s1", "f1pp", "s1pp", "f1ppdr", "s1ppdr", "flex", "uniform"))
+  "s1", "f1pp", "s1pp", "f1ppdr", "s1ppdr", "flex", "uniform", "custom"))
 }
 \arguments{
 \item{ploidy}{The ploidy of the species. Assumed to be the same for each
