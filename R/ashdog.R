@@ -76,7 +76,7 @@
 flexdog <- function(refvec,
                     sizevec,
                     ploidy,
-                    model       = c("norm", "hw", "bb", "ash", "s1", "s1pp", "f1", "f1pp", "flex", "uniform"),
+                    model       = c("norm", "hw", "bb", "ash", "s1", "s1pp", "f1", "f1pp", "flex", "uniform", "custom"),
                     p1ref       = NULL,
                     p1size      = NULL,
                     p2ref       = NULL,
@@ -85,6 +85,7 @@ flexdog <- function(refvec,
                     bias_init   = exp(c(-1, -0.5, 0, 0.5, 1)),
                     verbose     = TRUE,
                     outliers    = FALSE,
+                    prior_vec   = NULL,
                     ...) {
   assertthat::assert_that(all(bias_init > 0))
   model <- match.arg(model)
@@ -103,18 +104,19 @@ flexdog <- function(refvec,
       cat("Initial Bias:", bias_init[bias_index], "\n")
     }
 
-    fcurrent <- flexdog_full(refvec   = refvec,
-                             sizevec  = sizevec,
-                             ploidy   = ploidy,
-                             model    = model,
-                             p1ref    = p1ref,
-                             p1size   = p1size,
-                             p2ref    = p2ref,
-                             p2size   = p2size,
-                             snpname  = snpname,
-                             bias     = bias_init[bias_index],
-                             verbose  = FALSE,
-                             outliers = outliers,
+    fcurrent <- flexdog_full(refvec    = refvec,
+                             sizevec   = sizevec,
+                             ploidy    = ploidy,
+                             model     = model,
+                             p1ref     = p1ref,
+                             p1size    = p1size,
+                             p2ref     = p2ref,
+                             p2size    = p2size,
+                             snpname   = snpname,
+                             bias      = bias_init[bias_index],
+                             verbose   = FALSE,
+                             outliers  = outliers,
+                             prior_vec = prior_vec,
                              ...)
 
     if (verbose) {
@@ -195,6 +197,9 @@ flexdog <- function(refvec,
 #'       be less robust to violations in modeling assumptions.}
 #'   \item{\code{"uniform"}}{A discrete uniform distribution. This should never
 #'       be used in practice.}
+#'   \item{\code{"custom"}}{A pre-specified prior distribution. You specify
+#'       it using the \code{prior_vec} argument. You should almost never
+#'       use this option in practice.}
 #' }
 #'
 #' You might think a good default is \code{model = "uniform"} because it is
@@ -306,6 +311,10 @@ flexdog <- function(refvec,
 #'     (\code{TRUE}) or not (\code{FALSE}). Only supported when
 #'     \code{model = "f1"} or \code{model = "s1"}. I wouldn't
 #'     recommend it for any other model anyway.
+#' @param prior_vec The pre-specified genotype distribution. Only used if
+#'     \code{model = "custom"} and must otherwise be \code{NULL}. If specified,
+#'     then it should be a vector of length \code{ploidy + 1} with
+#'     non-negative elements that sum to 1.
 #'
 #' @return An object of class \code{flexdog}, which consists
 #'     of a list with some or all of the following elements:
@@ -357,6 +366,7 @@ flexdog <- function(refvec,
 #'           \code{get_bivalent_probs(ploidy)$probmat[get_bivalent_probs(ploidy)$lvec == p2geno, , drop = FALSE]}.}
 #'       \item{\code{model = "flex"}:}{\code{par} is an empty list.}
 #'       \item{\code{model = "uniform"}:}{\code{par} is an empty list.}
+#'       \item{\code{model = "custom"}:}{\code{par} is an empty list.}
 #'       }}
 #'   \item{\code{geno}}{The posterior mode genotype. These are your
 #'       genotype estimates.}
@@ -432,7 +442,7 @@ flexdog <- function(refvec,
 flexdog_full <- function(refvec,
                          sizevec,
                          ploidy,
-                         model       = c("norm", "hw", "bb", "ash", "s1", "s1pp", "f1", "f1pp", "flex", "uniform"),
+                         model       = c("norm", "hw", "bb", "ash", "s1", "s1pp", "f1", "f1pp", "flex", "uniform", "custom"),
                          verbose     = TRUE,
                          mean_bias   = 0,
                          var_bias    = 0.7 ^ 2,
@@ -455,7 +465,8 @@ flexdog_full <- function(refvec,
                          p2ref       = NULL,
                          p2size      = NULL,
                          snpname     = NULL,
-                         outliers    = FALSE) {
+                         outliers    = FALSE,
+                         prior_vec   = NULL) {
 
   ## Check input -----------------------------------------------------
   model <- match.arg(model)
@@ -511,6 +522,18 @@ flexdog_full <- function(refvec,
   assertthat::are_equal(length(fs1_alpha), 1)
   assertthat::assert_that(fs1_alpha <= 1, fs1_alpha >= 0)
 
+  ## Check custom --------------------------------------------------
+  if (!is.null(prior_vec) & model != "custom") {
+    stop('Cannot specify `prior_vec` when model != "custom"')
+  } else if (!is.null(prior_vec)) {
+    stopifnot(prior_vec >= 0)
+    stopifnot(prior_vec <= 1)
+    stopifnot(abs(sum(prior_vec) - 1) < 10^-6)
+    stopifnot(length(prior_vec) == ploidy + 1)
+  } else if (model == "custom" & is.null(prior_vec)) {
+    stop('must specify `prior_vec` when model = "custom"')
+  }
+
   ## Check p1ref, p2ref, p1size, p2size ----------------------------
   if ((!is.null(p1ref) | !is.null(p1size)) & (model != "f1" & model != "s1" & model != "f1pp" & model != "s1pp" & model != "f1ppdr" & model != "s1ppdr")) {
     stop("flexdog: if model is not 'f1', 's1', 'f1pp', 's1pp', 'f1ppdr', or 's1ppdr' then p1ref and p1size both need to be NULL.")
@@ -540,8 +563,8 @@ flexdog_full <- function(refvec,
     stop('flexdog: `model` cannot equal `"flex"` when `mode` is specified.')
   } else if (is.null(mode) & model == "flex") {
     mode_vec <- 0
-  } else if (!is.null(mode) & (model == "f1" | model == "s1" | model == "uniform" | model == "f1pp" | model == "s1pp" | model == "f1ppdr" | model == "s1ppdr")) {
-    stop('flexdog: `model` cannot equal "f1", "s1", "f1pp", "s1pp", "f1ppdr", "s1ppdr", or "uniform" when `mode` is specified.')
+  } else if (!is.null(mode) & (model == "f1" | model == "s1" | model == "uniform" | model == "f1pp" | model == "s1pp" | model == "f1ppdr" | model == "s1ppdr" | model == "custom")) {
+    stop('flexdog: `model` cannot equal "f1", "s1", "f1pp", "s1pp", "f1ppdr", "s1ppdr", "uniform", or "custom" when `mode` is specified.')
   } else if (is.null(mode) & (model == "f1" | model == "s1" | model == "uniform" | model == "f1pp" | model == "s1pp" | model == "f1ppdr" | model == "s1ppdr")) {
     mode_vec <- mean(refvec / sizevec, na.rm = TRUE) ## just to initialize pivec
   } else if (!is.null(mode) & model == "ash") {
@@ -555,6 +578,8 @@ flexdog_full <- function(refvec,
     if (any((mode < 0) | (mode > 1))) {
       stop('If model = "hw" or model = "bb" or model = "norm" then `mode` should be between 0 and 1.\nIt is the initialization of the allele frequency.')
     }
+  } else if (model == "custom") {
+    mode_vec <- sum((0:ploidy) * prior_vec) / ploidy
   } else {
     stop("flexdog: Checking mode. How did you get here?")
   }
@@ -655,11 +680,16 @@ flexdog_full <- function(refvec,
         }
       }
       control$mixing_pen <- control$blist$penvec * 1 ## The penalties to use on the mixing weights of the ppdr model.
+    } else if (model == "custom") {
+      control$prior_vec <- prior_vec
     }
 
     ## Initialize pivec so that two modes have equal prob if model = "ash".
     ##     Uniform if model = "flex".
     pivec <- initialize_pivec(ploidy = ploidy, mode = mode, model = model)
+    if (model == "custom") { ## hack to get around passing more arguments to initialize_pivec
+      pivec <- prior_vec
+    }
     assertthat::are_equal(sum(pivec), 1)
     control$pivec <- pivec ## initialization for unimodal optimization
 
@@ -1019,7 +1049,7 @@ initialize_pivec <- function(ploidy,
                              model = c("hw", "bb", "norm", "ash",
                                        "f1", "s1", "f1pp", "s1pp",
                                        "f1ppdr", "s1ppdr",
-                                       "flex", "uniform")) {
+                                       "flex", "uniform", "custom")) {
   assertthat::are_equal(1, length(ploidy), length(mode))
   assertthat::are_equal(ploidy %% 1, 0)
 
@@ -1057,7 +1087,7 @@ initialize_pivec <- function(ploidy,
     } else if (init_type == "piunif") {
       pivec <- rep(1 / (ploidy + 1), length = ploidy + 1)
     }
-  } else if (model == "hw" | model == "f1" | model == "s1" | model == "bb" | model == "norm" | model == "f1pp" | model == "s1pp" | model == "f1ppdr" | model == "s1ppdr") {
+  } else if (model == "hw" | model == "f1" | model == "s1" | model == "bb" | model == "norm" | model == "f1pp" | model == "s1pp" | model == "f1ppdr" | model == "s1ppdr" | model == "custom") {
     if (mode < 0 | mode > 1) {
       stop('initialize_pivec: when model = "hw", mode should be between 0 and 1.\n It is the initialization of the allele frequency.')
     }
@@ -1092,7 +1122,7 @@ flex_update_pivec <- function(weight_vec,
                                         "ash", "f1", "s1",
                                         "f1pp", "s1pp",
                                         "f1ppdr", "s1ppdr",
-                                        "flex", "uniform"),
+                                        "flex", "uniform", "custom"),
                               control) {
   ## Check input -------------------------------
   ploidy <- length(weight_vec) - 1
@@ -1266,6 +1296,9 @@ flex_update_pivec <- function(weight_vec,
       return_list$par$p2_pair_weights  <- temp_list$p2_pair_weights[[temp_list$p2geno + 1]]
       return_list$par$p2_dr_proportion <- sum(temp_list$p2_pair_weights[[temp_list$p2geno + 1]][!control$blist$penvec[control$blist$lvec == temp_list$p2geno]])
     }
+  } else if (model == "custom") {
+    return_list$pivec <- control$prior_vec
+    return_list$par <- list()
   } else {
     stop("flex_update_pivec: how did you get here?")
   }

@@ -71,6 +71,14 @@ test_that("flexdog works", {
   fout <- flexdog(refvec = refvec, sizevec = sizevec,
                   p1ref = 10, p1size = 20,
                   ploidy = ploidy, model = "s1pp", verbose = FALSE)
+
+  flexdog(refvec = refvec,
+          sizevec = sizevec,
+          ploidy = ploidy,
+          model = "custom",
+          bias = 1,
+          prior_vec = 0:ploidy / sum(0:ploidy),
+          verbose = FALSE) -> fout
 }
 )
 

@@ -5,13 +5,14 @@
 \title{Flexible genotyping for polyploids from next-generation sequencing data.}
 \usage{
 flexdog_full(refvec, sizevec, ploidy, model = c("norm", "hw", "bb",
-  "ash", "s1", "s1pp", "f1", "f1pp", "flex", "uniform"), verbose = TRUE,
-  mean_bias = 0, var_bias = 0.7^2, mean_seq = -4.7, var_seq = 1,
-  seq = 0.005, bias = 1, od = 0.001, update_bias = TRUE,
-  update_seq = TRUE, update_od = TRUE, mode = NULL,
-  use_cvxr = FALSE, itermax = 200, tol = 10^-4, fs1_alpha = 10^-3,
-  ashpen = 10^-6, p1ref = NULL, p1size = NULL, p2ref = NULL,
-  p2size = NULL, snpname = NULL, outliers = FALSE)
+  "ash", "s1", "s1pp", "f1", "f1pp", "flex", "uniform", "custom"),
+  verbose = TRUE, mean_bias = 0, var_bias = 0.7^2, mean_seq = -4.7,
+  var_seq = 1, seq = 0.005, bias = 1, od = 0.001,
+  update_bias = TRUE, update_seq = TRUE, update_od = TRUE,
+  mode = NULL, use_cvxr = FALSE, itermax = 200, tol = 10^-4,
+  fs1_alpha = 10^-3, ashpen = 10^-6, p1ref = NULL, p1size = NULL,
+  p2ref = NULL, p2size = NULL, snpname = NULL, outliers = FALSE,
+  prior_vec = NULL)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads of the reference allele.}
@@ -104,6 +105,11 @@ This is just returned in the \code{input} list for your reference.}
 (\code{TRUE}) or not (\code{FALSE}). Only supported when
 \code{model = "f1"} or \code{model = "s1"}. I wouldn't
 recommend it for any other model anyway.}
+
+\item{prior_vec}{The pre-specified genotype distribution. Only used if
+\code{model = "custom"} and must otherwise be \code{NULL}. If specified,
+then it should be a vector of length \code{ploidy + 1} with
+non-negative elements that sum to 1.}
 }
 \value{
 An object of class \code{flexdog}, which consists
@@ -156,6 +162,7 @@ An object of class \code{flexdog}, which consists
           \code{get_bivalent_probs(ploidy)$probmat[get_bivalent_probs(ploidy)$lvec == p2geno, , drop = FALSE]}.}
       \item{\code{model = "flex"}:}{\code{par} is an empty list.}
       \item{\code{model = "uniform"}:}{\code{par} is an empty list.}
+      \item{\code{model = "custom"}:}{\code{par} is an empty list.}
       }}
   \item{\code{geno}}{The posterior mode genotype. These are your
       genotype estimates.}
@@ -243,6 +250,9 @@ Possible values of the genotype distribution (values of \code{model}) are:
       be less robust to violations in modeling assumptions.}
   \item{\code{"uniform"}}{A discrete uniform distribution. This should never
       be used in practice.}
+  \item{\code{"custom"}}{A pre-specified prior distribution. You specify
+      it using the \code{prior_vec} argument. You should almost never
+      use this option in practice.}
 }
 
 You might think a good default is \code{model = "uniform"} because it is
