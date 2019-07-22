@@ -307,6 +307,18 @@ arma::vec uni_em(arma::vec weight_vec,
     // calculate objective and update stopping criteria
     obj = uni_obj(pivec, weight_vec, lmat, lambda);
     if (obj < old_obj - TOL) {
+      // corner case is where all mass is on one genotype ---------------------
+      int num_zero = 0;
+      for (int i = 0; i <= ploidy; i++) {
+        if (pivec(i) < 0.0001) {
+          num_zero++;
+        }
+      }
+      if (num_zero == ploidy) {
+        break;
+      }
+
+      // If not corner case print current parameter values and return error ---
       Rcpp::Rcout << "Index: "
                   << index
                   << std::endl
