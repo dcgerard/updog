@@ -53,7 +53,7 @@ update_pp_f1 <- function(weight_vec, ## only accepts f1pp now
         ## Just return likelihood
         p1_seg_prob <- control$blist$probmat[control$blist$lvec == p1geno, , drop = TRUE]
         p2_seg_prob <- control$blist$probmat[control$blist$lvec == p2geno, , drop = TRUE]
-        temp_list$pivec <- c(convolve(p1_seg_prob, p2_seg_prob))
+        temp_list$pivec <- c(convolve_up(p1_seg_prob, p2_seg_prob))
         temp_list$obj <- f1_obj(alpha = control$fs1_alpha,
                                 pvec = temp_list$pivec,
                                 weight_vec = weight_vec)
@@ -76,7 +76,7 @@ update_pp_f1 <- function(weight_vec, ## only accepts f1pp now
         return_list$p2_pair_weights[[p2geno + 1]][2] <- 1 - oout$par
 
         temp_list$obj <- oout$value
-        temp_list$pivec <- c(convolve(colSums(return_list$p2_pair_weights[[p2geno + 1]] * p2_seg_prob_mat), p1_seg_prob))
+        temp_list$pivec <- c(convolve_up(colSums(return_list$p2_pair_weights[[p2geno + 1]] * p2_seg_prob_mat), p1_seg_prob))
       } else if ((num_comp[p1geno + 1] == 1) & (num_comp[p2geno + 1] > 2)) {
         ## EM on 2.
         p1_seg_prob <- control$blist$probmat[control$blist$lvec == p1geno, , drop = TRUE]
@@ -124,7 +124,7 @@ update_pp_f1 <- function(weight_vec, ## only accepts f1pp now
         return_list$p1_pair_weights[[p1geno + 1]][2] <- 1 - oout$par
 
         temp_list$obj <- oout$value
-        temp_list$pivec <- c(convolve(colSums(return_list$p1_pair_weights[[p1geno + 1]] * p1_seg_prob_mat), p2_seg_prob))
+        temp_list$pivec <- c(convolve_up(colSums(return_list$p1_pair_weights[[p1geno + 1]] * p1_seg_prob_mat), p2_seg_prob))
       } else if ((num_comp[p1geno + 1] == 2) & (num_comp[p2geno + 1] == 2)) {
         ## Brent on both
         p1_seg_prob_mat <- control$blist$probmat[control$blist$lvec == p1geno, , drop = FALSE]
@@ -183,7 +183,7 @@ update_pp_f1 <- function(weight_vec, ## only accepts f1pp now
         p1_seg_prob <- colSums(c(firstmixweight_p1, 1 - firstmixweight_p1) * p1_seg_prob_mat)
         p2_seg_prob <- colSums(c(firstmixweight_p2, 1 - firstmixweight_p2) * p2_seg_prob_mat)
 
-        temp_list$pivec <- convolve(p1_seg_prob, p2_seg_prob)
+        temp_list$pivec <- convolve_up(p1_seg_prob, p2_seg_prob)
 
       } else if ((num_comp[p1geno + 1] == 2) & (num_comp[p2geno + 1] > 2)) {
         ## Brent on 1, EM on 2
@@ -464,7 +464,7 @@ update_pp_s1 <- function(weight_vec,
     if (num_comp[pgeno + 1] == 1) {
       ## Return likelihood
       p_seg_prob <- control$blist$probmat[control$blist$lvec == pgeno, , drop = TRUE]
-      temp_list$pivec <- c(convolve(p_seg_prob, p_seg_prob))
+      temp_list$pivec <- c(convolve_up(p_seg_prob, p_seg_prob))
       temp_list$obj <- s1pp_obj(p_seg_prob = p_seg_prob,
                                 weight_vec = weight_vec,
                                 fs1_alpha  = control$fs1_alpha)
@@ -482,7 +482,7 @@ update_pp_s1 <- function(weight_vec,
       temp_list$obj <- oout$value
       p_seg_prob <- colSums(control$blist$probmat[control$blist$lvec == pgeno, , drop = FALSE] *
                               c(oout$par, 1.0 - oout$par))
-      temp_list$pivec <- c(convolve(p_seg_prob, p_seg_prob))
+      temp_list$pivec <- c(convolve_up(p_seg_prob, p_seg_prob))
 
       return_list$p1_pair_weights[[pgeno + 1]][1] <- oout$par
       return_list$p1_pair_weights[[pgeno + 1]][2] <- 1.0 - oout$par
@@ -506,7 +506,7 @@ update_pp_s1 <- function(weight_vec,
 }
 
 s1pp_obj <- function(p_seg_prob, weight_vec, fs1_alpha) {
-  pivec <- c(convolve(p_seg_prob, p_seg_prob))
+  pivec <- c(convolve_up(p_seg_prob, p_seg_prob))
   f1_obj(alpha = fs1_alpha,
          pvec = pivec,
          weight_vec = weight_vec)
@@ -544,7 +544,7 @@ get_conv_inner_weights <- function(psegprob, psegmat) {
                  ncol = length(psegprob) * 2 - 1,
                  nrow = nrow(psegmat))
   for (index in seq_len(nrow(psegmat))) {
-    lmat[index, ] <- c(convolve(psegprob, psegmat[index, ]))
+    lmat[index, ] <- c(convolve_up(psegprob, psegmat[index, ]))
   }
   return(lmat)
 }
@@ -574,7 +574,7 @@ pivec_from_segmats <- function(p1segmat, p2segmat, p1weight, p2weight) {
   assertthat::are_equal(nrow(p1segmat), length(p1weight))
   assertthat::are_equal(nrow(p2segmat), length(p2weight))
   assertthat::are_equal(ncol(p1segmat), ncol(p2segmat))
-  pivec <- c(convolve(colSums(p1weight * p1segmat),
+  pivec <- c(convolve_up(colSums(p1weight * p1segmat),
                       colSums(p2weight * p2segmat)))
   return(pivec)
 }

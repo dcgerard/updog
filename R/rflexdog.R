@@ -298,7 +298,7 @@ rgeno <- function(n,
     }
     p1segprob <- colSums(blist$probmat[which_p1, , drop = FALSE] * p1_pair_weights)
     p2segprob <- colSums(blist$probmat[which_p2, , drop = FALSE] * p2_pair_weights)
-    pivec <- c(convolve(p1segprob, p2segprob))
+    pivec <- c(convolve_up(p1segprob, p2segprob))
   } else {
     stop("rgeno: how did you get here?")
   }

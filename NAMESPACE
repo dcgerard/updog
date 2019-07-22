@@ -3,7 +3,7 @@
 S3method(plot,flexdog)
 S3method(plot,mupdog)
 S3method(summary,mupdog)
-export(convolve)
+export(convolve_up)
 export(dbetabinom)
 export(flexdog)
 export(flexdog_full)

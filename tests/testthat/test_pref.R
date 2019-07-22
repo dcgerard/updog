@@ -42,10 +42,10 @@ test_that("get_hyper_weights works", {
   expect_true(all(abs(mixdist - hdist) < 10 ^ -3))
 })
 
-test_that("convolve works", {
+test_that("convolve_up() works", {
   x <- c(1/4, 3/4)
   y <- c(1/8, 7/8)
-  cout <- convolve(x, y)
+  cout <- convolve_up(x, y)
   expect_equal(cout[1], x[1] * y[1])
   expect_equal(cout[2], x[2] * y[1] + x[1] * y[2])
   expect_equal(cout[3], x[2] * y[2])

@@ -196,13 +196,13 @@ arma::vec uni_em_const(arma::vec weight_vec,
 //' @examples
 //' x <- c(1 / 6, 2 / 6, 3 / 6)
 //' y <- c(1 / 9, 2 / 9, 6 / 9)
-//' convolve(x, y)
+//' convolve_up(x, y)
 //' stats::convolve(x, rev(y), type = "o")
 //'
 // [[Rcpp::export]]
-arma::vec convolve(arma::vec x, arma::vec y) {
+arma::vec convolve_up(arma::vec x, arma::vec y) {
   if (x.n_elem != y.n_elem) {
-    Rcpp::stop("convolve: x and y should have the same number of values.");
+    Rcpp::stop("convolve_up: x and y should have the same number of values.");
   }
 
   int nval = x.n_elem;
@@ -236,7 +236,7 @@ arma::vec convolve(arma::vec x, arma::vec y) {
 //' @param alpha The mixing weight on the uniform component.
 //'
 //' @return The objective value, as calculated by taking a
-//'     convolution using \code{\link{convolve}} of the mixing
+//'     convolution using \code{\link{convolve_up}} of the mixing
 //'     distribution and \code{pvec}, then putting that
 //'     probability distribution through \code{\link{f1_obj}}.
 //'
@@ -268,7 +268,7 @@ double pp_brent_obj(double firstmixweight,
   arma::vec pvec_new = firstmixweight * probmat.row(0).t() +
     (1.0 - firstmixweight) * probmat.row(1).t();
 
-  arma::vec pvec_final = convolve(pvec_new, pvec);
+  arma::vec pvec_final = convolve_up(pvec_new, pvec);
 
   double obj = f1_obj(alpha, pvec_final, weight_vec);
 

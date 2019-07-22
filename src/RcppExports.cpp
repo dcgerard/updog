@@ -1738,15 +1738,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// convolve
-arma::vec convolve(arma::vec x, arma::vec y);
-RcppExport SEXP _updog_convolve(SEXP xSEXP, SEXP ySEXP) {
+// convolve_up
+arma::vec convolve_up(arma::vec x, arma::vec y);
+RcppExport SEXP _updog_convolve_up(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(convolve(x, y));
+    rcpp_result_gen = Rcpp::wrap(convolve_up(x, y));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1913,7 +1913,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_updog_expit", (DL_FUNC) &_updog_expit, 1},
     {"_updog_uni_obj_const", (DL_FUNC) &_updog_uni_obj_const, 5},
     {"_updog_uni_em_const", (DL_FUNC) &_updog_uni_em_const, 7},
-    {"_updog_convolve", (DL_FUNC) &_updog_convolve, 2},
+    {"_updog_convolve_up", (DL_FUNC) &_updog_convolve_up, 2},
     {"_updog_pp_brent_obj", (DL_FUNC) &_updog_pp_brent_obj, 5},
     {"_updog_RcppExport_registerCCallable", (DL_FUNC) &_updog_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}

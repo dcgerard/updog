@@ -106,7 +106,7 @@ update_dr <- function(weight_vec,
         ## Just return likelihood
         p1_seg_prob <- control$blist$probmat[control$blist$lvec == p1geno, , drop = TRUE]
         p2_seg_prob <- control$blist$probmat[control$blist$lvec == p2geno, , drop = TRUE]
-        temp_list$pivec <- c(convolve(p1_seg_prob, p2_seg_prob))
+        temp_list$pivec <- c(convolve_up(p1_seg_prob, p2_seg_prob))
         temp_list$obj <- f1_obj(alpha = control$fs1_alpha,
                                 pvec = temp_list$pivec,
                                 weight_vec = weight_vec)

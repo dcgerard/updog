@@ -22,7 +22,7 @@ index the segregation amount. Should only have two rows.}
 }
 \value{
 The objective value, as calculated by taking a
-    convolution using \code{\link{convolve}} of the mixing
+    convolution using \code{\link{convolve_up}} of the mixing
     distribution and \code{pvec}, then putting that
     probability distribution through \code{\link{f1_obj}}.
 }

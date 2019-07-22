@@ -1243,11 +1243,11 @@ uni_em_const <- function(weight_vec, lmat, pi_init, alpha, lambda, itermax, obj_
 #' @examples
 #' x <- c(1 / 6, 2 / 6, 3 / 6)
 #' y <- c(1 / 9, 2 / 9, 6 / 9)
-#' convolve(x, y)
+#' convolve_up(x, y)
 #' stats::convolve(x, rev(y), type = "o")
 #'
-convolve <- function(x, y) {
-    .Call('_updog_convolve', PACKAGE = 'updog', x, y)
+convolve_up <- function(x, y) {
+    .Call('_updog_convolve_up', PACKAGE = 'updog', x, y)
 }
 
 #' Objective function when doing Brent's method in
@@ -1262,7 +1262,7 @@ convolve <- function(x, y) {
 #' @param alpha The mixing weight on the uniform component.
 #'
 #' @return The objective value, as calculated by taking a
-#'     convolution using \code{\link{convolve}} of the mixing
+#'     convolution using \code{\link{convolve_up}} of the mixing
 #'     distribution and \code{pvec}, then putting that
 #'     probability distribution through \code{\link{f1_obj}}.
 #'
