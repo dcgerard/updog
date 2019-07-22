@@ -68,7 +68,7 @@ options than flexdog and is only meant for expert users." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
       </span>
     </div>
 
@@ -137,13 +137,14 @@ options than <code><a href='flexdog.html'>flexdog</a></code> and is only meant f
     </div>
 
     <pre class="usage"><span class='fu'>flexdog_full</span>(<span class='no'>refvec</span>, <span class='no'>sizevec</span>, <span class='no'>ploidy</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"norm"</span>, <span class='st'>"hw"</span>, <span class='st'>"bb"</span>,
-  <span class='st'>"ash"</span>, <span class='st'>"s1"</span>, <span class='st'>"s1pp"</span>, <span class='st'>"f1"</span>, <span class='st'>"f1pp"</span>, <span class='st'>"flex"</span>, <span class='st'>"uniform"</span>), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>mean_bias</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>var_bias</span> <span class='kw'>=</span> <span class='fl'>0.7</span>^<span class='fl'>2</span>, <span class='kw'>mean_seq</span> <span class='kw'>=</span> -<span class='fl'>4.7</span>, <span class='kw'>var_seq</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>seq</span> <span class='kw'>=</span> <span class='fl'>0.005</span>, <span class='kw'>bias</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>od</span> <span class='kw'>=</span> <span class='fl'>0.001</span>, <span class='kw'>update_bias</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>update_seq</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>update_od</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>use_cvxr</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>itermax</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>10</span>^-<span class='fl'>4</span>, <span class='kw'>fs1_alpha</span> <span class='kw'>=</span> <span class='fl'>10</span>^-<span class='fl'>3</span>,
-  <span class='kw'>ashpen</span> <span class='kw'>=</span> <span class='fl'>10</span>^-<span class='fl'>6</span>, <span class='kw'>p1ref</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>p1size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>p2ref</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>p2size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>snpname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>outliers</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='st'>"ash"</span>, <span class='st'>"s1"</span>, <span class='st'>"s1pp"</span>, <span class='st'>"f1"</span>, <span class='st'>"f1pp"</span>, <span class='st'>"flex"</span>, <span class='st'>"uniform"</span>, <span class='st'>"custom"</span>),
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>mean_bias</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>var_bias</span> <span class='kw'>=</span> <span class='fl'>0.7</span>^<span class='fl'>2</span>, <span class='kw'>mean_seq</span> <span class='kw'>=</span> -<span class='fl'>4.7</span>,
+  <span class='kw'>var_seq</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>seq</span> <span class='kw'>=</span> <span class='fl'>0.005</span>, <span class='kw'>bias</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>od</span> <span class='kw'>=</span> <span class='fl'>0.001</span>,
+  <span class='kw'>update_bias</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>update_seq</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>update_od</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>mode</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>use_cvxr</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>itermax</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>10</span>^-<span class='fl'>4</span>,
+  <span class='kw'>fs1_alpha</span> <span class='kw'>=</span> <span class='fl'>10</span>^-<span class='fl'>3</span>, <span class='kw'>ashpen</span> <span class='kw'>=</span> <span class='fl'>10</span>^-<span class='fl'>6</span>, <span class='kw'>p1ref</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>p1size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>p2ref</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>p2size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>snpname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>outliers</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>prior_vec</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -293,6 +294,13 @@ This is just returned in the <code>input</code> list for your reference.</p></td
 <code>model = "f1"</code> or <code>model = "s1"</code>. I wouldn't
 recommend it for any other model anyway.</p></td>
     </tr>
+    <tr>
+      <th>prior_vec</th>
+      <td><p>The pre-specified genotype distribution. Only used if
+<code>model = "custom"</code> and must otherwise be <code>NULL</code>. If specified,
+then it should be a vector of length <code>ploidy + 1</code> with
+non-negative elements that sum to 1.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -346,6 +354,7 @@ recommend it for any other model anyway.</p></td>
           <code>get_bivalent_probs(ploidy)$probmat[get_bivalent_probs(ploidy)$lvec == p2geno, , drop = FALSE]</code>.</p></dd>
       <dt><code>model = "flex"</code>:</dt><dd><p><code>par</code> is an empty list.</p></dd>
       <dt><code>model = "uniform"</code>:</dt><dd><p><code>par</code> is an empty list.</p></dd>
+      <dt><code>model = "custom"</code>:</dt><dd><p><code>par</code> is an empty list.</p></dd>
       </dl></p></dd>
   <dt><code>geno</code></dt><dd><p>The posterior mode genotype. These are your
       genotype estimates.</p></dd>
@@ -426,6 +435,9 @@ recommend it for any other model anyway.</p></td>
       be less robust to violations in modeling assumptions.</p></dd>
   <dt><code>"uniform"</code></dt><dd><p>A discrete uniform distribution. This should never
       be used in practice.</p></dd>
+  <dt><code>"custom"</code></dt><dd><p>A pre-specified prior distribution. You specify
+      it using the <code>prior_vec</code> argument. You should almost never
+      use this option in practice.</p></dd>
 </dl>
     <p>You might think a good default is <code>model = "uniform"</code> because it is
 somehow an "uninformative prior." But it is very informative and tends to

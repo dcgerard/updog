@@ -6,8 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get the oracle misclassification error rate directly from the
-joint distribution of the genotype and the oracle estimator. — oracle_mis_from_joint • updog</title>
+<title>Convolution between two discrete probability mass functions
+with support on 0:K. — convolve_up • updog</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -31,11 +31,11 @@ joint distribution of the genotype and the oracle estimator. — oracle_mis_from
 
 
 
-<meta property="og:title" content="Get the oracle misclassification error rate directly from the
-joint distribution of the genotype and the oracle estimator. — oracle_mis_from_joint" />
+<meta property="og:title" content="Convolution between two discrete probability mass functions
+with support on 0:K. — convolve_up" />
 
-<meta property="og:description" content="Get the oracle misclassification error rate directly from the
-joint distribution of the genotype and the oracle estimator." />
+<meta property="og:description" content="Convolution between two discrete probability mass functions
+with support on 0:K." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -118,54 +118,56 @@ joint distribution of the genotype and the oracle estimator." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get the oracle misclassification error rate directly from the
-joint distribution of the genotype and the oracle estimator.</h1>
+    <h1>Convolution between two discrete probability mass functions
+with support on 0:K.</h1>
     
-    <div class="hidden name"><code>oracle_mis_from_joint.Rd</code></div>
+    <div class="hidden name"><code>convolve_up.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Get the oracle misclassification error rate directly from the
-joint distribution of the genotype and the oracle estimator.</p>
+    <p>Convolution between two discrete probability mass functions
+with support on 0:K.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>oracle_mis_from_joint</span>(<span class='no'>jd</span>)</pre>
+    <pre class="usage"><span class='fu'>convolve_up</span>(<span class='no'>x</span>, <span class='no'>y</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>jd</th>
-      <td><p>A matrix of numerics. Element (i, j) is the probability
-of genotype i - 1 and estimated genotype j - 1. This is usually
-obtained from <code><a href='oracle_joint.html'>oracle_joint</a></code>.</p></td>
+      <th>x</th>
+      <td><p>The first probability vector. The ith element is the
+probability of i - 1.</p></td>
+    </tr>
+    <tr>
+      <th>y</th>
+      <td><p>The second probability vector. The ith element is the
+probability of i - 1.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A double. The oracle misclassification error rate.</p>
+    <p>A vector that is the convolution of <code>x</code> and
+    <code>y</code>. The ith element is the probability of i - 1.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='oracle_joint.html'>oracle_joint</a></code> for getting <code>jd</code>.
-    <code><a href='oracle_mis.html'>oracle_mis</a></code> for not having to first calculate
-    <code>jd</code>.</p></div>
+    <div class='dont-index'><p><code><a href='https://www.rdocumentation.org/packages/stats/topics/convolve'>convolve</a></code> for a more generic convolution
+    function.</p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## Hardy-Weinberg population with allele-frequency of 0.75.</span>
-<span class='co'>## Moderate bias and moderate overdispersion.</span>
-<span class='no'>ploidy</span> <span class='kw'>&lt;-</span> <span class='fl'>6</span>
-<span class='no'>dist</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Binomial'>dbinom</a></span>(<span class='fl'>0</span>:<span class='no'>ploidy</span>, <span class='no'>ploidy</span>, <span class='fl'>0.75</span>)
-<span class='no'>jd</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='oracle_joint.html'>oracle_joint</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>ploidy</span> <span class='kw'>=</span> <span class='no'>ploidy</span>, <span class='kw'>seq</span> <span class='kw'>=</span> <span class='fl'>0.001</span>,
-                   <span class='kw'>bias</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>od</span> <span class='kw'>=</span> <span class='fl'>0.01</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='no'>dist</span>)
-<span class='fu'>oracle_mis_from_joint</span>(<span class='kw'>jd</span> <span class='kw'>=</span> <span class='no'>jd</span>)</div><div class='output co'>#&gt; [1] 0.1329197</div><div class='input'>
-<span class='co'>## Compare to oracle_cor</span>
-<span class='fu'><a href='oracle_mis.html'>oracle_mis</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>ploidy</span> <span class='kw'>=</span> <span class='no'>ploidy</span>, <span class='kw'>seq</span> <span class='kw'>=</span> <span class='fl'>0.001</span>,
-           <span class='kw'>bias</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>od</span> <span class='kw'>=</span> <span class='fl'>0.01</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 0.1329197</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span> / <span class='fl'>6</span>, <span class='fl'>2</span> / <span class='fl'>6</span>, <span class='fl'>3</span> / <span class='fl'>6</span>)
+<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span> / <span class='fl'>9</span>, <span class='fl'>2</span> / <span class='fl'>9</span>, <span class='fl'>6</span> / <span class='fl'>9</span>)
+<span class='fu'>convolve_up</span>(<span class='no'>x</span>, <span class='no'>y</span>)</div><div class='output co'>#&gt;            [,1]
+#&gt; [1,] 0.01851852
+#&gt; [2,] 0.07407407
+#&gt; [3,] 0.24074074
+#&gt; [4,] 0.33333333
+#&gt; [5,] 0.33333333</div><div class='input'><span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/convolve'>convolve</a></span>(<span class='no'>x</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rev'>rev</a></span>(<span class='no'>y</span>), <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"o"</span>)</div><div class='output co'>#&gt; [1] 0.01851852 0.07407407 0.24074074 0.33333333 0.33333333</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
