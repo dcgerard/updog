@@ -43,7 +43,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -101,7 +101,7 @@
 <a href="#updog" class="anchor"></a>updog</h1></div>
 
 <p>Updog provides a suite of methods for genotyping polyploids from next-generation sequencing (NGS) data. It does this while accounting for many common features of NGS data: allelic bias, overdispersion, sequencing error, and (possibly) outlying observations. It is named updog for “Using Parental Data for Offspring Genotyping” because we originally developed the method for full-sib populations, but it works now for more general populations. The method is described in detail <a href="https://doi.org/10.1534/genetics.118.301468">here</a> and <a href="https://doi.org/10.1101/281550">here</a>.</p>
-<p>The main function is <code>flexdog</code>, which provides many options for the distribution of the genotypes in your sample.</p>
+<p>The main function is <code>flexdog</code>, which provides many options for the distribution of the genotypes in your sample. Novel genotype distributions include the class of proportional normal distributions (<code>model = "norm"</code>) and the class of discrete unimodal distributions (<code>model = "ash"</code>). The default is <code>model = "norm"</code> because it is the most robust to varying genotype distributions, but feel free to use more specialized priors if you have more information on the data.</p>
 <p>Also provided are:</p>
 <ul>
 <li>An experimental function <code>mupdog</code>, which allows for correlation between the individuals’ genotypes while jointly estimating the genotypes of the individuals at all provided SNPs. The implementation uses a variational approximation. This is designed for samples where the individuals share a complex relatedness structure (e.g. siblings, cousins, uncles, half-siblings, etc). Right now there are no guarantees about this function’s performance.</li>

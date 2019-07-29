@@ -148,6 +148,8 @@ test_that("grad_for_eps works", {
   var_bias <- 1
   mean_seq <- -4.7
   var_seq <- 1
+  mean_od <- -5.5
+  var_od <- 0.6
   wmat <- matrix(abs(rnorm(11 * (ploidy + 1))), nrow = 11)
   wmat <- wmat / rowSums(wmat)
 
@@ -157,7 +159,8 @@ test_that("grad_for_eps works", {
   dout <- grad_for_eps(parvec = parvec, refvec = refvec, sizevec = sizevec,
                        ploidy = ploidy, mean_bias = mean_bias,
                        var_bias = var_bias, mean_seq = mean_seq,
-                       var_seq = var_seq, wmat = wmat)
+                       var_seq = var_seq, mean_od = mean_od,
+                       var_od = var_od, wmat = wmat)
 
   myenv <- new.env()
   assign(x = "parvec", value = parvec, envir = myenv)
@@ -172,7 +175,8 @@ test_that("grad_for_eps works", {
   nout <- stats::numericDeriv(quote(obj_for_eps(parvec = parvec, refvec = refvec, sizevec = sizevec,
                                                 ploidy = ploidy, mean_bias = mean_bias,
                                                 var_bias = var_bias, mean_seq = mean_seq,
-                                                var_seq = var_seq, wmat = wmat)),
+                                                var_seq = var_seq, mean_od = mean_od,
+                                                var_od = var_od, wmat = wmat)),
                               "parvec", myenv)
   expect_equal(c(attr(nout, "gradient")), dout, tol = 10 ^ -4)
 

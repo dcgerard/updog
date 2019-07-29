@@ -157,7 +157,9 @@ double flexdog_obj(NumericVector probk_vec,
                    double mean_bias,
                    double var_bias,
                    double mean_seq,
-                   double var_seq) {
+                   double var_seq,
+                   double mean_od,
+                   double var_od) {
   // Check input -----------------------------------------------------------
   int nind = refvec.length();
   if (nind != sizevec.length()) {
@@ -187,6 +189,7 @@ double flexdog_obj(NumericVector probk_vec,
   // Penalties --------------------------------------------------------------
   obj = obj + pen_bias(bias, mean_bias, var_bias);
   obj = obj + pen_seq_error(seq, mean_seq, var_seq);
+  obj = obj + pen_seq_error(od, mean_od, var_od);
   return obj;
 }
 
@@ -307,18 +310,8 @@ arma::vec uni_em(arma::vec weight_vec,
     // calculate objective and update stopping criteria
     obj = uni_obj(pivec, weight_vec, lmat, lambda);
     if (obj < old_obj - TOL) {
-      // corner case is where all mass is on one genotype ---------------------
-      int num_zero = 0;
-      for (int i = 0; i <= ploidy; i++) {
-        if (pivec(i) < 0.0001) {
-          num_zero++;
-        }
-      }
-      if (num_zero == ploidy) {
-        break;
-      }
+      break; // this almost always is OK because other bias starting points will work
 
-      // If not corner case print current parameter values and return error ---
       Rcpp::Rcout << "Index: "
                   << index
                   << std::endl

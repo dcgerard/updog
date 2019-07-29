@@ -24,7 +24,12 @@ now for more general populations. The method is described in detail
 [here](https://doi.org/10.1101/281550).
 
 The main function is `flexdog`, which provides many options for the
-distribution of the genotypes in your sample.
+distribution of the genotypes in your sample. Novel genotype
+distributions include the class of proportional normal distributions
+(`model = "norm"`) and the class of discrete unimodal distributions
+(`model = "ash"`). The default is `model = "norm"` because it is the
+most robust to varying genotype distributions, but feel free to use more
+specialized priors if you have more information on the data.
 
 Also provided are:
 

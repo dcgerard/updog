@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@
       <h1>Simulate Next-Generation Sequencing Data</h1>
                         <h4 class="author">David Gerard</h4>
             
-            <h4 class="date">2019-07-22</h4>
+            <h4 class="date">2019-07-29</h4>
       
       
       <div class="hidden name"><code>simulate_ngs.Rmd</code></div>
@@ -139,27 +139,27 @@
 <a class="sourceLine" id="cb5-4" data-line-number="4">                <span class="dt">model   =</span> <span class="st">"f1"</span>)</a>
 <a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt;          Fit: 1 of 5 </span></a>
 <a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; Initial Bias: 0.3678794 </span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; Log-Likelihood: -369.5682 </span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; Log-Likelihood: -363.9369 </span></a>
 <a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; Keeping new fit.</span></a>
 <a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;          Fit: 2 of 5 </span></a>
 <a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; Initial Bias: 0.6065307 </span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; Log-Likelihood: -369.5683 </span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; Log-Likelihood: -363.937 </span></a>
 <a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; Keeping old fit.</span></a>
 <a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt;          Fit: 3 of 5 </span></a>
 <a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt; Initial Bias: 1 </span></a>
-<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt; Log-Likelihood: -369.5682 </span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt; Log-Likelihood: -363.9369 </span></a>
 <a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt; Keeping new fit.</span></a>
 <a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#&gt;          Fit: 4 of 5 </span></a>
 <a class="sourceLine" id="cb5-21" data-line-number="21"><span class="co">#&gt; Initial Bias: 1.648721 </span></a>
-<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="co">#&gt; Log-Likelihood: -379.0568 </span></a>
+<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="co">#&gt; Log-Likelihood: -381.6123 </span></a>
 <a class="sourceLine" id="cb5-23" data-line-number="23"><span class="co">#&gt; Keeping old fit.</span></a>
 <a class="sourceLine" id="cb5-24" data-line-number="24"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb5-25" data-line-number="25"><span class="co">#&gt;          Fit: 5 of 5 </span></a>
 <a class="sourceLine" id="cb5-26" data-line-number="26"><span class="co">#&gt; Initial Bias: 2.718282 </span></a>
-<a class="sourceLine" id="cb5-27" data-line-number="27"><span class="co">#&gt; Log-Likelihood: -401.265 </span></a>
+<a class="sourceLine" id="cb5-27" data-line-number="27"><span class="co">#&gt; Log-Likelihood: -412.7397 </span></a>
 <a class="sourceLine" id="cb5-28" data-line-number="28"><span class="co">#&gt; Keeping old fit.</span></a>
 <a class="sourceLine" id="cb5-29" data-line-number="29"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb5-30" data-line-number="30"><span class="co">#&gt; Done!</span></a></code></pre></div>
@@ -169,7 +169,7 @@
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">## Estimated proportion misgenotyped</span></a>
 <a class="sourceLine" id="cb7-3" data-line-number="3">fout<span class="op">$</span>prop_mis</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; [1] 0.0703387</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; [1] 0.07011089</span></a>
 <a class="sourceLine" id="cb7-5" data-line-number="5"></a>
 <a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">## Actual proportion misgenotyped</span></a>
 <a class="sourceLine" id="cb7-7" data-line-number="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(fout<span class="op">$</span>geno <span class="op">!=</span><span class="st"> </span>true_geno)</a>
@@ -195,27 +195,27 @@
 <a class="sourceLine" id="cb8-14" data-line-number="14">                <span class="dt">model   =</span> <span class="st">"hw"</span>)</a>
 <a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt;          Fit: 1 of 5 </span></a>
 <a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">#&gt; Initial Bias: 0.3678794 </span></a>
-<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">#&gt; Log-Likelihood: -383.0611 </span></a>
+<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">#&gt; Log-Likelihood: -377.9226 </span></a>
 <a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">#&gt; Keeping new fit.</span></a>
 <a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt;          Fit: 2 of 5 </span></a>
 <a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt; Initial Bias: 0.6065307 </span></a>
-<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt; Log-Likelihood: -383.0611 </span></a>
-<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt; Keeping new fit.</span></a>
+<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt; Log-Likelihood: -377.9226 </span></a>
+<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt; Keeping old fit.</span></a>
 <a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb8-25" data-line-number="25"><span class="co">#&gt;          Fit: 3 of 5 </span></a>
 <a class="sourceLine" id="cb8-26" data-line-number="26"><span class="co">#&gt; Initial Bias: 1 </span></a>
-<a class="sourceLine" id="cb8-27" data-line-number="27"><span class="co">#&gt; Log-Likelihood: -383.061 </span></a>
-<a class="sourceLine" id="cb8-28" data-line-number="28"><span class="co">#&gt; Keeping new fit.</span></a>
+<a class="sourceLine" id="cb8-27" data-line-number="27"><span class="co">#&gt; Log-Likelihood: -377.9226 </span></a>
+<a class="sourceLine" id="cb8-28" data-line-number="28"><span class="co">#&gt; Keeping old fit.</span></a>
 <a class="sourceLine" id="cb8-29" data-line-number="29"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb8-30" data-line-number="30"><span class="co">#&gt;          Fit: 4 of 5 </span></a>
 <a class="sourceLine" id="cb8-31" data-line-number="31"><span class="co">#&gt; Initial Bias: 1.648721 </span></a>
-<a class="sourceLine" id="cb8-32" data-line-number="32"><span class="co">#&gt; Log-Likelihood: -383.061 </span></a>
-<a class="sourceLine" id="cb8-33" data-line-number="33"><span class="co">#&gt; Keeping old fit.</span></a>
+<a class="sourceLine" id="cb8-32" data-line-number="32"><span class="co">#&gt; Log-Likelihood: -377.9226 </span></a>
+<a class="sourceLine" id="cb8-33" data-line-number="33"><span class="co">#&gt; Keeping new fit.</span></a>
 <a class="sourceLine" id="cb8-34" data-line-number="34"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb8-35" data-line-number="35"><span class="co">#&gt;          Fit: 5 of 5 </span></a>
 <a class="sourceLine" id="cb8-36" data-line-number="36"><span class="co">#&gt; Initial Bias: 2.718282 </span></a>
-<a class="sourceLine" id="cb8-37" data-line-number="37"><span class="co">#&gt; Log-Likelihood: -383.061 </span></a>
+<a class="sourceLine" id="cb8-37" data-line-number="37"><span class="co">#&gt; Log-Likelihood: -377.9226 </span></a>
 <a class="sourceLine" id="cb8-38" data-line-number="38"><span class="co">#&gt; Keeping old fit.</span></a>
 <a class="sourceLine" id="cb8-39" data-line-number="39"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb8-40" data-line-number="40"><span class="co">#&gt; Done!</span></a>
@@ -224,7 +224,7 @@
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"></a>
 <a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">## Estimated proportion misgenotyped</span></a>
 <a class="sourceLine" id="cb9-3" data-line-number="3">fout<span class="op">$</span>prop_mis</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; [1] 0.09165815</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; [1] 0.07625985</span></a>
 <a class="sourceLine" id="cb9-5" data-line-number="5"></a>
 <a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">## Actual proportion misgenotyped</span></a>
 <a class="sourceLine" id="cb9-7" data-line-number="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(fout<span class="op">$</span>geno <span class="op">!=</span><span class="st"> </span>true_geno)</a>
@@ -232,7 +232,7 @@
 <a class="sourceLine" id="cb9-9" data-line-number="9"></a>
 <a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">## Estimated allele frequency close to true allele frequency</span></a>
 <a class="sourceLine" id="cb9-11" data-line-number="11">fout<span class="op">$</span>par<span class="op">$</span>alpha</a>
-<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt; [1] 0.7498848</span></a></code></pre></div>
+<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt; [1] 0.7473264</span></a></code></pre></div>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">

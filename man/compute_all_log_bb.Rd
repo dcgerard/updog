@@ -32,8 +32,8 @@ Should be the same length as the number of columns of
 \code{refmat} (number of SNPs). Must be between 0 and 1.}
 }
 \value{
-A three dimensional array. The rows index the individuals, the 
-    columns index the SNPs, and the third dimension indexes the 
+A three dimensional array. The rows index the individuals, the
+    columns index the SNPs, and the third dimension indexes the
     genotypes. This is the log-likelihood for each individual/snp/genotype
     combination.
 }

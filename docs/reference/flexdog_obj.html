@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -127,7 +127,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>flexdog_obj</span>(<span class='no'>probk_vec</span>, <span class='no'>refvec</span>, <span class='no'>sizevec</span>, <span class='no'>ploidy</span>, <span class='no'>seq</span>, <span class='no'>bias</span>, <span class='no'>od</span>, <span class='no'>mean_bias</span>,
-  <span class='no'>var_bias</span>, <span class='no'>mean_seq</span>, <span class='no'>var_seq</span>)</pre>
+  <span class='no'>var_bias</span>, <span class='no'>mean_seq</span>, <span class='no'>var_seq</span>, <span class='no'>mean_od</span>, <span class='no'>var_od</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,6 +178,15 @@ error rate.</p></td>
       <th>var_seq</th>
       <td><p>The prior variance of the logit of the sequencing
 error rate.</p></td>
+    </tr>
+    <tr>
+      <th>mean_od</th>
+      <td><p>The prior mean of the logit of the overdispersion parameter.</p></td>
+    </tr>
+    <tr>
+      <th>var_od</th>
+      <td><p>The prior variance of the logit of the overdispersion
+parameter.</p></td>
     </tr>
     </table>
     

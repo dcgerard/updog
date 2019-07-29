@@ -3,10 +3,10 @@
 //' Gradient for \code{\link{obj_for_mu_sigma2}} with respect for \code{mu} and \code{sigma2}.
 //'
 //' @inheritParams obj_for_mu_sigma2
-//' 
-//' @return A vector of length 2 * nind of numerics. 
+//'
+//' @return A vector of length 2 * nind of numerics.
 //'     The first element n elements are the partial derivatives with respect
-//'     to \code{mu} and the second n elements are the 
+//'     to \code{mu} and the second n elements are the
 //'     partial derivatives with respect to \code{sigma2}
 //'     in \code{\link{obj_for_mu_sigma2}}.
 //'
@@ -110,7 +110,7 @@ NumericVector grad_for_mu_sigma2_wrapper(arma::Col<double> muSigma2, NumericMatr
 //' @param sigma2_h The variance of the log-bias.
 //'
 //' @seealso \code{\link{pen_bias}} which this is a derivative for.
-//' 
+//'
 //' @return A double.
 //'
 //' @author David Gerard
@@ -134,14 +134,14 @@ double dpen_dh(double h, double mu_h, double sigma2_h) {
 //' @param sigma2_eps The variance of the logit of the sequencing error rate.
 //'
 //' @seealso \code{\link{pen_seq_error}} which this is a derivative for.
-//' 
+//'
 //' @return A double.
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
 double dpen_deps(double eps, double mu_eps, double sigma2_eps) {
   double deriv;
-  
+
   if (arma::is_finite(sigma2_eps)) {
     deriv = -1.0 * (1.0 - 2.0 * eps + (logit(eps) - mu_eps) / sigma2_eps) / (eps * (1.0 - eps));
   } else {
@@ -182,7 +182,7 @@ double dlbeta_dc(int x, int n, double xi, double c) {
 //' Derivative of \eqn{c = (1 - \tau) / \tau} with respect to \eqn{\tau}.
 //'
 //' @param tau The overdispersion parameter.
-//' 
+//'
 //' @return A double.
 //'
 //' @seealso \code{\link{dlbeta_dc}}, \code{\link{dlbeta_dtau}}
@@ -203,7 +203,7 @@ double dc_dtau(double tau) {
 //' @param p The allele dosage.
 //' @param eps The sequencing error rate
 //' @param h The bias parameter.
-//' 
+//'
 //' @return A double.
 //'
 //' @seealso \code{\link{dlbeta_dc}}, \code{\link{dc_dtau}},
@@ -222,7 +222,7 @@ double dlbeta_dtau(int x, int n, double p, double eps, double h, double tau) {
 
 //' Derivative of the log-betabinomial density with respect to the
 //' mean of the underlying beta.
-//' 
+//'
 //' @return A double.
 //'
 //' @inheritParams dlbeta_dtau
@@ -240,7 +240,7 @@ double dlbeta_dxi(int x, int n, double xi, double tau) {
 }
 
 //' Derivative of xi-function with respect to bias parameter.
-//' 
+//'
 //' @return A double.
 //'
 //' @param p The dosage (between 0 and 1).
@@ -258,7 +258,7 @@ double dxi_dh(double p, double eps, double h) {
 //' Derivative of log-betabinomial density with respect to bias parameter.
 //'
 //' @inheritParams dlbeta_dtau
-//' 
+//'
 //' @return A double.
 //'
 //' @author David Gerard
@@ -275,7 +275,7 @@ double dlbeta_dh(int x, int n, double p, double eps, double h, double tau) {
 //'
 //' @param h The bias parameter.
 //' @param f The post-sequencing error rate adjusted probability of an A.
-//' 
+//'
 //' @return A double.
 //'
 //' @author David Gerard
@@ -289,7 +289,7 @@ double dxi_df(double h, double f) {
 //'
 //' @param p The allele dosage.
 //' @param eps The sequencing error rate.
-//' 
+//'
 //' @return A double.
 //'
 //' @author David Gerard
@@ -303,7 +303,7 @@ double df_deps(double p, double eps) {
 //' sequencing error rate.
 //'
 //' @inheritParams dlbeta_dtau
-//' 
+//'
 //' @return A double.
 //'
 //' @author David Gerard
@@ -320,7 +320,7 @@ double dlbeta_deps(int x, int n, double p, double eps, double h, double tau) {
 
 
 //' Gradient for \code{\link{obj_for_eps}}.
-//' 
+//'
 //' @return A double.
 //'
 //' @inheritParams obj_for_eps
@@ -335,6 +335,8 @@ NumericVector grad_for_eps(NumericVector parvec,
                    double var_bias,
                    double mean_seq,
                    double var_seq,
+                   double mean_od,
+                   double var_od,
                    NumericMatrix wmat,
                    bool update_bias = true,
                    bool update_seq = true,
@@ -376,6 +378,7 @@ NumericVector grad_for_eps(NumericVector parvec,
   // contribution by penalties
   grad(0) = grad(0) + dpen_deps(eps, mean_seq, var_seq);
   grad(1) = grad(1) + dpen_dh(h, mean_bias, var_bias);
+  grad(2) = grad(2) + dpen_deps(tau, mean_od, var_od); // can use dpen_deps() for the od as well!
 
   // set gradient to zero where don't update parameter values.
   if (!update_seq) {

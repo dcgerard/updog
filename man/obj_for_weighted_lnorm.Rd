@@ -18,7 +18,7 @@ underlying normal. The second term is the current standard deviation
 for each component beta-binomial.}
 }
 \value{
-A double. The objective when updating the normal 
+A double. The objective when updating the normal
     genotype distribution in \code{\link{mupdog}}.
 }
 \description{

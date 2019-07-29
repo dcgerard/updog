@@ -453,21 +453,23 @@ mupdog <- function(refmat,
     fout_seq <- foreach::foreach(index = seq_len(nsnps), .combine = cbind,
                                  .export = c("obj_for_eps",
                                              "grad_for_eps")) %dopar% {
-      oout <- stats::optim(par = c(seq[index], bias[index], od[index]),
-                           fn = obj_for_eps,
-                           gr = grad_for_eps,
-                           method = "L-BFGS-B",
-                           lower = rep(10^-6, 3),
-                           upper = c(1 - 10^-6, Inf, 1 - 10^-6),
-                           control = list(fnscale = -1, maxit = 10),
-                           refvec = refmat[, index],
-                           sizevec = sizemat[, index],
-                           ploidy = ploidy,
+      oout <- stats::optim(par       = c(seq[index], bias[index], od[index]),
+                           fn        = obj_for_eps,
+                           gr        = grad_for_eps,
+                           method    = "L-BFGS-B",
+                           lower     = rep(10^-6, 3),
+                           upper     = c(1 - 10^-6, Inf, 1 - 10^-6),
+                           control   = list(fnscale = -1, maxit = 10),
+                           refvec    = refmat[, index],
+                           sizevec   = sizemat[, index],
+                           ploidy    = ploidy,
                            mean_bias = mean_bias,
-                           var_bias = var_bias,
-                           mean_seq = mean_seq,
-                           var_seq = var_seq,
-                           wmat = warray[, index, ])
+                           var_bias  = var_bias,
+                           mean_seq  = mean_seq,
+                           var_seq   = var_seq,
+                           mean_od   = 0,
+                           var_od    = Inf,
+                           wmat      = warray[, index, ])
       oout$par
       }
     seq  <- fout_seq[1, ]
@@ -482,10 +484,18 @@ mupdog <- function(refmat,
                                       od = od)
 
     ## Calculate objective ---------------------------------------------------------------------------------------------------------
-    obj <- elbo(warray = warray, lbeta_array = lbeta_array, cor_inv = cor_inv,
-                postmean = postmean, postvar = postvar, bias = bias,
-                seq = seq, mean_bias = mean_bias, var_bias = var_bias,
-                mean_seq = mean_seq, var_seq = var_seq, ploidy = ploidy)
+    obj <- elbo(warray      = warray,
+                lbeta_array = lbeta_array,
+                cor_inv     = cor_inv,
+                postmean    = postmean,
+                postvar     = postvar,
+                bias        = bias,
+                seq         = seq,
+                mean_bias   = mean_bias,
+                var_bias    = var_bias,
+                mean_seq    = mean_seq,
+                var_seq     = var_seq,
+                ploidy      = ploidy)
 
     ## stopping criteria -----------------------------------------------------------------------------------------------------------
     err <- abs(obj_old / obj) - 1

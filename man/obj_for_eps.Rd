@@ -5,8 +5,8 @@
 \title{Objective function for updating sequencing error rate, bias, and overdispersion parameters.}
 \usage{
 obj_for_eps(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq,
-  var_seq, wmat, update_bias = TRUE, update_seq = TRUE,
-  update_od = TRUE)
+  var_seq, mean_od, var_od, wmat, update_bias = TRUE,
+  update_seq = TRUE, update_od = TRUE)
 }
 \arguments{
 \item{parvec}{A vector of length three. The first element is the sequencing
@@ -26,6 +26,10 @@ is the overdispersion parameter.}
 \item{mean_seq}{The prior mean of the logit sequencing error rate.}
 
 \item{var_seq}{The prior variance of the logit sequencing error rate.}
+
+\item{mean_od}{The prior mean of the logit of the overdispersion parameter}
+
+\item{var_od}{The prior variance of the logit of the overdispersion parameter.}
 
 \item{wmat}{The matrix of (variational) posterior probabilities for each dosage.
 The rows index the individuals and the columns index the dosage levels.}

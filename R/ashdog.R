@@ -261,6 +261,9 @@ flexdog <- function(refvec,
 #'     error rate.
 #' @param var_seq The prior variance of the logit of the sequencing
 #'     error rate.
+#' @param mean_od The prior mean of the logit of the overdispersion parameter.
+#' @param var_od The prior variance of the logit of the overdispersion
+#'     parameter.
 #' @param seq The starting value of the sequencing error rate.
 #' @param bias The starting value of the bias.
 #' @param od The starting value of the overdispersion parameter.
@@ -448,6 +451,8 @@ flexdog_full <- function(refvec,
                          var_bias    = 0.7 ^ 2,
                          mean_seq    = -4.7,
                          var_seq     = 1,
+                         mean_od     = -5.5,
+                         var_od      = 0.5 ^ 2,
                          seq         = 0.005,
                          bias        = 1,
                          od          = 0.001,
@@ -500,7 +505,8 @@ flexdog_full <- function(refvec,
   assertthat::are_equal(1, length(verbose), length(mean_bias),
                         length(var_bias), length(mean_seq),
                         length(var_seq), length(seq),
-                        length(bias), length(od))
+                        length(bias), length(od),
+                        length(mean_od), length(var_od))
   assertthat::assert_that(var_bias > 0)
   assertthat::assert_that(var_seq > 0)
   assertthat::assert_that(seq >= 0, seq <= 1)
@@ -741,6 +747,8 @@ flexdog_full <- function(refvec,
                            var_bias    = var_bias,
                            mean_seq    = mean_seq,
                            var_seq     = var_seq,
+                           mean_od     = mean_od,
+                           var_od      = var_od,
                            wmat        = wik_mat,
                            update_seq  = update_seq,
                            update_bias = update_bias,
@@ -828,7 +836,9 @@ flexdog_full <- function(refvec,
                              mean_bias = mean_bias,
                              var_bias  = var_bias,
                              mean_seq  = mean_seq,
-                             var_seq   = var_seq)
+                             var_seq   = var_seq,
+                             mean_od   = mean_od,
+                             var_od    = var_od)
       } else {
         llike <- flexdog_obj_out(probk_vec = probk_vec,
                                  out_prop  = out_prop,
@@ -841,7 +851,9 @@ flexdog_full <- function(refvec,
                                  mean_bias = mean_bias,
                                  var_bias  = var_bias,
                                  mean_seq  = mean_seq,
-                                 var_seq   = var_seq)
+                                 var_seq   = var_seq,
+                                 mean_od   = mean_od,
+                                 var_od    = var_od)
       }
 
 

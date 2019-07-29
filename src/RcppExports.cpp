@@ -473,8 +473,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // flexdog_obj
-double flexdog_obj(NumericVector probk_vec, NumericVector refvec, NumericVector sizevec, int ploidy, double seq, double bias, double od, double mean_bias, double var_bias, double mean_seq, double var_seq);
-RcppExport SEXP _updog_flexdog_obj(SEXP probk_vecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP) {
+double flexdog_obj(NumericVector probk_vec, NumericVector refvec, NumericVector sizevec, int ploidy, double seq, double bias, double od, double mean_bias, double var_bias, double mean_seq, double var_seq, double mean_od, double var_od);
+RcppExport SEXP _updog_flexdog_obj(SEXP probk_vecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP mean_odSEXP, SEXP var_odSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -489,7 +489,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type var_bias(var_biasSEXP);
     Rcpp::traits::input_parameter< double >::type mean_seq(mean_seqSEXP);
     Rcpp::traits::input_parameter< double >::type var_seq(var_seqSEXP);
-    rcpp_result_gen = Rcpp::wrap(flexdog_obj(probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq));
+    Rcpp::traits::input_parameter< double >::type mean_od(mean_odSEXP);
+    Rcpp::traits::input_parameter< double >::type var_od(var_odSEXP);
+    rcpp_result_gen = Rcpp::wrap(flexdog_obj(probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -716,8 +718,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // grad_for_eps
-NumericVector grad_for_eps(NumericVector parvec, NumericVector refvec, NumericVector sizevec, int ploidy, double mean_bias, double var_bias, double mean_seq, double var_seq, NumericMatrix wmat, bool update_bias, bool update_seq, bool update_od);
-RcppExport SEXP _updog_grad_for_eps(SEXP parvecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP wmatSEXP, SEXP update_biasSEXP, SEXP update_seqSEXP, SEXP update_odSEXP) {
+NumericVector grad_for_eps(NumericVector parvec, NumericVector refvec, NumericVector sizevec, int ploidy, double mean_bias, double var_bias, double mean_seq, double var_seq, double mean_od, double var_od, NumericMatrix wmat, bool update_bias, bool update_seq, bool update_od);
+RcppExport SEXP _updog_grad_for_eps(SEXP parvecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP mean_odSEXP, SEXP var_odSEXP, SEXP wmatSEXP, SEXP update_biasSEXP, SEXP update_seqSEXP, SEXP update_odSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -729,11 +731,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type var_bias(var_biasSEXP);
     Rcpp::traits::input_parameter< double >::type mean_seq(mean_seqSEXP);
     Rcpp::traits::input_parameter< double >::type var_seq(var_seqSEXP);
+    Rcpp::traits::input_parameter< double >::type mean_od(mean_odSEXP);
+    Rcpp::traits::input_parameter< double >::type var_od(var_odSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type wmat(wmatSEXP);
     Rcpp::traits::input_parameter< bool >::type update_bias(update_biasSEXP);
     Rcpp::traits::input_parameter< bool >::type update_seq(update_seqSEXP);
     Rcpp::traits::input_parameter< bool >::type update_od(update_odSEXP);
-    rcpp_result_gen = Rcpp::wrap(grad_for_eps(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat, update_bias, update_seq, update_od));
+    rcpp_result_gen = Rcpp::wrap(grad_for_eps(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od, wmat, update_bias, update_seq, update_od));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -882,8 +886,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // obj_for_eps
-double obj_for_eps(NumericVector parvec, NumericVector refvec, NumericVector sizevec, int ploidy, double mean_bias, double var_bias, double mean_seq, double var_seq, NumericMatrix wmat, bool update_bias, bool update_seq, bool update_od);
-RcppExport SEXP _updog_obj_for_eps(SEXP parvecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP wmatSEXP, SEXP update_biasSEXP, SEXP update_seqSEXP, SEXP update_odSEXP) {
+double obj_for_eps(NumericVector parvec, NumericVector refvec, NumericVector sizevec, int ploidy, double mean_bias, double var_bias, double mean_seq, double var_seq, double mean_od, double var_od, NumericMatrix wmat, bool update_bias, bool update_seq, bool update_od);
+RcppExport SEXP _updog_obj_for_eps(SEXP parvecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP mean_odSEXP, SEXP var_odSEXP, SEXP wmatSEXP, SEXP update_biasSEXP, SEXP update_seqSEXP, SEXP update_odSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -895,11 +899,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type var_bias(var_biasSEXP);
     Rcpp::traits::input_parameter< double >::type mean_seq(mean_seqSEXP);
     Rcpp::traits::input_parameter< double >::type var_seq(var_seqSEXP);
+    Rcpp::traits::input_parameter< double >::type mean_od(mean_odSEXP);
+    Rcpp::traits::input_parameter< double >::type var_od(var_odSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type wmat(wmatSEXP);
     Rcpp::traits::input_parameter< bool >::type update_bias(update_biasSEXP);
     Rcpp::traits::input_parameter< bool >::type update_seq(update_seqSEXP);
     Rcpp::traits::input_parameter< bool >::type update_od(update_odSEXP);
-    rcpp_result_gen = Rcpp::wrap(obj_for_eps(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, wmat, update_bias, update_seq, update_od));
+    rcpp_result_gen = Rcpp::wrap(obj_for_eps(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od, wmat, update_bias, update_seq, update_od));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1129,8 +1135,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // flexdog_obj_out
-double flexdog_obj_out(NumericVector probk_vec, double out_prop, NumericVector refvec, NumericVector sizevec, int ploidy, double seq, double bias, double od, double mean_bias, double var_bias, double mean_seq, double var_seq);
-RcppExport SEXP _updog_flexdog_obj_out(SEXP probk_vecSEXP, SEXP out_propSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP) {
+double flexdog_obj_out(NumericVector probk_vec, double out_prop, NumericVector refvec, NumericVector sizevec, int ploidy, double seq, double bias, double od, double mean_bias, double var_bias, double mean_seq, double var_seq, double mean_od, double var_od);
+RcppExport SEXP _updog_flexdog_obj_out(SEXP probk_vecSEXP, SEXP out_propSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP mean_odSEXP, SEXP var_odSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -1146,7 +1152,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type var_bias(var_biasSEXP);
     Rcpp::traits::input_parameter< double >::type mean_seq(mean_seqSEXP);
     Rcpp::traits::input_parameter< double >::type var_seq(var_seqSEXP);
-    rcpp_result_gen = Rcpp::wrap(flexdog_obj_out(probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq));
+    Rcpp::traits::input_parameter< double >::type mean_od(mean_odSEXP);
+    Rcpp::traits::input_parameter< double >::type var_od(var_odSEXP);
+    rcpp_result_gen = Rcpp::wrap(flexdog_obj_out(probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1855,7 +1863,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_updog_get_probk_vec", (DL_FUNC) &_updog_get_probk_vec, 3},
     {"_updog_get_inner_weights", (DL_FUNC) &_updog_get_inner_weights, 2},
     {"_updog_get_wik_mat", (DL_FUNC) &_updog_get_wik_mat, 7},
-    {"_updog_flexdog_obj", (DL_FUNC) &_updog_flexdog_obj, 11},
+    {"_updog_flexdog_obj", (DL_FUNC) &_updog_flexdog_obj, 13},
     {"_updog_uni_obj", (DL_FUNC) &_updog_uni_obj, 4},
     {"_updog_uni_em", (DL_FUNC) &_updog_uni_em, 6},
     {"_updog_f1_obj", (DL_FUNC) &_updog_f1_obj, 3},
@@ -1872,7 +1880,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_updog_dxi_df", (DL_FUNC) &_updog_dxi_df, 2},
     {"_updog_df_deps", (DL_FUNC) &_updog_df_deps, 2},
     {"_updog_dlbeta_deps", (DL_FUNC) &_updog_dlbeta_deps, 6},
-    {"_updog_grad_for_eps", (DL_FUNC) &_updog_grad_for_eps, 12},
+    {"_updog_grad_for_eps", (DL_FUNC) &_updog_grad_for_eps, 14},
     {"_updog_grad_for_weighted_lbb", (DL_FUNC) &_updog_grad_for_weighted_lbb, 3},
     {"_updog_grad_for_weighted_lnorm", (DL_FUNC) &_updog_grad_for_weighted_lnorm, 3},
     {"_updog_post_prob", (DL_FUNC) &_updog_post_prob, 6},
@@ -1883,7 +1891,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_updog_pen_seq_error", (DL_FUNC) &_updog_pen_seq_error, 3},
     {"_updog_obj_for_rho", (DL_FUNC) &_updog_obj_for_rho, 6},
     {"_updog_obj_for_alpha", (DL_FUNC) &_updog_obj_for_alpha, 6},
-    {"_updog_obj_for_eps", (DL_FUNC) &_updog_obj_for_eps, 12},
+    {"_updog_obj_for_eps", (DL_FUNC) &_updog_obj_for_eps, 14},
     {"_updog_obj_for_mu_sigma2", (DL_FUNC) &_updog_obj_for_mu_sigma2, 5},
     {"_updog_obj_for_mu_sigma2_wrapper", (DL_FUNC) &_updog_obj_for_mu_sigma2_wrapper, 4},
     {"_updog_elbo", (DL_FUNC) &_updog_elbo, 12},
@@ -1894,7 +1902,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_updog_oracle_joint", (DL_FUNC) &_updog_oracle_joint, 6},
     {"_updog_doutdist", (DL_FUNC) &_updog_doutdist, 3},
     {"_updog_get_wik_mat_out", (DL_FUNC) &_updog_get_wik_mat_out, 8},
-    {"_updog_flexdog_obj_out", (DL_FUNC) &_updog_flexdog_obj_out, 12},
+    {"_updog_flexdog_obj_out", (DL_FUNC) &_updog_flexdog_obj_out, 14},
     {"_updog_dist_from_p", (DL_FUNC) &_updog_dist_from_p, 2},
     {"_updog_num_pairs", (DL_FUNC) &_updog_num_pairs, 2},
     {"_updog_get_pname", (DL_FUNC) &_updog_get_pname, 1},

@@ -7,12 +7,12 @@
 flexdog_full(refvec, sizevec, ploidy, model = c("norm", "hw", "bb",
   "ash", "s1", "s1pp", "f1", "f1pp", "flex", "uniform", "custom"),
   verbose = TRUE, mean_bias = 0, var_bias = 0.7^2, mean_seq = -4.7,
-  var_seq = 1, seq = 0.005, bias = 1, od = 0.001,
-  update_bias = TRUE, update_seq = TRUE, update_od = TRUE,
-  mode = NULL, use_cvxr = FALSE, itermax = 200, tol = 10^-4,
-  fs1_alpha = 10^-3, ashpen = 10^-6, p1ref = NULL, p1size = NULL,
-  p2ref = NULL, p2size = NULL, snpname = NULL, outliers = FALSE,
-  prior_vec = NULL)
+  var_seq = 1, mean_od = -5.5, var_od = 0.5^2, seq = 0.005,
+  bias = 1, od = 0.001, update_bias = TRUE, update_seq = TRUE,
+  update_od = TRUE, mode = NULL, use_cvxr = FALSE, itermax = 200,
+  tol = 10^-4, fs1_alpha = 10^-3, ashpen = 10^-6, p1ref = NULL,
+  p1size = NULL, p2ref = NULL, p2size = NULL, snpname = NULL,
+  outliers = FALSE, prior_vec = NULL)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads of the reference allele.}
@@ -37,6 +37,11 @@ error rate.}
 
 \item{var_seq}{The prior variance of the logit of the sequencing
 error rate.}
+
+\item{mean_od}{The prior mean of the logit of the overdispersion parameter.}
+
+\item{var_od}{The prior variance of the logit of the overdispersion
+parameter.}
 
 \item{seq}{The starting value of the sequencing error rate.}
 

@@ -21,7 +21,7 @@ The rows index the individuals and the columns index the SNPs.}
 \item{rho}{A vector of inbreeding coefficients for all individuals.}
 }
 \value{
-An array. The rows index the individuals, the columns index the 
+An array. The rows index the individuals, the columns index the
     SNPS, and the third dimension indexes the genotypes. Element (i, j, k)
     is the return of \code{\link{post_prob}}.
 }

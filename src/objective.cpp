@@ -14,7 +14,7 @@
 //' @param sigma2 The variational variance (not standard devation).
 //' @param alpha The allele frequency.
 //' @param rho The individual's overdispersion parameter.
-//' 
+//'
 //' @return The posterior probability of having \code{dosage} A alleles.
 //'
 //' @author David
@@ -58,8 +58,8 @@ double post_prob(int dosage, int ploidy, double mu, double sigma2,
 //'     The rows index the individuals and the columns index the SNPs.
 //' @param alpha A vector of allele frequencies for all SNPs.
 //' @param rho A vector of inbreeding coefficients for all individuals.
-//' 
-//' @return An array. The rows index the individuals, the columns index the 
+//'
+//' @return An array. The rows index the individuals, the columns index the
 //'     SNPS, and the third dimension indexes the genotypes. Element (i, j, k)
 //'     is the return of \code{\link{post_prob}}.
 //'
@@ -105,8 +105,8 @@ arma::Cube<double> compute_all_post_prob(int ploidy,
 //'
 //' @inheritParams mupdog
 //'
-//' @return A three dimensional array. The rows index the individuals, the 
-//'     columns index the SNPs, and the third dimension indexes the 
+//' @return A three dimensional array. The rows index the individuals, the
+//'     columns index the SNPs, and the third dimension indexes the
 //'     genotypes. This is the log-likelihood for each individual/snp/genotype
 //'     combination.
 //'
@@ -159,7 +159,7 @@ arma::Cube<double> compute_all_log_bb(NumericMatrix refmat, NumericMatrix sizema
 //' @param alpha A vector whose jth element is the allele frequency of SNP j.
 //' @param rho A vector whose ith element is the inbreeding coefficient of individual i.
 //' @param ploidy The ploidy of the species.
-//' 
+//'
 //' @return A three dimensional array. The rows index the individuals,
 //'     the columns index the SNPs, and the third dimension indexes the
 //'     genotypes. Computes the "continuous genotype".
@@ -191,7 +191,7 @@ arma::Cube<double> compute_all_phifk(NumericVector alpha, NumericVector rho, int
 //' @param mu_h The prior mean of the log-bias parameter.
 //' @param sigma2_h The prior variance (not standard deviation)
 //'     of the log-bias parameter. Set to to \code{Inf} to return \code{0}.
-//'     
+//'
 //' @return A double. The default penalty on the allelic bias parameter.
 //'
 //' @author David Gerard
@@ -223,7 +223,7 @@ double pen_bias(double h, double mu_h, double sigma2_h) {
 //' @param sigma2_eps The prior variance (not standard deviation)
 //'     of the logit sequencing error rate. Set this to \code{Inf} to
 //'     return \code{0}.
-//'     
+//'
 //' @return A double. The default penalty on the sequencing error rate.
 //'
 //' @author David Gerard
@@ -236,7 +236,7 @@ double pen_seq_error(double eps, double mu_eps, double sigma2_eps) {
   if (sigma2_eps < TOL) {
     Rcpp::stop("pen_seq_error: sigma2_eps must be greater tha 0.");
   }
-  
+
   double pen;
   if (arma::is_finite(sigma2_eps)) {
     pen = -log(eps * (1.0 - eps)) - std::pow(logit(eps) - mu_eps, 2) / (2.0 * sigma2_eps);
@@ -259,8 +259,8 @@ double pen_seq_error(double eps, double mu_eps, double sigma2_eps) {
 //' @param log_bb_dense A matrix of log posterior densities. The
 //'     rows index the SNPs and the columns index the dosage.
 //' @param ploidy The ploidy of the species.
-//' 
-//' @return A double. The objective when updating 
+//'
+//' @return A double. The objective when updating
 //'     \code{rho} in \code{\link{mupdog}}.
 //'
 //'
@@ -375,6 +375,8 @@ double obj_for_alpha(arma::Col<double> mu,
 //' @param var_bias The prior variance of the log-bias
 //' @param mean_seq The prior mean of the logit sequencing error rate.
 //' @param var_seq The prior variance of the logit sequencing error rate.
+//' @param mean_od The prior mean of the logit of the overdispersion parameter
+//' @param var_od The prior variance of the logit of the overdispersion parameter.
 //' @param wmat The matrix of (variational) posterior probabilities for each dosage.
 //'     The rows index the individuals and the columns index the dosage levels.
 //' @param update_seq A logical. This is not used in \code{obj_for_eps},
@@ -383,7 +385,7 @@ double obj_for_alpha(arma::Col<double> mu,
 //'     but sets the second element to \code{0.0} in \code{\link{grad_for_eps}}.
 //' @param update_od A logical. This is not used in \code{obj_for_eps},
 //'     but sets the third element to \code{0.0} in \code{\link{grad_for_eps}}.
-//'     
+//'
 //' @return A double. The objective when updating \code{eps} in
 //'     \code{\link{mupdog}}.
 //'
@@ -397,6 +399,8 @@ double obj_for_eps(NumericVector parvec,
 		   double var_bias,
 		   double mean_seq,
 		   double var_seq,
+		   double mean_od,
+		   double var_od,
 		   NumericMatrix wmat,
 		   bool update_bias = true,
 		   bool update_seq = true,
@@ -436,7 +440,10 @@ double obj_for_eps(NumericVector parvec,
     }
   }
 
-  obj_val = obj_val + pen_bias(h, mean_bias, var_bias) + pen_seq_error(eps, mean_seq, var_seq);
+  obj_val = obj_val +
+    pen_bias(h, mean_bias, var_bias) +
+    pen_seq_error(eps, mean_seq, var_seq) +
+    pen_seq_error(tau, mean_od, var_od); // can use pen_seq_error() for overdispersion as well!
 
   if (obj_val == R_NegInf) {
     Rcpp::Rcout << obj_val << std::endl;
@@ -456,7 +463,7 @@ double obj_for_eps(NumericVector parvec,
 //' @param cor_inv The inverse of the underlying correlation matrix.
 //' @param log_bb_dense A matrix of log-densities of the beta binomial. The rows index the individuals and the columns index the allele dosage.
 //'     Allele dosage goes from -1 to ploidy, so there are ploidy + 2 elements.
-//' 
+//'
 //' @return A double. The objective when updating \code{mu} and \code{sigma2}
 //'     in \code{\link{mupdog}}.
 //'
@@ -548,11 +555,18 @@ double obj_for_mu_sigma2_wrapper(arma::Col<double> muSigma2, NumericMatrix phifk
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
-double elbo(arma::Cube<double> warray, arma::Cube<double> lbeta_array,
-	    arma::Mat<double> cor_inv, arma::Mat<double> postmean,
-	    arma::Mat<double> postvar,
-	    NumericVector bias, NumericVector seq, double mean_bias,
-	    double var_bias, double mean_seq, double var_seq, int ploidy) {
+double elbo(arma::Cube<double> warray,
+            arma::Cube<double> lbeta_array,
+            arma::Mat<double> cor_inv,
+            arma::Mat<double> postmean,
+            arma::Mat<double> postvar,
+            NumericVector bias,
+            NumericVector seq,
+            double mean_bias,
+            double var_bias,
+            double mean_seq,
+            double var_seq,
+            int ploidy) {
   // Check input -------------------------------------------------------
   int nsnps = warray.n_cols;
   int nind  = warray.n_rows;
@@ -649,7 +663,7 @@ double elbo(arma::Cube<double> warray, arma::Cube<double> lbeta_array,
 //' @param ploidy The ploidy of the species.
 //' @param weight_vec A vector of length \code{ploidy + 1} that contains the weights
 //'     for each component beta-binomial.
-//'     
+//'
 //' @return A double. The objective when updating the beta-binomial genotype
 //'     distribution in \code{\link{mupdog}}.
 //'
@@ -684,8 +698,8 @@ double obj_for_weighted_lbb(NumericVector parvec,
 //' @param ploidy The ploidy of the species.
 //' @param weight_vec A vector of length \code{ploidy + 1} that contains the weights
 //'     for each component beta-binomial.
-//'     
-//' @return A double. The objective when updating the normal 
+//'
+//' @return A double. The objective when updating the normal
 //'     genotype distribution in \code{\link{mupdog}}.
 //'
 //' @author David Gerard

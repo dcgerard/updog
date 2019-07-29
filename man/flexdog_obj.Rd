@@ -5,7 +5,7 @@
 \title{Log-likelihood that \code{\link{flexdog}} maximizes.}
 \usage{
 flexdog_obj(probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_bias,
-  var_bias, mean_seq, var_seq)
+  var_bias, mean_seq, var_seq, mean_od, var_od)
 }
 \arguments{
 \item{probk_vec}{The kth element is the prior probability of genotype k (when starting to count from 0).}
@@ -32,6 +32,11 @@ error rate.}
 
 \item{var_seq}{The prior variance of the logit of the sequencing
 error rate.}
+
+\item{mean_od}{The prior mean of the logit of the overdispersion parameter.}
+
+\item{var_od}{The prior variance of the logit of the overdispersion
+parameter.}
 }
 \value{
 The objective (marginal log-likelihood) used in

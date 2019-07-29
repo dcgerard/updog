@@ -1,7 +1,6 @@
 Package: updog
 Title: Flexible Genotyping for Polyploids
-Version: 1.0.2
-Date: 2019-07-22
+Version: 1.1.0
 Authors@R: person("David", "Gerard", email = "gerard.1787@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9450-5023"))
 Description: Implements empirical Bayes approaches to genotype
        polyploids from next generation sequencing data while

@@ -15,7 +15,7 @@ NumericMatrix get_wik_mat(NumericVector probk_vec,
 //' @param x The number of reference counts.
 //' @param n The total number of read-counts.
 //' @param logp Return the log density \code{TRUE} or not \code{FALSE}?
-//' 
+//'
 //' @return A double. The outlier density value.
 //'
 //'
@@ -40,7 +40,7 @@ double doutdist(int x, int n, bool logp) {
 //'     \code{\link{get_wik_mat}} for the equivalent function
 //'     without outliers. \code{\link{doutdist}} for the outlier
 //'     density function.
-//'     
+//'
 //' @return Same as \code{\link{get_wik_mat}} but the last column is
 //'     for the outlier class.
 //'
@@ -61,9 +61,9 @@ NumericMatrix get_wik_mat_out(NumericVector probk_vec,
   if (probk_vec.length() != ploidy + 1) {
     Rcpp::stop("get_wik_mat_out: probk_vec must have length ploidy + 1.");
   }
-  
 
-  NumericMatrix wik_mat(nind, ploidy + 2);  
+
+  NumericMatrix wik_mat(nind, ploidy + 2);
   if (out_prop < TOL) { // outliers have zero probability
     NumericMatrix wik_sub(nind, ploidy + 1);
     wik_sub = get_wik_mat(probk_vec,
@@ -73,7 +73,7 @@ NumericMatrix get_wik_mat_out(NumericVector probk_vec,
                           seq,
                           bias,
                           od);
-    
+
     for (int i = 0; i < nind; i++) {
       for (int k = 0; k <= ploidy; k++) {
         wik_mat(i, k) = wik_sub(i, k);
@@ -90,7 +90,7 @@ NumericMatrix get_wik_mat_out(NumericVector probk_vec,
     for (int k = 0; k <= ploidy; k++) {
       xi(k) = xi_double((double)k / (double)ploidy, seq, bias);
     }
-    
+
     double sumi; // denominator to get wik for each i.
     NumericVector wvec(ploidy + 2);
     for (int i = 0; i < nind; i++) {
@@ -116,8 +116,8 @@ NumericMatrix get_wik_mat_out(NumericVector probk_vec,
 //' @inheritParams flexdog_full
 //' @param probk_vec The kth element is the prior probability of genotype k (when starting to count from 0).
 //' @param out_prop The probability of being an outlier.
-//' 
-//' @return A double. The \code{\link{flexdog}} objective when 
+//'
+//' @return A double. The \code{\link{flexdog}} objective when
 //'     \code{outliers = TRUE}.
 //'
 //' @author David Gerard
@@ -136,7 +136,9 @@ double flexdog_obj_out(NumericVector probk_vec,
                        double mean_bias,
                        double var_bias,
                        double mean_seq,
-                       double var_seq) {
+                       double var_seq,
+                       double mean_od,
+                       double var_od) {
   // Check input -----------------------------------------------------------
   int nind = refvec.length();
   if (nind != sizevec.length()) {
@@ -169,7 +171,7 @@ double flexdog_obj_out(NumericVector probk_vec,
     for (int i = 0; i < nind; i++) {
       out_val = doutdist(refvec(i), sizevec(i), true);
       obj = obj + out_val;
-    } 
+    }
   } else {
     for (int i = 0; i < nind; i++) {
       for (int k = 0; k <= ploidy; k++) {
@@ -177,12 +179,13 @@ double flexdog_obj_out(NumericVector probk_vec,
       }
       wvec(ploidy + 1) = log(out_prop) + doutdist(refvec(i), sizevec(i), true);
       obj = obj + log_sum_exp(wvec);
-    } 
+    }
   }
 
   // Penalties --------------------------------------------------------------
   obj = obj + pen_bias(bias, mean_bias, var_bias);
   obj = obj + pen_seq_error(seq, mean_seq, var_seq);
+  obj = obj + pen_seq_error(od, mean_od, var_od);
   return obj;
 }
 

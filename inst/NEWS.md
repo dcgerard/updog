@@ -1,3 +1,9 @@
+# updog 1.1.0
+
+- More flexible priors.
+- Places a normal prior distribution on the logit of the overdispersion parameter.
+- Documentation updates.
+
 # updog 1.0.1
 
 * Fixes a bug with option `model = "s1pp"` in `flexdog`. I was originally not constraining the levels of preferential pairing to be the same in both segregations of the same parent. This is now fixed. But the downside is that `model = "s1pp"` is now only supported for `ploidy = 4` or `ploidy = 6`. This is because the optimization becomes more difficult for larger ploidy levels.
