@@ -15,7 +15,7 @@ v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org
 
 Updog provides a suite of methods for genotyping polyploids from
 next-generation sequencing (NGS) data. It does this while accounting for
-many common features of NGS data: allelic bias, overdispersion,
+many common features of NGS data: allele bias, overdispersion,
 sequencing error, and (possibly) outlying observations. It is named
 updog for “Using Parental Data for Offspring Genotyping” because we
 originally developed the method for full-sib populations, but it works
@@ -23,7 +23,7 @@ now for more general populations. The method is described in detail
 [here](https://doi.org/10.1534/genetics.118.301468) and
 [here](https://doi.org/10.1101/281550).
 
-The main function is `flexdog`, which provides many options for the
+The main function is `flexdog()`, which provides many options for the
 distribution of the genotypes in your sample. Novel genotype
 distributions include the class of proportional normal distributions
 (`model = "norm"`) and the class of discrete unimodal distributions
@@ -33,23 +33,23 @@ specialized priors if you have more information on the data.
 
 Also provided are:
 
-  - An experimental function `mupdog`, which allows for correlation
+  - An experimental function `mupdog()`, which allows for correlation
     between the individuals’ genotypes while jointly estimating the
     genotypes of the individuals at all provided SNPs. The
     implementation uses a variational approximation. This is designed
     for samples where the individuals share a complex relatedness
     structure (e.g. siblings, cousins, uncles, half-siblings, etc).
     Right now there are no guarantees about this function’s performance.
-  - Functions to simulate genotypes (`rgeno`) and read-counts
-    (`rflexdog`). These support all of the models available in
-    `flexdog`.
-  - Functions to evaluate oracle genotyping performance: `oracle_joint`,
-    `oracle_mis`, `oracle_mis_vec`, and `oracle_cor`. We mean “oracle”
-    in the sense that we assume that the entire data generation process
-    is known (i.e. the genotype distribution, sequencing error rate,
-    allelic bias, and overdispersion are all known). These are good
-    approximations when there are a lot of individuals (but not
-    necessarily large read-depth).
+  - Functions to simulate genotypes (`rgeno()`) and read-counts
+    (`rflexdog()`). These support all of the models available in
+    `flexdog()`.
+  - Functions to evaluate oracle genotyping performance:
+    `oracle_joint()`, `oracle_mis()`, `oracle_mis_vec()`, and
+    `oracle_cor()`. We mean “oracle” in the sense that we assume that
+    the entire data generation process is known (i.e. the genotype
+    distribution, sequencing error rate, allele bias, and overdispersion
+    are all known). These are good approximations when there are a lot
+    of individuals (but not necessarily large read-depth).
 
 The original `updog` package is now named `updogAlpha` and may be found
 [here](https://github.com/dcgerard/updogAlpha).
@@ -59,7 +59,9 @@ See also [ebg](https://github.com/pblischak/polyploid-genotyping),
 [TET](http://www.g3journal.org/content/suppl/2017/01/19/g3.117.039008.DC1),
 and [polyRAD](https://cran.r-project.org/package=polyRAD). Our best
 “competitor” is probably
-[fitPoly](https://cran.r-project.org/package=fitPoly).
+[fitPoly](https://cran.r-project.org/package=fitPoly), though
+[polyRAD](https://cran.r-project.org/package=polyRAD) has some nice
+ideas for utilizing population structure and linkage disequilibrium.
 
 See [NEWS](./inst/NEWS.md) for the latest updates on the package.
 
@@ -82,7 +84,7 @@ You can install updog from
 install.packages("updog")
 ```
 
-You can install the current (unstable) version of updog from Github
+You can install the current (unstable) version of updog from GitHub
 with:
 
 ``` r
@@ -137,5 +139,5 @@ Or, using BibTex:
 ## Code of Conduct
 
 Please note that this project is released with a [Contributor Code of
-Conduct](CONDUCT.md). By participating in this project you agree to
-abide by its terms.
+Conduct](https://github.com/dcgerard/updog/blob/master/CONDUCT.md). By
+participating in this project you agree to abide by its terms.
