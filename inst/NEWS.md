@@ -36,7 +36,7 @@
     > discard all SNPs with a prop_mis **over 0.05**.
 - I've now exported some C++ functions that I think are useful. You
   can call them in the usual way:
-  [http://r-pkgs.had.co.nz/src.html#cpp-import](http://r-pkgs.had.co.nz/src.html#cpp-import).
+  <http://r-pkgs.had.co.nz/src.html#cpp-import>.
 
 
 # updog 0.99.0

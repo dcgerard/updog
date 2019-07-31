@@ -100,16 +100,16 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#updog" class="anchor"></a>updog</h1></div>
 
-<p>Updog provides a suite of methods for genotyping polyploids from next-generation sequencing (NGS) data. It does this while accounting for many common features of NGS data: allelic bias, overdispersion, sequencing error, and (possibly) outlying observations. It is named updog for “Using Parental Data for Offspring Genotyping” because we originally developed the method for full-sib populations, but it works now for more general populations. The method is described in detail <a href="https://doi.org/10.1534/genetics.118.301468">here</a> and <a href="https://doi.org/10.1101/281550">here</a>.</p>
-<p>The main function is <code>flexdog</code>, which provides many options for the distribution of the genotypes in your sample. Novel genotype distributions include the class of proportional normal distributions (<code>model = "norm"</code>) and the class of discrete unimodal distributions (<code>model = "ash"</code>). The default is <code>model = "norm"</code> because it is the most robust to varying genotype distributions, but feel free to use more specialized priors if you have more information on the data.</p>
+<p>Updog provides a suite of methods for genotyping polyploids from next-generation sequencing (NGS) data. It does this while accounting for many common features of NGS data: allele bias, overdispersion, sequencing error, and (possibly) outlying observations. It is named updog for “Using Parental Data for Offspring Genotyping” because we originally developed the method for full-sib populations, but it works now for more general populations. The method is described in detail <a href="https://doi.org/10.1534/genetics.118.301468">here</a> and <a href="https://doi.org/10.1101/281550">here</a>.</p>
+<p>The main function is <code><a href="reference/flexdog.html">flexdog()</a></code>, which provides many options for the distribution of the genotypes in your sample. Novel genotype distributions include the class of proportional normal distributions (<code>model = "norm"</code>) and the class of discrete unimodal distributions (<code>model = "ash"</code>). The default is <code>model = "norm"</code> because it is the most robust to varying genotype distributions, but feel free to use more specialized priors if you have more information on the data.</p>
 <p>Also provided are:</p>
 <ul>
-<li>An experimental function <code>mupdog</code>, which allows for correlation between the individuals’ genotypes while jointly estimating the genotypes of the individuals at all provided SNPs. The implementation uses a variational approximation. This is designed for samples where the individuals share a complex relatedness structure (e.g. siblings, cousins, uncles, half-siblings, etc). Right now there are no guarantees about this function’s performance.</li>
-<li>Functions to simulate genotypes (<code>rgeno</code>) and read-counts (<code>rflexdog</code>). These support all of the models available in <code>flexdog</code>.</li>
-<li>Functions to evaluate oracle genotyping performance: <code>oracle_joint</code>, <code>oracle_mis</code>, <code>oracle_mis_vec</code>, and <code>oracle_cor</code>. We mean “oracle” in the sense that we assume that the entire data generation process is known (i.e. the genotype distribution, sequencing error rate, allelic bias, and overdispersion are all known). These are good approximations when there are a lot of individuals (but not necessarily large read-depth).</li>
+<li>An experimental function <code><a href="reference/mupdog.html">mupdog()</a></code>, which allows for correlation between the individuals’ genotypes while jointly estimating the genotypes of the individuals at all provided SNPs. The implementation uses a variational approximation. This is designed for samples where the individuals share a complex relatedness structure (e.g. siblings, cousins, uncles, half-siblings, etc). Right now there are no guarantees about this function’s performance.</li>
+<li>Functions to simulate genotypes (<code><a href="reference/rgeno.html">rgeno()</a></code>) and read-counts (<code><a href="reference/rflexdog.html">rflexdog()</a></code>). These support all of the models available in <code><a href="reference/flexdog.html">flexdog()</a></code>.</li>
+<li>Functions to evaluate oracle genotyping performance: <code><a href="reference/oracle_joint.html">oracle_joint()</a></code>, <code><a href="reference/oracle_mis.html">oracle_mis()</a></code>, <code><a href="reference/oracle_mis_vec.html">oracle_mis_vec()</a></code>, and <code><a href="reference/oracle_cor.html">oracle_cor()</a></code>. We mean “oracle” in the sense that we assume that the entire data generation process is known (i.e. the genotype distribution, sequencing error rate, allele bias, and overdispersion are all known). These are good approximations when there are a lot of individuals (but not necessarily large read-depth).</li>
 </ul>
 <p>The original <code>updog</code> package is now named <code>updogAlpha</code> and may be found <a href="https://github.com/dcgerard/updogAlpha">here</a>.</p>
-<p>See also <a href="https://github.com/pblischak/polyploid-genotyping">ebg</a>, <a href="https://cran.r-project.org/package=fitPoly">fitPoly</a>, and <a href="http://www.g3journal.org/content/suppl/2017/01/19/g3.117.039008.DC1">TET</a>, and <a href="https://cran.r-project.org/package=polyRAD">polyRAD</a>. Our best “competitor” is probably <a href="https://cran.r-project.org/package=fitPoly">fitPoly</a>.</p>
+<p>See also <a href="https://github.com/pblischak/polyploid-genotyping">ebg</a>, <a href="https://cran.r-project.org/package=fitPoly">fitPoly</a>, and <a href="http://www.g3journal.org/content/suppl/2017/01/19/g3.117.039008.DC1">TET</a>, and <a href="https://cran.r-project.org/package=polyRAD">polyRAD</a>. Our best “competitor” is probably <a href="https://cran.r-project.org/package=fitPoly">fitPoly</a>, though <a href="https://cran.r-project.org/package=polyRAD">polyRAD</a> has some nice ideas for utilizing population structure and linkage disequilibrium.</p>
 <p>See <a href="./inst/NEWS.html">NEWS</a> for the latest updates on the package.</p>
 <div id="vignettes" class="section level2">
 <h2 class="hasAnchor">
@@ -126,7 +126,7 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install updog from <a href="https://cran.r-project.org/package=updog">CRAN</a> in the usual way:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"updog"</span>)</a></code></pre></div>
-<p>You can install the current (unstable) version of updog from Github with:</p>
+<p>You can install the current (unstable) version of updog from GitHub with:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"dcgerard/updog"</span>)</a></code></pre></div>
 <div id="cvxr" class="section level3">
@@ -163,7 +163,7 @@
 <div id="code-of-conduct" class="section level2">
 <h2 class="hasAnchor">
 <a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h2>
-<p>Please note that this project is released with a <a href="CONDUCT.html">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
+<p>Please note that this project is released with a <a href="https://github.com/dcgerard/updog/blob/master/CONDUCT.md">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
 </div>
 </div>
   </div>

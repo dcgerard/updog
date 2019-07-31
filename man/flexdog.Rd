@@ -157,7 +157,9 @@ Possible values of the genotype distribution (values of \code{model}) are:
       default.}
   \item{\code{"hw"}}{A binomial distribution that results from assuming that
       the population is in Hardy-Weinberg equilibrium (HWE). This actually does
-      pretty well even when there are minor to moderate deviations from HWE.}
+      pretty well even when there are minor to moderate deviations from HWE.
+      Though it does not perform as well as the `"norm"` option when there
+      are severe deviations from HWE.}
   \item{\code{"bb"}}{A beta-binomial distribution. This is an overdispersed
       version of \code{"hw"} and can be derived from a special case of the Balding-Nichols model.}
   \item{\code{"ash"}}{Any unimodal prior. This can sometimes be sensitive to violations
@@ -191,7 +193,7 @@ Possible values of the genotype distribution (values of \code{model}) are:
       greater than \code{6}.}
   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
       this works well if you have a lot of individuals. In practice, it seems to
-      be less robust to violations in modeling assumptions.}
+      be much less robust to violations in modeling assumptions.}
   \item{\code{"uniform"}}{A discrete uniform distribution. This should never
       be used in practice.}
   \item{\code{"custom"}}{A pre-specified prior distribution. You specify

@@ -313,7 +313,9 @@ non-negative elements that sum to 1.</p></td>
       default.</p></dd>
   <dt><code>"hw"</code></dt><dd><p>A binomial distribution that results from assuming that
       the population is in Hardy-Weinberg equilibrium (HWE). This actually does
-      pretty well even when there are minor to moderate deviations from HWE.</p></dd>
+      pretty well even when there are minor to moderate deviations from HWE.
+      Though it does not perform as well as the `"norm"` option when there
+      are severe deviations from HWE.</p></dd>
   <dt><code>"bb"</code></dt><dd><p>A beta-binomial distribution. This is an overdispersed
       version of <code>"hw"</code> and can be derived from a special case of the Balding-Nichols model.</p></dd>
   <dt><code>"ash"</code></dt><dd><p>Any unimodal prior. This can sometimes be sensitive to violations
@@ -347,7 +349,7 @@ non-negative elements that sum to 1.</p></td>
       greater than <code>6</code>.</p></dd>
   <dt><code>"flex"</code></dt><dd><p>Generically any categorical distribution. Theoretically,
       this works well if you have a lot of individuals. In practice, it seems to
-      be less robust to violations in modeling assumptions.</p></dd>
+      be much less robust to violations in modeling assumptions.</p></dd>
   <dt><code>"uniform"</code></dt><dd><p>A discrete uniform distribution. This should never
       be used in practice.</p></dd>
   <dt><code>"custom"</code></dt><dd><p>A pre-specified prior distribution. You specify
