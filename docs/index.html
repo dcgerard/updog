@@ -21,8 +21,9 @@
        functions to calculate oracle genotyping error rates, oracle_mis(), and
        correlation with the true genotypes, oracle_cor(). These latter two
        functions are useful for read depth calculations. Run
-       browseVignettes(package = "updog") in R for example usage. See also
-       Gerard et al. (2018) &lt;doi:10.1534/genetics.118.301468&gt; for details on the
+       browseVignettes(package = "updog") in R for example usage. See
+       Gerard et al. (2018) &lt;doi:10.1534/genetics.118.301468&gt; and
+       Gerard and Ferrão (2019) &lt;doi:10.1101/751784&gt; for details on the
        implemented methods.'>
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -43,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -159,6 +160,19 @@
 <a class="sourceLine" id="cb5-11" data-line-number="11">    URL = {https://doi.org/10.1534/genetics.118.301468},</a>
 <a class="sourceLine" id="cb5-12" data-line-number="12">    journal = {Genetics}</a>
 <a class="sourceLine" id="cb5-13" data-line-number="13">}</a></code></pre></div>
+<p>If you are using the porportional normal prior class (<code>model = "norm"</code>) or the unimodal prior class (<code>model = "ash"</code>), then please also cite</p>
+<blockquote>
+<p>Gerard D. &amp; Ferrão L. F. V. (2019). “Priors for Genotyping Polyploids.” <em>bioRxiv</em>. doi: <a href="https://doi.org/10.1101/751784">10.1101/751784</a>.</p>
+</blockquote>
+<p>Or, using BibTex:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode tex"><code class="sourceCode latex"><a class="sourceLine" id="cb6-1" data-line-number="1">@article{gerard2019priors,</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">  title = {Priors for Genotyping Polyploids},</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">  year = {2019},</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">  journal = {bioRxiv},</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">  publisher = {Cold Spring Harbor Laboratory},</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">  doi = {10.1101/751784},</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">  author = {David Gerard and Lu{<span class="fu">\'</span>i}s Felipe Ventorim Ferr{<span class="fu">\~</span>a}o},</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">}</a></code></pre></div>
 </div>
 <div id="code-of-conduct" class="section level2">
 <h2 class="hasAnchor">

@@ -1,3 +1,4 @@
+c(
 bibentry(bibtype    = "Article",
          title      = "Genotyping Polyploids from Messy Sequencing Data",
           year      = "2018",
@@ -11,7 +12,7 @@ bibentry(bibtype    = "Article",
           author    = c(person(given  = "David",
                                family = "Gerard",
                                email  = "gerard.1787@gmail.com"),
-                        person(given  = "Luis Felipe Ventorim",
+                        person(given  = "Lu{\\'i}s Felipe Ventorim",
                                family = "Ferr{\\~a}o",
                                email  = "lfelipe.ferrao@gmail.com"),
                         person(given  = "Antonio Augusto Franco",
@@ -21,4 +22,23 @@ bibentry(bibtype    = "Article",
                                family = "Stephens",
                                email  = "mstephens@uchicago.edu")
                        )
+),
+bibentry(bibtype    = "Article",
+         title      = "Priors for Genotyping Polyploids",
+          year      = "2019",
+          journal   = "bioRxiv",
+          publisher = "Cold Spring Harbor Laboratory",
+          volume    = "",
+	        number    = "",
+	        pages     = "",
+	        issn      = "",
+          doi       = "10.1101/751784",
+          author    = c(person(given  = "David",
+                               family = "Gerard",
+                               email  = "gerard.1787@gmail.com"),
+                        person(given  = "Lu{\\'i}s Felipe Ventorim",
+                               family = "Ferr{\\~a}o",
+                               email  = "lfelipe.ferrao@gmail.com")
+                       )
+)
 )

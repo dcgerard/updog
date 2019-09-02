@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@
       <h1>Parallelized Genotyping using Updog</h1>
                         <h4 class="author">David Gerard</h4>
             
-            <h4 class="date">2019-07-31</h4>
+            <h4 class="date">2019-09-02</h4>
       
       
       <div class="hidden name"><code>parallel_computing.Rmd</code></div>
@@ -127,7 +127,7 @@
 <a class="sourceLine" id="cb4-15" data-line-number="15">                      fout<span class="op">$</span>geno</a>
 <a class="sourceLine" id="cb4-16" data-line-number="16">                      }</a>
 <a class="sourceLine" id="cb4-17" data-line-number="17"><span class="kw"><a href="https://www.rdocumentation.org/packages/parallel/topics/makeCluster">stopCluster</a></span>(cl)</a></code></pre></div>
-<p>Note that I used <code>model = "norm"</code> because we have a very small number of samples.</p>
+<p>Note that I used <code>model = "norm"</code> <span class="citation">(Gerard and Ferrão 2019)</span> because we have a very small number of samples.</p>
 <p>However, this doesn’t return any sort of diagnostic statistics for each SNP. So suppose we now want to save all of the output of each SNP and not just the MAP genotype, then we can use the following code:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">nc &lt;-<span class="st"> </span><span class="dv">2</span> <span class="co">## number of cores. </span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">        <span class="co">## You should change this for your specific computing environment.</span></a>
@@ -160,6 +160,9 @@
 <div id="refs" class="references">
 <div id="ref-gerard2018genotyping">
 <p>Gerard, David, Luis Felipe Ventorim Ferrão, Antonio Augusto Franco Garcia, and Matthew Stephens. 2018. “Genotyping Polyploids from Messy Sequencing Data.” <em>Genetics</em> 210 (3). Genetics: 789–807. <a href="https://doi.org/10.1534/genetics.118.301468">https://doi.org/10.1534/genetics.118.301468</a>.</p>
+</div>
+<div id="ref-gerard2019priors">
+<p>Gerard, David, and Luís Felipe Ventorim Ferrão. 2019. “Priors for Genotyping Polyploids.” <em>bioRxiv</em>. Cold Spring Harbor Laboratory. <a href="https://doi.org/10.1101/751784">https://doi.org/10.1101/751784</a>.</p>
 </div>
 <div id="ref-uitdewilligen2013next">
 <p>Uitdewilligen, Anne-Marie A. AND D’hoop, Jan G. A. M. L. AND Wolters. 2013. “A Next-Generation Sequencing Method for Genotyping-by-Sequencing of Highly Heterozygous Autotetraploid Potato.” <em>PLOS ONE</em> 8 (5). Public Library of Science: 1–14. <a href="https://doi.org/10.1371/journal.pone.0062355">https://doi.org/10.1371/journal.pone.0062355</a>.</p>

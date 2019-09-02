@@ -136,6 +136,26 @@ Or, using BibTex:
 }
 ```
 
+If you are using the porportional normal prior class (`model = "norm"`)
+or the unimodal prior class (`model = "ash"`), then please also cite
+
+> Gerard D. & Ferrão L. F. V. (2019). “Priors for Genotyping
+> Polyploids.” *bioRxiv*. doi:
+> [10.1101/751784](https://doi.org/10.1101/751784).
+
+Or, using BibTex:
+
+``` tex
+@article{gerard2019priors,
+  title = {Priors for Genotyping Polyploids},
+  year = {2019},
+  journal = {bioRxiv},
+  publisher = {Cold Spring Harbor Laboratory},
+  doi = {10.1101/751784},
+  author = {David Gerard and Lu{\'i}s Felipe Ventorim Ferr{\~a}o},
+}
+```
+
 ## Code of Conduct
 
 Please note that this project is released with a [Contributor Code of

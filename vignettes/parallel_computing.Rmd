@@ -69,7 +69,7 @@ gene_est <- foreach(i = 1:ngenes,
 stopCluster(cl)
 ```
 
-Note that I used `model = "norm"` because we have a very small number of samples.
+Note that I used `model = "norm"` [@gerard2019priors] because we have a very small number of samples.
 
 However, this doesn't return any sort of diagnostic statistics for each SNP. So suppose we now want to save all of the output of each SNP and not just the MAP genotype, then we can use the following code:
 
