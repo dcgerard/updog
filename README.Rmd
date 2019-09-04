@@ -28,7 +28,8 @@ updog for "Using Parental Data for Offspring Genotyping" because we
 originally developed the method for full-sib populations, but it works
 now for more general populations. The method is described in detail
 [here](https://doi.org/10.1534/genetics.118.301468) and
-[here](https://doi.org/10.1101/281550).
+[here](https://doi.org/10.1101/281550). Additional details concerning 
+prior specification is described [here](https://doi.org/10.1101/751784).
 
 The main function is `flexdog()`, which provides many options for the
 distribution of the genotypes in your sample. Novel genotype distributions
