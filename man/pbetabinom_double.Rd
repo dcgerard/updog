@@ -3,7 +3,7 @@
 \name{pbetabinom_double}
 \alias{pbetabinom_double}
 \title{The distribution function of the betabinomial. This is generally
-only adviseable if q is relatively small.}
+only advisable if q is relatively small.}
 \usage{
 pbetabinom_double(q, size, mu, rho, log_p)
 }
@@ -24,7 +24,7 @@ The tail-probability of the beta-binomial.
 }
 \description{
 The distribution function of the betabinomial. This is generally
-only adviseable if q is relatively small.
+only advisable if q is relatively small.
 }
 \author{
 David Gerard

@@ -88,7 +88,7 @@ double xi_double(double p, double eps, double h) {
 //' @param h The allele bias. Must either be of length 1 or the same length
 //'     as p.
 //'
-//' @return A vector of prababilities of the reference read adjusted
+//' @return A vector of probabilities of the reference read adjusted
 //'     by both the sequencing error rate and the allele bias.
 //'
 //' @author David Gerard

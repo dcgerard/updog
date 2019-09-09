@@ -57,7 +57,8 @@ A \code{\link[ggplot2]{ggplot}} object for the genotype plot.
 The x-axis is the counts of the non-reference allele,
 and the y-axis is the counts of the reference allele.
 Transparency is controlled by the \code{maxpostprob}
-vector.
+vector. These types of plots are used in Gerard et. al. (2018) and
+Gerard and Ferrão (2019).
 }
 \details{
 If parental genotypes are provided (\code{p1geno} and \code{p2geno}) then
@@ -71,6 +72,12 @@ sizevec <- snpdat$size[snpdat$snp == "SNP1"]
 ploidy  <- 6
 plot_geno(refvec = refvec, sizevec = sizevec, ploidy = ploidy)
 
+}
+\references{
+\itemize{
+  \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+  \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/751784}{10.1101/751784}.}
+}
 }
 \author{
 David Gerard

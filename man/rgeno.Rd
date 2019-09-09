@@ -67,7 +67,8 @@ A vector of length \code{n} with the genotypes of the sampled individuals.
 }
 \description{
 This will simulate genotypes of a sample of individuals drawn from one of the populations supported by
-\code{\link{flexdog}}. See the details of \code{\link{flexdog}} for the models allowed.
+\code{\link{flexdog}}. See the details of \code{\link{flexdog}} for the models allowed. These genotype
+distributions are described in detail in Gerard and Ferrão (2019).
 }
 \details{
 The allowable variable values of \code{allele_freq}, \code{od}, \code{p1geno}, \code{p2geno}, \code{pivec},
@@ -93,8 +94,8 @@ rgeno(n = 10, ploidy = ploidy, model = "hw", allele_freq = 0.75)
 }
 \references{
 \itemize{
-  \item{Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).}
-  \item{Gerard, D. and Ferrao, L. F. V. (2019). Priors for Genotyping Polyploids. *bioRxiv*. doi: [10.1101/751784](https://doi.org/10.1101/751784).}
+  \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+  \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/751784}{10.1101/751784}.}
 }
 }
 \author{

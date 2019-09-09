@@ -9,21 +9,25 @@
 <title>The joint probability of the genotype and the genotype estimate
 of an oracle estimator. — oracle_joint • updog</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -31,13 +35,14 @@ of an oracle estimator. — oracle_joint • updog</title>
 
 
 
+
 <meta property="og:title" content="The joint probability of the genotype and the genotype estimate
 of an oracle estimator. — oracle_joint" />
-
 <meta property="og:description" content="This returns the joint distribution of the true genotypes and an oracle
 estimator given perfect knowledge of the data generating process. This is a useful
 approximation when you have a lot of individuals." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -49,6 +54,7 @@ approximation when you have a lot of individuals." />
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -75,7 +81,7 @@ approximation when you have a lot of individuals." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -103,8 +109,10 @@ approximation when you have a lot of individuals." />
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -114,6 +122,7 @@ approximation when you have a lot of individuals." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -126,15 +135,13 @@ of an oracle estimator.</h1>
     </div>
 
     <div class="ref-description">
-    
     <p>This returns the joint distribution of the true genotypes and an oracle
 estimator given perfect knowledge of the data generating process. This is a useful
 approximation when you have a lot of individuals.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>oracle_joint</span>(<span class='no'>n</span>, <span class='no'>ploidy</span>, <span class='no'>seq</span>, <span class='no'>bias</span>, <span class='no'>od</span>, <span class='no'>dist</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -163,7 +170,7 @@ approximation when you have a lot of individuals.</p>
       <td><p>The distribution of the alleles.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A matrix. Element (i, j) is the joint probability of estimating
@@ -171,26 +178,28 @@ approximation when you have a lot of individuals.</p>
     estimated genotype indexes the rows and the true genotype indexes
     the columns. This is when
     using an oracle estimator.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>To come up with <code>dist</code>, you need some additional assumptions.
 For example, if the population is in Hardy-Weinberg equilibrium and
 the allele frequency is <code>alpha</code> then you could calculate
-<code>dist</code> using the R code: <code><a href='https://www.rdocumentation.org/packages/stats/topics/Binomial'>dbinom(x = 0:ploidy, size = ploidy, prob = alpha)</a></code>.
+<code>dist</code> using the R code: <code><a href='https://rdrr.io/r/stats/Binomial.html'>dbinom(x = 0:ploidy, size = ploidy, prob = alpha)</a></code>.
 Alternatively, if you know the genotypes of the individual's two parents are, say,
 <code>ref_count1</code> and <code>ref_count2</code>, then you could use the <code><a href='get_q_array.html'>get_q_array</a></code>
 function from the updog package: <code>get_q_array(ploidy)[ref_count1 + 1, ref_count2 + 1, ]</code>.</p>
 <p>See the Examples to see how to reconcile the output of <code>oracle_joint</code>
 with <code><a href='oracle_mis.html'>oracle_mis</a></code> and <code><a href='oracle_mis_vec.html'>oracle_mis_vec</a></code>.</p>
-    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., &amp; Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).</p>
     
+<ul>
+<li><p>Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., &amp; Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. <em>Genetics</em>, 210(3), 789-807. doi: <a href='https://doi.org/10.1534/genetics.118.301468'>10.1534/genetics.118.301468</a>.</p></li>
+</ul>
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><dl class='dl-horizontal'>
+    <div class='dont-index'>
+<dl class='dl-horizontal'>
   <dt><code><a href='oracle_plot.html'>oracle_plot</a></code></dt><dd><p>For visualizing the joint distribution output from <code>oracle_joint</code>.</p></dd>
   <dt><code><a href='oracle_mis_from_joint.html'>oracle_mis_from_joint</a></code></dt><dd><p>For obtaining the same results as <code><a href='oracle_mis.html'>oracle_mis</a></code>
       directly from the output of <code>oracle_joint</code>.</p></dd>
@@ -198,14 +207,15 @@ with <code><a href='oracle_mis.html'>oracle_mis</a></code> and <code><a href='or
       directly from the output of <code>oracle_joint</code>.</p></dd>
   <dt><code><a href='oracle_cor_from_joint.html'>oracle_cor_from_joint</a></code></dt><dd><p>For obtaining the same results as <code><a href='oracle_cor.html'>oracle_cor</a></code>
       directly from the output of <code>oracle_joint</code>.</p></dd>
-</dl></div>
-    
+
+</dl>
+</div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>## Hardy-Weinberg population with allele-frequency of 0.75.</span>
 <span class='co'>## Moderate bias and moderate overdispersion.</span>
 <span class='no'>ploidy</span> <span class='kw'>&lt;-</span> <span class='fl'>4</span>
-<span class='no'>dist</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Binomial'>dbinom</a></span>(<span class='fl'>0</span>:<span class='no'>ploidy</span>, <span class='no'>ploidy</span>, <span class='fl'>0.75</span>)
+<span class='no'>dist</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>dbinom</a></span>(<span class='fl'>0</span>:<span class='no'>ploidy</span>, <span class='no'>ploidy</span>, <span class='fl'>0.75</span>)
 <span class='no'>jd</span> <span class='kw'>&lt;-</span> <span class='fu'>oracle_joint</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>ploidy</span> <span class='kw'>=</span> <span class='no'>ploidy</span>, <span class='kw'>seq</span> <span class='kw'>=</span> <span class='fl'>0.001</span>,
                    <span class='kw'>bias</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>od</span> <span class='kw'>=</span> <span class='fl'>0.01</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='no'>dist</span>)
 <span class='no'>jd</span></div><div class='output co'>#&gt;              [,1]         [,2]         [,3]         [,4]         [,5]
@@ -215,10 +225,10 @@ with <code><a href='oracle_mis.html'>oracle_mis</a></code> and <code><a href='or
 #&gt; [4,] 1.314974e-34 2.427440e-09 1.264700e-02 4.105964e-01 2.601245e-04
 #&gt; [5,] 2.284980e-57 7.543647e-25 9.090651e-12 2.863373e-04 3.161461e-01</div><div class='input'>
 <span class='co'>## Get same output as oracle_mis this way:</span>
-<span class='fl'>1</span> - <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/diag'>diag</a></span>(<span class='no'>jd</span>))</div><div class='output co'>#&gt; [1] 0.02944818</div><div class='input'><span class='fu'><a href='oracle_mis.html'>oracle_mis</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>ploidy</span> <span class='kw'>=</span> <span class='no'>ploidy</span>, <span class='kw'>seq</span> <span class='kw'>=</span> <span class='fl'>0.001</span>,
+<span class='fl'>1</span> - <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span>(<span class='no'>jd</span>))</div><div class='output co'>#&gt; [1] 0.02944818</div><div class='input'><span class='fu'><a href='oracle_mis.html'>oracle_mis</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>ploidy</span> <span class='kw'>=</span> <span class='no'>ploidy</span>, <span class='kw'>seq</span> <span class='kw'>=</span> <span class='fl'>0.001</span>,
            <span class='kw'>bias</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>od</span> <span class='kw'>=</span> <span class='fl'>0.01</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 0.02944818</div><div class='input'>
 <span class='co'>## Get same output as oracle_mis_vec this way:</span>
-<span class='fl'>1</span> - <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/diag'>diag</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sweep'>sweep</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>jd</span>, <span class='kw'>MARGIN</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>STATS</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colSums'>colSums</a></span>(<span class='no'>jd</span>), <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='st'>"/"</span>))</div><div class='output co'>#&gt; [1] 0.0001497595 0.0657395175 0.0702925658 0.0267344300 0.0008221220</div><div class='input'><span class='fu'><a href='oracle_mis_vec.html'>oracle_mis_vec</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>ploidy</span> <span class='kw'>=</span> <span class='no'>ploidy</span>, <span class='kw'>seq</span> <span class='kw'>=</span> <span class='fl'>0.001</span>,
+<span class='fl'>1</span> - <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/sweep.html'>sweep</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>jd</span>, <span class='kw'>MARGIN</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>STATS</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>colSums</a></span>(<span class='no'>jd</span>), <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='st'>"/"</span>))</div><div class='output co'>#&gt; [1] 0.0001497595 0.0657395175 0.0702925658 0.0267344300 0.0008221220</div><div class='input'><span class='fu'><a href='oracle_mis_vec.html'>oracle_mis_vec</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>ploidy</span> <span class='kw'>=</span> <span class='no'>ploidy</span>, <span class='kw'>seq</span> <span class='kw'>=</span> <span class='fl'>0.001</span>,
                <span class='kw'>bias</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>od</span> <span class='kw'>=</span> <span class='fl'>0.01</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 0.0001497595 0.0657395175 0.0702925658 0.0267344300 0.0008221220</div><div class='input'>
 </div></pre>
   </div>
@@ -226,15 +236,10 @@ with <code><a href='oracle_mis.html'>oracle_mis</a></code> and <code><a href='or
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-
       <li><a href="#references">References</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -243,19 +248,23 @@ with <code><a href='oracle_mis.html'>oracle_mis</a></code> and <code><a href='or
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by David Gerard.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

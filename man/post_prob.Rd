@@ -17,7 +17,7 @@ post_prob(dosage, ploidy, mu, sigma2, alpha, rho)
 
 \item{mu}{The variational mean.}
 
-\item{sigma2}{The variational variance (not standard devation).}
+\item{sigma2}{The variational variance (not standard deviation).}
 
 \item{alpha}{The allele frequency.}
 

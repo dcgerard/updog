@@ -6,7 +6,8 @@
 #' sequencing (NGS) data while assuming the genotype distribution is one of
 #' several forms. \code{flexdog} does this while accounting for allele bias,
 #' overdispersion, sequencing error, and possibly outlying observations
-#' (if \code{model = "f1"} or \code{model = "s1"}).
+#' (if \code{model = "f1"} or \code{model = "s1"}). The method is described
+#' in detail in Gerard et. al. (2018) and Gerard and Ferrão (2019).
 #'
 #' @inherit flexdog_full
 #'
@@ -149,6 +150,8 @@ flexdog <- function(refvec,
 #' overdispersion, sequencing error, and possibly outlying observations
 #' (if \code{model = "f1"} or \code{model = "s1"}). This function has more
 #' options than \code{\link{flexdog}} and is only meant for expert users.
+#' The method is described in detail in Gerard et. al. (2018) and
+#' Gerard and Ferrão (2019).
 #'
 #' Possible values of the genotype distribution (values of \code{model}) are:
 #' \describe{
@@ -157,7 +160,7 @@ flexdog <- function(refvec,
 #'       Unlike the \code{"bb"} and \code{"hw"} options, this will allow for
 #'       distributions both more and less dispersed than a binomial.
 #'       This seems to be the most robust to violations in modeling assumptions, and so is the
-#'       default.}
+#'       default. This prior class was developed in Gerard and Ferrão (2019).}
 #'   \item{\code{"hw"}}{A binomial distribution that results from assuming that
 #'       the population is in Hardy-Weinberg equilibrium (HWE). This actually does
 #'       pretty well even when there are minor to moderate deviations from HWE.
@@ -166,7 +169,8 @@ flexdog <- function(refvec,
 #'   \item{\code{"bb"}}{A beta-binomial distribution. This is an overdispersed
 #'       version of \code{"hw"} and can be derived from a special case of the Balding-Nichols model.}
 #'   \item{\code{"ash"}}{Any unimodal prior. This can sometimes be sensitive to violations
-#'       in modeling assumptions, but tends to work better than the \code{"flex"} option.}
+#'       in modeling assumptions, but tends to work better than the \code{"flex"} option.
+#'       This prior class was developed in Gerard and Ferrão (2019).}
 #'   \item{\code{"s1"}}{This prior assumes the individuals are
 #'       all full-siblings resulting
 #'       from one generation of selfing. I.e. there is only
@@ -345,7 +349,7 @@ flexdog <- function(refvec,
 #'           is the normal standard deviation (not variance).}
 #'       \item{\code{model = "hw"}:}{\code{alpha} is the major allele frequency.}
 #'       \item{\code{model = "bb"}:}{\code{alpha} is the major allele frequency and
-#'           \code{tau} is the overdisperion parameter (see the description of
+#'           \code{tau} is the overdispersion parameter (see the description of
 #'           \code{rho} in the Details of \code{\link{betabinom}}).}
 #'       \item{\code{model = "ash"}:}{\code{par} is an empty list.}
 #'       \item{\code{model = "s1"}:}{\code{pgeno} is the allele dosage of the parent and
@@ -407,8 +411,8 @@ flexdog <- function(refvec,
 #'
 #' @references
 #' \itemize{
-#'   \item{Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).}
-#'   \item{Gerard, D. and Ferrao, L. F. V. (2019). Priors for Genotyping Polyploids. *bioRxiv*. doi: [10.1101/751784](https://doi.org/10.1101/751784).}
+#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+#'   \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/751784}{10.1101/751784}.}
 #' }
 #'
 #' @seealso
@@ -995,6 +999,12 @@ flexdog_full <- function(refvec,
 #' \describe{
 #'   \item{\code{\link{plot_geno}}}{The underlying plotting function.}
 #'   \item{\code{\link{flexdog}}}{Creates a \code{flexdog} object.}
+#' }
+#'
+#' @references
+#' \itemize{
+#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+#'   \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/751784}{10.1101/751784}.}
 #' }
 #'
 #' @return A \code{\link[ggplot2]{ggplot}} object for the genotype plot.

@@ -11,7 +11,7 @@
 //' @param dosage The number of A alleles.
 //' @param ploidy The ploidy of the individual.
 //' @param mu The variational mean.
-//' @param sigma2 The variational variance (not standard devation).
+//' @param sigma2 The variational variance (not standard deviation).
 //' @param alpha The allele frequency.
 //' @param rho The individual's overdispersion parameter.
 //'
@@ -689,7 +689,7 @@ double obj_for_weighted_lbb(NumericVector parvec,
 }
 
 
-//' Objective funtion for updating discrete normal genotype distribution
+//' Objective function for updating discrete normal genotype distribution
 //' when \code{model = "normal"} in \code{\link{flex_update_pivec}}.
 //'
 //' @param parvec A vector of length 2. The first term is the current mean of the

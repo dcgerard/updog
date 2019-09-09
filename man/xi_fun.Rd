@@ -16,7 +16,7 @@ or the same length as p.}
 as p.}
 }
 \value{
-A vector of prababilities of the reference read adjusted
+A vector of probabilities of the reference read adjusted
     by both the sequencing error rate and the allele bias.
 }
 \description{

@@ -35,6 +35,11 @@ oracle_cor(n = 100, ploidy = ploidy, seq = 0.001,
 
 
 }
+\references{
+\itemize{
+  \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+}
+}
 \seealso{
 \code{\link{oracle_joint}} for getting \code{jd}.
     \code{\link{oracle_cor}} for not having to first calculate

@@ -27,9 +27,8 @@ sequencing error, and (possibly) outlying observations. It is named
 updog for "Using Parental Data for Offspring Genotyping" because we
 originally developed the method for full-sib populations, but it works
 now for more general populations. The method is described in detail
-[here](https://doi.org/10.1534/genetics.118.301468) and
-[here](https://doi.org/10.1101/281550). Additional details concerning 
-prior specification is described [here](https://doi.org/10.1101/751784).
+Gerard et. al. (2018) <[doi:10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468)>. Additional details concerning 
+prior specification are described in Gerard and Ferr&atilde;o (2019) <[doi:10.1101/751784](https://doi.org/10.1101/751784)>.
 
 The main function is `flexdog()`, which provides many options for the
 distribution of the genotypes in your sample. Novel genotype distributions
@@ -123,7 +122,7 @@ Please cite
 Or, using BibTex:
 ``` tex
 @article {gerard2018genotyping,
-	author = {Gerard, David and Ferr{\~a}o, Luis Felipe Ventorim and Garcia, Antonio Augusto Franco and Stephens, Matthew},
+	author = {Gerard, David and Ferr{\~a}o, Lu{\'i}s Felipe Ventorim and Garcia, Antonio Augusto Franco and Stephens, Matthew},
 	title = {Genotyping Polyploids from Messy Sequencing Data},
 	volume = {210},
 	number = {3},
@@ -137,7 +136,7 @@ Or, using BibTex:
 }
 ```
 
-If you are using the porportional normal prior class (`model = "norm"`) or 
+If you are using the proportional normal prior class (`model = "norm"`) or 
 the unimodal prior class (`model = "ash"`), then please also cite
 
 >Gerard D. & Ferr&atilde;o L. F. V. (2019). “Priors for Genotyping Polyploids.” _bioRxiv_. doi: [10.1101/751784](https://doi.org/10.1101/751784).

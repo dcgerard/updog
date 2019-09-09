@@ -50,7 +50,7 @@ dbetabinom <- function(x, size, mu, rho, log) {
 }
 
 #' The distribution function of the betabinomial. This is generally
-#' only adviseable if q is relatively small.
+#' only advisable if q is relatively small.
 #'
 #' @inheritParams dbetabinom_double
 #' @param q A quantile.
@@ -255,7 +255,7 @@ uni_em <- function(weight_vec, lmat, pi_init, lambda, itermax, obj_tol) {
 #' Objective for mixture of known dist and uniform dist.
 #'
 #' @param alpha The mixing weight.
-#' @param pvec The known distribtuion (e.g. from assuming an
+#' @param pvec The known distribution (e.g. from assuming an
 #'     F1 population).
 #' @param weight_vec A vector of weights.
 #'
@@ -500,7 +500,7 @@ grad_for_weighted_lnorm <- function(parvec, ploidy, weight_vec) {
 #' @param dosage The number of A alleles.
 #' @param ploidy The ploidy of the individual.
 #' @param mu The variational mean.
-#' @param sigma2 The variational variance (not standard devation).
+#' @param sigma2 The variational variance (not standard deviation).
 #' @param alpha The allele frequency.
 #' @param rho The individual's overdispersion parameter.
 #'
@@ -738,7 +738,7 @@ obj_for_weighted_lbb <- function(parvec, ploidy, weight_vec) {
     .Call('_updog_obj_for_weighted_lbb', PACKAGE = 'updog', parvec, ploidy, weight_vec)
 }
 
-#' Objective funtion for updating discrete normal genotype distribution
+#' Objective function for updating discrete normal genotype distribution
 #' when \code{model = "normal"} in \code{\link{flex_update_pivec}}.
 #'
 #' @param parvec A vector of length 2. The first term is the current mean of the
@@ -786,7 +786,11 @@ obj_for_weighted_lnorm <- function(parvec, ploidy, weight_vec) {
 #'
 #' @author David Gerard
 #'
-#' @references Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).
+#' @references
+#' \itemize{
+#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+#' }
+#'
 #' @examples
 #' ## Hardy-Weinberg population with allele-frequency of 0.75.
 #' ## Moderate bias and moderate overdispersion.
@@ -844,7 +848,11 @@ oracle_mis <- function(n, ploidy, seq, bias, od, dist) {
 #'
 #' @export
 #'
-#' @references Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).
+#' @references
+#' \itemize{
+#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+#' }
+#'
 #' @examples
 #' ## Hardy-Weinberg population with allele-frequency of 0.75.
 #' ## Moderate bias and moderate overdispersion.
@@ -890,7 +898,11 @@ oracle_mis_vec <- function(n, ploidy, seq, bias, od, dist) {
 #'     the columns. This is when
 #'     using an oracle estimator.
 #'
-#' @references Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).
+#' @references
+#' \itemize{
+#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+#' }
+#'
 #' @examples
 #' ## Hardy-Weinberg population with allele-frequency of 0.75.
 #' ## Moderate bias and moderate overdispersion.
@@ -1118,7 +1130,7 @@ xi_double <- function(p, eps, h) {
 #' @param h The allele bias. Must either be of length 1 or the same length
 #'     as p.
 #'
-#' @return A vector of prababilities of the reference read adjusted
+#' @return A vector of probabilities of the reference read adjusted
 #'     by both the sequencing error rate and the allele bias.
 #'
 #' @author David Gerard

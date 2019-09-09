@@ -17,7 +17,11 @@
 #'
 #' @inheritParams oracle_mis
 #'
-#' @references Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).
+#' @references
+#' \itemize{
+#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+#' }
+#'
 #' @export
 #'
 #' @author David Gerard
@@ -96,6 +100,11 @@ oracle_cor <- function(n,
 #'
 #' @export
 #'
+#' @references
+#' \itemize{
+#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+#' }
+#'
 #' @author David Gerard
 #'
 #' @examples
@@ -145,6 +154,11 @@ oracle_cor_from_joint <- function(jd) {
 #'
 #' @export
 #'
+#' @references
+#' \itemize{
+#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+#' }
+#'
 #' @seealso \code{\link{oracle_joint}} for getting \code{jd}.
 #'     \code{\link{oracle_mis}} for not having to first calculate
 #'     \code{jd}.
@@ -181,6 +195,11 @@ oracle_mis_from_joint <- function(jd) {
 #' @author David Gerard
 #'
 #' @export
+#'
+#' @references
+#' \itemize{
+#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+#' }
 #'
 #' @seealso \code{\link{oracle_joint}} for getting \code{jd}.
 #'     \code{\link{oracle_mis_vec}} for not having to first calculate
@@ -229,6 +248,11 @@ oracle_mis_vec_from_joint <- function(jd) {
 #'     with the estimated genotype. Both of these quantities may be derived from the joint distribution.
 #'
 #' @export
+#'
+#' @references
+#' \itemize{
+#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+#' }
 #'
 #' @seealso \code{\link{oracle_joint}} for obtaining \code{jd}.
 #'

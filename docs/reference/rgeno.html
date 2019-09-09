@@ -8,21 +8,25 @@
 
 <title>Simulate individual genotypes from one of the supported <code><a href='flexdog.html'>flexdog</a></code> models. — rgeno • updog</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,11 +34,13 @@
 
 
 
-<meta property="og:title" content="Simulate individual genotypes from one of the supported <code><a href='flexdog.html'>flexdog</a></code> models. — rgeno" />
 
+<meta property="og:title" content="Simulate individual genotypes from one of the supported <code><a href='flexdog.html'>flexdog</a></code> models. — rgeno" />
 <meta property="og:description" content="This will simulate genotypes of a sample of individuals drawn from one of the populations supported by
-flexdog. See the details of flexdog for the models allowed." />
+flexdog. See the details of flexdog for the models allowed. These genotype
+distributions are described in detail in Gerard and Ferrão (2019)." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -46,6 +52,7 @@ flexdog. See the details of flexdog for the models allowed." />
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -72,7 +79,7 @@ flexdog. See the details of flexdog for the models allowed." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,8 +107,10 @@ flexdog. See the details of flexdog for the models allowed." />
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -111,6 +120,7 @@ flexdog. See the details of flexdog for the models allowed." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -122,18 +132,17 @@ flexdog. See the details of flexdog for the models allowed." />
     </div>
 
     <div class="ref-description">
-    
     <p>This will simulate genotypes of a sample of individuals drawn from one of the populations supported by
-<code><a href='flexdog.html'>flexdog</a></code>. See the details of <code><a href='flexdog.html'>flexdog</a></code> for the models allowed.</p>
-    
+<code><a href='flexdog.html'>flexdog</a></code>. See the details of <code><a href='flexdog.html'>flexdog</a></code> for the models allowed. These genotype
+distributions are described in detail in Gerard and Ferrão (2019).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rgeno</span>(<span class='no'>n</span>, <span class='no'>ploidy</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"hw"</span>, <span class='st'>"bb"</span>, <span class='st'>"norm"</span>, <span class='st'>"ash"</span>, <span class='st'>"f1"</span>, <span class='st'>"s1"</span>, <span class='st'>"f1pp"</span>,
+    <pre class="usage"><span class='fu'>rgeno</span>(<span class='no'>n</span>, <span class='no'>ploidy</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hw"</span>, <span class='st'>"bb"</span>, <span class='st'>"norm"</span>, <span class='st'>"ash"</span>, <span class='st'>"f1"</span>, <span class='st'>"s1"</span>, <span class='st'>"f1pp"</span>,
   <span class='st'>"s1pp"</span>, <span class='st'>"flex"</span>, <span class='st'>"uniform"</span>), <span class='kw'>allele_freq</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>od</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>p1geno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>p2geno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pivec</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>mu</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>p1_pair_weights</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>p2_pair_weights</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -215,11 +224,10 @@ parent.
 This should be <code>NULL</code> for all other values of <code>model</code>.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A vector of length <code>n</code> with the genotypes of the sampled individuals.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The allowable variable values of <code>allele_freq</code>, <code>od</code>, <code>p1geno</code>, <code>p2geno</code>, <code>pivec</code>,
@@ -231,14 +239,14 @@ If <code>model = "s1"</code> then only <code>p1geno</code> can be non-<code>NULL
 none of the above variables can be non-<code>NULL</code>. If <code>model = "bb"</code>, then only <code>allele_freq</code>,
 and <code>od</code> can be non-<code>NULL</code>. If <code>model == "norm"</code>, then only <code>mu</code> and <code>sigma</code>
 can be non-<code>NULL</code>.</p>
-    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <ul>
-<li><p>Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., &amp; Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).</p></li>
-<li><p>Gerard, D. and Ferrao, L. F. V. (2019). Priors for Genotyping Polyploids. *bioRxiv*. doi: [10.1101/751784](https://doi.org/10.1101/751784).</p></li>
-</ul>
     
+<ul>
+<li><p>Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., &amp; Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. <em>Genetics</em>, 210(3), 789-807. doi: <a href='https://doi.org/10.1534/genetics.118.301468'>10.1534/genetics.118.301468</a>.</p></li>
+<li><p>Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. <em>bioRxiv</em>. doi: <a href='https://doi.org/10.1101/751784'>10.1101/751784</a>.</p></li>
+</ul>
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>## F1 Population where parent 1 has 1 copy of the referenc allele</span>
@@ -254,13 +262,9 @@ can be non-<code>NULL</code>.</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-
       <li><a href="#references">References</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -269,19 +273,23 @@ can be non-<code>NULL</code>.</p>
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by David Gerard.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

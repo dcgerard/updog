@@ -3,7 +3,8 @@
 #' Simulate individual genotypes from one of the supported \code{\link{flexdog}} models.
 #'
 #' This will simulate genotypes of a sample of individuals drawn from one of the populations supported by
-#' \code{\link{flexdog}}. See the details of \code{\link{flexdog}} for the models allowed.
+#' \code{\link{flexdog}}. See the details of \code{\link{flexdog}} for the models allowed. These genotype
+#' distributions are described in detail in Gerard and Ferrão (2019).
 #'
 #' The allowable variable values of \code{allele_freq}, \code{od}, \code{p1geno}, \code{p2geno}, \code{pivec},
 #' and \code{mode} varies based on the value of \code{model}. If \code{model = "ash"}, then only
@@ -59,8 +60,8 @@
 #'
 #' @references
 #' \itemize{
-#'   \item{Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).}
-#'   \item{Gerard, D. and Ferrao, L. F. V. (2019). Priors for Genotyping Polyploids. *bioRxiv*. doi: [10.1101/751784](https://doi.org/10.1101/751784).}
+#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+#'   \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/751784}{10.1101/751784}.}
 #' }
 #'
 #' @export
@@ -318,7 +319,8 @@ rgeno <- function(n,
 #' Simulate GBS data from the \code{\link{flexdog}} likelihood.
 #'
 #' This will take a vector of genotypes and a vector of total read-counts, then generate a vector of reference
-#' counts. To get the genotypes, you could use \code{\link{rgeno}}.
+#' counts. To get the genotypes, you could use \code{\link{rgeno}}. The likelihood used to generate read-counts
+#' is described in detail in Gerard et. al. (2018).
 #'
 #' @param sizevec A vector of total read-counts for the individuals.
 #' @param geno A vector of genotypes for the individuals. I.e. the number of reference alleles
@@ -337,8 +339,8 @@ rgeno <- function(n,
 #'
 #' @references
 #' \itemize{
-#'   \item{Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).}
-#'   \item{Gerard, D. and Ferrao, L. F. V. (2019). Priors for Genotyping Polyploids. *bioRxiv*. doi: [10.1101/751784](https://doi.org/10.1101/751784).}
+#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+#'   \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/751784}{10.1101/751784}.}
 #' }
 #'
 #' @export

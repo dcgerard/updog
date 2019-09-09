@@ -12,7 +12,7 @@
     \item{size}{The total number of read-counts at a given SNP.}
 }}
 \source{
-\url{http://sweetpotato-garden.kazusa.or.jp/}
+\url{https://doi.org/10.1038/srep44207}
 }
 \usage{
 snpdat
@@ -22,11 +22,12 @@ A \code{\link[tibble]{tibble}}. See the Format Section.
 }
 \description{
 Contains counts of reference alleles and total read counts from the GBS data of Shirasawa et al (2017) for
-the three SNP's used as examples in Gerard, Ferrao, and Stephens (2017).
+the three SNP's used as examples in Gerard et. al. (2018).
 }
 \references{
-Shirasawa, Kenta, Masaru Tanaka, Yasuhiro Takahata, Daifu Ma, Qinghe Cao, Qingchang Liu, Hong Zhai et al. "A high-density SNP genetic map consisting of a complete set of homologous groups in autohexaploid sweetpotato (Ipomoea batatas)." Scientific Reports 7 (2017). DOI: 10.1038/srep44207
-
-  Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).
+\itemize{
+  \item{Shirasawa, Kenta, Masaru Tanaka, Yasuhiro Takahata, Daifu Ma, Qinghe Cao, Qingchang Liu, Hong Zhai, Sang-Soo Kwak, Jae Cheol Jeong, Ung-Han Yoon, Hyeong-Un Lee, Hideki Hirakawa, and Sahiko Isobe "A high-density SNP genetic map consisting of a complete set of homologous groups in autohexaploid sweetpotato (Ipomoea batatas)." \emph{Scientific Reports 7} (2017). DOI: 10.1038/srep44207}
+  \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+}
 }
 \keyword{datasets}

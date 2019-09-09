@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Parallelized Genotyping using Updog • updog</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Parallelized Genotyping using Updog">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
@@ -38,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -66,6 +67,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
 </div>
@@ -76,13 +80,14 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Parallelized Genotyping using Updog</h1>
                         <h4 class="author">David Gerard</h4>
             
-            <h4 class="date">2019-09-02</h4>
+            <h4 class="date">2019-09-09</h4>
       
       
       <div class="hidden name"><code>parallel_computing.Rmd</code></div>
@@ -100,22 +105,22 @@
 <h1 class="hasAnchor">
 <a href="#analysis" class="anchor"></a>Analysis</h1>
 <p>Before we begin, we’ll need to load the <code>parallel</code>, <code>foreach</code>, and <code>doParallel</code> packages. There are other ways to perform parallel computation in R, but we find these to be pretty handy and easy to use.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(parallel)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(foreach)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(doParallel)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(parallel)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(foreach)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(doParallel)</a></code></pre></div>
 <p>Of course, we’ll need to load the <code>updog</code> package to actually do the genotyping.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(updog)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(updog)</a></code></pre></div>
 <p>We’ll work with the <code>uitedewilligen</code> dataset, which is a subset of the data from <span class="citation">Uitdewilligen (2013)</span>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(<span class="st">"uitdewilligen"</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">ngenes &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">ncol</a></span>(uitdewilligen<span class="op">$</span>refmat)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"uitdewilligen"</span>)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">ngenes &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(uitdewilligen<span class="op">$</span>refmat)</a></code></pre></div>
 <p>You can read more about these data by typing <code><a href="../reference/uitdewilligen.html">?uitdewilligen</a></code> in R.</p>
 <p>Suppose we wanted to use parallel computing to genotype this individual. Also suppose we only wanted the MAP (maximum a posteriori) estimated genotypes for each individual and each gene. Then we can use the following code.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">nc &lt;-<span class="st"> </span><span class="dv">2</span> <span class="co">## number of cores. </span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">        <span class="co">## You should change this for your specific computing environment.</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">cl &lt;-<span class="st"> </span>parallel<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/parallel/topics/makeCluster">makeCluster</a></span>(nc)</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">doParallel<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/doParallel/topics/registerDoParallel">registerDoParallel</a></span>(<span class="dt">cl =</span> cl)</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/stopifnot">stopifnot</a></span>(foreach<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/foreach/topics/getDoParWorkers">getDoParWorkers</a></span>() <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>) <span class="co">## make sure cluster is set up.</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">gene_est &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/foreach/topics/foreach">foreach</a></span>(<span class="dt">i =</span> <span class="dv">1</span><span class="op">:</span>ngenes, </a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">cl &lt;-<span class="st"> </span>parallel<span class="op">::</span><span class="kw"><a href="https://rdrr.io/r/parallel/makeCluster.html">makeCluster</a></span>(nc)</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">doParallel<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html">registerDoParallel</a></span>(<span class="dt">cl =</span> cl)</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span>(foreach<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/foreach/man/getDoParWorkers.html">getDoParWorkers</a></span>() <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>) <span class="co">## make sure cluster is set up.</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">gene_est &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/foreach/man/foreach.html">foreach</a></span>(<span class="dt">i =</span> <span class="dv">1</span><span class="op">:</span>ngenes, </a>
 <a class="sourceLine" id="cb4-7" data-line-number="7">                    <span class="dt">.combine =</span> cbind, </a>
 <a class="sourceLine" id="cb4-8" data-line-number="8">                    <span class="dt">.export =</span> <span class="st">"flexdog"</span>) <span class="op">%dopar%</span><span class="st"> </span>{</a>
 <a class="sourceLine" id="cb4-9" data-line-number="9">                      <span class="co">## fit flexdog</span></a>
@@ -126,15 +131,15 @@
 <a class="sourceLine" id="cb4-14" data-line-number="14">                                      <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb4-15" data-line-number="15">                      fout<span class="op">$</span>geno</a>
 <a class="sourceLine" id="cb4-16" data-line-number="16">                      }</a>
-<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="kw"><a href="https://www.rdocumentation.org/packages/parallel/topics/makeCluster">stopCluster</a></span>(cl)</a></code></pre></div>
+<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="kw"><a href="https://rdrr.io/r/parallel/makeCluster.html">stopCluster</a></span>(cl)</a></code></pre></div>
 <p>Note that I used <code>model = "norm"</code> <span class="citation">(Gerard and Ferrão 2019)</span> because we have a very small number of samples.</p>
 <p>However, this doesn’t return any sort of diagnostic statistics for each SNP. So suppose we now want to save all of the output of each SNP and not just the MAP genotype, then we can use the following code:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">nc &lt;-<span class="st"> </span><span class="dv">2</span> <span class="co">## number of cores. </span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">        <span class="co">## You should change this for your specific computing environment.</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">cl &lt;-<span class="st"> </span>parallel<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/parallel/topics/makeCluster">makeCluster</a></span>(nc)</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">doParallel<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/doParallel/topics/registerDoParallel">registerDoParallel</a></span>(<span class="dt">cl =</span> cl)</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/stopifnot">stopifnot</a></span>(foreach<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/foreach/topics/getDoParWorkers">getDoParWorkers</a></span>() <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>) <span class="co">## make sure cluster is set up.</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">glist &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/foreach/topics/foreach">foreach</a></span>(<span class="dt">i =</span> <span class="dv">1</span><span class="op">:</span>ngenes, </a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">cl &lt;-<span class="st"> </span>parallel<span class="op">::</span><span class="kw"><a href="https://rdrr.io/r/parallel/makeCluster.html">makeCluster</a></span>(nc)</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">doParallel<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html">registerDoParallel</a></span>(<span class="dt">cl =</span> cl)</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span>(foreach<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/foreach/man/getDoParWorkers.html">getDoParWorkers</a></span>() <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>) <span class="co">## make sure cluster is set up.</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">glist &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/foreach/man/foreach.html">foreach</a></span>(<span class="dt">i =</span> <span class="dv">1</span><span class="op">:</span>ngenes, </a>
 <a class="sourceLine" id="cb5-7" data-line-number="7">                 <span class="dt">.export =</span> <span class="st">"flexdog"</span>) <span class="op">%dopar%</span><span class="st"> </span>{</a>
 <a class="sourceLine" id="cb5-8" data-line-number="8">                   <span class="co">## fit flexdog</span></a>
 <a class="sourceLine" id="cb5-9" data-line-number="9">                   fout &lt;-<span class="st"> </span><span class="kw"><a href="../reference/flexdog.html">flexdog</a></span>(<span class="dt">refvec  =</span> uitdewilligen<span class="op">$</span>refmat[, i], </a>
@@ -144,10 +149,10 @@
 <a class="sourceLine" id="cb5-13" data-line-number="13">                                   <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb5-14" data-line-number="14">                   fout</a>
 <a class="sourceLine" id="cb5-15" data-line-number="15">                   }</a>
-<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="kw"><a href="https://www.rdocumentation.org/packages/parallel/topics/makeCluster">stopCluster</a></span>(cl)</a></code></pre></div>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="kw"><a href="https://rdrr.io/r/parallel/makeCluster.html">stopCluster</a></span>(cl)</a></code></pre></div>
 <p>Returning the diagnostics for each SNP is pretty easy. For example, below we extract the variable <code>prop_mis</code> from the list <code>glist</code> and make a histogram of these values.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(tidyverse)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">prop_mis &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/lapply">sapply</a></span>(<span class="dt">X =</span> glist, <span class="dt">FUN =</span> <span class="cf">function</span>(x) x<span class="op">$</span>prop_mis)</a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyverse)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">prop_mis &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(<span class="dt">X =</span> glist, <span class="dt">FUN =</span> <span class="cf">function</span>(x) x<span class="op">$</span>prop_mis)</a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw">qplot</span>(prop_mis, </a>
 <a class="sourceLine" id="cb6-4" data-line-number="4">      <span class="dt">xlab =</span> <span class="st">"Posterior Proportion Mis-genotyped"</span>, </a>
 <a class="sourceLine" id="cb6-5" data-line-number="5">      <span class="dt">bins =</span> <span class="dv">30</span>) <span class="op">+</span></a>
@@ -172,6 +177,7 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -186,17 +192,20 @@
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by David Gerard.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

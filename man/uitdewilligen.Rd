@@ -24,7 +24,9 @@ A list containing a matrix of reference counts, a matrix of total counts, and th
 This is a subset of the data from Uitdewilligen et al (2013).
 }
 \references{
-Uitdewilligen, J. G., Wolters, A. M. A., Bjorn, B., Borm, T. J., Visser, R. G., & van Eck, H. J. (2013). \href{https://doi.org/10.1371/journal.pone.0062355}{A next-generation sequencing method for genotyping-by-sequencing of highly heterozygous autotetraploid potato.} PLoS One, 8(5), e62355.
+\itemize{
+  \item{Uitdewilligen, J. G., Wolters, A. M. A., Bjorn, B., Borm, T. J., Visser, R. G., & van Eck, H. J. (2013). \href{https://doi.org/10.1371/journal.pone.0062355}{A next-generation sequencing method for genotyping-by-sequencing of highly heterozygous autotetraploid potato.} \emph{PLoS One}, 8(5), e62355.}
+}
 }
 \seealso{
 \code{\link{mupout}}: a mupdog fit of these data.

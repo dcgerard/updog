@@ -191,7 +191,7 @@ NumericVector dbetabinom(IntegerVector x, IntegerVector size,
 
 
 //' The distribution function of the betabinomial. This is generally
-//' only adviseable if q is relatively small.
+//' only advisable if q is relatively small.
 //'
 //' @inheritParams dbetabinom_double
 //' @param q A quantile.

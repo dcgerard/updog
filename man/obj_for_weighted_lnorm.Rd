@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{obj_for_weighted_lnorm}
 \alias{obj_for_weighted_lnorm}
-\title{Objective funtion for updating discrete normal genotype distribution
+\title{Objective function for updating discrete normal genotype distribution
 when \code{model = "normal"} in \code{\link{flex_update_pivec}}.}
 \usage{
 obj_for_weighted_lnorm(parvec, ploidy, weight_vec)
@@ -22,7 +22,7 @@ A double. The objective when updating the normal
     genotype distribution in \code{\link{mupdog}}.
 }
 \description{
-Objective funtion for updating discrete normal genotype distribution
+Objective function for updating discrete normal genotype distribution
 when \code{model = "normal"} in \code{\link{flex_update_pivec}}.
 }
 \author{

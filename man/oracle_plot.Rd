@@ -33,6 +33,11 @@ pl <- oracle_plot(jd = jd)
 print(pl)
 
 }
+\references{
+\itemize{
+  \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+}
+}
 \seealso{
 \code{\link{oracle_joint}} for obtaining \code{jd}.
 }

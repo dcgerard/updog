@@ -351,7 +351,7 @@ arma::vec uni_em(arma::vec weight_vec,
 //' Objective for mixture of known dist and uniform dist.
 //'
 //' @param alpha The mixing weight.
-//' @param pvec The known distribtuion (e.g. from assuming an
+//' @param pvec The known distribution (e.g. from assuming an
 //'     F1 population).
 //' @param weight_vec A vector of weights.
 //'

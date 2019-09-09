@@ -9,7 +9,7 @@ f1_obj(alpha, pvec, weight_vec)
 \arguments{
 \item{alpha}{The mixing weight.}
 
-\item{pvec}{The known distribtuion (e.g. from assuming an
+\item{pvec}{The known distribution (e.g. from assuming an
 F1 population).}
 
 \item{weight_vec}{A vector of weights.}

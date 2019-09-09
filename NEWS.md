@@ -1,3 +1,10 @@
+# updog 1.1.1
+
+- Updates documentation to include Gerard and Ferrão (2019) 
+  \<[doi:10.1101/751784](https://doi.org/10.1101/751784)\>
+  as a reference.
+- Minor fixes to documentation.
+
 # updog 1.1.0
 
 - Introduces more flexible priors for more general populations.

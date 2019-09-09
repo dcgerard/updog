@@ -85,9 +85,9 @@
 #'
 #' @references
 #' \itemize{
-#' \item{David J Balding and Richard A Nichols. \href{http://dx.doi.org/10.1038/sj.hdy.6881750}{Significant genetic correlations among caucasians at forensic DNA loci}. Heredity, 78(6):583–589, 1997. doi: 10.1038/sj.hdy.6881750.}
-#' \item{Paul D Blischak, Laura S Kubatko, and Andrea D Wolfe. \href{http://dx.doi.org/10.1093/bioinformatics/btx587}{SNP genotyping and parameter estimation in polyploids using low-coverage sequencing data}. Bioinformatics, page btx587, 2017. doi: 10.1093/bioinformatics/btx587.}
-#' \item{Gerard, D., Ferrao, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. *Genetics*, 210(3), 789-807. doi: [10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468).}
+#'   \item{David J Balding and Richard A Nichols. \href{http://dx.doi.org/10.1038/sj.hdy.6881750}{Significant genetic correlations among caucasians at forensic DNA loci}. \emph{Heredity}, 78(6):583–589, 1997. doi: 10.1038/sj.hdy.6881750.}
+#'   \item{Paul D Blischak, Laura S Kubatko, and Andrea D Wolfe. \href{http://dx.doi.org/10.1093/bioinformatics/btx587}{SNP genotyping and parameter estimation in polyploids using low-coverage sequencing data}. \emph{Bioinformatics}, page btx587, 2017. doi: 10.1093/bioinformatics/btx587.}
+#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
 #' }
 #'
 #' @export

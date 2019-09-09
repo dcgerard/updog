@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Derivative of $$-log(\epsilon(1 - \epsilon)) - (logit(\epsilon) - \mu_{\epsilon})^2 / (2\sigma_{\epsilon}^2)$$
-with respect to \(\epsilon\). — dpen_deps • updog</title>
+<title>Changelog • updog</title>
 
 
 <!-- jquery -->
@@ -36,11 +35,7 @@ with respect to \(\epsilon\). — dpen_deps • updog</title>
 
 
 
-<meta property="og:title" content="Derivative of $$-log(\epsilon(1 - \epsilon)) - (logit(\epsilon) - \mu_{\epsilon})^2 / (2\sigma_{\epsilon}^2)$$
-with respect to \(\epsilon\). — dpen_deps" />
-<meta property="og:description" content="Derivative of $$-log(\epsilon(1 - \epsilon)) - (logit(\epsilon) - \mu_{\epsilon})^2 / (2\sigma_{\epsilon}^2)$$
-with respect to \(\epsilon\)." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Changelog" />
 
 
 
@@ -59,7 +54,7 @@ with respect to \(\epsilon\)." />
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -127,55 +122,76 @@ with respect to \(\epsilon\)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Derivative of $$-log(\epsilon(1 - \epsilon)) - (logit(\epsilon) - \mu_{\epsilon})^2 / (2\sigma_{\epsilon}^2)$$
-with respect to \(\epsilon\).</h1>
-    
-    <div class="hidden name"><code>dpen_deps.Rd</code></div>
+      <h1>Changelog <small></small></h1>
+      
     </div>
 
-    <div class="ref-description">
-    <p>Derivative of $$-log(\epsilon(1 - \epsilon)) - (logit(\epsilon) - \mu_{\epsilon})^2 / (2\sigma_{\epsilon}^2)$$
-with respect to \(\epsilon\).</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>dpen_deps</span>(<span class='no'>eps</span>, <span class='no'>mu_eps</span>, <span class='no'>sigma2_eps</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>eps</th>
-      <td><p>The current sequencing error rate.</p></td>
-    </tr>
-    <tr>
-      <th>mu_eps</th>
-      <td><p>The mean of the logit of the sequencing error rate.</p></td>
-    </tr>
-    <tr>
-      <th>sigma2_eps</th>
-      <td><p>The variance of the logit of the sequencing error rate.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A double.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='pen_seq_error.html'>pen_seq_error</a></code> which this is a derivative for.</p></div>
-
+    <div id="updog-1-1-1" class="section level1">
+<h1 class="page-header">
+<a href="#updog-1-1-1" class="anchor"></a>updog 1.1.1<small> Unreleased </small>
+</h1>
+<ul>
+<li>Updates documentation to include Gerard and Ferrão (2019) &lt;<a href="https://doi.org/10.1101/751784">doi:10.1101/751784</a>&gt; as a reference.</li>
+<li>Minor fixes to documentation.</li>
+</ul>
+</div>
+    <div id="updog-1-1-0" class="section level1">
+<h1 class="page-header">
+<a href="#updog-1-1-0" class="anchor"></a>updog 1.1.0<small> 2019-07-31 </small>
+</h1>
+<ul>
+<li>Introduces more flexible priors for more general populations.</li>
+<li>Places a normal prior distribution on the logit of the overdispersion parameter. This might change genotype calls from previous versions of updog. To reproduce the genotype calls from previous versions of updog, simply set <code>mean_od = 0</code> and <code>var_od = Inf</code> in <code><a href="../reference/flexdog.html">flexdog()</a></code>.</li>
+<li>Adds the <code>method = "custom"</code> option to <code><a href="../reference/flexdog.html">flexdog()</a></code>. This lets users choose the genotype distribution if it is completely known a priori.</li>
+<li>Documentation updates.</li>
+</ul>
+</div>
+    <div id="updog-1-0-1" class="section level1">
+<h1 class="page-header">
+<a href="#updog-1-0-1" class="anchor"></a>updog 1.0.1<small> 2018-07-27 </small>
+</h1>
+<ul>
+<li>Fixes a bug with option <code>model = "s1pp"</code> in <code><a href="../reference/flexdog.html">flexdog()</a></code>. I was originally not constraining the levels of preferential pairing to be the same in both segregations of the same parent. This is now fixed. But the downside is that <code>model = "s1pp"</code> is now only supported for <code>ploidy = 4</code> or <code>ploidy = 6</code>. This is because the optimization becomes more difficult for larger ploidy levels.</li>
+<li>
+<p>I fixed some documentation. Perhaps the biggest error comes from this snippet from the original documentation of <code>flexdog</code>:</p>
+<blockquote>
+<p>The value of <code>prop_mis</code> is a very intuitive measure for the quality of the SNP. <code>prop_mis</code> is the posterior proportion of individuals mis-genotyped. So if you want only SNPS that accurately genotype, say, 95% of the individuals, you could discard all SNPs with a <code>prop_mis</code> under 0.95.</p>
+</blockquote>
+<p>This now says</p>
+<blockquote>
+<p>The value of prop_mis is a very intuitive measure for the quality of the SNP. prop_mis is the posterior proportion of individuals mis-genotyped. So if you want only SNPS that accurately genotype, say, 95% of the individuals, you could discard all SNPs with a prop_mis <strong>over 0.05</strong>.</p>
+</blockquote>
+</li>
+<li><p>I’ve now exported some C++ functions that I think are useful. You can call them in the usual way: <a href="http://r-pkgs.had.co.nz/src.html#cpp-import" class="uri">http://r-pkgs.had.co.nz/src.html#cpp-import</a>.</p></li>
+</ul>
+</div>
+    <div id="updog-0-99-0" class="section level1">
+<h1 class="page-header">
+<a href="#updog-0-99-0" class="anchor"></a>updog 0.99.0<small> Unreleased </small>
+</h1>
+<ul>
+<li>This is a complete re-working of the code in <code>updog</code>. The old version may be found in the <a href="https://github.com/dcgerard/updogAlpha"><code>updogAlpha</code> package</a>.</li>
+<li>The main function is now <code><a href="../reference/flexdog.html">flexdog()</a></code>.</li>
+<li>An experimental approach <code><a href="../reference/mupdog.html">mupdog()</a></code> is now live. We provide no guarantees about <code><a href="../reference/mupdog.html">mupdog()</a></code>’s performance.</li>
+<li>Oracle misclassification error rates may be calculated in <code><a href="../reference/oracle_mis.html">oracle_mis()</a></code>.</li>
+<li>Genotypes can be simulated using <code><a href="../reference/rgeno.html">rgeno()</a></code>.</li>
+<li>Next-generation sequencing data can be simulated using <code><a href="../reference/rflexdog.html">rflexdog()</a></code>.</li>
+</ul>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>David Gerard</p>
+    <div id="tocnav">
+      <h2>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="#updog-1-1-1">1.1.1</a></li>
+        <li><a href="#updog-1-1-0">1.1.0</a></li>
+        <li><a href="#updog-1-0-1">1.0.1</a></li>
+        <li><a href="#updog-0-99-0">0.99.0</a></li>
+      </ul>
+    </div>
   </div>
+
 </div>
 
 
