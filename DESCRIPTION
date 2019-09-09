@@ -15,7 +15,7 @@ Description: Implements empirical Bayes approaches to genotype
        functions are useful for read depth calculations. Run
        browseVignettes(package = "updog") in R for example usage. See
        Gerard et al. (2018) <doi:10.1534/genetics.118.301468> and
-       Gerard and Ferrão (2019) <doi:10.1101/751784> for details on the
+       Gerard and Ferrao (2019) <doi:10.1101/751784> for details on the
        implemented methods.
 Depends: R (>= 3.4.0)
 License: GPL-3
