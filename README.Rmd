@@ -71,7 +71,7 @@ and [polyRAD](https://cran.r-project.org/package=polyRAD). Our best
 [polyRAD](https://cran.r-project.org/package=polyRAD) has some nice ideas
 for utilizing population structure and linkage disequilibrium.
 
-See [NEWS](NEWS.md) for the latest updates on the package.
+See [NEWS](https://github.com/dcgerard/updog/blob/master/NEWS.md) for the latest updates on the package.
 
 ## Vignettes
 
