@@ -152,7 +152,7 @@ Or, using BibTex:
 ``` tex
 @article{gerard2019priors,
     author = {Gerard, David and Ferr{\~a}o, Lu{\'i}s Felipe Ventorim},
-    title = "{Priors for Genotyping Polyploids}",
+    title = {Priors for Genotyping Polyploids},
     journal = {Bioinformatics},
     year = {2019},
     month = {11},
