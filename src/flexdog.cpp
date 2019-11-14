@@ -14,6 +14,8 @@
 //'
 //' @seealso \code{\link{flexdog}} where this is used.
 //'
+//' @keywords internal
+//'
 // [[Rcpp::export]]
 NumericVector get_probk_vec(NumericVector pivec, std::string model, double mode) {
   int K = pivec.length() - 1;
@@ -58,6 +60,8 @@ NumericVector get_probk_vec(NumericVector pivec, std::string model, double mode)
 //'
 //' @author David Gerard
 //'
+//' @keywords internal
+//'
 // [[Rcpp::export]]
 NumericMatrix get_inner_weights(int ploidy, double mode) {
   NumericMatrix inner_weights(ploidy + 1, ploidy + 1);
@@ -94,6 +98,8 @@ NumericMatrix get_inner_weights(int ploidy, double mode) {
 //'     (and is indeed the E-step) in \code{\link{flexdog_full}}.
 //'
 //' @author David Gerard
+//'
+//' @keywords internal
 //'
 //' @seealso \code{\link{flexdog}} for the full EM algorithm.
 //'
@@ -142,6 +148,8 @@ NumericMatrix get_wik_mat(NumericVector probk_vec,
 //' @param probk_vec The kth element is the prior probability of genotype k (when starting to count from 0).
 //'
 //' @author David Gerard
+//'
+//' @keywords internal
 //'
 //' @return The objective (marginal log-likelihood) used in
 //'     \code{\link{flexdog_full}}.
@@ -201,6 +209,8 @@ double flexdog_obj(NumericVector probk_vec,
 //'
 //' @author David Gerard
 //'
+//' @keywords internal
+//'
 //' @return The objective optimized by \code{\link{uni_em}} during
 //'     that separate unimodal EM algorithm.
 //'
@@ -251,6 +261,8 @@ double uni_obj(arma::vec pivec,
 //'     \code{\link{flexdog_full}}.
 //'
 //' @author David Gerard
+//'
+//' @keywords internal
 //'
 // [[Rcpp::export]]
 arma::vec uni_em(arma::vec weight_vec,
@@ -359,6 +371,8 @@ arma::vec uni_em(arma::vec weight_vec,
 //'     or \code{model = "s1"} in \code{\link{flexdog_full}}.
 //'
 //' @author David Gerard
+//'
+//' @keywords internal
 //'
 // [[Rcpp::export]]
 double f1_obj(double alpha,

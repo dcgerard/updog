@@ -412,7 +412,7 @@ flexdog <- function(refvec,
 #' @references
 #' \itemize{
 #'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
-#'   \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/751784}{10.1101/751784}.}
+#'   \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{Bioinformatics}. doi: \href{https://doi.org/10.1093/bioinformatics/btz852}{10.1093/bioinformatics/btz852}.}
 #' }
 #'
 #' @seealso
@@ -1004,7 +1004,7 @@ flexdog_full <- function(refvec,
 #' @references
 #' \itemize{
 #'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
-#'   \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/751784}{10.1101/751784}.}
+#'   \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{Bioinformatics}. doi: \href{https://doi.org/10.1093/bioinformatics/btz852}{10.1093/bioinformatics/btz852}.}
 #' }
 #'
 #' @return A \code{\link[ggplot2]{ggplot}} object for the genotype plot.
@@ -1070,6 +1070,8 @@ is.flexdog <- function(x) {
 #'
 #' @return A vector of numerics. The initial value of \code{pivec}
 #'     used in \code{\link{flexdog_full}}.
+#'
+#' @keywords internal
 #'
 #' @author David Gerard
 initialize_pivec <- function(ploidy,
@@ -1143,6 +1145,8 @@ initialize_pivec <- function(ploidy,
 #'   \item{\code{pivec}}{The estimate of the genotype distribution.}
 #'   \item{\code{par}}{A list of estimated parameters. An empty list if the model does not contain any parameters other than \code{pivec}.}
 #' }
+#'
+#' @keywords internal
 #'
 #' @author David Gerard
 flex_update_pivec <- function(weight_vec,
@@ -1350,6 +1354,8 @@ flex_update_pivec <- function(weight_vec,
 #' \item{\code{mode}}{The central value of the unimodal distribution.}
 #' }
 #'
+#' @keywords internal
+#'
 #' @author David Gerard
 #'
 get_uni_rep <- function(probvec) {
@@ -1391,6 +1397,8 @@ get_uni_rep <- function(probvec) {
 #' @return A penalty on the ash mixing weights.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 #'
 ashpen_fun <- function(lambda, pivec) {
   lambda * sum(log(pivec))
@@ -1464,6 +1472,8 @@ get_q_array <- function(ploidy) {
 #'     c("aaa", "Aaa", "AAa", "AAA")
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 #'
 #'
 get_dimname <- function(ploidy) {

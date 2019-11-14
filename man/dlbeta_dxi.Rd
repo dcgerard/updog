@@ -26,3 +26,4 @@ mean of the underlying beta.
 \author{
 David Gerard
 }
+\keyword{internal}

@@ -19,6 +19,8 @@
 #'
 #' @author David Gerard
 #'
+#' @keywords internal
+#'
 #' @seealso \code{\link{update_dr}}
 update_pp_f1 <- function(weight_vec, ## only accepts f1pp now
                          control) {
@@ -437,6 +439,8 @@ update_pp_f1 <- function(weight_vec, ## only accepts f1pp now
 #'
 #' @inherit update_pp_f1
 #'
+#' @keywords internal
+#'
 #' @seealso \code{\link{update_pp_f1}}
 update_pp_s1 <- function(weight_vec,
                          control) {
@@ -537,6 +541,8 @@ s1pp_brent_obj <- function(first_pair_weight, control_list, weight_vec, pgeno) {
 #'
 #' @author David Gerard
 #'
+#' @keywords internal
+#'
 get_conv_inner_weights <- function(psegprob, psegmat) {
   assertthat::are_equal(length(psegprob), ncol(psegmat))
 
@@ -567,6 +573,8 @@ get_conv_inner_weights <- function(psegprob, psegmat) {
 #'
 #' @return A vector. The ith element is the probability of
 #'     segregating i+1 total A alleles.
+#'
+#' @keywords internal
 #'
 #' @seealso This is mostly used in \code{\link{update_pp_f1}}.
 #'

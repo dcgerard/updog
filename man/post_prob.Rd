@@ -36,3 +36,4 @@ variance is \code{sigma2}.
 \author{
 David
 }
+\keyword{internal}

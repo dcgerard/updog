@@ -18,3 +18,4 @@ The logit function.
 \author{
 David Gerard
 }
+\keyword{internal}

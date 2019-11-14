@@ -24,7 +24,7 @@ Gerard et. al. (2018)
 \<[doi:10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468)\>.
 Additional details concerning prior specification are described in
 Gerard and Ferrão (2019)
-\<[doi:10.1101/751784](https://doi.org/10.1101/751784)\>.
+\<[doi:10.1093/bioinformatics/btz852](https://doi.org/10.1093/bioinformatics/btz852)\>.
 
 The main function is `flexdog()`, which provides many options for the
 distribution of the genotypes in your sample. Novel genotype
@@ -143,20 +143,22 @@ Or, using BibTex:
 If you are using the proportional normal prior class (`model = "norm"`)
 or the unimodal prior class (`model = "ash"`), then please also cite
 
-> Gerard D. & Ferrão L. F. V. (2019). “Priors for Genotyping
-> Polyploids.” *bioRxiv*. doi:
-> [10.1101/751784](https://doi.org/10.1101/751784).
+> Gerard, D. & Ferrão L. F. V. (2019). “Priors for Genotyping
+> Polyploids.” *Bioinformatics* (in press). doi:
+> [10.1093/bioinformatics/btz852](https://doi.org/10.1093/bioinformatics/btz852)
 
 Or, using BibTex:
 
 ``` tex
 @article{gerard2019priors,
-  title = {Priors for Genotyping Polyploids},
-  year = {2019},
-  journal = {bioRxiv},
-  publisher = {Cold Spring Harbor Laboratory},
-  doi = {10.1101/751784},
-  author = {David Gerard and Lu{\'i}s Felipe Ventorim Ferr{\~a}o},
+    author = {Gerard, David and Ferr{\~a}o, Lu{\'i}s Felipe Ventorim},
+    title = "{Priors for Genotyping Polyploids}",
+    journal = {Bioinformatics},
+    year = {2019},
+    month = {11},
+    issn = {1367-4803},
+    doi = {10.1093/bioinformatics/btz852},
+    note = {btz852},
 }
 ```
 

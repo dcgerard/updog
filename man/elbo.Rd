@@ -45,3 +45,4 @@ The evidence lower bound
 \author{
 David Gerard
 }
+\keyword{internal}

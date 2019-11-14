@@ -1,6 +1,6 @@
 Package: updog
 Title: Flexible Genotyping for Polyploids
-Version: 1.1.1
+Version: 1.1.2
 Authors@R: person("David", "Gerard", email = "gerard.1787@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9450-5023"))
 Description: Implements empirical Bayes approaches to genotype
        polyploids from next generation sequencing data while
@@ -15,8 +15,8 @@ Description: Implements empirical Bayes approaches to genotype
        functions are useful for read depth calculations. Run
        browseVignettes(package = "updog") in R for example usage. See
        Gerard et al. (2018) <doi:10.1534/genetics.118.301468> and
-       Gerard and Ferrao (2019) <doi:10.1101/751784> for details on the
-       implemented methods.
+       Gerard and Ferrao (2019) <doi:10.1093/bioinformatics/btz852> for details 
+       on the implemented methods.
 Depends: R (>= 3.4.0)
 License: GPL-3
 BugReports: http://github.com/dcgerard/updog/issues

@@ -9,3 +9,5 @@
 ^.github$
 ^docs$
 ^LICENSE$
+^doc$
+^Meta$

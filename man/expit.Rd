@@ -18,3 +18,4 @@ The expit (logistic) function.
 \author{
 David Gerard
 }
+\keyword{internal}

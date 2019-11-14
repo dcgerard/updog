@@ -52,3 +52,4 @@ Gradient for \code{\link{obj_for_eps}}.
 \author{
 David Gerard
 }
+\keyword{internal}

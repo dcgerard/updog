@@ -12,6 +12,8 @@ double TOL = 10.0 * DBL_EPSILON; // defined here, used everywhere
 //'
 //' @return The density of the beta-binomial.
 //'
+//' @keywords internal
+//'
 //' @author David Gerard
 // [[Rcpp::export]]
 double dbetabinom_alpha_beta_double(int x, int size, double alpha, double beta, bool log) {
@@ -32,6 +34,8 @@ double dbetabinom_alpha_beta_double(int x, int size, double alpha, double beta, 
 //' @inheritParams dbetabinom_double
 //'
 //' @return The density of the Bernoulli-binomial.
+//'
+//' @keywords internal
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -76,6 +80,8 @@ double dbernbinom(int x, int size, double mu, bool log) {
 //'     density \code{TRUE} or not \code{FALSE}?
 //'
 //' @return The density of the beta-binomial.
+//'
+//' @keywords internal
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -187,9 +193,6 @@ NumericVector dbetabinom(IntegerVector x, IntegerVector size,
   return dout;
 }
 
-
-
-
 //' The distribution function of the betabinomial. This is generally
 //' only advisable if q is relatively small.
 //'
@@ -199,6 +202,8 @@ NumericVector dbetabinom(IntegerVector x, IntegerVector size,
 //'     \code{TRUE} or not \code{FALSE}?
 //'
 //' @return The tail-probability of the beta-binomial.
+//'
+//' @keywords internal
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -319,6 +324,8 @@ NumericVector pbetabinom(IntegerVector q, IntegerVector size,
 //'
 //' @return The quantile of the beta-binomial.
 //'
+//' @keywords internal
+//'
 //' @author David Gerard
 // [[Rcpp::export]]
 int qbetabinom_double(double p, int size, double mu, double rho) {
@@ -422,6 +429,8 @@ IntegerVector qbetabinom(NumericVector p, IntegerVector size,
 //' @inheritParams dbetabinom_double
 //'
 //' @return A random sample from the beta-binomial.
+//'
+//' @keywords internal
 //'
 //' @author David Gerard
 // [[Rcpp::export]]

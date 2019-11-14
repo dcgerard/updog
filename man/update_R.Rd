@@ -23,3 +23,4 @@ Update the underlying correlation matrix.
 \author{
 David Gerard
 }
+\keyword{internal}

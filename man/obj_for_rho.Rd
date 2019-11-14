@@ -33,3 +33,4 @@ Objective function when updating a single inbreeding coefficient.
 \author{
 David Gerard
 }
+\keyword{internal}

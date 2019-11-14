@@ -21,3 +21,4 @@ Penalty on pivec used when \code{model = "ash"} in \code{\link{flexdog}}.
 \author{
 David Gerard
 }
+\keyword{internal}

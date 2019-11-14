@@ -21,6 +21,8 @@ NumericMatrix get_wik_mat(NumericVector probk_vec,
 //'
 //' @author David Gerard
 //'
+//' @keywords internal
+//'
 //'
 // [[Rcpp::export]]
 double doutdist(int x, int n, bool logp) {
@@ -35,6 +37,8 @@ double doutdist(int x, int n, bool logp) {
 //' @param out_prop The probability of being an outlier.
 //'
 //' @author David Gerard
+//'
+//' @keywords internal
 //'
 //' @seealso \code{\link{flexdog}} for the full EM algorithm.
 //'     \code{\link{get_wik_mat}} for the equivalent function
@@ -121,6 +125,8 @@ NumericMatrix get_wik_mat_out(NumericVector probk_vec,
 //'     \code{outliers = TRUE}.
 //'
 //' @author David Gerard
+//'
+//' @keywords internal
 //'
 //' @seealso \code{\link{flexdog_obj}} for the objective function without outliers.
 //'

@@ -24,8 +24,8 @@
        functions are useful for read depth calculations. Run
        browseVignettes(package = "updog") in R for example usage. See
        Gerard et al. (2018) &lt;doi:10.1534/genetics.118.301468&gt; and
-       Gerard and Ferrao (2019) &lt;doi:10.1101/751784&gt; for details on the
-       implemented methods.'>
+       Gerard and Ferrao (2019) &lt;doi:10.1093/bioinformatics/btz852&gt; for details 
+       on the implemented methods.'>
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -45,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
       </span>
     </div>
 
@@ -101,7 +101,7 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#updog" class="anchor"></a>updog</h1></div>
 
-<p>Updog provides a suite of methods for genotyping polyploids from next-generation sequencing (NGS) data. It does this while accounting for many common features of NGS data: allele bias, overdispersion, sequencing error, and (possibly) outlying observations. It is named updog for “Using Parental Data for Offspring Genotyping” because we originally developed the method for full-sib populations, but it works now for more general populations. The method is described in detail Gerard et. al. (2018) &lt;<a href="https://doi.org/10.1534/genetics.118.301468">doi:10.1534/genetics.118.301468</a>&gt;. Additional details concerning prior specification are described in Gerard and Ferrão (2019) &lt;<a href="https://doi.org/10.1101/751784">doi:10.1101/751784</a>&gt;.</p>
+<p>Updog provides a suite of methods for genotyping polyploids from next-generation sequencing (NGS) data. It does this while accounting for many common features of NGS data: allele bias, overdispersion, sequencing error, and (possibly) outlying observations. It is named updog for “Using Parental Data for Offspring Genotyping” because we originally developed the method for full-sib populations, but it works now for more general populations. The method is described in detail Gerard et. al. (2018) &lt;<a href="https://doi.org/10.1534/genetics.118.301468">doi:10.1534/genetics.118.301468</a>&gt;. Additional details concerning prior specification are described in Gerard and Ferrão (2019) &lt;<a href="https://doi.org/10.1093/bioinformatics/btz852">doi:10.1093/bioinformatics/btz852</a>&gt;.</p>
 <p>The main function is <code><a href="reference/flexdog.html">flexdog()</a></code>, which provides many options for the distribution of the genotypes in your sample. Novel genotype distributions include the class of proportional normal distributions (<code>model = "norm"</code>) and the class of discrete unimodal distributions (<code>model = "ash"</code>). The default is <code>model = "norm"</code> because it is the most robust to varying genotype distributions, but feel free to use more specialized priors if you have more information on the data.</p>
 <p>Also provided are:</p>
 <ul>
@@ -162,17 +162,19 @@
 <a class="sourceLine" id="cb5-13" data-line-number="13">}</a></code></pre></div>
 <p>If you are using the proportional normal prior class (<code>model = "norm"</code>) or the unimodal prior class (<code>model = "ash"</code>), then please also cite</p>
 <blockquote>
-<p>Gerard D. &amp; Ferrão L. F. V. (2019). “Priors for Genotyping Polyploids.” <em>bioRxiv</em>. doi: <a href="https://doi.org/10.1101/751784">10.1101/751784</a>.</p>
+<p>Gerard, D. &amp; Ferrão L. F. V. (2019). “Priors for Genotyping Polyploids.” <em>Bioinformatics</em> (in press). doi: <a href="https://doi.org/10.1093/bioinformatics/btz852">10.1093/bioinformatics/btz852</a></p>
 </blockquote>
 <p>Or, using BibTex:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode tex"><code class="sourceCode latex"><a class="sourceLine" id="cb6-1" data-line-number="1">@article{gerard2019priors,</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">  title = {Priors for Genotyping Polyploids},</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">  year = {2019},</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">  journal = {bioRxiv},</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">  publisher = {Cold Spring Harbor Laboratory},</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">  doi = {10.1101/751784},</a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">  author = {David Gerard and Lu{<span class="fu">\'</span>i}s Felipe Ventorim Ferr{<span class="fu">\~</span>a}o},</a>
-<a class="sourceLine" id="cb6-8" data-line-number="8">}</a></code></pre></div>
+<a class="sourceLine" id="cb6-2" data-line-number="2">    author = {Gerard, David and Ferr{<span class="fu">\~</span>a}o, Lu{<span class="fu">\'</span>i}s Felipe Ventorim},</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">    title = "{Priors for Genotyping Polyploids}",</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">    journal = {Bioinformatics},</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">    year = {2019},</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">    month = {11},</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">    issn = {1367-4803},</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">    doi = {10.1093/bioinformatics/btz852},</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9">    note = {btz852},</a>
+<a class="sourceLine" id="cb6-10" data-line-number="10">}</a></code></pre></div>
 </div>
 <div id="code-of-conduct" class="section level2">
 <h2 class="hasAnchor">
@@ -231,7 +233,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>

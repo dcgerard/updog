@@ -53,3 +53,4 @@ Objective function for updating sequencing error rate, bias, and overdispersion 
 \author{
 David Gerard
 }
+\keyword{internal}

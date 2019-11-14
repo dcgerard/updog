@@ -24,3 +24,4 @@ Objective for mixture of known dist and uniform dist.
 \author{
 David Gerard
 }
+\keyword{internal}

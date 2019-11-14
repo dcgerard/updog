@@ -27,3 +27,4 @@ Wrapper for \code{\link{obj_for_mu_sigma2}} so that I can use it in \code{optim}
 \author{
 David Gerard
 }
+\keyword{internal}

@@ -13,6 +13,8 @@
 #'
 #' @seealso \code{\link{get_bivalent_probs}}.
 #'
+#' @keywords internal
+#'
 #' @author David Gerard
 get_bivalent_probs_dr <- function(ploidy) {
   blist <- get_bivalent_probs(ploidy = ploidy)
@@ -51,6 +53,8 @@ get_bivalent_probs_dr <- function(ploidy) {
 #'
 #' @seealso \code{\link{update_dr}}
 #'
+#' @keywords internal
+#'
 #' @author David Gerard
 dr_pen <- function(pairweights, mixing_pen) {
   sum((log(pairweights) * mixing_pen)[mixing_pen > 10^-6])
@@ -62,6 +66,8 @@ dr_pen <- function(pairweights, mixing_pen) {
 #'
 #' @inherit update_pp_f1
 #' @param model The model to assume.
+#'
+#' @keywords internal
 #'
 #' @seealso \code{\link{update_pp_f1}}
 update_dr <- function(weight_vec,

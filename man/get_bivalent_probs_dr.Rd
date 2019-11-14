@@ -31,3 +31,4 @@ get_bivalent_probs(4)
 \author{
 David Gerard
 }
+\keyword{internal}

@@ -29,3 +29,4 @@ Objective function when updating mu and sigma2.
 \author{
 David Gerard
 }
+\keyword{internal}

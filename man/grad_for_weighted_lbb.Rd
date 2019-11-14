@@ -26,3 +26,4 @@ Gradient for \code{\link{obj_for_weighted_lbb}}.
 \author{
 David Gerard
 }
+\keyword{internal}

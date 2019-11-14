@@ -21,3 +21,4 @@ Derivative of \eqn{c = (1 - \tau) / \tau} with respect to \eqn{\tau}.
 \author{
 David Gerard
 }
+\keyword{internal}

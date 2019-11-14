@@ -24,3 +24,4 @@ Penalty on bias parameter.
 \author{
 David Gerard
 }
+\keyword{internal}

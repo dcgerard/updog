@@ -26,3 +26,4 @@ Objective function optimized by \code{\link{uni_em}}.
 \author{
 David Gerard
 }
+\keyword{internal}

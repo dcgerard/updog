@@ -27,3 +27,4 @@ Objective function for updating the beta-binomial genotype distribution when
 \author{
 David Gerard
 }
+\keyword{internal}

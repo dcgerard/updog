@@ -547,6 +547,8 @@ mupdog <- function(refmat,
 #'     correlation matrix.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 update_R <- function(postmean, postvar) {
   # stats::cov2cor(tcrossprod(postmean) + diag(rowSums(postvar)))
   (tcrossprod(postmean) + diag(rowSums(postvar))) / ncol(postmean)

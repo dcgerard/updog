@@ -33,3 +33,4 @@ where \eqn{\tau} is the overdispersion parameter.
 \author{
 David Gerard
 }
+\keyword{internal}

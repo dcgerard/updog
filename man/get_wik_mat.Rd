@@ -36,3 +36,4 @@ E-step in \code{\link{flexdog}}.
 \author{
 David Gerard
 }
+\keyword{internal}

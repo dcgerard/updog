@@ -29,3 +29,4 @@ Obtain the genotype distribution given the distribution of discrete uniforms.
 \author{
 David Gerard
 }
+\keyword{internal}

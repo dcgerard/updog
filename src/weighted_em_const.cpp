@@ -11,6 +11,8 @@
 //'
 //' @author David Gerard
 //'
+//' @keywords internal
+//'
 //' @return The objective optimized by \code{\link{uni_em_const}} during
 //'     that separate unimodal EM algorithm.
 //'
@@ -84,6 +86,8 @@ double uni_obj_const(arma::vec pivec,
 //'     \code{\link{flexdog_full}}.
 //'
 //' @author David Gerard
+//'
+//' @keywords internal
 //'
 // [[Rcpp::export]]
 arma::vec uni_em_const(arma::vec weight_vec,
@@ -241,6 +245,8 @@ arma::vec convolve_up(arma::vec x, arma::vec y) {
 //'     probability distribution through \code{\link{f1_obj}}.
 //'
 //' @author David Gerard
+//'
+//' @keywords internal
 // [[Rcpp::export]]
 double pp_brent_obj(double firstmixweight,
                     arma::mat probmat,

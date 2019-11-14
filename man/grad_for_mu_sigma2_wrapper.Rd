@@ -32,3 +32,4 @@ and a wrapper for \code{\link{grad_for_mu_sigma2}}
 \author{
 David Gerard
 }
+\keyword{internal}

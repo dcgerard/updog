@@ -22,3 +22,4 @@ Derivative of xi-function with respect to bias parameter.
 \author{
 David Gerard
 }
+\keyword{internal}

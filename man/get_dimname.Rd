@@ -21,3 +21,4 @@ combinations of the reference allele and the non-reference allele.
 \author{
 David Gerard
 }
+\keyword{internal}

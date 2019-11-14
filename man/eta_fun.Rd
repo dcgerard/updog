@@ -22,3 +22,4 @@ Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
 \author{
 David Gerard
 }
+\keyword{internal}

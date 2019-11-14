@@ -40,3 +40,4 @@ A three dimensional array. The rows index the individuals, the
 \description{
 Calculates the log-density for every individual by snp by dosage level.
 }
+\keyword{internal}

@@ -67,7 +67,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
       </span>
     </div>
 
@@ -143,34 +143,9 @@
       <tr>
         
         <td>
-          <p><code><a href="ashpen_fun.html">ashpen_fun()</a></code> </p>
-        </td>
-        <td><p>Penalty on pivec used when <code>model = "ash"</code> in <code>flexdog</code>.</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="betabinom.html">dbetabinom()</a></code> <code><a href="betabinom.html">pbetabinom()</a></code> <code><a href="betabinom.html">qbetabinom()</a></code> <code><a href="betabinom.html">rbetabinom()</a></code> </p>
         </td>
         <td><p>The Beta-Binomial Distribution</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="compute_all_log_bb.html">compute_all_log_bb()</a></code> </p>
-        </td>
-        <td><p>Calculates the log-density for every individual by snp by dosage level.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="compute_all_phifk.html">compute_all_phifk()</a></code> </p>
-        </td>
-        <td><p>Computes $$\Phi^{-1}(F(k|K,\alpha_j,\rho_i))$$ for all possible (i,j,k).</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="compute_all_post_prob.html">compute_all_post_prob()</a></code> </p>
-        </td>
-        <td><p>Computes every posterior probability for each dosage level for
-each individual at each SNP.</p></td>
       </tr><tr>
         
         <td>
@@ -178,147 +153,6 @@ each individual at each SNP.</p></td>
         </td>
         <td><p>Convolution between two discrete probability mass functions
 with support on 0:K.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dbernbinom.html">dbernbinom()</a></code> </p>
-        </td>
-        <td><p>Special case of betabinomial where the beta is bernoulli mu.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dbetabinom_alpha_beta_double.html">dbetabinom_alpha_beta_double()</a></code> </p>
-        </td>
-        <td><p>Density function of betabinomial with the shape parameterizations</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dbetabinom_double.html">dbetabinom_double()</a></code> </p>
-        </td>
-        <td><p>The density function of the beta-binomial distribution.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dc_dtau.html">dc_dtau()</a></code> </p>
-        </td>
-        <td><p>Derivative of \(c = (1 - \tau) / \tau\) with respect to \(\tau\).</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="df_deps.html">df_deps()</a></code> </p>
-        </td>
-        <td><p>Derivative of f with respect to eps.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dlbeta_dc.html">dlbeta_dc()</a></code> </p>
-        </td>
-        <td><p>Derivative of the log-beta density with
-respect to c where \(c = (1 - \tau)/\tau\)
-where \(\tau\) is the overdispersion parameter.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dlbeta_deps.html">dlbeta_deps()</a></code> </p>
-        </td>
-        <td><p>Derivative of the log-beta-binomial density with respect to the
-sequencing error rate.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dlbeta_dh.html">dlbeta_dh()</a></code> </p>
-        </td>
-        <td><p>Derivative of log-betabinomial density with respect to bias parameter.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dlbeta_dtau.html">dlbeta_dtau()</a></code> </p>
-        </td>
-        <td><p>Derivative of the log-beta-binomial density with respect to the
-overdispersion parameter.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dlbeta_dxi.html">dlbeta_dxi()</a></code> </p>
-        </td>
-        <td><p>Derivative of the log-betabinomial density with respect to the
-mean of the underlying beta.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="doutdist.html">doutdist()</a></code> </p>
-        </td>
-        <td><p>The outlier distribution we use. Right now it is just a
-beta binomial with mean 1/2 and od 1/3 (so underlying beta
-is just a uniform from 0 to 1).</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dpen_deps.html">dpen_deps()</a></code> </p>
-        </td>
-        <td><p>Derivative of $$-log(\epsilon(1 - \epsilon)) - (logit(\epsilon) - \mu_{\epsilon})^2 / (2\sigma_{\epsilon}^2)$$
-with respect to \(\epsilon\).</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dpen_dh.html">dpen_dh()</a></code> </p>
-        </td>
-        <td><p>Derivative of $$-log(h) - (log(h) - \mu_h)^2 / (2\sigma_h^2)$$ with respect
-to \(h\).</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dr_pen.html">dr_pen()</a></code> </p>
-        </td>
-        <td><p>Penalty used in <code>update_dr</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dxi_df.html">dxi_df()</a></code> </p>
-        </td>
-        <td><p>Derivative of xi with respect to f.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dxi_dh.html">dxi_dh()</a></code> </p>
-        </td>
-        <td><p>Derivative of xi-function with respect to bias parameter.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="elbo.html">elbo()</a></code> </p>
-        </td>
-        <td><p>The evidence lower bound</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="eta_double.html">eta_double()</a></code> </p>
-        </td>
-        <td><p>Adjusts allele dosage <code>p</code> by the sequencing error rate <code>eps</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="eta_fun.html">eta_fun()</a></code> </p>
-        </td>
-        <td><p>Adjusts allele dosage <code>p</code> by the sequencing error rate <code>eps</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="expit.html">expit()</a></code> </p>
-        </td>
-        <td><p>The expit (logistic) function.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="f1_obj.html">f1_obj()</a></code> </p>
-        </td>
-        <td><p>Objective for mixture of known dist and uniform dist.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="flex_update_pivec.html">flex_update_pivec()</a></code> </p>
-        </td>
-        <td><p>Update the distribution of genotypes from various models.</p></td>
       </tr><tr>
         
         <td>
@@ -334,43 +168,10 @@ to \(h\).</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="flexdog_obj.html">flexdog_obj()</a></code> </p>
-        </td>
-        <td><p>Log-likelihood that <code>flexdog</code> maximizes.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="flexdog_obj_out.html">flexdog_obj_out()</a></code> </p>
-        </td>
-        <td><p>Log-likelihood that <code>flexdog</code> maximizes when
-outliers are present.</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="get_bivalent_probs.html">get_bivalent_probs()</a></code> </p>
         </td>
         <td><p>Returns segregation probabilities, pairing representation
 and number of ref alleles given the ploidy.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_bivalent_probs_dr.html">get_bivalent_probs_dr()</a></code> </p>
-        </td>
-        <td><p>Double reduction version of <code>get_bivalent_probs</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_conv_inner_weights.html">get_conv_inner_weights()</a></code> </p>
-        </td>
-        <td><p>Get the inner weights used for the em update in <code>update_pp_f1</code>
-when there are more than two bivalent components for one of the parents.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_dimname.html">get_dimname()</a></code> </p>
-        </td>
-        <td><p>Returns a vector character strings that are all of the possible
-combinations of the reference allele and the non-reference allele.</p></td>
       </tr><tr>
         
         <td>
@@ -381,79 +182,12 @@ distribution.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="get_inner_weights.html">get_inner_weights()</a></code> </p>
-        </td>
-        <td><p>Compute inner weights for updating the mixing proportions when using ash model.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_probk_vec.html">get_probk_vec()</a></code> </p>
-        </td>
-        <td><p>Obtain the genotype distribution given the distribution of discrete uniforms.</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="get_q_array.html">get_q_array()</a></code> </p>
         </td>
         <td><p>Return the probabilities of an offspring's genotype given its
 parental genotypes for all possible combinations of parental and
 offspring genotypes. This is for species with polysomal inheritance
 and bivalent, non-preferential pairing.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_uni_rep.html">get_uni_rep()</a></code> </p>
-        </td>
-        <td><p>Get the representation of a discrete unimodal probability distribution.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_wik_mat.html">get_wik_mat()</a></code> </p>
-        </td>
-        <td><p>E-step in <code>flexdog</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_wik_mat_out.html">get_wik_mat_out()</a></code> </p>
-        </td>
-        <td><p>E-step in <code>flexdog</code> where we now allow an outlier distribution.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="grad_for_eps.html">grad_for_eps()</a></code> </p>
-        </td>
-        <td><p>Gradient for <code>obj_for_eps</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="grad_for_mu_sigma2.html">grad_for_mu_sigma2()</a></code> </p>
-        </td>
-        <td><p>Gradient for <code>obj_for_mu_sigma2</code> with respect for <code>mu</code> and <code>sigma2</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="grad_for_mu_sigma2_wrapper.html">grad_for_mu_sigma2_wrapper()</a></code> </p>
-        </td>
-        <td><p>Gradient for <code>obj_for_mu_sigma2_wrapper</code> with respect for <code>muSigma2</code>
-and a wrapper for <code>grad_for_mu_sigma2</code></p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="grad_for_weighted_lbb.html">grad_for_weighted_lbb()</a></code> </p>
-        </td>
-        <td><p>Gradient for <code>obj_for_weighted_lbb</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="grad_for_weighted_lnorm.html">grad_for_weighted_lnorm()</a></code> </p>
-        </td>
-        <td><p>Gradient for <code>obj_for_weighted_lnorm</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="initialize_pivec.html">initialize_pivec()</a></code> </p>
-        </td>
-        <td><p>Initialize <code>pivec</code> for <code>flexdog</code> EM algorithm.</p></td>
       </tr><tr>
         
         <td>
@@ -481,12 +215,6 @@ and a wrapper for <code>grad_for_mu_sigma2</code></p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="logit.html">logit()</a></code> </p>
-        </td>
-        <td><p>The logit function.</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="mupdog.html">mupdog()</a></code> </p>
         </td>
         <td><p>Multi-SNP updog.</p></td>
@@ -496,50 +224,6 @@ and a wrapper for <code>grad_for_mu_sigma2</code></p></td>
           <p><code><a href="mupout.html">mupout</a></code> </p>
         </td>
         <td><p>A mupdog fit of the <code>uitdewilligen</code> data.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="obj_for_alpha.html">obj_for_alpha()</a></code> </p>
-        </td>
-        <td><p>Objective function when updating alpha</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="obj_for_eps.html">obj_for_eps()</a></code> </p>
-        </td>
-        <td><p>Objective function for updating sequencing error rate, bias, and overdispersion parameters.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="obj_for_mu_sigma2.html">obj_for_mu_sigma2()</a></code> </p>
-        </td>
-        <td><p>Objective function when updating mu and sigma2.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="obj_for_mu_sigma2_wrapper.html">obj_for_mu_sigma2_wrapper()</a></code> </p>
-        </td>
-        <td><p>Wrapper for <code>obj_for_mu_sigma2</code> so that I can use it in <code>optim</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="obj_for_rho.html">obj_for_rho()</a></code> </p>
-        </td>
-        <td><p>Objective function when updating a single inbreeding coefficient.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="obj_for_weighted_lbb.html">obj_for_weighted_lbb()</a></code> </p>
-        </td>
-        <td><p>Objective function for updating the beta-binomial genotype distribution when
-<code>model = "bb"</code> in <code>flex_update_pivec</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="obj_for_weighted_lnorm.html">obj_for_weighted_lnorm()</a></code> </p>
-        </td>
-        <td><p>Objective function for updating discrete normal genotype distribution
-when <code>model = "normal"</code> in <code>flex_update_pivec</code>.</p></td>
       </tr><tr>
         
         <td>
@@ -597,32 +281,6 @@ joint distribution of the genotype and the oracle estimator.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="pbetabinom_double.html">pbetabinom_double()</a></code> </p>
-        </td>
-        <td><p>The distribution function of the betabinomial. This is generally
-only advisable if q is relatively small.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="pen_bias.html">pen_bias()</a></code> </p>
-        </td>
-        <td><p>Penalty on bias parameter.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="pen_seq_error.html">pen_seq_error()</a></code> </p>
-        </td>
-        <td><p>Penalty on sequencing error rate.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="pivec_from_segmats.html">pivec_from_segmats()</a></code> </p>
-        </td>
-        <td><p>Function to get the segregation probabilities from the distributions
-of each component and the weights of each component.</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="plot.flexdog.html">plot(<i>&lt;flexdog&gt;</i>)</a></code> </p>
         </td>
         <td><p>Draw a genotype plot from the output of <code>flexdog</code>.</p></td>
@@ -638,38 +296,6 @@ of each component and the weights of each component.</p></td>
           <p><code><a href="plot_geno.html">plot_geno()</a></code> </p>
         </td>
         <td><p>Make a genotype plot.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="post_prob.html">post_prob()</a></code> </p>
-        </td>
-        <td><p>Variational posterior probability of having <code>dosage</code> A alleles
-when the ploidy is <code>ploidy</code>, the allele frequency is
-<code>alpha</code>, the individual-specific overdispersion parameter is
-<code>rho</code>, the variational mean is <code>mu</code>, and the variational
-variance is <code>sigma2</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="pp_brent_obj.html">pp_brent_obj()</a></code> </p>
-        </td>
-        <td><p>Objective function when doing Brent's method in
-<code>update_pp_f1</code> when one parent only has
-two mixing components.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="qbetabinom_double.html">qbetabinom_double()</a></code> </p>
-        </td>
-        <td><p>The quantile function of the beta-binomial distribution parameterized
-by mean and overdispersion parameter.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rbetabinom_int.html">rbetabinom_int()</a></code> </p>
-        </td>
-        <td><p>One draw from the beta-binomial distribution parameterized
-by mean and overdispersion parameter.</p></td>
       </tr><tr>
         
         <td>
@@ -703,56 +329,6 @@ by mean and overdispersion parameter.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="uni_em.html">uni_em()</a></code> </p>
-        </td>
-        <td><p>EM algorithm to fit weighted ash objective.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="uni_em_const.html">uni_em_const()</a></code> </p>
-        </td>
-        <td><p>EM algorithm to fit weighted ash objective with a uniform
-mixing component.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="uni_obj.html">uni_obj()</a></code> </p>
-        </td>
-        <td><p>Objective function optimized by <code>uni_em</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="uni_obj_const.html">uni_obj_const()</a></code> </p>
-        </td>
-        <td><p>Objective function optimized by <code>uni_em_const</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="update_R.html">update_R()</a></code> </p>
-        </td>
-        <td><p>Update the underlying correlation matrix.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="update_dr.html">update_dr()</a></code> </p>
-        </td>
-        <td><p>Same as <code>update_pp_f1</code> but I exclusively use the EM (instead of also Brent's method),
-and I allow for priors on the mixing proportions.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="update_pp_f1.html">update_pp_f1()</a></code> </p>
-        </td>
-        <td><p>Function to update the parameters in the preferential pairing F1 model.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="update_pp_s1.html">update_pp_s1()</a></code> </p>
-        </td>
-        <td><p>Same as <code>update_pp_f1</code> but only allow s1.</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="updog.html">updog</a></code> </p>
         </td>
         <td><p><code>updog</code> Flexible Genotyping for Polyploids</p></td>
@@ -762,18 +338,6 @@ and I allow for priors on the mixing proportions.</p></td>
           <p><code><a href="wem.html">wem()</a></code> </p>
         </td>
         <td><p>Generalized version of <code>uni_em</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="xi_double.html">xi_double()</a></code> </p>
-        </td>
-        <td><p>Adjusts allele dosage <code>p</code> by the sequencing error rate <code>eps</code> and the allele bias <code>h</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="xi_fun.html">xi_fun()</a></code> </p>
-        </td>
-        <td><p>Adjusts allele dosage <code>p</code> by the sequencing error rate <code>eps</code> and the allele bias <code>h</code>.</p></td>
       </tr>
     </tbody>
     </table>
@@ -794,7 +358,7 @@ and I allow for priors on the mixing proportions.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>

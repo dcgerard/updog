@@ -28,3 +28,4 @@ NB: In \code{get_uni_rep}, we count the mode starting at 1.
 \author{
 David Gerard
 }
+\keyword{internal}

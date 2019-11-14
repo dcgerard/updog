@@ -24,3 +24,4 @@ Computes \deqn{\Phi^{-1}(F(k|K,\alpha_j,\rho_i))} for all possible (i,j,k).
 \author{
 David Gerard
 }
+\keyword{internal}

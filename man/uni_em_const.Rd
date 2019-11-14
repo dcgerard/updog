@@ -42,3 +42,4 @@ It does this using a weighted EM algorithm.
 \author{
 David Gerard
 }
+\keyword{internal}

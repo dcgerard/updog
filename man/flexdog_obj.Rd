@@ -48,3 +48,4 @@ Log-likelihood that \code{\link{flexdog}} maximizes.
 \author{
 David Gerard
 }
+\keyword{internal}

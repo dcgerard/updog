@@ -40,3 +40,4 @@ and I allow for priors on the mixing proportions.
 \seealso{
 \code{\link{update_pp_f1}}
 }
+\keyword{internal}

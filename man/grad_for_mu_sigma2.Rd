@@ -32,3 +32,4 @@ Gradient for \code{\link{obj_for_mu_sigma2}} with respect for \code{mu} and \cod
 \author{
 David Gerard
 }
+\keyword{internal}

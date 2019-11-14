@@ -27,3 +27,4 @@ Density function of betabinomial with the shape parameterizations
 \author{
 David Gerard
 }
+\keyword{internal}

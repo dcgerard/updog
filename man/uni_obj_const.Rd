@@ -34,3 +34,4 @@ Objective function optimized by \code{\link{uni_em_const}}.
 \author{
 David Gerard
 }
+\keyword{internal}

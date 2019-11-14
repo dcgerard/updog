@@ -36,3 +36,4 @@ Same as \code{\link{update_pp_f1}} but only allow s1.
 \seealso{
 \code{\link{update_pp_f1}}
 }
+\keyword{internal}

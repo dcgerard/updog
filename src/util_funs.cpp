@@ -12,6 +12,8 @@
 //'     sequencing error rate.
 //'
 //' @author David Gerard
+//'
+//' @keywords internal
 // [[Rcpp::export]]
 double eta_double(double p, double eps) {
   if ((p < -1.0 * TOL) or (1.0 - p < -1.0 * TOL)) {
@@ -34,6 +36,8 @@ double eta_double(double p, double eps) {
 //'     by the sequencing error rate.
 //'
 //' @author David Gerard
+//'
+//' @keywords internal
 // [[Rcpp::export]]
 NumericVector eta_fun(NumericVector p, NumericVector eps) {
   int n = p.length();
@@ -70,6 +74,8 @@ NumericVector eta_fun(NumericVector p, NumericVector eps) {
 //'     bias and the sequencing error rate.
 //'
 //' @author David Gerard
+//'
+//' @keywords internal
 // [[Rcpp::export]]
 double xi_double(double p, double eps, double h) {
   if (h < -TOL) {
@@ -92,6 +98,8 @@ double xi_double(double p, double eps, double h) {
 //'     by both the sequencing error rate and the allele bias.
 //'
 //' @author David Gerard
+//'
+//' @keywords internal
 // [[Rcpp::export]]
 NumericVector xi_fun(NumericVector p, NumericVector eps, NumericVector h) {
   int n = p.length();
@@ -181,6 +189,8 @@ double log_sum_exp_2(double x, double y) {
 //'
 //' @author David Gerard
 //'
+//' @keywords internal
+//'
 // [[Rcpp::export]]
 double logit(double x) {
   if ((x < TOL) | ((1.0 - x) < TOL)) {
@@ -195,6 +205,8 @@ double logit(double x) {
 //' @param x A double.
 //'
 //' @return The expit (logistic) of \code{x}.
+//'
+//' @keywords internal
 //'
 //' @author David Gerard
 // [[Rcpp::export]]

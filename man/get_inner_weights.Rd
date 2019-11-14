@@ -25,3 +25,4 @@ The (i,k)th element is \eqn{1(k \in F(a, i)) / |F(a,i)|}.
 \author{
 David Gerard
 }
+\keyword{internal}

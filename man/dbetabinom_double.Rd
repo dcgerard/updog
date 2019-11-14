@@ -27,3 +27,4 @@ The density function of the beta-binomial distribution.
 \author{
 David Gerard
 }
+\keyword{internal}

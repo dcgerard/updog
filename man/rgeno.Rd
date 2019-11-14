@@ -95,7 +95,7 @@ rgeno(n = 10, ploidy = ploidy, model = "hw", allele_freq = 0.75)
 \references{
 \itemize{
   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
-  \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/751784}{10.1101/751784}.}
+  \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{Bioinformatics}. doi: \href{https://doi.org/10.1093/bioinformatics/btz852}{10.1093/bioinformatics/btz852}.}
 }
 }
 \author{

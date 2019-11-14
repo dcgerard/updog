@@ -28,3 +28,4 @@ when \code{model = "normal"} in \code{\link{flex_update_pivec}}.
 \author{
 David Gerard
 }
+\keyword{internal}

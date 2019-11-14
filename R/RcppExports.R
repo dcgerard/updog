@@ -9,6 +9,8 @@
 #'
 #' @return The density of the beta-binomial.
 #'
+#' @keywords internal
+#'
 #' @author David Gerard
 dbetabinom_alpha_beta_double <- function(x, size, alpha, beta, log) {
     .Call('_updog_dbetabinom_alpha_beta_double', PACKAGE = 'updog', x, size, alpha, beta, log)
@@ -19,6 +21,8 @@ dbetabinom_alpha_beta_double <- function(x, size, alpha, beta, log) {
 #' @inheritParams dbetabinom_double
 #'
 #' @return The density of the Bernoulli-binomial.
+#'
+#' @keywords internal
 #'
 #' @author David Gerard
 dbernbinom <- function(x, size, mu, log) {
@@ -35,6 +39,8 @@ dbernbinom <- function(x, size, mu, log) {
 #'     density \code{TRUE} or not \code{FALSE}?
 #'
 #' @return The density of the beta-binomial.
+#'
+#' @keywords internal
 #'
 #' @author David Gerard
 dbetabinom_double <- function(x, size, mu, rho, log) {
@@ -59,6 +65,8 @@ dbetabinom <- function(x, size, mu, rho, log) {
 #'
 #' @return The tail-probability of the beta-binomial.
 #'
+#' @keywords internal
+#'
 #' @author David Gerard
 pbetabinom_double <- function(q, size, mu, rho, log_p) {
     .Call('_updog_pbetabinom_double', PACKAGE = 'updog', q, size, mu, rho, log_p)
@@ -80,6 +88,8 @@ pbetabinom <- function(q, size, mu, rho, log_p) {
 #'
 #' @return The quantile of the beta-binomial.
 #'
+#' @keywords internal
+#'
 #' @author David Gerard
 qbetabinom_double <- function(p, size, mu, rho) {
     .Call('_updog_qbetabinom_double', PACKAGE = 'updog', p, size, mu, rho)
@@ -99,6 +109,8 @@ qbetabinom <- function(p, size, mu, rho) {
 #' @inheritParams dbetabinom_double
 #'
 #' @return A random sample from the beta-binomial.
+#'
+#' @keywords internal
 #'
 #' @author David Gerard
 rbetabinom_int <- function(size, mu, rho) {
@@ -162,6 +174,8 @@ wem <- function(weight_vec, lmat, pi_init, lambda, itermax, obj_tol) {
 #'
 #' @seealso \code{\link{flexdog}} where this is used.
 #'
+#' @keywords internal
+#'
 get_probk_vec <- function(pivec, model, mode) {
     .Call('_updog_get_probk_vec', PACKAGE = 'updog', pivec, model, mode)
 }
@@ -176,6 +190,8 @@ get_probk_vec <- function(pivec, model, mode) {
 #'    weighted EM algorithm in \code{\link{flexdog_full}}.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 #'
 get_inner_weights <- function(ploidy, mode) {
     .Call('_updog_get_inner_weights', PACKAGE = 'updog', ploidy, mode)
@@ -193,6 +209,8 @@ get_inner_weights <- function(ploidy, mode) {
 #'
 #' @author David Gerard
 #'
+#' @keywords internal
+#'
 #' @seealso \code{\link{flexdog}} for the full EM algorithm.
 #'
 get_wik_mat <- function(probk_vec, refvec, sizevec, ploidy, seq, bias, od) {
@@ -205,6 +223,8 @@ get_wik_mat <- function(probk_vec, refvec, sizevec, ploidy, seq, bias, od) {
 #' @param probk_vec The kth element is the prior probability of genotype k (when starting to count from 0).
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 #'
 #' @return The objective (marginal log-likelihood) used in
 #'     \code{\link{flexdog_full}}.
@@ -219,6 +239,8 @@ flexdog_obj <- function(probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_
 #' @param pivec The current parameters.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 #'
 #' @return The objective optimized by \code{\link{uni_em}} during
 #'     that separate unimodal EM algorithm.
@@ -248,6 +270,8 @@ uni_obj <- function(pivec, weight_vec, lmat, lambda) {
 #'
 #' @author David Gerard
 #'
+#' @keywords internal
+#'
 uni_em <- function(weight_vec, lmat, pi_init, lambda, itermax, obj_tol) {
     .Call('_updog_uni_em', PACKAGE = 'updog', weight_vec, lmat, pi_init, lambda, itermax, obj_tol)
 }
@@ -264,6 +288,8 @@ uni_em <- function(weight_vec, lmat, pi_init, lambda, itermax, obj_tol) {
 #'
 #' @author David Gerard
 #'
+#' @keywords internal
+#'
 f1_obj <- function(alpha, pvec, weight_vec) {
     .Call('_updog_f1_obj', PACKAGE = 'updog', alpha, pvec, weight_vec)
 }
@@ -279,6 +305,8 @@ f1_obj <- function(alpha, pvec, weight_vec) {
 #'     in \code{\link{obj_for_mu_sigma2}}.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 grad_for_mu_sigma2 <- function(mu, sigma2, phifk_mat, cor_inv, log_bb_dense) {
     .Call('_updog_grad_for_mu_sigma2', PACKAGE = 'updog', mu, sigma2, phifk_mat, cor_inv, log_bb_dense)
 }
@@ -291,7 +319,7 @@ grad_for_mu_sigma2 <- function(mu, sigma2, phifk_mat, cor_inv, log_bb_dense) {
 #' @inheritParams obj_for_mu_sigma2
 #' @param muSigma2 A vector. The first half are mu and the second half are sigma2.
 #'
-#'
+#' @keywords internal
 #'
 #' @author David Gerard
 grad_for_mu_sigma2_wrapper <- function(muSigma2, phifk_mat, cor_inv, log_bb_dense) {
@@ -309,6 +337,8 @@ grad_for_mu_sigma2_wrapper <- function(muSigma2, phifk_mat, cor_inv, log_bb_dens
 #'
 #' @return A double.
 #'
+#' @keywords internal
+#'
 #' @author David Gerard
 dpen_dh <- function(h, mu_h, sigma2_h) {
     .Call('_updog_dpen_dh', PACKAGE = 'updog', h, mu_h, sigma2_h)
@@ -324,6 +354,8 @@ dpen_dh <- function(h, mu_h, sigma2_h) {
 #' @seealso \code{\link{pen_seq_error}} which this is a derivative for.
 #'
 #' @return A double.
+#'
+#' @keywords internal
 #'
 #' @author David Gerard
 dpen_deps <- function(eps, mu_eps, sigma2_eps) {
@@ -342,6 +374,8 @@ dpen_deps <- function(eps, mu_eps, sigma2_eps) {
 #'
 #' @return A double.
 #'
+#' @keywords internal
+#'
 #' @seealso \code{\link{dbetabinom_double}}, \code{\link{dlbeta_dtau}},
 #'     \code{\link{dc_dtau}}.
 #' @author David Gerard
@@ -354,6 +388,8 @@ dlbeta_dc <- function(x, n, xi, c) {
 #' @param tau The overdispersion parameter.
 #'
 #' @return A double.
+#'
+#' @keywords internal
 #'
 #' @seealso \code{\link{dlbeta_dc}}, \code{\link{dlbeta_dtau}}
 #'
@@ -374,6 +410,8 @@ dc_dtau <- function(tau) {
 #'
 #' @return A double.
 #'
+#' @keywords internal
+#'
 #' @seealso \code{\link{dlbeta_dc}}, \code{\link{dc_dtau}},
 #'     \code{\link{dbetabinom_double}}.
 #'
@@ -390,6 +428,8 @@ dlbeta_dtau <- function(x, n, p, eps, h, tau) {
 #' @inheritParams dlbeta_dtau
 #' @param xi The mean of the underlying beta.
 #'
+#' @keywords internal
+#'
 #' @author David Gerard
 dlbeta_dxi <- function(x, n, xi, tau) {
     .Call('_updog_dlbeta_dxi', PACKAGE = 'updog', x, n, xi, tau)
@@ -403,6 +443,8 @@ dlbeta_dxi <- function(x, n, xi, tau) {
 #' @param eps The sequencing error rate.
 #' @param h The bias parameter.
 #'
+#' @keywords internal
+#'
 #' @author David Gerard
 dxi_dh <- function(p, eps, h) {
     .Call('_updog_dxi_dh', PACKAGE = 'updog', p, eps, h)
@@ -413,6 +455,8 @@ dxi_dh <- function(p, eps, h) {
 #' @inheritParams dlbeta_dtau
 #'
 #' @return A double.
+#'
+#' @keywords internal
 #'
 #' @author David Gerard
 dlbeta_dh <- function(x, n, p, eps, h, tau) {
@@ -426,6 +470,8 @@ dlbeta_dh <- function(x, n, p, eps, h, tau) {
 #'
 #' @return A double.
 #'
+#' @keywords internal
+#'
 #' @author David Gerard
 dxi_df <- function(h, f) {
     .Call('_updog_dxi_df', PACKAGE = 'updog', h, f)
@@ -437,6 +483,8 @@ dxi_df <- function(h, f) {
 #' @param eps The sequencing error rate.
 #'
 #' @return A double.
+#'
+#' @keywords internal
 #'
 #' @author David Gerard
 df_deps <- function(p, eps) {
@@ -450,6 +498,8 @@ df_deps <- function(p, eps) {
 #'
 #' @return A double.
 #'
+#' @keywords internal
+#'
 #' @author David Gerard
 dlbeta_deps <- function(x, n, p, eps, h, tau) {
     .Call('_updog_dlbeta_deps', PACKAGE = 'updog', x, n, p, eps, h, tau)
@@ -458,6 +508,8 @@ dlbeta_deps <- function(x, n, p, eps, h, tau) {
 #' Gradient for \code{\link{obj_for_eps}}.
 #'
 #' @return A double.
+#'
+#' @keywords internal
 #'
 #' @inheritParams obj_for_eps
 #'
@@ -474,6 +526,8 @@ grad_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, m
 #'     beta. The second component is the gradient of the overdispersion parameter of the
 #'     underlying beta.
 #'
+#' @keywords internal
+#'
 #' @author David Gerard
 grad_for_weighted_lbb <- function(parvec, ploidy, weight_vec) {
     .Call('_updog_grad_for_weighted_lbb', PACKAGE = 'updog', parvec, ploidy, weight_vec)
@@ -487,6 +541,8 @@ grad_for_weighted_lbb <- function(parvec, ploidy, weight_vec) {
 #'     the second term is the derivative with respect to the standard deviation (not variance).
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 grad_for_weighted_lnorm <- function(parvec, ploidy, weight_vec) {
     .Call('_updog_grad_for_weighted_lnorm', PACKAGE = 'updog', parvec, ploidy, weight_vec)
 }
@@ -507,6 +563,8 @@ grad_for_weighted_lnorm <- function(parvec, ploidy, weight_vec) {
 #' @return The posterior probability of having \code{dosage} A alleles.
 #'
 #' @author David
+#'
+#' @keywords internal
 #'
 post_prob <- function(dosage, ploidy, mu, sigma2, alpha, rho) {
     .Call('_updog_post_prob', PACKAGE = 'updog', dosage, ploidy, mu, sigma2, alpha, rho)
@@ -529,6 +587,8 @@ post_prob <- function(dosage, ploidy, mu, sigma2, alpha, rho) {
 #'
 #' @author David Gerard
 #'
+#' @keywords internal
+#'
 compute_all_post_prob <- function(ploidy, mu, sigma2, alpha, rho) {
     .Call('_updog_compute_all_post_prob', PACKAGE = 'updog', ploidy, mu, sigma2, alpha, rho)
 }
@@ -536,6 +596,8 @@ compute_all_post_prob <- function(ploidy, mu, sigma2, alpha, rho) {
 #' Calculates the log-density for every individual by snp by dosage level.
 #'
 #' @inheritParams mupdog
+#'
+#' @keywords internal
 #'
 #' @return A three dimensional array. The rows index the individuals, the
 #'     columns index the SNPs, and the third dimension indexes the
@@ -557,6 +619,8 @@ compute_all_log_bb <- function(refmat, sizemat, ploidy, seq, bias, od) {
 #'     genotypes. Computes the "continuous genotype".
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 compute_all_phifk <- function(alpha, rho, ploidy) {
     .Call('_updog_compute_all_phifk', PACKAGE = 'updog', alpha, rho, ploidy)
 }
@@ -572,6 +636,8 @@ compute_all_phifk <- function(alpha, rho, ploidy) {
 #' @return A double. The default penalty on the allelic bias parameter.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 pen_bias <- function(h, mu_h, sigma2_h) {
     .Call('_updog_pen_bias', PACKAGE = 'updog', h, mu_h, sigma2_h)
 }
@@ -588,6 +654,8 @@ pen_bias <- function(h, mu_h, sigma2_h) {
 #' @return A double. The default penalty on the sequencing error rate.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 pen_seq_error <- function(eps, mu_eps, sigma2_eps) {
     .Call('_updog_pen_seq_error', PACKAGE = 'updog', eps, mu_eps, sigma2_eps)
 }
@@ -610,6 +678,8 @@ pen_seq_error <- function(eps, mu_eps, sigma2_eps) {
 #'
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 obj_for_rho <- function(rho, mu, sigma2, alpha, log_bb_dense, ploidy) {
     .Call('_updog_obj_for_rho', PACKAGE = 'updog', rho, mu, sigma2, alpha, log_bb_dense, ploidy)
 }
@@ -629,6 +699,8 @@ obj_for_rho <- function(rho, mu, sigma2, alpha, log_bb_dense, ploidy) {
 #'
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 obj_for_alpha <- function(mu, sigma2, alpha, rho, log_bb_dense, ploidy) {
     .Call('_updog_obj_for_alpha', PACKAGE = 'updog', mu, sigma2, alpha, rho, log_bb_dense, ploidy)
 }
@@ -660,6 +732,8 @@ obj_for_alpha <- function(mu, sigma2, alpha, rho, log_bb_dense, ploidy) {
 #'     \code{\link{mupdog}}.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 obj_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od, wmat, update_bias = TRUE, update_seq = TRUE, update_od = TRUE) {
     .Call('_updog_obj_for_eps', PACKAGE = 'updog', parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od, wmat, update_bias, update_seq, update_od)
 }
@@ -678,6 +752,8 @@ obj_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, me
 #'     in \code{\link{mupdog}}.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 obj_for_mu_sigma2 <- function(mu, sigma2, phifk_mat, cor_inv, log_bb_dense) {
     .Call('_updog_obj_for_mu_sigma2', PACKAGE = 'updog', mu, sigma2, phifk_mat, cor_inv, log_bb_dense)
 }
@@ -690,6 +766,8 @@ obj_for_mu_sigma2 <- function(mu, sigma2, phifk_mat, cor_inv, log_bb_dense) {
 #'
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 obj_for_mu_sigma2_wrapper <- function(muSigma2, phifk_mat, cor_inv, log_bb_dense) {
     .Call('_updog_obj_for_mu_sigma2_wrapper', PACKAGE = 'updog', muSigma2, phifk_mat, cor_inv, log_bb_dense)
 }
@@ -717,6 +795,8 @@ obj_for_mu_sigma2_wrapper <- function(muSigma2, phifk_mat, cor_inv, log_bb_dense
 #'
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 elbo <- function(warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mean_bias, var_bias, mean_seq, var_seq, ploidy) {
     .Call('_updog_elbo', PACKAGE = 'updog', warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mean_bias, var_bias, mean_seq, var_seq, ploidy)
 }
@@ -734,6 +814,8 @@ elbo <- function(warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mea
 #'     distribution in \code{\link{mupdog}}.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 obj_for_weighted_lbb <- function(parvec, ploidy, weight_vec) {
     .Call('_updog_obj_for_weighted_lbb', PACKAGE = 'updog', parvec, ploidy, weight_vec)
 }
@@ -752,6 +834,8 @@ obj_for_weighted_lbb <- function(parvec, ploidy, weight_vec) {
 #'     genotype distribution in \code{\link{mupdog}}.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 #'
 obj_for_weighted_lnorm <- function(parvec, ploidy, weight_vec) {
     .Call('_updog_obj_for_weighted_lnorm', PACKAGE = 'updog', parvec, ploidy, weight_vec)
@@ -953,6 +1037,8 @@ oracle_joint <- function(n, ploidy, seq, bias, od, dist) {
 #'
 #' @author David Gerard
 #'
+#' @keywords internal
+#'
 #'
 doutdist <- function(x, n, logp) {
     .Call('_updog_doutdist', PACKAGE = 'updog', x, n, logp)
@@ -965,6 +1051,8 @@ doutdist <- function(x, n, logp) {
 #' @param out_prop The probability of being an outlier.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 #'
 #' @seealso \code{\link{flexdog}} for the full EM algorithm.
 #'     \code{\link{get_wik_mat}} for the equivalent function
@@ -989,6 +1077,8 @@ get_wik_mat_out <- function(probk_vec, out_prop, refvec, sizevec, ploidy, seq, b
 #'     \code{outliers = TRUE}.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 #'
 #' @seealso \code{\link{flexdog_obj}} for the objective function without outliers.
 #'
@@ -1092,6 +1182,8 @@ get_hyper_weights <- function(ploidy, ell) {
 #'     sequencing error rate.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 eta_double <- function(p, eps) {
     .Call('_updog_eta_double', PACKAGE = 'updog', p, eps)
 }
@@ -1104,6 +1196,8 @@ eta_double <- function(p, eps) {
 #'     by the sequencing error rate.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 eta_fun <- function(p, eps) {
     .Call('_updog_eta_fun', PACKAGE = 'updog', p, eps)
 }
@@ -1118,6 +1212,8 @@ eta_fun <- function(p, eps) {
 #'     bias and the sequencing error rate.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 xi_double <- function(p, eps, h) {
     .Call('_updog_xi_double', PACKAGE = 'updog', p, eps, h)
 }
@@ -1134,6 +1230,8 @@ xi_double <- function(p, eps, h) {
 #'     by both the sequencing error rate and the allele bias.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 xi_fun <- function(p, eps, h) {
     .Call('_updog_xi_fun', PACKAGE = 'updog', p, eps, h)
 }
@@ -1174,6 +1272,8 @@ log_sum_exp_2 <- function(x, y) {
 #'
 #' @author David Gerard
 #'
+#' @keywords internal
+#'
 logit <- function(x) {
     .Call('_updog_logit', PACKAGE = 'updog', x)
 }
@@ -1183,6 +1283,8 @@ logit <- function(x) {
 #' @param x A double.
 #'
 #' @return The expit (logistic) of \code{x}.
+#'
+#' @keywords internal
 #'
 #' @author David Gerard
 expit <- function(x) {
@@ -1195,6 +1297,8 @@ expit <- function(x) {
 #' @param pivec The current parameters.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 #'
 #' @return The objective optimized by \code{\link{uni_em_const}} during
 #'     that separate unimodal EM algorithm.
@@ -1231,6 +1335,8 @@ uni_obj_const <- function(pivec, alpha, weight_vec, lmat, lambda) {
 #'     \code{\link{flexdog_full}}.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 #'
 uni_em_const <- function(weight_vec, lmat, pi_init, alpha, lambda, itermax, obj_tol) {
     .Call('_updog_uni_em_const', PACKAGE = 'updog', weight_vec, lmat, pi_init, alpha, lambda, itermax, obj_tol)
@@ -1281,6 +1387,8 @@ convolve_up <- function(x, y) {
 #'     probability distribution through \code{\link{f1_obj}}.
 #'
 #' @author David Gerard
+#'
+#' @keywords internal
 pp_brent_obj <- function(firstmixweight, probmat, pvec, weight_vec, alpha) {
     .Call('_updog_pp_brent_obj', PACKAGE = 'updog', firstmixweight, probmat, pvec, weight_vec, alpha)
 }

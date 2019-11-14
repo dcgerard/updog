@@ -29,3 +29,4 @@ Objective function when updating alpha
 \author{
 David Gerard
 }
+\keyword{internal}

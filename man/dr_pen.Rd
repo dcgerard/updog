@@ -20,3 +20,4 @@ A dirichlet prior on \code{pairweights}. Returns log density.
 \author{
 David Gerard
 }
+\keyword{internal}

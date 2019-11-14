@@ -41,3 +41,4 @@ E-step in \code{\link{flexdog}} where we now allow an outlier distribution.
 \author{
 David Gerard
 }
+\keyword{internal}

@@ -32,3 +32,4 @@ each individual at each SNP.
 \author{
 David Gerard
 }
+\keyword{internal}

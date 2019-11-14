@@ -25,3 +25,4 @@ Special case of betabinomial where the beta is bernoulli mu.
 \author{
 David Gerard
 }
+\keyword{internal}
