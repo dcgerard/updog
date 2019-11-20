@@ -5,8 +5,22 @@
 \title{Log-likelihood that \code{\link{flexdog}} maximizes when
 outliers are present.}
 \usage{
-flexdog_obj_out(probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias,
-  od, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od)
+flexdog_obj_out(
+  probk_vec,
+  out_prop,
+  refvec,
+  sizevec,
+  ploidy,
+  seq,
+  bias,
+  od,
+  mean_bias,
+  var_bias,
+  mean_seq,
+  var_seq,
+  mean_od,
+  var_od
+)
 }
 \arguments{
 \item{probk_vec}{The kth element is the prior probability of genotype k (when starting to count from 0).}

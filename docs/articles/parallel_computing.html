@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
       </span>
     </div>
 
@@ -87,7 +87,7 @@
       <h1>Parallelized Genotyping using Updog</h1>
                         <h4 class="author">David Gerard</h4>
             
-            <h4 class="date">2019-11-14</h4>
+            <h4 class="date">2019-11-20</h4>
       
       
       <div class="hidden name"><code>parallel_computing.Rmd</code></div>
@@ -151,12 +151,12 @@
 <a class="sourceLine" id="cb5-15" data-line-number="15">                   }</a>
 <a class="sourceLine" id="cb5-16" data-line-number="16"><span class="kw"><a href="https://rdrr.io/r/parallel/makeCluster.html">stopCluster</a></span>(cl)</a></code></pre></div>
 <p>Returning the diagnostics for each SNP is pretty easy. For example, below we extract the variable <code>prop_mis</code> from the list <code>glist</code> and make a histogram of these values.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyverse)</a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">prop_mis &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(<span class="dt">X =</span> glist, <span class="dt">FUN =</span> <span class="cf">function</span>(x) x<span class="op">$</span>prop_mis)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw">qplot</span>(prop_mis, </a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/qplot.html">qplot</a></span>(prop_mis, </a>
 <a class="sourceLine" id="cb6-4" data-line-number="4">      <span class="dt">xlab =</span> <span class="st">"Posterior Proportion Mis-genotyped"</span>, </a>
 <a class="sourceLine" id="cb6-5" data-line-number="5">      <span class="dt">bins =</span> <span class="dv">30</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</a></code></pre></div>
 <p><img src="parallel_computing_files/figure-html/unnamed-chunk-6-1.png" width="432"></p>
 </div>
 <div id="references" class="section level1 unnumbered">

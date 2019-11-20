@@ -49,9 +49,9 @@ gene_dist <- get_q_array(ploidy = ploidy)[pgeno + 1, pgeno + 1, ]
 
 This is what the genotype distribution for the offspring looks like:
 ```{r, message=FALSE}
-library(tidyverse)
-tibble(x = 0:ploidy, y = 0, yend = gene_dist) %>%
-  ggplot(mapping = aes(x = x, y = y, xend = x, yend = yend)) +
+library(ggplot2)
+distdf <- data.frame(x = 0:ploidy, y = 0, yend = gene_dist)
+ggplot(distdf, mapping = aes(x = x, y = y, xend = x, yend = yend)) +
   geom_segment(lineend = "round", lwd = 2) +
   theme_bw() +
   xlab("Allele Dosage") +

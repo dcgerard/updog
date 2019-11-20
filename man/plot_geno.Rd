@@ -4,10 +4,22 @@
 \alias{plot_geno}
 \title{Make a genotype plot.}
 \usage{
-plot_geno(refvec, sizevec, ploidy, p1ref = NULL, p1size = NULL,
-  p2ref = NULL, p2size = NULL, geno = NULL, seq = 0, bias = 1,
-  maxpostprob = NULL, p1geno = NULL, p2geno = NULL,
-  use_colorblind = TRUE)
+plot_geno(
+  refvec,
+  sizevec,
+  ploidy,
+  p1ref = NULL,
+  p1size = NULL,
+  p2ref = NULL,
+  p2size = NULL,
+  geno = NULL,
+  seq = 0,
+  bias = 1,
+  maxpostprob = NULL,
+  p1geno = NULL,
+  p2geno = NULL,
+  use_colorblind = TRUE
+)
 }
 \arguments{
 \item{refvec}{A vector of non-negative integers. The number of

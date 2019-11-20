@@ -95,7 +95,7 @@ stopCluster(cl)
 
 Returning the diagnostics for each SNP is pretty easy. For example, below we extract the variable `prop_mis` from the list `glist` and make a histogram of these values.
 ```{r, message=FALSE}
-library(tidyverse)
+library(ggplot2)
 prop_mis <- sapply(X = glist, FUN = function(x) x$prop_mis)
 qplot(prop_mis, 
       xlab = "Posterior Proportion Mis-genotyped", 

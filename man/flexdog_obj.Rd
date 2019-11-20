@@ -4,8 +4,21 @@
 \alias{flexdog_obj}
 \title{Log-likelihood that \code{\link{flexdog}} maximizes.}
 \usage{
-flexdog_obj(probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_bias,
-  var_bias, mean_seq, var_seq, mean_od, var_od)
+flexdog_obj(
+  probk_vec,
+  refvec,
+  sizevec,
+  ploidy,
+  seq,
+  bias,
+  od,
+  mean_bias,
+  var_bias,
+  mean_seq,
+  var_seq,
+  mean_od,
+  var_od
+)
 }
 \arguments{
 \item{probk_vec}{The kth element is the prior probability of genotype k (when starting to count from 0).}

@@ -43,14 +43,10 @@ library(updog)
 data("snpdat")
 ```
 
-We'll use the `tidyverse` to extract the First SNP.
+We'll extract the First SNP.
 
 ```{r, message=FALSE}
-library(tidyverse)
-snpdat %>% 
-  filter(snp == "SNP1") %>%
-  select(counts, size, id) ->
-  smalldat
+smalldat <- snpdat[snpdat$snp == "SNP1", c("counts", "size", "id")]
 head(smalldat)
 ```
 

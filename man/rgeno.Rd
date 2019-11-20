@@ -4,11 +4,21 @@
 \alias{rgeno}
 \title{Simulate individual genotypes from one of the supported \code{\link{flexdog}} models.}
 \usage{
-rgeno(n, ploidy, model = c("hw", "bb", "norm", "ash", "f1", "s1", "f1pp",
-  "s1pp", "flex", "uniform"), allele_freq = NULL, od = NULL,
-  p1geno = NULL, p2geno = NULL, mode = NULL, pivec = NULL,
-  mu = NULL, sigma = NULL, p1_pair_weights = NULL,
-  p2_pair_weights = NULL)
+rgeno(
+  n,
+  ploidy,
+  model = c("hw", "bb", "norm", "ash", "f1", "s1", "f1pp", "s1pp", "flex", "uniform"),
+  allele_freq = NULL,
+  od = NULL,
+  p1geno = NULL,
+  p2geno = NULL,
+  mode = NULL,
+  pivec = NULL,
+  mu = NULL,
+  sigma = NULL,
+  p1_pair_weights = NULL,
+  p2_pair_weights = NULL
+)
 }
 \arguments{
 \item{n}{The number of observations.}

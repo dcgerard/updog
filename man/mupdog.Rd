@@ -4,13 +4,30 @@
 \alias{mupdog}
 \title{Multi-SNP updog.}
 \usage{
-mupdog(refmat, sizemat, ploidy, verbose = TRUE, mean_bias = 0,
-  var_bias = 1, mean_seq = -4.7, var_seq = 1, seq = NULL,
-  bias = NULL, od = NULL, allele_freq = NULL, inbreeding = NULL,
-  cor_mat = NULL, postmean = NULL, postvar = NULL,
-  update_cor = TRUE, update_inbreeding = TRUE,
-  update_allele_freq = TRUE, num_core = 1, update_method = c("Brent",
-  "L-BFGS-B"), control = list())
+mupdog(
+  refmat,
+  sizemat,
+  ploidy,
+  verbose = TRUE,
+  mean_bias = 0,
+  var_bias = 1,
+  mean_seq = -4.7,
+  var_seq = 1,
+  seq = NULL,
+  bias = NULL,
+  od = NULL,
+  allele_freq = NULL,
+  inbreeding = NULL,
+  cor_mat = NULL,
+  postmean = NULL,
+  postvar = NULL,
+  update_cor = TRUE,
+  update_inbreeding = TRUE,
+  update_allele_freq = TRUE,
+  num_core = 1,
+  update_method = c("Brent", "L-BFGS-B"),
+  control = list()
+)
 }
 \arguments{
 \item{refmat}{A matrix of reference counts.

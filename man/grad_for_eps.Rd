@@ -4,9 +4,22 @@
 \alias{grad_for_eps}
 \title{Gradient for \code{\link{obj_for_eps}}.}
 \usage{
-grad_for_eps(parvec, refvec, sizevec, ploidy, mean_bias, var_bias,
-  mean_seq, var_seq, mean_od, var_od, wmat, update_bias = TRUE,
-  update_seq = TRUE, update_od = TRUE)
+grad_for_eps(
+  parvec,
+  refvec,
+  sizevec,
+  ploidy,
+  mean_bias,
+  var_bias,
+  mean_seq,
+  var_seq,
+  mean_od,
+  var_od,
+  wmat,
+  update_bias = TRUE,
+  update_seq = TRUE,
+  update_od = TRUE
+)
 }
 \arguments{
 \item{parvec}{A vector of length three. The first element is the sequencing

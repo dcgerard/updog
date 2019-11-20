@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
       </span>
     </div>
 
@@ -87,7 +87,7 @@
       <h1>Example Use of Updog</h1>
                         <h4 class="author">David Gerard</h4>
             
-            <h4 class="date">2019-11-14</h4>
+            <h4 class="date">2019-11-20</h4>
       
       
       <div class="hidden name"><code>smells_like_updog.Rmd</code></div>
@@ -115,22 +115,18 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(updog)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"snpdat"</span>)</a></code></pre></div>
-<p>We’ll use the <code>tidyverse</code> to extract the First SNP.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyverse)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">snpdat <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(snp <span class="op">==</span><span class="st"> "SNP1"</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="st">  </span><span class="kw">select</span>(counts, size, id) -&gt;</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="st">  </span>smalldat</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(smalldat)</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; # A tibble: 6 x 3</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt;   counts  size id           </span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;chr&gt;        </span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co">#&gt; 1    298   354 Xushu18      </span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co">#&gt; 2    187   187 Xushu18S1-001</span></a>
-<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co">#&gt; 3    201   201 Xushu18S1-002</span></a>
-<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">#&gt; 4    157   184 Xushu18S1-003</span></a>
-<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="co">#&gt; 5    175   215 Xushu18S1-004</span></a>
-<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co">#&gt; 6    283   283 Xushu18S1-005</span></a></code></pre></div>
+<p>We’ll extract the First SNP.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">smalldat &lt;-<span class="st"> </span>snpdat[snpdat<span class="op">$</span>snp <span class="op">==</span><span class="st"> "SNP1"</span>, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"counts"</span>, <span class="st">"size"</span>, <span class="st">"id"</span>)]</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(smalldat)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; # A tibble: 6 x 3</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt;   counts  size id           </span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;chr&gt;        </span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt; 1    298   354 Xushu18      </span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; 2    187   187 Xushu18S1-001</span></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; 3    201   201 Xushu18S1-002</span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt; 4    157   184 Xushu18S1-003</span></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co">#&gt; 5    175   215 Xushu18S1-004</span></a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co">#&gt; 6    283   283 Xushu18S1-005</span></a></code></pre></div>
 <p>We will separate the counts between the children and the parent (the first individual). Note that you do <em>not</em> need the parental counts to fit updog, but they can help improve estimates of the parameters in the updog model.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">pref    &lt;-<span class="st"> </span>smalldat<span class="op">$</span>counts[<span class="dv">1</span>]</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">psize   &lt;-<span class="st"> </span>smalldat<span class="op">$</span>size[<span class="dv">1</span>]</a>

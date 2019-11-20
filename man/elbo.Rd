@@ -4,8 +4,20 @@
 \alias{elbo}
 \title{The evidence lower bound}
 \usage{
-elbo(warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mean_bias,
-  var_bias, mean_seq, var_seq, ploidy)
+elbo(
+  warray,
+  lbeta_array,
+  cor_inv,
+  postmean,
+  postvar,
+  bias,
+  seq,
+  mean_bias,
+  var_bias,
+  mean_seq,
+  var_seq,
+  ploidy
+)
 }
 \arguments{
 \item{warray}{An three-way array. The (i,j,k)th entry is the variational posterior probability

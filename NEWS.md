@@ -1,3 +1,12 @@
+# updog 1.1.3
+
+- Updates documentation to include the Bioinformatics publication,
+  Gerard and Ferrão (2019) 
+  \<[doi:10.1093/bioinformatics/btz852](https://doi.org/10.1093/bioinformatics/btz852)\>.
+- Adds the "internal" keyword to functions that most users don't need.
+- Removes the tidyverse from the Suggests field. I was only using this in 
+  the vignettes, so I changed it to base R (except for ggplot2).
+
 # updog 1.1.1
 
 - Updates documentation to include Gerard and Ferrão (2019) 

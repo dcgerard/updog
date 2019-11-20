@@ -4,11 +4,23 @@
 \alias{flexdog}
 \title{Flexible genotyping for polyploids from next-generation sequencing data.}
 \usage{
-flexdog(refvec, sizevec, ploidy, model = c("norm", "hw", "bb", "ash",
-  "s1", "s1pp", "f1", "f1pp", "flex", "uniform", "custom"), p1ref = NULL,
-  p1size = NULL, p2ref = NULL, p2size = NULL, snpname = NULL,
-  bias_init = exp(c(-1, -0.5, 0, 0.5, 1)), verbose = TRUE,
-  outliers = FALSE, prior_vec = NULL, ...)
+flexdog(
+  refvec,
+  sizevec,
+  ploidy,
+  model = c("norm", "hw", "bb", "ash", "s1", "s1pp", "f1", "f1pp", "flex", "uniform",
+    "custom"),
+  p1ref = NULL,
+  p1size = NULL,
+  p2ref = NULL,
+  p2size = NULL,
+  snpname = NULL,
+  bias_init = exp(c(-1, -0.5, 0, 0.5, 1)),
+  verbose = TRUE,
+  outliers = FALSE,
+  prior_vec = NULL,
+  ...
+)
 }
 \arguments{
 \item{refvec}{A vector of counts of reads of the reference allele.}

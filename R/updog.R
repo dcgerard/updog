@@ -82,12 +82,11 @@
 #' @importFrom stringr str_replace
 #'
 #' @docType package
-#' @name updog
 #' @name updog-package
+#' @aliases updog
 #'
 #' @author David Gerard
 NULL
-
 
 #' The Beta-Binomial Distribution
 #'

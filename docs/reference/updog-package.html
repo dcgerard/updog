@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Make a genotype plot. — plot_geno • updog</title>
+<title><code>updog</code> Flexible Genotyping for Polyploids — updog-package • updog</title>
 
 
 <!-- jquery -->
@@ -35,12 +35,23 @@
 
 
 
-<meta property="og:title" content="Make a genotype plot. — plot_geno" />
-<meta property="og:description" content="The x-axis is the counts of the non-reference allele,
-and the y-axis is the counts of the reference allele.
-Transparency is controlled by the maxpostprob
-vector. These types of plots are used in Gerard et. al. (2018) and
-Gerard and Ferrão (2019)." />
+<meta property="og:title" content="<code>updog</code> Flexible Genotyping for Polyploids — updog-package" />
+<meta property="og:description" content="Implements empirical Bayes approaches to genotype
+polyploids from next generation sequencing data while
+accounting for allelic bias, overdispersion, and sequencing
+error. The main function is flexdog, which allows
+the specification of many different genotype distributions.
+An experimental function that takes into account varying
+levels of relatedness is implemented in mupdog.
+Also provided are functions to simulate genotypes
+(rgeno) and read-counts
+(rflexdog), as well as functions to calculate
+oracle genotyping error rates (oracle_mis) and
+correlation with the true genotypes (oracle_cor).
+These latter two functions are useful for read depth calculations.
+Run browseVignettes(package = &quot;updog&quot;) in R
+for example usage. The methods are described in detail in
+Gerard et. al. (2018) and Gerard and Ferrão (2019)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -128,117 +139,87 @@ Gerard and Ferrão (2019)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Make a genotype plot.</h1>
+    <h1><code>updog</code> Flexible Genotyping for Polyploids</h1>
     
-    <div class="hidden name"><code>plot_geno.Rd</code></div>
+    <div class="hidden name"><code>updog-package.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The x-axis is the counts of the non-reference allele,
-and the y-axis is the counts of the reference allele.
-Transparency is controlled by the <code>maxpostprob</code>
-vector. These types of plots are used in Gerard et. al. (2018) and
-Gerard and Ferrão (2019).</p>
+    <p>Implements empirical Bayes approaches to genotype
+polyploids from next generation sequencing data while
+accounting for allelic bias, overdispersion, and sequencing
+error. The main function is <code><a href='flexdog.html'>flexdog</a></code>, which allows
+the specification of many different genotype distributions.
+An experimental function that takes into account varying
+levels of relatedness is implemented in <code><a href='mupdog.html'>mupdog</a></code>.
+Also provided are functions to simulate genotypes
+(<code><a href='rgeno.html'>rgeno</a></code>) and read-counts
+(<code><a href='rflexdog.html'>rflexdog</a></code>), as well as functions to calculate
+oracle genotyping error rates (<code><a href='oracle_mis.html'>oracle_mis</a></code>) and
+correlation with the true genotypes (<code><a href='oracle_cor.html'>oracle_cor</a></code>).
+These latter two functions are useful for read depth calculations.
+Run <code><a href='https://rdrr.io/r/utils/browseVignettes.html'>browseVignettes(package = "updog")</a></code> in R
+for example usage. The methods are described in detail in
+Gerard et. al. (2018) and Gerard and Ferrão (2019).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_geno</span>(
-  <span class='no'>refvec</span>,
-  <span class='no'>sizevec</span>,
-  <span class='no'>ploidy</span>,
-  <span class='kw'>p1ref</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>p1size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>p2ref</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>p2size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>geno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>seq</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>bias</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>maxpostprob</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>p1geno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>p2geno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>use_colorblind</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)</pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>refvec</th>
-      <td><p>A vector of non-negative integers. The number of
-reference reads observed in the individuals</p></td>
-    </tr>
-    <tr>
-      <th>sizevec</th>
-      <td><p>A vector of positive integers. The total number of
-reads in the individuals.</p></td>
-    </tr>
-    <tr>
-      <th>ploidy</th>
-      <td><p>A non-negative integer. The ploidy of the species.</p></td>
-    </tr>
-    <tr>
-      <th>p1ref</th>
-      <td><p>A vector of non-negative integers. The number of
-reference reads observed in parent 1 (if the individuals are
-all siblings).</p></td>
-    </tr>
-    <tr>
-      <th>p1size</th>
-      <td><p>A vector of positive integers. The total number of
-reads in parent 1 (if the individuals are
-all siblings).</p></td>
-    </tr>
-    <tr>
-      <th>p2ref</th>
-      <td><p>A vector of non-negative integers. The number of
-reference reads observed in parent 2 (if the individuals are
-all siblings).</p></td>
-    </tr>
-    <tr>
-      <th>p2size</th>
-      <td><p>A vector of positive integers. The total number of
-reads in parent 2 (if the individuals are
-all siblings).</p></td>
-    </tr>
-    <tr>
-      <th>geno</th>
-      <td><p>The individual genotypes.</p></td>
-    </tr>
-    <tr>
-      <th>seq</th>
-      <td><p>The sequencing error rate.</p></td>
-    </tr>
-    <tr>
-      <th>bias</th>
-      <td><p>The bias parameter.</p></td>
-    </tr>
-    <tr>
-      <th>maxpostprob</th>
-      <td><p>A vector of the posterior probabilities of being at
-the modal genotype.</p></td>
-    </tr>
-    <tr>
-      <th>p1geno</th>
-      <td><p>Parent 1's genotype.</p></td>
-    </tr>
-    <tr>
-      <th>p2geno</th>
-      <td><p>Parent 2's genotype.</p></td>
-    </tr>
-    <tr>
-      <th>use_colorblind</th>
-      <td><p>A logical. Should we use a colorblind safe palette (<code>TRUE</code>),
-or not (<code>FALSE</code>)? Only allowed if <code>ploidy &lt;= 6</code>.</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A <code><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></code> object for the genotype plot.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>If parental genotypes are provided (<code>p1geno</code> and <code>p2geno</code>) then
-they will be colored the same as the offspring. Since they are often hard to see,
-a small black dot will also indicate their position.</p>
+    <p>The package is named <code>updog</code> for "Using
+Parental Data for Offspring Genotyping" because
+we originally developed the
+method for full-sib populations, but it works
+now for more general populations.</p>
+<p>Our best competitor is probably the <code>fitPoly</code> package,
+which you can check out at
+<a href='https://cran.r-project.org/package=fitPoly'>https://cran.r-project.org/package=fitPoly</a>. Though, we think
+that <code>updog</code> returns better calibrated measures of uncertainty
+when you have next-generation sequencing data.</p>
+<p>If you find a bug or want an enhancement, please submit an
+issue at <a href='http://github.com/dcgerard/updog/issues'>http://github.com/dcgerard/updog/issues</a>.</p>
+    <h2 class="hasAnchor" id="updog-functions"><a class="anchor" href="#updog-functions"></a><code>updog</code> Functions</h2>
+
+    
+
+<dl class='dl-horizontal'>
+  <dt><code><a href='flexdog.html'>flexdog</a></code></dt><dd><p>The main function that
+      fits an empirical Bayes approach to genotype polyploids
+      from next generation sequencing data.</p></dd>
+  <dt><code><a href='mupdog.html'>mupdog</a></code></dt><dd><p>An experimental approach to genotype
+      autopolyploids that accounts for varying levels of
+      relatedness between the individuals in the sample.</p></dd>
+  <dt><code><a href='rgeno.html'>rgeno</a></code></dt><dd><p>simulate the genotypes of a sample
+      from one of the models allowed in <code><a href='flexdog.html'>flexdog</a></code>.</p></dd>
+  <dt><code><a href='rflexdog.html'>rflexdog</a></code></dt><dd><p>Simulate read-counts from the
+      <code><a href='flexdog.html'>flexdog</a></code> model.</p></dd>
+  <dt><code><a href='plot.flexdog.html'>plot.flexdog</a></code></dt><dd><p>Plotting the output of
+      <code><a href='flexdog.html'>flexdog</a></code>.</p></dd>
+  <dt><code><a href='plot.mupdog.html'>plot.mupdog</a></code></dt><dd><p>Plotting the output of
+      <code><a href='mupdog.html'>mupdog</a></code>.</p></dd>
+  <dt><code><a href='oracle_joint.html'>oracle_joint</a></code></dt><dd><p>The joint distribution of the true genotype
+      and an oracle estimator.</p></dd>
+  <dt><code><a href='oracle_plot.html'>oracle_plot</a></code></dt><dd><p>Visualize the output of <code><a href='oracle_joint.html'>oracle_joint</a></code>.</p></dd>
+  <dt><code><a href='oracle_mis.html'>oracle_mis</a></code></dt><dd><p>The oracle misclassification error rate (Bayes rate).</p></dd>
+  <dt><code><a href='oracle_cor.html'>oracle_cor</a></code></dt><dd><p>Correlation between the true genotype and the oracle estimated genotype.</p></dd>
+
+</dl>
+
+    <h2 class="hasAnchor" id="updog-datasets"><a class="anchor" href="#updog-datasets"></a><code>updog</code> Datasets</h2>
+
+    
+
+<dl class='dl-horizontal'>
+  <dt><code><a href='snpdat.html'>snpdat</a></code></dt><dd><p>A small example dataset for using
+      <code><a href='flexdog.html'>flexdog</a></code>.</p></dd>
+  <dt><code><a href='uitdewilligen.html'>uitdewilligen</a></code></dt><dd><p>A small example dataset
+      for using <code><a href='mupdog.html'>mupdog</a></code>.</p></dd>
+  <dt><code><a href='mupout.html'>mupout</a></code></dt><dd><p>The output from fitting
+      <code><a href='mupdog.html'>mupdog</a></code> to <code><a href='uitdewilligen.html'>uitdewilligen</a></code>.</p></dd>
+
+</dl>
+
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
@@ -248,22 +229,14 @@ a small black dot will also indicate their position.</p>
 </ul>
 
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"snpdat"</span>)
-<span class='no'>refvec</span>  <span class='kw'>&lt;-</span> <span class='no'>snpdat</span>$<span class='no'>counts</span>[<span class='no'>snpdat</span>$<span class='no'>snp</span> <span class='kw'>==</span> <span class='st'>"SNP1"</span>]
-<span class='no'>sizevec</span> <span class='kw'>&lt;-</span> <span class='no'>snpdat</span>$<span class='no'>size</span>[<span class='no'>snpdat</span>$<span class='no'>snp</span> <span class='kw'>==</span> <span class='st'>"SNP1"</span>]
-<span class='no'>ploidy</span>  <span class='kw'>&lt;-</span> <span class='fl'>6</span>
-<span class='fu'>plot_geno</span>(<span class='kw'>refvec</span> <span class='kw'>=</span> <span class='no'>refvec</span>, <span class='kw'>sizevec</span> <span class='kw'>=</span> <span class='no'>sizevec</span>, <span class='kw'>ploidy</span> <span class='kw'>=</span> <span class='no'>ploidy</span>)</div><div class='img'><img src='plot_geno-1.png' alt='' width='700' height='433' /></div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
       <li><a href="#details">Details</a></li>
+      <li><a href="#updog-functions"><code>updog</code> Functions</a></li>
+      <li><a href="#updog-datasets"><code>updog</code> Datasets</a></li>
       <li><a href="#references">References</a></li>
-      <li><a href="#examples">Examples</a></li>
     </ul>
 
     <h2>Author</h2>
