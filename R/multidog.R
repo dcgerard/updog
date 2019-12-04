@@ -22,7 +22,7 @@
 #'     length 1. This should correspond to a single column name in \code{refmat}
 #'     and \code{sizemat}.
 #'     
-#' @return A list of two data frames.
+#' @return A list-like object of two data frames.
 #' \describe{
 #' \item{\code{snpdf}}{A data frame containing properties of the SNP's (markers).
 #'     The rows index the SNP's. The variables include:
@@ -71,13 +71,15 @@
 #' @author David Gerard 
 #' 
 #' @examples 
+#' \dontrun{
 #' data("uitdewilligen")
-#' mout <- multidog(refmat = uitdewilligen$refmat,
-#'                  sizemat = uitdewilligen$sizemat,
+#' mout <- multidog(refmat = t(uitdewilligen$refmat),
+#'                  sizemat = t(uitdewilligen$sizemat),
 #'                  ploidy = uitdewilligen$ploidy,
 #'                  nc = 2)
 #' mout$inddf
 #' mout$snpdf
+#' }
 #' 
 #' @export
 multidog <- function(refmat,
@@ -231,6 +233,63 @@ multidog <- function(refmat,
   inddf <- do.call("rbind", lapply(outlist, function(x) x[[1]]))
   snpdf <- do.call("rbind", lapply(outlist, function(x) x[[2]]))
   
-  return(list(snpdf = snpdf, 
-              inddf = inddf))
+  retlist <- list(snpdf = snpdf, 
+                  inddf = inddf)
+  class(retlist) <- "multidog"
+  return(retlist)
 }
+
+
+
+#' Plot the output of \code{\link{multidog}}.
+#' 
+#' Produce genotype plots from the output of \code{\link{multidog}}. You may
+#' select which SNP's to plot.
+#' 
+#' @param x The output of \code{\link{multidog}}.
+#' @param indices A vector of integers. The indices of the SNP's to plot.
+#' @param wait Should we prompt for a new plot (\code{TRUE}) or not 
+#'     (\code{FALSE})?
+#' @param ... not used.
+#' 
+#' @author David Gerard
+#' 
+#' @export
+#' 
+#' @seealso \code{\link{plot_geno}}.
+#' 
+plot.multidog <- function(x, indices = seq_len(nrow(x$snpdf)), wait = TRUE, ...) {
+  
+  all(indices <= nrow(x$snpdf))
+  
+  pllist <- list()
+  for (i in seq_along(indices)) {
+    current_index <- indices[[i]]
+    current_snp <- x$snpdf$snp[[current_index]]
+    bias <- x$snpdf$bias[[current_index]]
+    seq <- x$snpdf$seq[[current_index]]
+    ploidy <- x$snpdf$ploidy[[current_index]]
+    
+    refvec <- x$inddf[x$inddf$snp == current_snp, "ref", drop = TRUE]
+    sizevec <- x$inddf[x$inddf$snp == current_snp, "size", drop = TRUE]
+    geno <- x$inddf[x$inddf$snp == current_snp, "geno", drop = TRUE]
+    maxpostprob <- x$inddf[x$inddf$snp == current_snp, "maxpostprob", drop = TRUE]
+    
+    
+    pllist[[i]] <- plot_geno(refvec         = refvec,
+                             sizevec        = sizevec,
+                             ploidy         = ploidy, 
+                             geno           = geno, 
+                             seq            = seq, 
+                             bias           = bias, 
+                             maxpostprob    = maxpostprob,
+                             use_colorblind = ploidy <= 6) 
+    if (wait) {
+      print(pllist[[i]])
+      readline(prompt = "Press [enter] to continue")
+    }
+  }
+  
+  return(pllist)
+}
+

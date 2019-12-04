@@ -62,7 +62,7 @@ non-negative elements that sum to 1.}
 \item{...}{Additional parameters to pass to \code{\link{flexdog_full}}.}
 }
 \value{
-A list of two data frames.
+A list-like object of two data frames.
 \describe{
 \item{\code{snpdf}}{A data frame containing properties of the SNP's (markers).
     The rows index the SNP's. The variables include:
@@ -112,13 +112,15 @@ A list of two data frames.
 Fit \code{\link{flexdog}} to multiple SNPs.
 }
 \examples{
+\dontrun{
 data("uitdewilligen")
-mout <- multidog(refmat = uitdewilligen$refmat,
-                 sizemat = uitdewilligen$sizemat,
+mout <- multidog(refmat = t(uitdewilligen$refmat),
+                 sizemat = t(uitdewilligen$sizemat),
                  ploidy = uitdewilligen$ploidy,
                  nc = 2)
 mout$inddf
 mout$snpdf
+}
 
 }
 \author{
