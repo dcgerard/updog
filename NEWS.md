@@ -2,8 +2,12 @@
 
 - Adds `multidog()` for genotypying multiple SNP's using parallel computing.
 - Adds `plot.mupdog()` for plotting the output of `multidog()`.
+- Adds `format_multidog()` for formatting the output of `multidog()` to be
+  a matrix.
 - No longer changes the color scale in `plot_geno()` based on what 
   genotypes are present.
+- In .cpp files, we now coerce objects to be unsigned before comparing. This
+  getrs rid of some warnings during install.
 
 # updog 1.1.3
 
