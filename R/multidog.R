@@ -305,7 +305,7 @@ is.multidog <- function(x) {
 #' 
 #' @seealso \code{\link{plot_geno}}.
 #' 
-plot.multidog <- function(x, indices = seq_len(nrow(x$snpdf)), ...) {
+plot.multidog <- function(x, indices = seq(1, min(5, nrow(x$snpdf))), ...) {
   assertthat::assert_that(is.multidog(x))
   
   all(indices <= nrow(x$snpdf))
@@ -331,7 +331,8 @@ plot.multidog <- function(x, indices = seq_len(nrow(x$snpdf)), ...) {
                              seq            = seq, 
                              bias           = bias, 
                              maxpostprob    = maxpostprob,
-                             use_colorblind = ploidy <= 6)
+                             use_colorblind = ploidy <= 6) +
+      ggplot2::ggtitle(current_snp)
   }
   
   return(pllist)
