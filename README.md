@@ -20,7 +20,7 @@ sequencing error, and (possibly) outlying observations. It is named
 updog for “Using Parental Data for Offspring Genotyping” because we
 originally developed the method for full-sib populations, but it works
 now for more general populations. The method is described in detail
-Gerard et. al. (2018)
+Gerard et. al. (2018)
 \<[doi:10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468)\>.
 Additional details concerning prior specification are described in
 Gerard and Ferrão (2019)
@@ -33,6 +33,9 @@ distributions include the class of proportional normal distributions
 (`model = "ash"`). The default is `model = "norm"` because it is the
 most robust to varying genotype distributions, but feel free to use more
 specialized priors if you have more information on the data.
+
+`multidog()` is a convenience function that let’s you run `flexdog()`
+over many SNP’s. It has support for parallel computing.
 
 Also provided are:
 
