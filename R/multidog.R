@@ -3,7 +3,35 @@
 ################
 
 
-#' Fit \code{\link{flexdog}} to multiple SNPs.
+#' Fit \code{\link{flexdog}} to multiple SNP's.
+#' 
+#' This is a convenience that will run \code{\link{flexdog}} over many SNP's.
+#' Support is provided for parallel computing through the doParallel package.
+#' 
+#' You should format your reference counts and total read counts in two
+#' separate matrices. The rows should index the markers (SNP's) and the 
+#' columns should index the individuals. Row names are how we ID the SNP's 
+#' and column names are how we ID the individuals, and so they are required
+#' attributes. 
+#' 
+#' See the details of \code{\link{flexdog}} for the possible values of
+#' \code{model}.
+#' 
+#' If \code{model = "f1"}, \code{model = "f1pp"}, \code{model = "s1"}, 
+#' or \code{model = "s1pp"} then the user may provide the individual ID 
+#' for parent(s) via the \code{p1_id} and \code{p2_id} arguments.
+#' 
+#' The output is a list containing two data frames. The first data frame,
+#' called \code{snpdf}, contains information on each SNP, such as the allele bias
+#' and the sequencing error rate. The second data frame, called \code{inddf}, 
+#' contains information on each individual at each SNP, such as the estimated
+#' genotype and the posterior probability of being classified correctly.
+#' 
+#' Using an \code{nc} value greater than \code{1} will allow you to 
+#' run \code{\link{flexdog}} in parallel. Only set \code{nc} greater than 
+#' \code{1} if you are sure you have access to the proper number of cores.
+#' The upper bound on the value of \code{nc} you should try can be determined
+#' by running \code{parallel::detectCores()} in R.
 #' 
 #' @inheritParams flexdog
 #' @param refmat A matrix of reference read counts. The columns index
@@ -14,11 +42,14 @@
 #'     the individuals and the rows index the markers (SNP's). This matrix must have
 #'     rownames (for the names of the markers) and column names (for the names
 #'     of the individuals). These names must match the names in \code{refmat}.
-#' @param nc The number of computing cores to use.
-#' @param p1_id The name of the first parent. This should be a character of 
+#' @param nc The number of computing cores to use. This should never be
+#'     more than the number of cores available in your computing environment.
+#'     You can determine the maximum number of available cores by running
+#'     \code{parallel::detectCores()} in R.
+#' @param p1_id The ID of the first parent. This should be a character of 
 #'     length 1. This should correspond to a single column name in \code{refmat}
 #'     and \code{sizemat}.
-#' @param p2_id The name of the second parent. This should be a character of 
+#' @param p2_id The ID of the second parent. This should be a character of 
 #'     length 1. This should correspond to a single column name in \code{refmat}
 #'     and \code{sizemat}.
 #'     
@@ -239,6 +270,24 @@ multidog <- function(refmat,
   return(retlist)
 }
 
+#' Tests if an argument is a \code{multidog} object.
+#'
+#' @param x Anything.
+#'
+#' @return A logical. \code{TRUE} if \code{x} is a \code{multidog} object, and \code{FALSE} otherwise.
+#'
+#' @author David Gerard
+#'
+#' @export
+#'
+#' @examples
+#' is.multidog("anything")
+#' # FALSE
+#'
+is.multidog <- function(x) {
+  inherits(x, "multidog")
+}
+
 
 
 #' Plot the output of \code{\link{multidog}}.
@@ -248,8 +297,6 @@ multidog <- function(refmat,
 #' 
 #' @param x The output of \code{\link{multidog}}.
 #' @param indices A vector of integers. The indices of the SNP's to plot.
-#' @param wait Should we prompt for a new plot (\code{TRUE}) or not 
-#'     (\code{FALSE})?
 #' @param ... not used.
 #' 
 #' @author David Gerard
@@ -258,7 +305,8 @@ multidog <- function(refmat,
 #' 
 #' @seealso \code{\link{plot_geno}}.
 #' 
-plot.multidog <- function(x, indices = seq_len(nrow(x$snpdf)), wait = TRUE, ...) {
+plot.multidog <- function(x, indices = seq_len(nrow(x$snpdf)), ...) {
+  assertthat::assert_that(is.multidog(x))
   
   all(indices <= nrow(x$snpdf))
   
@@ -283,13 +331,37 @@ plot.multidog <- function(x, indices = seq_len(nrow(x$snpdf)), wait = TRUE, ...)
                              seq            = seq, 
                              bias           = bias, 
                              maxpostprob    = maxpostprob,
-                             use_colorblind = ploidy <= 6) 
-    if (wait) {
-      print(pllist[[i]])
-      readline(prompt = "Press [enter] to continue")
-    }
+                             use_colorblind = ploidy <= 6)
   }
   
   return(pllist)
 }
 
+
+#' Return matricized elements from the output of \code{\link{multidog}}.
+#' 
+#' This function will allow you to have genotype estimates, maximum posterior
+#' probability, and other values in the form of a matrix.
+#' 
+#' @param x The output of \code{multidog}.
+#' @param varname The variable whose values populate the cells. This should
+#'     be a single columne from \code{x$inddf}.
+#' 
+#' @author David Gerard
+#' 
+#' @export
+#' 
+format_multidog <- function(x, varname = "geno") {
+  assertthat::assert_that(is.multidog(x))
+  assertthat::assert_that(!is.null(x$inddf))
+  assertthat::assert_that(is.data.frame(x$inddf))
+  assertthat::assert_that(is.character(varname))
+  assertthat::are_equal(length(varname), 1)
+  assertthat::assert_that(varname %in% colnames(x$inddf))
+  
+  matout <- reshape2::acast(data      = x$inddf[, c("ind", "snp", varname)], 
+                            formula   = snp ~ ind, 
+                            value.var = varname)
+  
+  return(matout)
+}

@@ -1,11 +1,8 @@
 ---
 title: "Simulate Next-Generation Sequencing Data"
 author: "David Gerard"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 bibliography: "genobib.bib"
-nocite: |
-  @gerard2018genotyping
 vignette: >
   %\VignetteIndexEntry{Simulate Next-Generation Sequencing Data}
   %\VignetteEngine{knitr::rmarkdown}
@@ -23,7 +20,7 @@ knitr::opts_chunk$set(
 
 # Abstract
 
-We demonstrate how to simulate NGS data under various genotype distributions, then fit these data using `flexdog`.
+We demonstrate how to simulate NGS data under various genotype distributions, then fit these data using `flexdog`. The genotyping methods are described in @gerard2018genotyping.
 
 # Analysis
 

@@ -1,7 +1,6 @@
 ---
 title: "Example Use of Updog"
 author: "David Gerard"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 bibliography: "genobib.bib"
 vignette: >

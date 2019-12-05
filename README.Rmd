@@ -38,6 +38,9 @@ default is `model = "norm"` because it is the most robust to varying
 genotype distributions, but feel free to use more specialized priors if
 you have more information on the data.
 
+`multidog()` is a convenience function that let's you run `flexdog()` over
+many SNP's. It has support for parallel computing.
+
 Also provided are:
 
 - An experimental function `mupdog()`, which allows for correlation

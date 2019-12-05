@@ -5,7 +5,8 @@ Authors@R: person("David", "Gerard", email = "gerard.1787@gmail.com", role = c("
 Description: Implements empirical Bayes approaches to genotype
        polyploids from next generation sequencing data while
        accounting for allelic bias, overdispersion, and sequencing
-       error. The main function is flexdog(), which allows the specification
+       error. The main functions are flexdog() and multidog(), 
+       which allow the specification
        of many different genotype distributions. An experimental
        function that takes into account varying levels of relatedness
        is implemented in mupdog(). Also provided are functions to
@@ -25,14 +26,16 @@ LazyData: true
 RoxygenNote: 7.0.2
 LinkingTo: Rcpp,
     RcppArmadillo
-Imports: Rcpp (>= 0.12.16),
+Imports: 
+    Rcpp (>= 0.12.16),
     RcppArmadillo,
     assertthat,
     foreach,
     doParallel,
     ggplot2,
     ggthemes,
-    stringr
+    stringr,
+    reshape2
 Suggests: covr,
     testthat,
     SuppDists,

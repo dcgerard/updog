@@ -1,3 +1,10 @@
+# updog 1.2.0
+
+- Adds `multidog()` for genotypying multiple SNP's using parallel computing.
+- Adds `plot.mupdog()` for plotting the output of `multidog()`.
+- No longer changes the color scale in `plot_geno()` based on what 
+  genotypes are present.
+
 # updog 1.1.3
 
 - Updates documentation to include the Bioinformatics publication,

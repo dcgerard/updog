@@ -36,7 +36,7 @@ double wem_obj(const arma::vec & pivec,
                const long double & lambda) {
   arma::vec lpi = lmat.t() * pivec;
   double obj = 0.0;
-  for (int k = 0; k < weight_vec.n_elem; k++) {
+  for (int k = 0; (unsigned)k < weight_vec.n_elem; k++) {
     if ((weight_vec(k) > TOL) && (lpi(k) > TOL)) {
       obj = obj + weight_vec(k) * std::log(lpi(k));
     } else if ((weight_vec(k) > TOL * 1000) && (lpi(k) < TOL)) {

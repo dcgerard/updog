@@ -2,7 +2,7 @@
 % Please edit documentation in R/multidog.R
 \name{multidog}
 \alias{multidog}
-\title{Fit \code{\link{flexdog}} to multiple SNPs.}
+\title{Fit \code{\link{flexdog}} to multiple SNP's.}
 \usage{
 multidog(
   refmat,
@@ -36,13 +36,16 @@ individual.}
 \item{model}{What form should the prior (genotype distribution) take?
 See Details for possible values.}
 
-\item{nc}{The number of computing cores to use.}
+\item{nc}{The number of computing cores to use. This should never be
+more than the number of cores available in your computing environment.
+You can determine the maximum number of available cores by running
+\code{parallel::detectCores()} in R.}
 
-\item{p1_id}{The name of the first parent. This should be a character of 
+\item{p1_id}{The ID of the first parent. This should be a character of 
 length 1. This should correspond to a single column name in \code{refmat}
 and \code{sizemat}.}
 
-\item{p2_id}{The name of the second parent. This should be a character of 
+\item{p2_id}{The ID of the second parent. This should be a character of 
 length 1. This should correspond to a single column name in \code{refmat}
 and \code{sizemat}.}
 
@@ -109,7 +112,34 @@ A list-like object of two data frames.
 }
 }
 \description{
-Fit \code{\link{flexdog}} to multiple SNPs.
+This is a convenience that will run \code{\link{flexdog}} over many SNP's.
+Support is provided for parallel computing through the doParallel package.
+}
+\details{
+You should format your reference counts and total read counts in two
+separate matrices. The rows should index the markers (SNP's) and the 
+columns should index the individuals. Row names are how we ID the SNP's 
+and column names are how we ID the individuals, and so they are required
+attributes. 
+
+See the details of \code{\link{flexdog}} for the possible values of
+\code{model}.
+
+If \code{model = "f1"}, \code{model = "f1pp"}, \code{model = "s1"}, 
+or \code{model = "s1pp"} then the user may provide the individual ID 
+for parent(s) via the \code{p1_id} and \code{p2_id} arguments.
+
+The output is a list containing two data frames. The first data frame,
+called \code{snpdf}, contains information on each SNP, such as the allele bias
+and the sequencing error rate. The second data frame, called \code{inddf}, 
+contains information on each individual at each SNP, such as the estimated
+genotype and the posterior probability of being classified correctly.
+
+Using an \code{nc} value greater than \code{1} will allow you to 
+run \code{\link{flexdog}} in parallel. Only set \code{nc} greater than 
+\code{1} if you are sure you have access to the proper number of cores.
+The upper bound on the value of \code{nc} you should try can be determined
+by running \code{parallel::detectCores()} in R.
 }
 \examples{
 \dontrun{

@@ -45,6 +45,9 @@ issue at \url{http://github.com/dcgerard/updog/issues}.
   \item{\code{\link{flexdog}}}{The main function that
       fits an empirical Bayes approach to genotype polyploids
       from next generation sequencing data.}
+  \item{\code{\link{multidog}}}{A convenience function for running
+      \code{\link{flexdog}} over many SNPs. This function provides
+      support for parallel computing.}
   \item{\code{\link{mupdog}}}{An experimental approach to genotype
       autopolyploids that accounts for varying levels of
       relatedness between the individuals in the sample.}

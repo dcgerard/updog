@@ -1,6 +1,5 @@
 #include "mupdog.h"
 
-// functions for fitting flexdog
 
 
 //' Obtain the genotype distribution given the distribution of discrete uniforms.
@@ -221,7 +220,7 @@ double uni_obj(arma::vec pivec,
                long double lambda) {
   arma::vec lpi = lmat.t() * pivec;
   double obj = 0.0;
-  for (int k = 0; k < weight_vec.n_elem; k++) {
+  for (int k = 0; (unsigned)k < weight_vec.n_elem; k++) {
     if ((weight_vec(k) > TOL) && (lpi(k) > TOL)) {
       obj = obj + weight_vec(k) * std::log(lpi(k));
     } else if ((weight_vec(k) > TOL * 1000) && (lpi(k) < TOL)) {
@@ -381,7 +380,7 @@ double f1_obj(double alpha,
 
   // check input ----------------------------------
   int ploidy = pvec.n_elem - 1;
-  if (weight_vec.n_elem != ploidy + 1) {
+  if (weight_vec.n_elem != (unsigned)ploidy + 1) {
     Rcpp::stop("f1_obj: pvec and weight_vec should be the same length.");
   }
   if ((alpha < 0) | (alpha > 1)) {

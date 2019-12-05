@@ -24,7 +24,7 @@ double uni_obj_const(arma::vec pivec,
                      arma::vec lambda) {
   arma::vec lambda_vec(pivec.n_elem);
   if (lambda.n_elem == 1) {
-    for (int i = 0; i < lambda_vec.n_elem; i++) {
+    for (int i = 0; (unsigned)i < lambda_vec.n_elem; i++) {
       lambda_vec(i) = lambda(0);
     }
   } else if (lambda.n_elem == lambda_vec.n_elem) {
@@ -36,7 +36,7 @@ double uni_obj_const(arma::vec pivec,
 
   arma::vec lpi = (1.0 - alpha) * lmat.t() * pivec + (alpha / (double)weight_vec.n_elem);
   double obj = 0.0;
-  for (int k = 0; k < weight_vec.n_elem; k++) {
+  for (int k = 0; (unsigned)k < weight_vec.n_elem; k++) {
     if ((weight_vec(k) > TOL) && (lpi(k) > TOL)) {
       obj = obj + weight_vec(k) * std::log(lpi(k));
     } else if ((weight_vec(k) > TOL * 10.0) && (lpi(k) < TOL)) {
@@ -49,7 +49,7 @@ double uni_obj_const(arma::vec pivec,
 
   // Add the penalty ----
   double pen = 0.0;
-  for (int i = 0; i < lambda_vec.n_elem; i++) {
+  for (int i = 0; (unsigned)i < lambda_vec.n_elem; i++) {
     if (lambda_vec(i) > TOL) {
       pen = pen + lambda_vec(i) * std::log(pivec(i));
     }
@@ -106,13 +106,13 @@ arma::vec uni_em_const(arma::vec weight_vec,
   if (itermax < 0) {
     Rcpp::stop("uni_em_const: itermax should be greater than or equal to 0.");
   }
-  if (lmat.n_rows != nclass) {
+  if (lmat.n_rows != (unsigned)nclass) {
     Rcpp::stop("uni_em_const: lmat should have pi_init.n_elem rows.");
   }
-  if (lmat.n_cols != nind) {
+  if (lmat.n_cols != (unsigned)nind) {
     Rcpp::stop("uni_em_const: lmat should have weight_vec.n_elem columns.");
   }
-  for (int i = 0; i < lambda.n_elem; i++) {
+  for (int i = 0; (unsigned)i < lambda.n_elem; i++) {
     if (lambda(i) < 0.0) {
       Rcpp::stop("uni_em_const: lambda cannot be negative.");
     }
@@ -123,7 +123,7 @@ arma::vec uni_em_const(arma::vec weight_vec,
 
   arma::vec lambda_vec(pi_init.n_elem);
   if (lambda.n_elem == 1) {
-    for (int i = 0; i < lambda_vec.n_elem; i++) {
+    for (int i = 0; (unsigned)i < lambda_vec.n_elem; i++) {
       lambda_vec(i) = lambda(0);
     }
   } else if (lambda.n_elem == lambda_vec.n_elem) {
@@ -258,7 +258,7 @@ double pp_brent_obj(double firstmixweight,
   if (probmat.n_rows != 2) {
     Rcpp::stop("pp_brent_obj: probmat should have two rows.");
   }
-  if (probmat.n_cols != (ploidy / 2 + 1)) {
+  if (probmat.n_cols != ((unsigned)ploidy / 2 + 1)) {
     Rcpp::stop("pp_brent_obj: probmat should have ploidy / 2 + 1 columns.");
   }
   if (probmat.n_cols != pvec.n_elem) {

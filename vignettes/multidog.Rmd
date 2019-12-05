@@ -1,0 +1,97 @@
+---
+title: "Genotyping Many SNP's with multidog()"
+author: "David Gerard"
+output: rmarkdown::html_vignette
+bibliography: "genobib.bib"
+vignette: >
+  %\VignetteIndexEntry{Genotyping Many SNP's with multidog()}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width=4.5,
+  fig.height=3.5
+)
+```
+
+# Abstract
+
+`multidog()` provides support for genotyping many SNP's by iterating
+`flexdog()` over the SNP's. Support is provided for parallel computing. The genotyping method
+is described in @gerard2018genotyping and @gerard2019priors.
+
+# Analysis
+
+Let's load updog and the data from @uitdewilligen2013next.
+```{r setup}
+library(updog)
+data("uitdewilligen")
+```
+
+`uitdewilligen$refmat` is a matrix of reference counts while 
+`uitdewilligen$sizemat` is a matrix of total read counts. In these data,
+the rows index the individuals and the columns index the 
+loci. But for insertion into `multidog()` we need it the other way around 
+(individuals in the columns and loci in the rows). 
+So we will transpose these matrices.
+```{r}
+refmat  <- t(uitdewilligen$refmat)
+sizemat <- t(uitdewilligen$sizemat)
+ploidy  <- uitdewilligen$ploidy
+```
+
+`sizemat` and `refmat` should have the same row and column names. These names
+identify the loci and the individuals.
+```{r}
+setdiff(colnames(sizemat), colnames(refmat))
+setdiff(rownames(sizemat), rownames(refmat))
+```
+
+If we want to do parallel computing, we should check that we have the
+proper number of cores:
+```{r}
+parallel::detectCores()
+```
+
+Now let's run `multidog()`:
+```{r}
+mout <- multidog(refmat = refmat, 
+                 sizemat = sizemat, 
+                 ploidy = ploidy, 
+                 model = "norm",
+                 nc = 2)
+```
+
+There is a plot method for the output of `multidog()`.
+```{r}
+plot(mout, indices = c(1, 5, 100))
+```
+
+The output of multidog contains two data frame. The first contains properties
+of the SNP's, such as estimated allele bias and estimated sequencing error rate.
+
+```{r}
+str(mout$snpdf)
+```
+
+The second data frame contains properties of each individual at each SNP, such as the
+estimated genotypes (`geno`) and the posterior probability of being genotyping correctly (`maxpostprob`).
+
+```{r}
+str(mout$inddf)
+```
+
+You can obtain the columns in `inddf` in matrix form with `format_multidog()`.
+
+```{r}
+genomat <- format_multidog(mout, varname = "geno")
+head(genomat)
+```
+
+# References
+
+

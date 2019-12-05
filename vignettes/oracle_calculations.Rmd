@@ -1,10 +1,7 @@
 ---
 title: "Oracle Calculations"
 author: "David Gerard"
-date: "`r Sys.Date()`"
 bibliography: "genobib.bib"
-nocite: |
-  @gerard2018genotyping
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Oracle Calculations}
@@ -23,7 +20,7 @@ knitr::opts_chunk$set(
 
 # Abstract
 
-We provide some example usage of the oracle calculations available in `updog`. These are particularly useful for read-depth determination.
+We provide some example usage of the oracle calculations available in `updog`. These are particularly useful for read-depth determination. These calculations are described in detail in @gerard2018genotyping.
 
 # Controlling Misclassification Error
 

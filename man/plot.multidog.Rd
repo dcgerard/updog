@@ -4,15 +4,12 @@
 \alias{plot.multidog}
 \title{Plot the output of \code{\link{multidog}}.}
 \usage{
-\method{plot}{multidog}(x, indices = seq_len(nrow(x$snpdf)), wait = TRUE, ...)
+\method{plot}{multidog}(x, indices = seq_len(nrow(x$snpdf)), ...)
 }
 \arguments{
 \item{x}{The output of \code{\link{multidog}}.}
 
 \item{indices}{A vector of integers. The indices of the SNP's to plot.}
-
-\item{wait}{Should we prompt for a new plot (\code{TRUE}) or not 
-(\code{FALSE})?}
 
 \item{...}{not used.}
 }
