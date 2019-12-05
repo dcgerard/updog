@@ -359,6 +359,8 @@ plot(fout)
 Run \code{browseVignettes(package = "updog")} in R for example usage.
     Other useful functions include:
 \describe{
+    \item{\code{\link{multidog}}}{For running \code{flexdog} on multiple
+          SNP's.}
     \item{\code{\link{flexdog}}}{For a more user-friendly version of
           \code{flexdog_full}.}
     \item{\code{\link{rgeno}}}{For simulating genotypes under the allowable
