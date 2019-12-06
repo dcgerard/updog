@@ -33,6 +33,8 @@
 #' The upper bound on the value of \code{nc} you should try can be determined
 #' by running \code{parallel::detectCores()} in R.
 #' 
+#' SNP's that contain 0 reads (or all missing data) are entirely removed.
+#' 
 #' @inheritParams flexdog
 #' @param refmat A matrix of reference read counts. The columns index
 #'     the individuals and the rows index the markers (SNP's). This matrix must have
@@ -165,6 +167,27 @@ multidog <- function(refmat,
     warning("setting p1_id to be p2_id and setting p2_id to be NULL.")
     p1_id <- p2_id
     p2_id <- NULL
+  }
+  
+  ## Remove NA SNPs ------------------------------------------------------------
+  which_bad_size <- apply(X = sizemat == 0, 
+                          MARGIN = 1, 
+                          FUN = all) | 
+    apply(X = is.na(sizemat), 
+          MARGIN = 1,
+          FUN = all)
+  which_bad_ref <- apply(X = is.na(refmat), 
+                         MARGIN = 1,
+                         FUN = all)
+  
+  bad_snps <- unique(c(rownames(sizemat)[which_bad_size], rownames(refmat)[which_bad_ref]))
+  
+  if (length(bad_snps) > 0) {
+    if (length(bad_snps) == nrow(sizemat)) {
+      stop("multidog: All SNPs are missing.")
+    }
+    sizemat <- sizemat[!(rownames(sizemat) %in% bad_snps), , drop = FALSE]
+    refmat  <- refmat[!(rownames(refmat) %in% bad_snps), , drop = FALSE]
   }
   
   ## Get list of SNP's and individuals -----------------------------------------
