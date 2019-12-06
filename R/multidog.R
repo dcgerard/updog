@@ -153,11 +153,13 @@ multidog <- function(refmat,
     stopifnot(is.character(p1_id))
     stopifnot(length(p1_id) == 1)
     stopifnot(is.element(el = p1_id, set = colnames(refmat)))
+    stopifnot(model == "f1" | model == "f1pp" | model == "s1" | model == "s1pp")
   }
   if (!is.null(p2_id)) {
     stopifnot(is.character(p2_id))
     stopifnot(length(p2_id) == 1)
     stopifnot(is.element(el = p2_id, set = colnames(refmat)))
+    stopifnot(model == "f1" | model == "f1pp")
   }
   if (!is.null(p2_id) & is.null(p1_id)) {
     warning("setting p1_id to be p2_id and setting p2_id to be NULL.")
@@ -241,9 +243,12 @@ multidog <- function(refmat,
                                              llike    = fout$llike,
                                              ploidy   = fout$input$ploidy,
                                              model    = fout$input$model),
-                                  as.data.frame(matrix(fout$gene_dist, nrow = 1, dimnames = list(NULL, names(fout$gene_dist)))),
-                                  as.data.frame(matrix(unlist(fout$par), nrow = 1, dimnames = list(NULL, names(fout$par))))
+                                  as.data.frame(matrix(fout$gene_dist, nrow = 1, dimnames = list(NULL, names(fout$gene_dist))))
                                 )
+                                
+                                if (length(fout$par) > 0) {
+                                  snpprop <- cbind(snpprop, as.data.frame(matrix(unlist(fout$par), nrow = 1, dimnames = list(NULL, names(fout$par)))))
+                                }
                                 
                                 indprop <- cbind(
                                   data.frame(snp = current_snp,

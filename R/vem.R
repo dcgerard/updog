@@ -200,6 +200,10 @@ mupdog <- function(refmat,
                    update_method      = c("Brent", "L-BFGS-B"),
                    control            = list()) {
 
+  message(paste0("Note: mupdog() is an experimental function for harnessting",
+                 "relatedness in genotyping.\nTo run flexdog() on many",
+                 "SNP's, please use multidog() instead."))
+  
   ##########################################################
   ## Check refmat and sizemat ------------------------------
   ##########################################################
