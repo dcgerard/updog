@@ -169,14 +169,21 @@ multidog <- function(refmat,
     p2_id <- NULL
   }
   
+  ## Get list of individuals ---------------------------------------------------
+  indlist <- colnames(refmat)
+  
+  if (!is.null(p1_id)) {
+    indlist <- indlist[indlist != p1_id]
+  }
+  if (!is.null(p2_id)) {
+    indlist <- indlist[indlist != p2_id]
+  }
+  
   ## Remove NA SNPs ------------------------------------------------------------
-  which_bad_size <- apply(X = sizemat == 0, 
+  which_bad_size <- apply(X = (sizemat[, indlist, drop = FALSE] == 0) | is.na(sizemat[, indlist, drop = FALSE]), 
                           MARGIN = 1, 
-                          FUN = all) | 
-    apply(X = is.na(sizemat), 
-          MARGIN = 1,
-          FUN = all)
-  which_bad_ref <- apply(X = is.na(refmat), 
+                          FUN = all)
+  which_bad_ref <- apply(X = is.na(refmat[, indlist, drop = FALSE]), 
                          MARGIN = 1,
                          FUN = all)
   
@@ -190,17 +197,9 @@ multidog <- function(refmat,
     refmat  <- refmat[!(rownames(refmat) %in% bad_snps), , drop = FALSE]
   }
   
-  ## Get list of SNP's and individuals -----------------------------------------
+  ## Get list of SNP's ---------------------------------------------------------
   snplist <- rownames(refmat)
-  indlist <- colnames(refmat)
-  
-  if (!is.null(p1_id)) {
-    indlist <- indlist[indlist != p1_id]
-  }
-  if (!is.null(p2_id)) {
-    indlist <- indlist[indlist != p2_id]
-  }
-  
+
   ## Register workers ----------------------------------------------------------
   if (nc == 1) {
     foreach::registerDoSEQ()

@@ -137,7 +137,7 @@ ploidy  &lt;-<span class="st"> </span>uitdewilligen<span class="op">$</span>ploi
 <p>The output of multidog contains two data frame. The first contains properties of the SNP’s, such as estimated allele bias and estimated sequencing error rate.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(mout<span class="op">$</span>snpdf)
 <span class="co">#&gt; 'data.frame':    100 obs. of  16 variables:</span>
-<span class="co">#&gt;  $ snp     : Factor w/ 100 levels "PotVar0089524",..: 1 2 3 4 5 6 7 8 9 10 ...</span>
+<span class="co">#&gt;  $ snp     : chr  "PotVar0089524" "PotVar0052647" "PotVar0120897" "PotVar0066020" ...</span>
 <span class="co">#&gt;  $ bias    : num  0.519 1.026 0.929 1.221 0.847 ...</span>
 <span class="co">#&gt;  $ seq     : num  0.00485 0.00221 0.002 0.0039 0.00206 ...</span>
 <span class="co">#&gt;  $ od      : num  0.00304 0.00295 0.00337 0.00275 0.00335 ...</span>
@@ -145,7 +145,7 @@ ploidy  &lt;-<span class="st"> </span>uitdewilligen<span class="op">$</span>ploi
 <span class="co">#&gt;  $ num_iter: num  6 3 3 5 7 7 4 8 8 4 ...</span>
 <span class="co">#&gt;  $ llike   : num  -14.7 -25.3 -10.4 -22.7 -32 ...</span>
 <span class="co">#&gt;  $ ploidy  : num  4 4 4 4 4 4 4 4 4 4 ...</span>
-<span class="co">#&gt;  $ model   : Factor w/ 1 level "norm": 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="co">#&gt;  $ model   : chr  "norm" "norm" "norm" "norm" ...</span>
 <span class="co">#&gt;  $ Pr_0    : num  0.000279 0.248211 0.66369 0.015803 0.08409 ...</span>
 <span class="co">#&gt;  $ Pr_1    : num  0.00707 0.45067 0.26892 0.06938 0.20154 ...</span>
 <span class="co">#&gt;  $ Pr_2    : num  0.0745 0.2542 0.0597 0.1931 0.2968 ...</span>
@@ -156,8 +156,8 @@ ploidy  &lt;-<span class="st"> </span>uitdewilligen<span class="op">$</span>ploi
 <p>The second data frame contains properties of each individual at each SNP, such as the estimated genotypes (<code>geno</code>) and the posterior probability of being genotyping correctly (<code>maxpostprob</code>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(mout<span class="op">$</span>inddf)
 <span class="co">#&gt; 'data.frame':    1000 obs. of  12 variables:</span>
-<span class="co">#&gt;  $ snp        : Factor w/ 100 levels "PotVar0089524",..: 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="co">#&gt;  $ ind        : Factor w/ 10 levels "P1PEM10","P2PEM05",..: 8 4 3 10 7 2 1 5 9 6 ...</span>
+<span class="co">#&gt;  $ snp        : chr  "PotVar0089524" "PotVar0089524" "PotVar0089524" "PotVar0089524" ...</span>
+<span class="co">#&gt;  $ ind        : chr  "P5PEM08" "P3PEM05" "P2PEM10" "P7PEM09" ...</span>
 <span class="co">#&gt;  $ ref        : num  122 113 86 80 69 85 130 228 60 211 ...</span>
 <span class="co">#&gt;  $ size       : num  142 143 96 80 69 86 130 228 86 212 ...</span>
 <span class="co">#&gt;  $ geno       : num  3 3 3 4 4 4 4 4 2 4 ...</span>
@@ -172,19 +172,19 @@ ploidy  &lt;-<span class="st"> </span>uitdewilligen<span class="op">$</span>ploi
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genomat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/format_multidog.html">format_multidog</a></span>(mout, <span class="dt">varname =</span> <span class="st">"geno"</span>)
 <span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(genomat)
 <span class="co">#&gt;               P1PEM10 P2PEM05 P2PEM10 P3PEM05 P4PEM01 P4PEM09 P5PEM04 P5PEM08</span>
-<span class="co">#&gt; PotVar0089524       4       4       3       3       4       4       4       3</span>
-<span class="co">#&gt; PotVar0052647       3       1       0       1       1       2       0       1</span>
-<span class="co">#&gt; PotVar0120897       0       0       0       0       0       0       0       1</span>
-<span class="co">#&gt; PotVar0066020       3       2       3       4       4       3       1       4</span>
+<span class="co">#&gt; PotVar0000693       2       3       4       4       3       3       3       3</span>
 <span class="co">#&gt; PotVar0003381       3       1       2       0       2       3       3       1</span>
-<span class="co">#&gt; PotVar0131622       2       4       1       2       2       3       4       3</span>
+<span class="co">#&gt; PotVar0004919       0       2       2       2       1       2       0       2</span>
+<span class="co">#&gt; PotVar0009402       0       2       0       1       3       2       1       2</span>
+<span class="co">#&gt; PotVar0009518       0       2       0       1       3       1       1       1</span>
+<span class="co">#&gt; PotVar0011967       3       3       4       4       3       4       3       3</span>
 <span class="co">#&gt;               P6PEM11 P7PEM09</span>
-<span class="co">#&gt; PotVar0089524       2       4</span>
-<span class="co">#&gt; PotVar0052647       1       1</span>
-<span class="co">#&gt; PotVar0120897       2       1</span>
-<span class="co">#&gt; PotVar0066020       4       2</span>
+<span class="co">#&gt; PotVar0000693       4       3</span>
 <span class="co">#&gt; PotVar0003381       4       3</span>
-<span class="co">#&gt; PotVar0131622       3       3</span></code></pre></div>
+<span class="co">#&gt; PotVar0004919       1       3</span>
+<span class="co">#&gt; PotVar0009402       3       3</span>
+<span class="co">#&gt; PotVar0009518       3       3</span>
+<span class="co">#&gt; PotVar0011967       4       3</span></code></pre></div>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
