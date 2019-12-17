@@ -5,7 +5,7 @@
 
 #' Fit \code{\link{flexdog}} to multiple SNP's.
 #' 
-#' This is a convenience that will run \code{\link{flexdog}} over many SNP's.
+#' This is a convenience function that will run \code{\link{flexdog}} over many SNP's.
 #' Support is provided for parallel computing through the doParallel package.
 #' 
 #' You should format your reference counts and total read counts in two
@@ -269,17 +269,49 @@ multidog <- function(refmat,
                                   as.data.frame(matrix(fout$gene_dist, nrow = 1, dimnames = list(NULL, names(fout$gene_dist))))
                                 )
                                 
-                                if (length(fout$par) > 0) {
-                                  snpprop <- cbind(snpprop, as.data.frame(matrix(unlist(fout$par), nrow = 1, dimnames = list(NULL, names(fout$par)))))
+                                
+                                if (model == "f1pp") {
+                                  blist <- get_bivalent_probs(fout$input$ploidy)
+                                  
+                                  p1weightvec <- rep(0, length = length(blist$lvec))
+                                  names(p1weightvec) <- paste0("p1(", apply(blist$pmat, 1, paste, collapse = ","), ")")
+                                  p1weightvec[blist$lvec == fout$par$p1geno] <- fout$par$p1_pair_weights
+                                  
+                                  p2weightvec <- rep(0, length = length(blist$lvec))
+                                  names(p2weightvec) <- paste0("p2(", apply(blist$pmat, 1, paste, collapse = ","), ")")
+                                  p2weightvec[blist$lvec == fout$par$p2geno] <- fout$par$p2_pair_weights
+                                  
+                                  fout$par$p1_pair_weights <- NULL
+                                  fout$par$p2_pair_weights <- NULL
+                                  
+                                  par_vec_output <- c(unlist(fout$par), p1weightvec, p2weightvec)
+                                  snpprop <- cbind(snpprop, as.data.frame(matrix(par_vec_output, nrow = 1, dimnames = list(NULL, names(par_vec_output)))))
+                                  
+                                } else if (model == "s1pp") {
+                                  blist <- get_bivalent_probs(fout$input$ploidy)
+                                  
+                                  p1weightvec <- rep(0, length = length(blist$lvec))
+                                  names(p1weightvec) <- paste0("p1(", apply(blist$pmat, 1, paste, collapse = ","), ")")
+                                  p1weightvec[blist$lvec == fout$par$p1geno] <- fout$par$p1_pair_weights
+                                  
+                                  fout$par$p1_pair_weights <- NULL
+                                  
+                                  par_vec_output <- c(unlist(fout$par), p1weightvec)
+                                  snpprop <- cbind(snpprop, as.data.frame(matrix(par_vec_output, nrow = 1, dimnames = list(NULL, names(par_vec_output)))))
+                                  
+                                } else if (length(fout$par) > 0) {
+                                  par_vec_output <- unlist(fout$par)
+                                  snpprop <- cbind(snpprop, as.data.frame(matrix(par_vec_output, nrow = 1, dimnames = list(NULL, names(par_vec_output)))))
                                 }
                                 
+                                
                                 indprop <- cbind(
-                                  data.frame(snp = current_snp,
-                                             ind = indlist,
-                                             ref = fout$input$refvec,
-                                             size = fout$input$sizevec,
-                                             geno = fout$geno,
-                                             postmean = fout$postmean,
+                                  data.frame(snp         = current_snp,
+                                             ind         = indlist,
+                                             ref         = fout$input$refvec,
+                                             size        = fout$input$sizevec,
+                                             geno        = fout$geno,
+                                             postmean    = fout$postmean,
                                              maxpostprob = fout$maxpostprob),
                                   fout$postmat)
                                 
@@ -292,8 +324,8 @@ multidog <- function(refmat,
   inddf <- do.call("rbind", lapply(outlist, function(x) x[[1]]))
   snpdf <- do.call("rbind", lapply(outlist, function(x) x[[2]]))
   
-  retlist <- list(snpdf = snpdf, 
-                  inddf = inddf)
+  retlist <- list(snpdf = as.data.frame(snpdf), 
+                  inddf = as.data.frame(inddf))
   class(retlist) <- "multidog"
   return(retlist)
 }

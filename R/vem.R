@@ -136,7 +136,7 @@
 #'
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' data(uitdewilligen)
 #' mout <- mupdog(refmat = uitdewilligen$refmat,
 #'                sizemat = uitdewilligen$sizemat,
@@ -203,7 +203,7 @@ mupdog <- function(refmat,
   message(paste0("Note: mupdog() is an experimental function for harnessting",
                  "relatedness in genotyping.\nTo run flexdog() on many",
                  "SNP's, please use multidog() instead."))
-  
+
   ##########################################################
   ## Check refmat and sizemat ------------------------------
   ##########################################################

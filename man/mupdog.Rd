@@ -176,7 +176,7 @@ Mupdog uses a variational Bayes approach to estimate all parameters of interest 
 the posterior probabilities of the genotypes for each individual at each locus.
 }
 \examples{
-\donttest{
+\dontrun{
 data(uitdewilligen)
 mout <- mupdog(refmat = uitdewilligen$refmat,
                sizemat = uitdewilligen$sizemat,

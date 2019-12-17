@@ -112,7 +112,7 @@ A list-like object of two data frames.
 }
 }
 \description{
-This is a convenience that will run \code{\link{flexdog}} over many SNP's.
+This is a convenience function that will run \code{\link{flexdog}} over many SNP's.
 Support is provided for parallel computing through the doParallel package.
 }
 \details{
@@ -140,6 +140,8 @@ run \code{\link{flexdog}} in parallel. Only set \code{nc} greater than
 \code{1} if you are sure you have access to the proper number of cores.
 The upper bound on the value of \code{nc} you should try can be determined
 by running \code{parallel::detectCores()} in R.
+
+SNP's that contain 0 reads (or all missing data) are entirely removed.
 }
 \examples{
 \dontrun{
