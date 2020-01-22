@@ -186,13 +186,13 @@ You can determine the maximum number of available cores by running
     </tr>
     <tr>
       <th>p1_id</th>
-      <td><p>The ID of the first parent. This should be a character of 
+      <td><p>The ID of the first parent. This should be a character of
 length 1. This should correspond to a single column name in <code>refmat</code>
 and <code>sizemat</code>.</p></td>
     </tr>
     <tr>
       <th>p2_id</th>
-      <td><p>The ID of the second parent. This should be a character of 
+      <td><p>The ID of the second parent. This should be a character of
 length 1. This should correspond to a single column name in <code>refmat</code>
 and <code>sizemat</code>.</p></td>
     </tr>
@@ -231,17 +231,17 @@ non-negative elements that sum to 1.</p></td>
     <dt><code>bias</code></dt><dd><p>The estimated allele bias of the SNP.</p></dd>
     <dt><code>seq</code></dt><dd><p>The estimated sequencing error rate of the SNP.</p></dd>
     <dt><code>od</code></dt><dd><p>The estimated overdispersion parameter of the SNP.</p></dd>
-    <dt><code>prop_mis</code></dt><dd><p>The estimated proportion of individuals 
+    <dt><code>prop_mis</code></dt><dd><p>The estimated proportion of individuals
         misclassified in the SNP.</p></dd>
-    <dt><code>num_iter</code></dt><dd><p>The number of iterations performed during 
+    <dt><code>num_iter</code></dt><dd><p>The number of iterations performed during
         the EM algorithm for that SNP.</p></dd>
     <dt><code>llike</code></dt><dd><p>The maximum marginal likelihood of the SNP.</p></dd>
     <dt><code>ploidy</code></dt><dd><p>The provided ploidy of the species.</p></dd>
-    <dt><code>model</code></dt><dd><p>The provided model for the prior genotype 
+    <dt><code>model</code></dt><dd><p>The provided model for the prior genotype
         distribution.</p></dd>
-    <dt><code>Pr_k</code></dt><dd><p>The estimated frequency of individuals with genotype 
+    <dt><code>Pr_k</code></dt><dd><p>The estimated frequency of individuals with genotype
         k, where k can be any integer between 0 and the ploidy level.</p></dd>
-    <dt>Model specific parameter estimates</dt><dd><p>See the return value of 
+    <dt>Model specific parameter estimates</dt><dd><p>See the return value of
         <code>par</code> in the help page of <code><a href='flexdog.html'>flexdog</a></code>.</p></dd></dl></p></dd>
 <dt><code>inddf</code></dt><dd><p>A data frame containing the properties of the
     individuals at each SNP. The variables include:
@@ -250,10 +250,10 @@ non-negative elements that sum to 1.</p></td>
     <dt><code>ind</code></dt><dd><p>The name of the individual.</p></dd>
     <dt><code>ref</code></dt><dd><p>The provided reference counts for that individual at
          that SNP.</p></dd>
-    <dt><code>size</code></dt><dd><p>The provided total counts for that individual at 
+    <dt><code>size</code></dt><dd><p>The provided total counts for that individual at
          that SNP.</p></dd>
     <dt><code>geno</code></dt><dd><p>The posterior mode genotype for that individual at
-         that SNP. This is the estimated reference allele dosage for a 
+         that SNP. This is the estimated reference allele dosage for a
          given individual at a given SNP.</p></dd>
     <dt><code>postmean</code></dt><dd><p>The posterior mean genotype for that individual
          at that SNP. This is a continuous genotype estimate of the
@@ -262,7 +262,7 @@ non-negative elements that sum to 1.</p></td>
          is the posterior probability that the individual was genotyped
          correctly.</p></dd>
     <dt><code>Pr_k</code></dt><dd><p>The posterior probability that a given individual
-         at a given SNP has genotype k, where k can vary from 0 to the 
+         at a given SNP has genotype k, where k can vary from 0 to the
          ploidy level of the species.</p></dd></dl></p></dd>
 
 </dl>
@@ -270,22 +270,22 @@ non-negative elements that sum to 1.</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>You should format your reference counts and total read counts in two
-separate matrices. The rows should index the markers (SNP's) and the 
-columns should index the individuals. Row names are how we ID the SNP's 
+separate matrices. The rows should index the markers (SNP's) and the
+columns should index the individuals. Row names are how we ID the SNP's
 and column names are how we ID the individuals, and so they are required
 attributes.</p>
 <p>See the details of <code><a href='flexdog.html'>flexdog</a></code> for the possible values of
 <code>model</code>.</p>
-<p>If <code>model = "f1"</code>, <code>model = "f1pp"</code>, <code>model = "s1"</code>, 
-or <code>model = "s1pp"</code> then the user may provide the individual ID 
+<p>If <code>model = "f1"</code>, <code>model = "f1pp"</code>, <code>model = "s1"</code>,
+or <code>model = "s1pp"</code> then the user may provide the individual ID
 for parent(s) via the <code>p1_id</code> and <code>p2_id</code> arguments.</p>
 <p>The output is a list containing two data frames. The first data frame,
 called <code>snpdf</code>, contains information on each SNP, such as the allele bias
-and the sequencing error rate. The second data frame, called <code>inddf</code>, 
+and the sequencing error rate. The second data frame, called <code>inddf</code>,
 contains information on each individual at each SNP, such as the estimated
 genotype and the posterior probability of being classified correctly.</p>
-<p>Using an <code>nc</code> value greater than <code>1</code> will allow you to 
-run <code><a href='flexdog.html'>flexdog</a></code> in parallel. Only set <code>nc</code> greater than 
+<p>Using an <code>nc</code> value greater than <code>1</code> will allow you to
+run <code><a href='flexdog.html'>flexdog</a></code> in parallel. Only set <code>nc</code> greater than
 <code>1</code> if you are sure you have access to the proper number of cores.
 The upper bound on the value of <code>nc</code> you should try can be determined
 by running <code><a href='https://rdrr.io/r/parallel/detectCores.html'>parallel::detectCores()</a></code> in R.</p>

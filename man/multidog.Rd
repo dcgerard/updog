@@ -41,11 +41,11 @@ more than the number of cores available in your computing environment.
 You can determine the maximum number of available cores by running
 \code{parallel::detectCores()} in R.}
 
-\item{p1_id}{The ID of the first parent. This should be a character of 
+\item{p1_id}{The ID of the first parent. This should be a character of
 length 1. This should correspond to a single column name in \code{refmat}
 and \code{sizemat}.}
 
-\item{p2_id}{The ID of the second parent. This should be a character of 
+\item{p2_id}{The ID of the second parent. This should be a character of
 length 1. This should correspond to a single column name in \code{refmat}
 and \code{sizemat}.}
 
@@ -74,17 +74,17 @@ A list-like object of two data frames.
     \item{\code{bias}}{The estimated allele bias of the SNP.}
     \item{\code{seq}}{The estimated sequencing error rate of the SNP.}
     \item{\code{od}}{The estimated overdispersion parameter of the SNP.}
-    \item{\code{prop_mis}}{The estimated proportion of individuals 
+    \item{\code{prop_mis}}{The estimated proportion of individuals
         misclassified in the SNP.}
-    \item{\code{num_iter}}{The number of iterations performed during 
+    \item{\code{num_iter}}{The number of iterations performed during
         the EM algorithm for that SNP.}
     \item{\code{llike}}{The maximum marginal likelihood of the SNP.}
     \item{\code{ploidy}}{The provided ploidy of the species.}
-    \item{\code{model}}{The provided model for the prior genotype 
+    \item{\code{model}}{The provided model for the prior genotype
         distribution.}
-    \item{\code{Pr_k}}{The estimated frequency of individuals with genotype 
+    \item{\code{Pr_k}}{The estimated frequency of individuals with genotype
         k, where k can be any integer between 0 and the ploidy level.}
-    \item{Model specific parameter estimates}{See the return value of 
+    \item{Model specific parameter estimates}{See the return value of
         \code{par} in the help page of \code{\link{flexdog}}.}
     }}
 \item{\code{inddf}}{A data frame containing the properties of the
@@ -94,10 +94,10 @@ A list-like object of two data frames.
     \item{\code{ind}}{The name of the individual.}
     \item{\code{ref}}{The provided reference counts for that individual at
          that SNP.}
-    \item{\code{size}}{The provided total counts for that individual at 
+    \item{\code{size}}{The provided total counts for that individual at
          that SNP.}
     \item{\code{geno}}{The posterior mode genotype for that individual at
-         that SNP. This is the estimated reference allele dosage for a 
+         that SNP. This is the estimated reference allele dosage for a
          given individual at a given SNP.}
     \item{\code{postmean}}{The posterior mean genotype for that individual
          at that SNP. This is a continuous genotype estimate of the
@@ -106,7 +106,7 @@ A list-like object of two data frames.
          is the posterior probability that the individual was genotyped
          correctly.}
     \item{\code{Pr_k}}{The posterior probability that a given individual
-         at a given SNP has genotype k, where k can vary from 0 to the 
+         at a given SNP has genotype k, where k can vary from 0 to the
          ploidy level of the species.}
     }}
 }
@@ -117,26 +117,26 @@ Support is provided for parallel computing through the doParallel package.
 }
 \details{
 You should format your reference counts and total read counts in two
-separate matrices. The rows should index the markers (SNP's) and the 
-columns should index the individuals. Row names are how we ID the SNP's 
+separate matrices. The rows should index the markers (SNP's) and the
+columns should index the individuals. Row names are how we ID the SNP's
 and column names are how we ID the individuals, and so they are required
-attributes. 
+attributes.
 
 See the details of \code{\link{flexdog}} for the possible values of
 \code{model}.
 
-If \code{model = "f1"}, \code{model = "f1pp"}, \code{model = "s1"}, 
-or \code{model = "s1pp"} then the user may provide the individual ID 
+If \code{model = "f1"}, \code{model = "f1pp"}, \code{model = "s1"},
+or \code{model = "s1pp"} then the user may provide the individual ID
 for parent(s) via the \code{p1_id} and \code{p2_id} arguments.
 
 The output is a list containing two data frames. The first data frame,
 called \code{snpdf}, contains information on each SNP, such as the allele bias
-and the sequencing error rate. The second data frame, called \code{inddf}, 
+and the sequencing error rate. The second data frame, called \code{inddf},
 contains information on each individual at each SNP, such as the estimated
 genotype and the posterior probability of being classified correctly.
 
-Using an \code{nc} value greater than \code{1} will allow you to 
-run \code{\link{flexdog}} in parallel. Only set \code{nc} greater than 
+Using an \code{nc} value greater than \code{1} will allow you to
+run \code{\link{flexdog}} in parallel. Only set \code{nc} greater than
 \code{1} if you are sure you have access to the proper number of cores.
 The upper bound on the value of \code{nc} you should try can be determined
 by running \code{parallel::detectCores()} in R.

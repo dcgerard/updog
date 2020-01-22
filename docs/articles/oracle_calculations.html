@@ -105,38 +105,38 @@
 <a href="#controlling-misclassification-error" class="anchor"></a>Controlling Misclassification Error</h1>
 <p>Suppose we have a sample of tetraploid individuals derived from an S1 cross (a single generation of selfing). Using domain expertise (either from previous studies or a pilot analysis), we’ve determined that our sequencing technology will produce relatively clean data. That is, the sequencing error rate will not be too large (say, ~0.001), the bias will be moderate (say, ~0.7 at the most extreme), and the majority of SNPs will have reasonable levels of overdispersion (say, less than 0.01). We want to know how deep we need to sequence.</p>
 <p>Using <code>oracle_mis</code>, we can see how deep we need to sequence under the worst-case scenario we want to control (sequencing error rate = 0.001, bias = 0.7, overdispersion = 0.01) in order to obtain a misclassification error rate of at most, say, 0.05.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bias   &lt;-<span class="st"> </span><span class="fl">0.7</span>
-od     &lt;-<span class="st"> </span><span class="fl">0.01</span>
-seq    &lt;-<span class="st"> </span><span class="fl">0.001</span>
-maxerr &lt;-<span class="st"> </span><span class="fl">0.05</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">bias   &lt;-<span class="st"> </span><span class="fl">0.7</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">od     &lt;-<span class="st"> </span><span class="fl">0.01</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">seq    &lt;-<span class="st"> </span><span class="fl">0.001</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">maxerr &lt;-<span class="st"> </span><span class="fl">0.05</span></a></code></pre></div>
 <p>Before we do this, we also need the distribution of the offspring genotypes. We can get this distribution assuming various parental genotypes using the <code>get_q_array</code> function. Typically, error rates will be larger when the allele-frequency is closer to 0.5. So we’ll start in the worst-case scenario of assuming that the parent has 2 copies of the reference allele.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(updog)
-ploidy &lt;-<span class="st"> </span><span class="dv">4</span>
-pgeno &lt;-<span class="st"> </span><span class="dv">2</span>
-gene_dist &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_q_array.html">get_q_array</a></span>(<span class="dt">ploidy =</span> ploidy)[pgeno <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, pgeno <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, ]</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(updog)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">ploidy &lt;-<span class="st"> </span><span class="dv">4</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">pgeno &lt;-<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">gene_dist &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_q_array.html">get_q_array</a></span>(<span class="dt">ploidy =</span> ploidy)[pgeno <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, pgeno <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, ]</a></code></pre></div>
 <p>This is what the genotype distribution for the offspring looks like:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)
-distdf &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">x =</span> <span class="dv">0</span><span class="op">:</span>ploidy, <span class="dt">y =</span> <span class="dv">0</span>, <span class="dt">yend =</span> gene_dist)
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(distdf, <span class="dt">mapping =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">xend =</span> x, <span class="dt">yend =</span> yend)) <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html">geom_segment</a></span>(<span class="dt">lineend =</span> <span class="st">"round"</span>, <span class="dt">lwd =</span> <span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Allele Dosage"</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Probability"</span>)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">distdf &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">x =</span> <span class="dv">0</span><span class="op">:</span>ploidy, <span class="dt">y =</span> <span class="dv">0</span>, <span class="dt">yend =</span> gene_dist)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(distdf, <span class="dt">mapping =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">xend =</span> x, <span class="dt">yend =</span> yend)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html">geom_segment</a></span>(<span class="dt">lineend =</span> <span class="st">"round"</span>, <span class="dt">lwd =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Allele Dosage"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Probability"</span>)</a></code></pre></div>
 <p><img src="oracle_calculations_files/figure-html/unnamed-chunk-3-1.png" width="432"></p>
 <p>Now, we are ready to iterate through read-depth’s until we reach one with an error rate less than 0.05.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">err    &lt;-<span class="st"> </span><span class="ot">Inf</span>
-depth  &lt;-<span class="st"> </span><span class="dv">0</span>
-<span class="cf">while</span>(err <span class="op">&gt;</span><span class="st"> </span>maxerr) {
-  depth &lt;-<span class="st"> </span>depth <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
-  err &lt;-<span class="st"> </span><span class="kw"><a href="../reference/oracle_mis.html">oracle_mis</a></span>(<span class="dt">n =</span> depth,
-                    <span class="dt">ploidy =</span> ploidy,
-                    <span class="dt">seq =</span> seq,
-                    <span class="dt">bias =</span> bias,
-                    <span class="dt">od =</span> od,
-                    <span class="dt">dist =</span> gene_dist)
-}
-depth
-<span class="co">#&gt; [1] 90</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">err    &lt;-<span class="st"> </span><span class="ot">Inf</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">depth  &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="cf">while</span>(err <span class="op">&gt;</span><span class="st"> </span>maxerr) {</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">  depth &lt;-<span class="st"> </span>depth <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">  err &lt;-<span class="st"> </span><span class="kw"><a href="../reference/oracle_mis.html">oracle_mis</a></span>(<span class="dt">n =</span> depth,</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">                    <span class="dt">ploidy =</span> ploidy,</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">                    <span class="dt">seq =</span> seq,</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">                    <span class="dt">bias =</span> bias,</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">                    <span class="dt">od =</span> od,</a>
+<a class="sourceLine" id="cb4-10" data-line-number="10">                    <span class="dt">dist =</span> gene_dist)</a>
+<a class="sourceLine" id="cb4-11" data-line-number="11">}</a>
+<a class="sourceLine" id="cb4-12" data-line-number="12">depth</a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt; [1] 90</span></a></code></pre></div>
 <p>Looks like we need a depth of 90 in order to get a misclassification error rate under 0.05.</p>
 <p>Note that <code>oracle_mis</code> returns the <strong>best misclassification error rate possible</strong> under these conditions (<code>ploidy</code> = 4, <code>bias</code> = 0.7, <code>seq</code> = 0.001, <code>od</code> = 0.01, and <code>pgeno</code> = 2). In your actual analysis, you will have a worse misclassification error rate than that returned by <code>oracle_mis</code>. However, if you have a lot of individuals in your sample, then this will act as a reasonable approximation to the error rate. In general though, you should sequence a little deeper than suggested by <code>oracle_mis</code>.</p>
 </div>
@@ -144,32 +144,32 @@ depth
 <h1 class="hasAnchor">
 <a href="#visualizing-the-joint-distribution" class="anchor"></a>Visualizing the Joint Distribution</h1>
 <p>Suppose we only have a budget to sequence to a depth of 30. Then what errors can we expect? We can use <code>oracle_joint</code> and <code>oracle_plot</code> to visualize the errors we can expect.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">depth &lt;-<span class="st"> </span><span class="dv">30</span>
-jd &lt;-<span class="st"> </span><span class="kw"><a href="../reference/oracle_joint.html">oracle_joint</a></span>(<span class="dt">n =</span> depth,
-                   <span class="dt">ploidy =</span> ploidy,
-                   <span class="dt">seq =</span> seq,
-                   <span class="dt">bias =</span> bias,
-                   <span class="dt">od =</span> od,
-                   <span class="dt">dist =</span> gene_dist)
-<span class="kw"><a href="../reference/oracle_plot.html">oracle_plot</a></span>(jd)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">depth &lt;-<span class="st"> </span><span class="dv">30</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">jd &lt;-<span class="st"> </span><span class="kw"><a href="../reference/oracle_joint.html">oracle_joint</a></span>(<span class="dt">n =</span> depth,</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">                   <span class="dt">ploidy =</span> ploidy,</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">                   <span class="dt">seq =</span> seq,</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">                   <span class="dt">bias =</span> bias,</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">                   <span class="dt">od =</span> od,</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">                   <span class="dt">dist =</span> gene_dist)</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="kw"><a href="../reference/oracle_plot.html">oracle_plot</a></span>(jd)</a></code></pre></div>
 <p><img src="oracle_calculations_files/figure-html/unnamed-chunk-5-1.png" width="432"></p>
 <p>Most of the errors will be mistakes between genotypes 2/3 and mistakes between genotypes 1/2.</p>
 <p>Even though the misclassification error rate is pretty high (0.14), the correlation of the oracle estimator with the true genotype is pretty reasonable (0.89). You can obtain this using the <code>oracle_cor</code> function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ocorr &lt;-<span class="st"> </span><span class="kw"><a href="../reference/oracle_cor.html">oracle_cor</a></span>(<span class="dt">n =</span> depth,
-                    <span class="dt">ploidy =</span> ploidy,
-                    <span class="dt">seq =</span> seq,
-                    <span class="dt">bias =</span> bias,
-                    <span class="dt">od =</span> od,
-                    <span class="dt">dist =</span> gene_dist)
-ocorr
-<span class="co">#&gt; [1] 0.8935101</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">ocorr &lt;-<span class="st"> </span><span class="kw"><a href="../reference/oracle_cor.html">oracle_cor</a></span>(<span class="dt">n =</span> depth,</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">                    <span class="dt">ploidy =</span> ploidy,</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">                    <span class="dt">seq =</span> seq,</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">                    <span class="dt">bias =</span> bias,</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">                    <span class="dt">od =</span> od,</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">                    <span class="dt">dist =</span> gene_dist)</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">ocorr</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; [1] 0.8935101</span></a></code></pre></div>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
 <div id="refs" class="references">
 <div id="ref-gerard2018genotyping">
-<p>Gerard, David, Luís Felipe Ventorim Ferrão, Antonio Augusto Franco Garcia, and Matthew Stephens. 2018. “Genotyping Polyploids from Messy Sequencing Data.” <em>Genetics</em> 210 (3). Genetics: 789–807. doi:<a href="https://doi.org/10.1534/genetics.118.301468">10.1534/genetics.118.301468</a>.</p>
+<p>Gerard, David, Luís Felipe Ventorim Ferrão, Antonio Augusto Franco Garcia, and Matthew Stephens. 2018. “Genotyping Polyploids from Messy Sequencing Data.” <em>Genetics</em> 210 (3). Genetics: 789–807. <a href="https://doi.org/10.1534/genetics.118.301468">https://doi.org/10.1534/genetics.118.301468</a>.</p>
 </div>
 </div>
 </div>
