@@ -132,10 +132,11 @@
 </h1>
 <ul>
 <li>Adds <code><a href="../reference/multidog.html">multidog()</a></code> for genotypying multiple SNP’s using parallel computing.</li>
-<li>Adds <code><a href="../reference/plot.mupdog.html">plot.mupdog()</a></code> for plotting the output of <code><a href="../reference/multidog.html">multidog()</a></code>.</li>
+<li>Adds <code><a href="../reference/plot.multidog.html">plot.multidog()</a></code> for plotting the output of <code><a href="../reference/multidog.html">multidog()</a></code>.</li>
 <li>Adds <code><a href="../reference/format_multidog.html">format_multidog()</a></code> for formatting the output of <code><a href="../reference/multidog.html">multidog()</a></code> to be a matrix.</li>
+<li>Removes dependency on CVXR. This makes install and maintenance a little easier. The defaults for this specific problem were a little faster anyway.</li>
 <li>No longer changes the color scale in <code><a href="../reference/plot_geno.html">plot_geno()</a></code> based on what genotypes are present.</li>
-<li>In .cpp files, we now coerce objects to be unsigned before comparing. This getrs rid of some warnings during install.</li>
+<li>In .cpp files, we now coerce objects to be unsigned before comparing. This gets rid of some warnings during install.</li>
 </ul>
 </div>
     <div id="updog-1-1-3" class="section level1">
