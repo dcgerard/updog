@@ -20,7 +20,7 @@ sequencing error, and (possibly) outlying observations. It is named
 updog for “Using Parental Data for Offspring Genotyping” because we
 originally developed the method for full-sib populations, but it works
 now for more general populations. The method is described in detail
-Gerard et. al. (2018)
+Gerard et. al. (2018)
 \<[doi:10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468)\>.
 Additional details concerning prior specification are described in
 Gerard and Ferrão (2019)
@@ -97,23 +97,6 @@ with:
 ``` r
 # install.packages("devtools")
 devtools::install_github("dcgerard/updog")
-```
-
-### CVXR
-
-If you want to use the `use_cvxr = TRUE` option in `flexdog` (not
-generally recommended), you will need to install the
-[CVXR](https://cran.r-project.org/package=CVXR) package. Before I could
-install CVXR in Ubuntu, I had to run in the terminal
-
-``` bash
-sudo apt-get install libmpfr-dev
-```
-
-and then run in R
-
-``` r
-install.packages("Rmpfr")
 ```
 
 ## How to Cite

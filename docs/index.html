@@ -102,7 +102,7 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#updog" class="anchor"></a>updog</h1></div>
 
-<p>Updog provides a suite of methods for genotyping polyploids from next-generation sequencing (NGS) data. It does this while accounting for many common features of NGS data: allele bias, overdispersion, sequencing error, and (possibly) outlying observations. It is named updog for “Using Parental Data for Offspring Genotyping” because we originally developed the method for full-sib populations, but it works now for more general populations. The method is described in detail Gerard et. al. (2018) &lt;<a href="https://doi.org/10.1534/genetics.118.301468">doi:10.1534/genetics.118.301468</a>&gt;. Additional details concerning prior specification are described in Gerard and Ferrão (2019) &lt;<a href="https://doi.org/10.1093/bioinformatics/btz852">doi:10.1093/bioinformatics/btz852</a>&gt;.</p>
+<p>Updog provides a suite of methods for genotyping polyploids from next-generation sequencing (NGS) data. It does this while accounting for many common features of NGS data: allele bias, overdispersion, sequencing error, and (possibly) outlying observations. It is named updog for “Using Parental Data for Offspring Genotyping” because we originally developed the method for full-sib populations, but it works now for more general populations. The method is described in detail Gerard et. al. (2018) &lt;<a href="https://doi.org/10.1534/genetics.118.301468">doi:10.1534/genetics.118.301468</a>&gt;. Additional details concerning prior specification are described in Gerard and Ferrão (2019) &lt;<a href="https://doi.org/10.1093/bioinformatics/btz852">doi:10.1093/bioinformatics/btz852</a>&gt;.</p>
 <p>The main function is <code><a href="reference/flexdog.html">flexdog()</a></code>, which provides many options for the distribution of the genotypes in your sample. Novel genotype distributions include the class of proportional normal distributions (<code>model = "norm"</code>) and the class of discrete unimodal distributions (<code>model = "ash"</code>). The default is <code>model = "norm"</code> because it is the most robust to varying genotype distributions, but feel free to use more specialized priors if you have more information on the data.</p>
 <p><code><a href="reference/multidog.html">multidog()</a></code> is a convenience function that let’s you run <code><a href="reference/flexdog.html">flexdog()</a></code> over many SNP’s. It has support for parallel computing.</p>
 <p>Also provided are:</p>
@@ -132,14 +132,6 @@
 <p>You can install the current (unstable) version of updog from GitHub with:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"dcgerard/updog"</span>)</a></code></pre></div>
-<div id="cvxr" class="section level3">
-<h3 class="hasAnchor">
-<a href="#cvxr" class="anchor"></a>CVXR</h3>
-<p>If you want to use the <code>use_cvxr = TRUE</code> option in <code>flexdog</code> (not generally recommended), you will need to install the <a href="https://cran.r-project.org/package=CVXR">CVXR</a> package. Before I could install CVXR in Ubuntu, I had to run in the terminal</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="fu">sudo</span> apt-get install libmpfr-dev</a></code></pre></div>
-<p>and then run in R</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"Rmpfr"</span>)</a></code></pre></div>
-</div>
 </div>
 <div id="how-to-cite" class="section level2">
 <h2 class="hasAnchor">
@@ -149,34 +141,34 @@
 <p>Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., &amp; Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. <em>Genetics</em>, 210(3), 789-807. doi: <a href="https://doi.org/10.1534/genetics.118.301468">10.1534/genetics.118.301468</a>.</p>
 </blockquote>
 <p>Or, using BibTex:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode tex"><code class="sourceCode latex"><a class="sourceLine" id="cb5-1" data-line-number="1">@article {gerard2018genotyping,</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">    author = {Gerard, David and Ferr{<span class="fu">\~</span>a}o, Lu{<span class="fu">\'</span>i}s Felipe Ventorim and Garcia, Antonio Augusto Franco and Stephens, Matthew},</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">    title = {Genotyping Polyploids from Messy Sequencing Data},</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">    volume = {210},</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">    number = {3},</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">    pages = {789--807},</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">    year = {2018},</a>
-<a class="sourceLine" id="cb5-8" data-line-number="8">    doi = {10.1534/genetics.118.301468},</a>
-<a class="sourceLine" id="cb5-9" data-line-number="9">    publisher = {Genetics},</a>
-<a class="sourceLine" id="cb5-10" data-line-number="10">    issn = {0016-6731},</a>
-<a class="sourceLine" id="cb5-11" data-line-number="11">    URL = {https://doi.org/10.1534/genetics.118.301468},</a>
-<a class="sourceLine" id="cb5-12" data-line-number="12">    journal = {Genetics}</a>
-<a class="sourceLine" id="cb5-13" data-line-number="13">}</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode tex"><code class="sourceCode latex"><a class="sourceLine" id="cb3-1" data-line-number="1">@article {gerard2018genotyping,</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">    author = {Gerard, David and Ferr{<span class="fu">\~</span>a}o, Lu{<span class="fu">\'</span>i}s Felipe Ventorim and Garcia, Antonio Augusto Franco and Stephens, Matthew},</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">    title = {Genotyping Polyploids from Messy Sequencing Data},</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">    volume = {210},</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">    number = {3},</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">    pages = {789--807},</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">    year = {2018},</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">    doi = {10.1534/genetics.118.301468},</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">    publisher = {Genetics},</a>
+<a class="sourceLine" id="cb3-10" data-line-number="10">    issn = {0016-6731},</a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">    URL = {https://doi.org/10.1534/genetics.118.301468},</a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">    journal = {Genetics}</a>
+<a class="sourceLine" id="cb3-13" data-line-number="13">}</a></code></pre></div>
 <p>If you are using the proportional normal prior class (<code>model = "norm"</code>) or the unimodal prior class (<code>model = "ash"</code>), then please also cite</p>
 <blockquote>
 <p>Gerard, D. &amp; Ferrão L. F. V. (2019). “Priors for Genotyping Polyploids.” <em>Bioinformatics</em> (in press). doi: <a href="https://doi.org/10.1093/bioinformatics/btz852">10.1093/bioinformatics/btz852</a></p>
 </blockquote>
 <p>Or, using BibTex:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode tex"><code class="sourceCode latex"><a class="sourceLine" id="cb6-1" data-line-number="1">@article{gerard2019priors,</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">    author = {Gerard, David and Ferr{<span class="fu">\~</span>a}o, Lu{<span class="fu">\'</span>i}s Felipe Ventorim},</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">    title = {Priors for Genotyping Polyploids},</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">    journal = {Bioinformatics},</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">    year = {2019},</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">    month = {11},</a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">    issn = {1367-4803},</a>
-<a class="sourceLine" id="cb6-8" data-line-number="8">    doi = {10.1093/bioinformatics/btz852},</a>
-<a class="sourceLine" id="cb6-9" data-line-number="9">    note = {btz852},</a>
-<a class="sourceLine" id="cb6-10" data-line-number="10">}</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode tex"><code class="sourceCode latex"><a class="sourceLine" id="cb4-1" data-line-number="1">@article{gerard2019priors,</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">    author = {Gerard, David and Ferr{<span class="fu">\~</span>a}o, Lu{<span class="fu">\'</span>i}s Felipe Ventorim},</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">    title = {Priors for Genotyping Polyploids},</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">    journal = {Bioinformatics},</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">    year = {2019},</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">    month = {11},</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">    issn = {1367-4803},</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">    doi = {10.1093/bioinformatics/btz852},</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">    note = {btz852},</a>
+<a class="sourceLine" id="cb4-10" data-line-number="10">}</a></code></pre></div>
 </div>
 <div id="code-of-conduct" class="section level2">
 <h2 class="hasAnchor">

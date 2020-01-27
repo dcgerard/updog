@@ -167,7 +167,6 @@ Gerard and Ferrão (2019).</p>
   <span class='kw'>update_seq</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>update_od</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>mode</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>use_cvxr</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>itermax</span> <span class='kw'>=</span> <span class='fl'>200</span>,
   <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>10</span>^-<span class='fl'>4</span>,
   <span class='kw'>fs1_alpha</span> <span class='kw'>=</span> <span class='fl'>10</span>^-<span class='fl'>3</span>,
@@ -267,15 +266,6 @@ parameter.</p></td>
 <code>flexdog</code> will estimate the mode. This is the starting point of
 the allele frequency if <code>model = "hw"</code>. This should be
 <code>NULL</code> for all other options of <code>model</code>.</p></td>
-    </tr>
-    <tr>
-      <th>use_cvxr</th>
-      <td><p>A logical. If <code>model = "ash"</code>, then do you want
-to use the EM algorithm
-(<code>FALSE</code>) or a convex optimization program using
-the package CVXR (<code>TRUE</code>)?
-Only available if CVXR is installed. Setting <code>use_cvxr</code> to
-<code>TRUE</code> is generally slower than setting it to <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>itermax</th>

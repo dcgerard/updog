@@ -40,7 +40,6 @@ Suggests: covr,
     testthat,
     SuppDists,
     Rmpfr,
-    CVXR,
     knitr,
     rmarkdown
 VignetteBuilder: knitr

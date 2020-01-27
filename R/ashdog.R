@@ -285,12 +285,6 @@ flexdog <- function(refvec,
 #' @param tol The tolerance stopping criterion. The EM algorithm will stop
 #'     if the difference in the log-likelihoods between two consecutive
 #'     iterations is less than \code{tol}.
-#' @param use_cvxr A logical. If \code{model = "ash"}, then do you want
-#'     to use the EM algorithm
-#'     (\code{FALSE}) or a convex optimization program using
-#'     the package CVXR (\code{TRUE})?
-#'     Only available if CVXR is installed. Setting \code{use_cvxr} to
-#'     \code{TRUE} is generally slower than setting it to \code{FALSE}.
 #' @param update_bias A logical. Should we update \code{bias}
 #'     (\code{TRUE}), or not (\code{FALSE})?
 #' @param update_seq A logical. Should we update \code{seq}
@@ -474,7 +468,6 @@ flexdog_full <- function(refvec,
                          update_seq  = TRUE,
                          update_od   = TRUE,
                          mode        = NULL,
-                         use_cvxr    = FALSE,
                          itermax     = 200,
                          tol         = 10 ^ -4,
                          fs1_alpha   = 10 ^ -3,
@@ -532,7 +525,6 @@ flexdog_full <- function(refvec,
   assertthat::assert_that(tol > 0)
   assertthat::are_equal(itermax %% 1, 0)
   assertthat::assert_that(itermax > 0)
-  assertthat::assert_that(is.logical(use_cvxr))
   assertthat::assert_that(is.logical(update_bias))
   assertthat::assert_that(is.logical(update_seq))
   assertthat::assert_that(is.logical(update_od))
@@ -651,10 +643,8 @@ flexdog_full <- function(refvec,
 
     ## Get inner weight vec only once
     ## Used in convex optimization program
-    ## assign use_cvxr
     if (model == "ash") {
       control$inner_weights <- get_inner_weights(ploidy = ploidy, mode = mode)
-      control$use_cvxr      <- use_cvxr
       control$lambda        <- ashpen
     } else if (model == "f1" | model == "s1") {
       control$qarray    <- get_q_array(ploidy = ploidy)
@@ -871,7 +861,7 @@ flexdog_full <- function(refvec,
       }
 
 
-      if (model == "ash" & !use_cvxr) { ## add small penalty if "ash"
+      if (model == "ash") { ## add small penalty if "ash"
         llike <- llike + ashpen_fun(lambda = ashpen, pivec = pivec)
       } else if (model == "f1ppdr") { ## add more penalties if f1ppdr
         llike <- llike +
@@ -1175,25 +1165,12 @@ flex_update_pivec <- function(weight_vec,
     if (is.null(control$inner_weights)) {
       stop('flex_update_pivec: control$inner_weights cannot be NULL when model = "ash"')
     }
-    if (!control$use_cvxr) {
-      pivec <- uni_em(weight_vec = weight_vec,
-                      lmat       = control$inner_weights,
-                      pi_init    = control$pivec,
-                      itermax    = 200,
-                      obj_tol    = 10 ^ -4,
-                      lambda     = control$lambda)
-    } else if (control$use_cvxr & requireNamespace("CVXR", quietly = TRUE)) {
-      cv_pi <- CVXR::Variable(1, ploidy + 1)
-      obj   <- sum(t(weight_vec) * log(cv_pi %*% control$inner_weights))
-      prob  <- CVXR::Problem(CVXR::Maximize(obj),
-                             constraints = list(sum(cv_pi) == 1,
-                                                cv_pi >= 0))
-      result <- solve(prob)
-      result$value
-      pivec <- c(result$getValue(cv_pi))
-    } else {
-      stop("flex_update_pivec: CVXR not installed but use_cvxr = TRUE.")
-    }
+    pivec <- uni_em(weight_vec = weight_vec,
+                    lmat       = control$inner_weights,
+                    pi_init    = control$pivec,
+                    itermax    = 200,
+                    obj_tol    = 10 ^ -4,
+                    lambda     = control$lambda)
     return_list$pivec <- pivec
     return_list$par <- list()
   } else if (model == "hw") {
