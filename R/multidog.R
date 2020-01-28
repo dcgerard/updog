@@ -7,6 +7,8 @@
 #'
 #' This is a convenience function that will run \code{\link{flexdog}} over many SNP's.
 #' Support is provided for parallel computing through the doParallel package.
+#' This function has not been extensively tested. Please report any bugs to
+#' \url{http://github.com/dcgerard/updog/issues}.
 #'
 #' You should format your reference counts and total read counts in two
 #' separate matrices. The rows should index the markers (SNP's) and the

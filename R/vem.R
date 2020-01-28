@@ -1,9 +1,11 @@
 ### Code for VEM
 
-#' Multi-SNP updog.
+#' Using correlation between individuals for genotyping.
 #'
 #' A method to genotype autopolyploids using GBS or RAD-seq like data by accounting
 #' for correlations in the genotype distribution between the individuals.
+#' This is a very experimental function. You probably want to use
+#' \code{\link{multidog}()} instead.
 #'
 #' Blischak et al (2017) developed a genotyping approach for autopolyploids
 #' that assumes a Balding-Nichols generative model (Balding and Nichols, 1997)
