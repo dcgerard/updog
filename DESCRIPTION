@@ -34,7 +34,6 @@ Imports:
     doParallel,
     ggplot2,
     ggthemes,
-    stringr,
     reshape2
 Suggests: covr,
     testthat,

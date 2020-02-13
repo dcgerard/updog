@@ -82,7 +82,6 @@
 #' @importFrom doParallel registerDoParallel
 #' @importFrom ggthemes colorblind_pal
 #' @importFrom foreach %dopar%
-#' @importFrom stringr str_replace
 #'
 #' @docType package
 #' @name updog-package

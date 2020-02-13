@@ -266,7 +266,7 @@ oracle_mis_vec_from_joint <- function(jd) {
 #'
 oracle_plot <- function(jd) {
   mat_text <- format(round(jd, digits = 2), digits = 2)
-  probability_text <- stringr::str_replace(stringr::str_replace(mat_text, "0.00", "0"), "0\\.", "\\.")
+  probability_text <- c(sub("0\\.", "\\.", sub("0.00", "0", mat_text)))
 
   dfdat <- cbind(expand.grid(x = seq_len(nrow(jd)) - 1, y = seq_len(nrow(jd)) - 1),
         probability_text,
