@@ -157,6 +157,15 @@ mout$snpdf
 }
 
 }
+\seealso{
+\itemize{
+  \item{\code{\link{flexdog}()}:}{For the underlying genotyping function.}
+  \item{\code{\link{format_multidog}()}:}{For converting the output
+      of \code{multidog()} to a matrix.}
+  \item{\code{\link{filter_snp}()}:}{For filtering SNPs using the
+      output of \code{multidog()}.}
+}
+}
 \author{
 David Gerard
 }

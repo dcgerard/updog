@@ -105,6 +105,15 @@
 #'
 #' @author David Gerard
 #'
+#' @seealso
+#' \itemize{
+#'   \item{\code{\link{flexdog}()}:}{For the underlying genotyping function.}
+#'   \item{\code{\link{format_multidog}()}:}{For converting the output
+#'       of \code{multidog()} to a matrix.}
+#'   \item{\code{\link{filter_snp}()}:}{For filtering SNPs using the
+#'       output of \code{multidog()}.}
+#' }
+#'
 #' @examples
 #' \dontrun{
 #' data("uitdewilligen")
@@ -427,3 +436,46 @@ format_multidog <- function(x, varname = "geno") {
 
   return(matout)
 }
+
+#' Filter SNPs based on the output of \code{\link{multidog}()}.
+#'
+#' Filter based on provided logical predicates in terms of the variable
+#' names in \code{x$snpdf}. This function filters both \code{x$snpdf}
+#' and \code{x$inddf}.
+#'
+#' @param x The output of \code{multidog}.
+#' @param expr Logical predicate expression defined in terms of the variables
+#'     in \code{x$snpdf}. Only SNPs where the condition evaluates to
+#'     \code{TRUE} are kept.
+#'
+#' @examples
+#' \dontrun{
+#' data("uitdewilligen")
+#' mout <- multidog(refmat = t(uitdewilligen$refmat),
+#'                  sizemat = t(uitdewilligen$sizemat),
+#'                  ploidy = uitdewilligen$ploidy,
+#'                  nc = 2)
+#'
+#' ## The following filters are for educational purposes only and should
+#' ## not be taken as a default filter:
+#' mout2 <- filter_snp(mout, bias < 0.8 & od < 0.003)
+#' }
+#'
+#' @seealso
+#' \itemize{
+#'   \item{\code{\link{multidog}()}:}{For the variables in \code{x$snpdf}
+#'       which you can filter by.}
+#' }
+#'
+#' @author David Gerard
+#'
+#' @export
+filter_snp <- function(x, expr) {
+  assertthat::assert_that(is.multidog(x))
+  cond <- eval(expr = substitute(expr), envir = x$snpdf)
+  x$snpdf <- x$snpdf[cond, , drop = FALSE]
+  goodsnps <- x$snpdf$snp
+  x$inddf <- x$inddf[x$inddf$snp %in% goodsnps, , drop = FALSE]
+  return(x)
+}
+

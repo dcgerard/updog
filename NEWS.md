@@ -1,3 +1,12 @@
+# updog 1.2.1
+
+- Adds `filter_snp()` for filtering the output of `multidog()` based
+  on predicates in terms of the variables in `snpdf`.
+- Removes stringr from Imports. I was only using it in one place so I
+  replaced that code with base R code.
+- Removes Rmpfr from Suggests. No longer needed since CVXR is no longer
+  suggested.
+
 # updog 1.2.0
 
 - Adds `multidog()` for genotypying multiple SNP's using parallel computing.

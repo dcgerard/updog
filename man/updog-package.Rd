@@ -48,6 +48,8 @@ issue at \url{http://github.com/dcgerard/updog/issues}.
   \item{\code{\link{multidog}}}{A convenience function for running
       \code{\link{flexdog}} over many SNPs. This function provides
       support for parallel computing.}
+  \item{\code{\link{format_multidog}}}{Return matricized elements from the output of \code{\link{multidog}}.}
+  \item{\code{\link{filter_snp}}}{Filter SNPs based on the output of \code{\link{multidog}}}
   \item{\code{\link{mupdog}}}{An experimental approach to genotype
       autopolyploids that accounts for varying levels of
       relatedness between the individuals in the sample.}

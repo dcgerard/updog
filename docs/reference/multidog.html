@@ -72,7 +72,7 @@ http://github.com/dcgerard/updog/issues." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
@@ -294,6 +294,17 @@ run <code><a href='flexdog.html'>flexdog</a></code> in parallel. Only set <code>
 The upper bound on the value of <code>nc</code> you should try can be determined
 by running <code><a href='https://rdrr.io/r/parallel/detectCores.html'>parallel::detectCores()</a></code> in R.</p>
 <p>SNP's that contain 0 reads (or all missing data) are entirely removed.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'>
+<ul>
+<li><p><code><a href='flexdog.html'>flexdog</a>()</code>:For the underlying genotyping function.</p></li>
+<li><p><code><a href='format_multidog.html'>format_multidog</a>()</code>:For converting the output
+      of <code>multidog()</code> to a matrix.</p></li>
+<li><p><code><a href='filter_snp.html'>filter_snp</a>()</code>:For filtering SNPs using the
+      output of <code>multidog()</code>.</p></li>
+</ul>
+</div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
@@ -312,6 +323,7 @@ by running <code><a href='https://rdrr.io/r/parallel/detectCores.html'>parallel:
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
       <li><a href="#details">Details</a></li>
+      <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 
