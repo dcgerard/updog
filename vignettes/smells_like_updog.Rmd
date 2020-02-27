@@ -2,7 +2,6 @@
 title: "Example Use of Updog"
 author: "David Gerard"
 output: rmarkdown::html_vignette
-bibliography: "genobib.bib"
 vignette: >
   %\VignetteIndexEntry{Example Use of Updog}
   %\VignetteEngine{knitr::rmarkdown}
@@ -20,13 +19,13 @@ knitr::opts_chunk$set(
 
 # What's Updog?
 
-Updog is a package containing empirical Bayes approaches to genotype individuals (particularly polyploids) from next generation sequencing (NGS) data. We had in mind NGS data that results from a reduced representation library, such as "genotyping-by-sequencing" (GBS) [@elshire2011robust] or "restriction site-associated DNA sequencing" (RAD-seq) [@baird2008rapid].
+Updog is a package containing empirical Bayes approaches to genotype individuals (particularly polyploids) from next generation sequencing (NGS) data. We had in mind NGS data that results from a reduced representation library, such as "genotyping-by-sequencing" (GBS) (Elshire et al., 2011) or "restriction site-associated DNA sequencing" (RAD-seq) (Baird et al., 2008).
 
 Updog wields the power of hierarchical modeling to account for some key features of NGS data overlooked in most other analyses, particularly allelic bias and overdispersion. Updog will also automatically account for sequencing errors.
 
 To efficiently account for these features, updog needs to know the distribution of the individual genotypes in the population. The function `flexdog` can accurately estimate this distribution under a wide variety of situations.
 
-You can read more about the updog method in @gerard2018genotyping.
+You can read more about the updog method in Gerard et al. (2018).
 
 In this vignette, we will go through one example of fitting `flexdog` on an S1 population of individuals.
 
@@ -34,7 +33,7 @@ In this vignette, we will go through one example of fitting `flexdog` on an S1 p
 
 ## Fit updog
 
-Load `updog` and the `snpdat` dataset. The data frame `snpdat` contains three example SNPs (single nucleotide polymorphisms) from the study of @shirasawa2017high. The individuals in this dataset resulted from a single generation of selfing (an S1 population). You can read more about it by typing `?snpdat`.
+Load `updog` and the `snpdat` dataset. The data frame `snpdat` contains three example SNPs (single nucleotide polymorphisms) from the study of Shirasawa et al. (2017). The individuals in this dataset resulted from a single generation of selfing (an S1 population). You can read more about it by typing `?snpdat`.
 
 ```{r, message=FALSE}
 set.seed(1)
@@ -98,3 +97,11 @@ For this SNP, we expect about `r round(uout$prop_mis, digits = 4) * 100` percent
 From our simulation studies, we also generally get rid of SNPs with overdispersion parameters greater than 0.05 or SNPs with bias parameters either less than 0.5 or greater than 2. However, if you have higher or lower read depths than what we looked at in our simulations, you should adjust these levels accordingly.
 
 # References
+
+Baird, Paul D. AND Atwood, Nathan A. AND Etter. 2008. "Rapid SNP Discovery and Genetic Mapping Using Sequenced RAD Markers." *PLOS ONE* 3 (10). Public Library of Science: 1–7. <https://doi.org/10.1371/journal.pone.0003376>.
+
+Elshire, Jeffrey C. AND Sun, Robert J. AND Glaubitz. 2011. "A Robust, Simple Genotyping-by-Sequencing (GBS) Approach for High Diversity Species." *PLOS ONE* 6 (5). Public Library of Science: 1–10. <https://doi.org/10.1371/journal.pone.0019379>.
+
+Gerard, David, Luís Felipe Ventorim Ferrão, Antonio Augusto Franco Garcia, and Matthew Stephens. 2018. "Genotyping Polyploids from Messy Sequencing Data." *Genetics* 210 (3). Genetics: 789–807. <https://doi.org/10.1534/genetics.118.301468>.
+
+Shirasawa, Kenta, Masaru Tanaka, Yasuhiro Takahata, Daifu Ma, Qinghe Cao, Qingchang Liu, Hong Zhai, et al. 2017. "A High-Density SNP Genetic Map Consisting of a Complete Set of Homologous Groups in Autohexaploid Sweetpotato (*Ipomoea batatas*)." *Scientific Reports* 7. Nature Publishing Group. <https://doi.org/10.1038/srep44207>.

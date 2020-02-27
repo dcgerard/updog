@@ -2,7 +2,6 @@
 title: "Simulate Next-Generation Sequencing Data"
 author: "David Gerard"
 output: rmarkdown::html_vignette
-bibliography: "genobib.bib"
 vignette: >
   %\VignetteIndexEntry{Simulate Next-Generation Sequencing Data}
   %\VignetteEngine{knitr::rmarkdown}
@@ -20,7 +19,7 @@ knitr::opts_chunk$set(
 
 # Abstract
 
-We demonstrate how to simulate NGS data under various genotype distributions, then fit these data using `flexdog`. The genotyping methods are described in @gerard2018genotyping.
+We demonstrate how to simulate NGS data under various genotype distributions, then fit these data using `flexdog`. The genotyping methods are described in Gerard et al. (2018).
 
 # Analysis
 
@@ -121,5 +120,5 @@ fout$par$alpha
 
 # References
 
-
+Gerard, David, Luís Felipe Ventorim Ferrão, Antonio Augusto Franco Garcia, and Matthew Stephens. 2018. "Genotyping Polyploids from Messy Sequencing Data." *Genetics* 210 (3). Genetics: 789–807. <https://doi.org/10.1534/genetics.118.301468>.
 

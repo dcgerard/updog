@@ -1,7 +1,6 @@
 ---
 title: "Oracle Calculations"
 author: "David Gerard"
-bibliography: "genobib.bib"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Oracle Calculations}
@@ -20,7 +19,7 @@ knitr::opts_chunk$set(
 
 # Abstract
 
-We provide some example usage of the oracle calculations available in `updog`. These are particularly useful for read-depth determination. These calculations are described in detail in @gerard2018genotyping.
+We provide some example usage of the oracle calculations available in `updog`. These are particularly useful for read-depth determination. These calculations are described in detail in Gerard et al. (2018).
 
 # Controlling Misclassification Error
 
@@ -125,7 +124,7 @@ ocorr
 
 # References
 
-
+Gerard, David, Luís Felipe Ventorim Ferrão, Antonio Augusto Franco Garcia, and Matthew Stephens. 2018. "Genotyping Polyploids from Messy Sequencing Data." *Genetics* 210 (3). Genetics: 789–807. <https://doi.org/10.1534/genetics.118.301468>.
 
 
 

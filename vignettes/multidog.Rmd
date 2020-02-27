@@ -2,7 +2,6 @@
 title: "Genotyping Many SNP's with multidog()"
 author: "David Gerard"
 output: rmarkdown::html_vignette
-bibliography: "genobib.bib"
 vignette: >
   %\VignetteIndexEntry{Genotyping Many SNP's with multidog()}
   %\VignetteEngine{knitr::rmarkdown}
@@ -22,11 +21,11 @@ knitr::opts_chunk$set(
 
 `multidog()` provides support for genotyping many SNP's by iterating
 `flexdog()` over the SNP's. Support is provided for parallel computing. The genotyping method
-is described in @gerard2018genotyping and @gerard2019priors.
+is described in Gerard et al. (2018) and Gerard and Ferrão (2019).
 
 # Analysis
 
-Let's load updog and the data from @uitdewilligen2013next.
+Let's load updog and the data from Uitdewilligen et al. (2013).
 ```{r setup}
 library(updog)
 data("uitdewilligen")
@@ -92,6 +91,30 @@ genomat <- format_multidog(mout, varname = "geno")
 head(genomat)
 ```
 
+To filter SNPs based on quality metrics (bias, sequencing error rate, 
+overdispersion, etc), you can use `filter_snp()`, which uses the same 
+non-standard evaluation you are used to from `dplyr::filter()`. 
+That is, you can define predicates in terms of the variable
+names in the `snpdf` data frame from the output of `mupdog()`. It then 
+keeps rows in both `snpdf` and `inddf` where the predicate for a SNP
+evaluates to `TRUE`.
+
+```{r}
+dim(mout$snpdf)
+dim(mout$inddf)
+mout_cleaned <- filter_snp(mout, prop_mis < 0.05 & bias > exp(-1) & bias < exp(1))
+dim(mout_cleaned$snpdf)
+dim(mout_cleaned$inddf)
+```
+
+
 # References
+
+Gerard, David, and Luís Felipe Ventorim Ferrão. 2019. "Priors for Genotyping Polyploids." *Bioinformatics*, November. <https://doi.org/10.1093/bioinformatics/btz852>.
+
+Gerard, David, Luís Felipe Ventorim Ferrão, Antonio Augusto Franco Garcia, and Matthew Stephens. 2018. "Genotyping Polyploids from Messy Sequencing Data." *Genetics* 210 (3). Genetics: 789–807. <https://doi.org/10.1534/genetics.118.301468>.
+
+Uitdewilligen, Anne-Marie A. AND D’hoop, Jan G. A. M. L. AND Wolters. 2013. "A Next-Generation Sequencing Method for Genotyping-by-Sequencing of Highly Heterozygous Autotetraploid Potato." *PLOS ONE* 8 (5). Public Library of Science: 1–14. https://doi.org/10.1371/journal.pone.0062355.
+
 
 

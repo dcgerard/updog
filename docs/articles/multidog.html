@@ -98,35 +98,35 @@
 <div id="abstract" class="section level1">
 <h1 class="hasAnchor">
 <a href="#abstract" class="anchor"></a>Abstract</h1>
-<p><code><a href="../reference/multidog.html">multidog()</a></code> provides support for genotyping many SNP’s by iterating <code><a href="../reference/flexdog.html">flexdog()</a></code> over the SNP’s. Support is provided for parallel computing. The genotyping method is described in <span class="citation">Gerard et al. (2018)</span> and <span class="citation">Gerard and Ferrão (2019)</span>.</p>
+<p><code><a href="../reference/multidog.html">multidog()</a></code> provides support for genotyping many SNP’s by iterating <code><a href="../reference/flexdog.html">flexdog()</a></code> over the SNP’s. Support is provided for parallel computing. The genotyping method is described in Gerard et al. (2018) and Gerard and Ferrão (2019).</p>
 </div>
 <div id="analysis" class="section level1">
 <h1 class="hasAnchor">
 <a href="#analysis" class="anchor"></a>Analysis</h1>
-<p>Let’s load updog and the data from <span class="citation">Uitdewilligen (2013)</span>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(updog)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"uitdewilligen"</span>)</span></code></pre></div>
+<p>Let’s load updog and the data from Uitdewilligen et al. (2013).</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(updog)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"uitdewilligen"</span>)</a></code></pre></div>
 <p><code>uitdewilligen$refmat</code> is a matrix of reference counts while <code>uitdewilligen$sizemat</code> is a matrix of total read counts. In these data, the rows index the individuals and the columns index the loci. But for insertion into <code><a href="../reference/multidog.html">multidog()</a></code> we need it the other way around (individuals in the columns and loci in the rows). So we will transpose these matrices.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>refmat  &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/t.html">t</a></span>(uitdewilligen<span class="op">$</span>refmat)</span>
-<span id="cb2-2"><a href="#cb2-2"></a>sizemat &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/t.html">t</a></span>(uitdewilligen<span class="op">$</span>sizemat)</span>
-<span id="cb2-3"><a href="#cb2-3"></a>ploidy  &lt;-<span class="st"> </span>uitdewilligen<span class="op">$</span>ploidy</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">refmat  &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/t.html">t</a></span>(uitdewilligen<span class="op">$</span>refmat)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">sizemat &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/t.html">t</a></span>(uitdewilligen<span class="op">$</span>sizemat)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">ploidy  &lt;-<span class="st"> </span>uitdewilligen<span class="op">$</span>ploidy</a></code></pre></div>
 <p><code>sizemat</code> and <code>refmat</code> should have the same row and column names. These names identify the loci and the individuals.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="https://rdrr.io/r/base/sets.html">setdiff</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(sizemat), <span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(refmat))</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; character(0)</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="kw"><a href="https://rdrr.io/r/base/sets.html">setdiff</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(sizemat), <span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(refmat))</span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; character(0)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/sets.html">setdiff</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(sizemat), <span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(refmat))</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; character(0)</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/sets.html">setdiff</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(sizemat), <span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(refmat))</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; character(0)</span></a></code></pre></div>
 <p>If we want to do parallel computing, we should check that we have the proper number of cores:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>parallel<span class="op">::</span><span class="kw"><a href="https://rdrr.io/r/parallel/detectCores.html">detectCores</a></span>()</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; [1] 4</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">parallel<span class="op">::</span><span class="kw"><a href="https://rdrr.io/r/parallel/detectCores.html">detectCores</a></span>()</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; [1] 16</span></a></code></pre></div>
 <p>Now let’s run <code><a href="../reference/multidog.html">multidog()</a></code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>mout &lt;-<span class="st"> </span><span class="kw"><a href="../reference/multidog.html">multidog</a></span>(<span class="dt">refmat =</span> refmat, </span>
-<span id="cb5-2"><a href="#cb5-2"></a>                 <span class="dt">sizemat =</span> sizemat, </span>
-<span id="cb5-3"><a href="#cb5-3"></a>                 <span class="dt">ploidy =</span> ploidy, </span>
-<span id="cb5-4"><a href="#cb5-4"></a>                 <span class="dt">model =</span> <span class="st">"norm"</span>,</span>
-<span id="cb5-5"><a href="#cb5-5"></a>                 <span class="dt">nc =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">mout &lt;-<span class="st"> </span><span class="kw"><a href="../reference/multidog.html">multidog</a></span>(<span class="dt">refmat =</span> refmat, </a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">                 <span class="dt">sizemat =</span> sizemat, </a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">                 <span class="dt">ploidy =</span> ploidy, </a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">                 <span class="dt">model =</span> <span class="st">"norm"</span>,</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">                 <span class="dt">nc =</span> <span class="dv">2</span>)</a></code></pre></div>
 <p>There is a plot method for the output of <code><a href="../reference/multidog.html">multidog()</a></code>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(mout, <span class="dt">indices =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">100</span>))</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt; [[1]]</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(mout, <span class="dt">indices =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">100</span>))</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; [[1]]</span></a></code></pre></div>
 <p><img src="multidog_files/figure-html/unnamed-chunk-6-1.png" width="432"></p>
 <pre><code>#&gt; 
 #&gt; [[2]]</code></pre>
@@ -135,71 +135,73 @@
 #&gt; [[3]]</code></pre>
 <p><img src="multidog_files/figure-html/unnamed-chunk-6-3.png" width="432"></p>
 <p>The output of multidog contains two data frame. The first contains properties of the SNP’s, such as estimated allele bias and estimated sequencing error rate.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(mout<span class="op">$</span>snpdf)</span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#&gt; 'data.frame':    100 obs. of  16 variables:</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt;  $ snp     : chr  "PotVar0089524" "PotVar0052647" "PotVar0120897" "PotVar0066020" ...</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt;  $ bias    : num  0.519 1.026 0.929 1.221 0.847 ...</span></span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt;  $ seq     : num  0.00485 0.00221 0.002 0.0039 0.00206 ...</span></span>
-<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt;  $ od      : num  0.00304 0.00295 0.00337 0.00275 0.00335 ...</span></span>
-<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt;  $ prop_mis: num  0.004926 0.002274 0.000626 0.002718 0.003 ...</span></span>
-<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt;  $ num_iter: num  6 3 3 5 7 7 4 8 8 4 ...</span></span>
-<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt;  $ llike   : num  -14.7 -25.3 -10.4 -22.7 -32 ...</span></span>
-<span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt;  $ ploidy  : num  4 4 4 4 4 4 4 4 4 4 ...</span></span>
-<span id="cb9-11"><a href="#cb9-11"></a><span class="co">#&gt;  $ model   : chr  "norm" "norm" "norm" "norm" ...</span></span>
-<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#&gt;  $ Pr_0    : num  0.000279 0.248211 0.66369 0.015803 0.08409 ...</span></span>
-<span id="cb9-13"><a href="#cb9-13"></a><span class="co">#&gt;  $ Pr_1    : num  0.00707 0.45067 0.26892 0.06938 0.20154 ...</span></span>
-<span id="cb9-14"><a href="#cb9-14"></a><span class="co">#&gt;  $ Pr_2    : num  0.0745 0.2542 0.0597 0.1931 0.2968 ...</span></span>
-<span id="cb9-15"><a href="#cb9-15"></a><span class="co">#&gt;  $ Pr_3    : num  0.32604 0.04452 0.00725 0.34069 0.26844 ...</span></span>
-<span id="cb9-16"><a href="#cb9-16"></a><span class="co">#&gt;  $ Pr_4    : num  0.592065 0.002423 0.000482 0.381024 0.149179 ...</span></span>
-<span id="cb9-17"><a href="#cb9-17"></a><span class="co">#&gt;  $ mu      : num  4.18 1.01 -1 3.75 2.29 ...</span></span>
-<span id="cb9-18"><a href="#cb9-18"></a><span class="co">#&gt;  $ sigma   : num  1.067 0.925 1.289 1.481 1.433 ...</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(mout<span class="op">$</span>snpdf)</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt; 'data.frame':    100 obs. of  16 variables:</span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt;  $ snp     : Factor w/ 100 levels "PotVar0089524",..: 1 2 3 4 5 6 7 8 9 10 ...</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt;  $ bias    : num  0.519 1.026 0.929 1.221 0.847 ...</span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt;  $ seq     : num  0.00485 0.00221 0.002 0.0039 0.00206 ...</span></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt;  $ od      : num  0.00304 0.00295 0.00337 0.00275 0.00335 ...</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt;  $ prop_mis: num  0.004926 0.002274 0.000626 0.002718 0.003 ...</span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt;  $ num_iter: num  6 3 3 5 7 7 4 8 8 4 ...</span></a>
+<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co">#&gt;  $ llike   : num  -14.7 -25.3 -10.4 -22.7 -32 ...</span></a>
+<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt;  $ ploidy  : num  4 4 4 4 4 4 4 4 4 4 ...</span></a>
+<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt;  $ model   : Factor w/ 1 level "norm": 1 1 1 1 1 1 1 1 1 1 ...</span></a>
+<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt;  $ Pr_0    : num  0.000279 0.248211 0.66369 0.015803 0.08409 ...</span></a>
+<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#&gt;  $ Pr_1    : num  0.00707 0.45067 0.26892 0.06938 0.20154 ...</span></a>
+<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="co">#&gt;  $ Pr_2    : num  0.0745 0.2542 0.0597 0.1931 0.2968 ...</span></a>
+<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt;  $ Pr_3    : num  0.32604 0.04452 0.00725 0.34069 0.26844 ...</span></a>
+<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt;  $ Pr_4    : num  0.592065 0.002423 0.000482 0.381024 0.149179 ...</span></a>
+<a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co">#&gt;  $ mu      : num  4.18 1.01 -1 3.75 2.29 ...</span></a>
+<a class="sourceLine" id="cb9-18" data-line-number="18"><span class="co">#&gt;  $ sigma   : num  1.067 0.925 1.289 1.481 1.433 ...</span></a></code></pre></div>
 <p>The second data frame contains properties of each individual at each SNP, such as the estimated genotypes (<code>geno</code>) and the posterior probability of being genotyping correctly (<code>maxpostprob</code>).</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(mout<span class="op">$</span>inddf)</span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; 'data.frame':    1000 obs. of  12 variables:</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt;  $ snp        : chr  "PotVar0089524" "PotVar0089524" "PotVar0089524" "PotVar0089524" ...</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt;  $ ind        : chr  "P5PEM08" "P3PEM05" "P2PEM10" "P7PEM09" ...</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt;  $ ref        : num  122 113 86 80 69 85 130 228 60 211 ...</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt;  $ size       : num  142 143 96 80 69 86 130 228 86 212 ...</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt;  $ geno       : num  3 3 3 4 4 4 4 4 2 4 ...</span></span>
-<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt;  $ postmean   : num  3 2.99 3 4 4 ...</span></span>
-<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt;  $ maxpostprob: num  1 0.988 1 1 1 ...</span></span>
-<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt;  $ Pr_0       : num  3.74e-90 1.03e-78 2.21e-77 1.06e-86 8.21e-79 ...</span></span>
-<span id="cb10-11"><a href="#cb10-11"></a><span class="co">#&gt;  $ Pr_1       : num  7.97e-23 3.86e-16 2.61e-20 6.80e-30 1.21e-26 ...</span></span>
-<span id="cb10-12"><a href="#cb10-12"></a><span class="co">#&gt;  $ Pr_2       : num  4.94e-06 1.17e-02 3.27e-06 2.82e-14 1.01e-12 ...</span></span>
-<span id="cb10-13"><a href="#cb10-13"></a><span class="co">#&gt;  $ Pr_3       : num  1.00 9.88e-01 1.00 6.74e-06 2.75e-05 ...</span></span>
-<span id="cb10-14"><a href="#cb10-14"></a><span class="co">#&gt;  $ Pr_4       : num  1.45e-10 1.14e-15 3.56e-06 1.00 1.00 ...</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(mout<span class="op">$</span>inddf)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt; 'data.frame':    1000 obs. of  12 variables:</span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt;  $ snp        : Factor w/ 100 levels "PotVar0089524",..: 1 1 1 1 1 1 1 1 1 1 ...</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt;  $ ind        : Factor w/ 10 levels "P1PEM10","P2PEM05",..: 8 4 3 10 7 2 1 5 9 6 ...</span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt;  $ ref        : num  122 113 86 80 69 85 130 228 60 211 ...</span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;  $ size       : num  142 143 96 80 69 86 130 228 86 212 ...</span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;  $ geno       : num  3 3 3 4 4 4 4 4 2 4 ...</span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;  $ postmean   : num  3 2.99 3 4 4 ...</span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt;  $ maxpostprob: num  1 0.988 1 1 1 ...</span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt;  $ Pr_0       : num  3.74e-90 1.03e-78 2.21e-77 1.06e-86 8.21e-79 ...</span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt;  $ Pr_1       : num  7.97e-23 3.86e-16 2.61e-20 6.80e-30 1.21e-26 ...</span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt;  $ Pr_2       : num  4.94e-06 1.17e-02 3.27e-06 2.82e-14 1.01e-12 ...</span></a>
+<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt;  $ Pr_3       : num  1.00 9.88e-01 1.00 6.74e-06 2.75e-05 ...</span></a>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt;  $ Pr_4       : num  1.45e-10 1.14e-15 3.56e-06 1.00 1.00 ...</span></a></code></pre></div>
 <p>You can obtain the columns in <code>inddf</code> in matrix form with <code><a href="../reference/format_multidog.html">format_multidog()</a></code>.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>genomat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/format_multidog.html">format_multidog</a></span>(mout, <span class="dt">varname =</span> <span class="st">"geno"</span>)</span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(genomat)</span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="co">#&gt;               P1PEM10 P2PEM05 P2PEM10 P3PEM05 P4PEM01 P4PEM09 P5PEM04 P5PEM08</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="co">#&gt; PotVar0000693       2       3       4       4       3       3       3       3</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a><span class="co">#&gt; PotVar0003381       3       1       2       0       2       3       3       1</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt; PotVar0004919       0       2       2       2       1       2       0       2</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt; PotVar0009402       0       2       0       1       3       2       1       2</span></span>
-<span id="cb11-8"><a href="#cb11-8"></a><span class="co">#&gt; PotVar0009518       0       2       0       1       3       1       1       1</span></span>
-<span id="cb11-9"><a href="#cb11-9"></a><span class="co">#&gt; PotVar0011967       3       3       4       4       3       4       3       3</span></span>
-<span id="cb11-10"><a href="#cb11-10"></a><span class="co">#&gt;               P6PEM11 P7PEM09</span></span>
-<span id="cb11-11"><a href="#cb11-11"></a><span class="co">#&gt; PotVar0000693       4       3</span></span>
-<span id="cb11-12"><a href="#cb11-12"></a><span class="co">#&gt; PotVar0003381       4       3</span></span>
-<span id="cb11-13"><a href="#cb11-13"></a><span class="co">#&gt; PotVar0004919       1       3</span></span>
-<span id="cb11-14"><a href="#cb11-14"></a><span class="co">#&gt; PotVar0009402       3       3</span></span>
-<span id="cb11-15"><a href="#cb11-15"></a><span class="co">#&gt; PotVar0009518       3       3</span></span>
-<span id="cb11-16"><a href="#cb11-16"></a><span class="co">#&gt; PotVar0011967       4       3</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">genomat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/format_multidog.html">format_multidog</a></span>(mout, <span class="dt">varname =</span> <span class="st">"geno"</span>)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(genomat)</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt;               P1PEM10 P2PEM05 P2PEM10 P3PEM05 P4PEM01 P4PEM09 P5PEM04 P5PEM08</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; PotVar0089524       4       4       3       3       4       4       4       3</span></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt; PotVar0052647       3       1       0       1       1       2       0       1</span></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt; PotVar0120897       0       0       0       0       0       0       0       1</span></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt; PotVar0066020       3       2       3       4       4       3       1       4</span></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt; PotVar0003381       3       1       2       0       2       3       3       1</span></a>
+<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt; PotVar0131622       2       4       1       2       2       3       4       3</span></a>
+<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt;               P6PEM11 P7PEM09</span></a>
+<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt; PotVar0089524       2       4</span></a>
+<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt; PotVar0052647       1       1</span></a>
+<a class="sourceLine" id="cb11-13" data-line-number="13"><span class="co">#&gt; PotVar0120897       2       1</span></a>
+<a class="sourceLine" id="cb11-14" data-line-number="14"><span class="co">#&gt; PotVar0066020       4       2</span></a>
+<a class="sourceLine" id="cb11-15" data-line-number="15"><span class="co">#&gt; PotVar0003381       4       3</span></a>
+<a class="sourceLine" id="cb11-16" data-line-number="16"><span class="co">#&gt; PotVar0131622       3       3</span></a></code></pre></div>
+<p>To filter SNPs based on quality metrics (bias, sequencing error rate, overdispersion, etc), you can use <code><a href="../reference/filter_snp.html">filter_snp()</a></code>, which uses the same non-standard evaluation you are used to from <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter()</a></code>. That is, you can define predicates in terms of the variable names in the <code>snpdf</code> data frame from the output of <code><a href="../reference/mupdog.html">mupdog()</a></code>. It then keeps rows in both <code>snpdf</code> and <code>inddf</code> where the predicate for a SNP evaluates to <code>TRUE</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(mout<span class="op">$</span>snpdf)</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#&gt; [1] 100  16</span></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(mout<span class="op">$</span>inddf)</a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt; [1] 1000   12</span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5">mout_cleaned &lt;-<span class="st"> </span><span class="kw"><a href="../reference/filter_snp.html">filter_snp</a></span>(mout, prop_mis <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span> <span class="op">&amp;</span><span class="st"> </span>bias <span class="op">&gt;</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(<span class="op">-</span><span class="dv">1</span>) <span class="op">&amp;</span><span class="st"> </span>bias <span class="op">&lt;</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(mout_cleaned<span class="op">$</span>snpdf)</a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt; [1] 97 16</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(mout_cleaned<span class="op">$</span>inddf)</a>
+<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt; [1] 970  12</span></a></code></pre></div>
 </div>
-<div id="references" class="section level1 unnumbered">
+<div id="references" class="section level1">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
-<div id="refs" class="references">
-<div id="ref-gerard2019priors">
-<p>Gerard, David, and Luís Felipe Ventorim Ferrão. 2019. “Priors for Genotyping Polyploids.” <em>Bioinformatics</em>, November. <a href="https://doi.org/10.1093/bioinformatics/btz852">https://doi.org/10.1093/bioinformatics/btz852</a>.</p>
-</div>
-<div id="ref-gerard2018genotyping">
-<p>Gerard, David, Luís Felipe Ventorim Ferrão, Antonio Augusto Franco Garcia, and Matthew Stephens. 2018. “Genotyping Polyploids from Messy Sequencing Data.” <em>Genetics</em> 210 (3): 789–807. <a href="https://doi.org/10.1534/genetics.118.301468">https://doi.org/10.1534/genetics.118.301468</a>.</p>
-</div>
-<div id="ref-uitdewilligen2013next">
-<p>Uitdewilligen, Anne-Marie A. AND D’hoop, Jan G. A. M. L. AND Wolters. 2013. “A Next-Generation Sequencing Method for Genotyping-by-Sequencing of Highly Heterozygous Autotetraploid Potato.” <em>PLOS ONE</em> 8 (5): 1–14. <a href="https://doi.org/10.1371/journal.pone.0062355">https://doi.org/10.1371/journal.pone.0062355</a>.</p>
-</div>
-</div>
+<p>Gerard, David, and Luís Felipe Ventorim Ferrão. 2019. “Priors for Genotyping Polyploids.” <em>Bioinformatics</em>, November. <a href="https://doi.org/10.1093/bioinformatics/btz852" class="uri">https://doi.org/10.1093/bioinformatics/btz852</a>.</p>
+<p>Gerard, David, Luís Felipe Ventorim Ferrão, Antonio Augusto Franco Garcia, and Matthew Stephens. 2018. “Genotyping Polyploids from Messy Sequencing Data.” <em>Genetics</em> 210 (3). Genetics: 789–807. <a href="https://doi.org/10.1534/genetics.118.301468" class="uri">https://doi.org/10.1534/genetics.118.301468</a>.</p>
+<p>Uitdewilligen, Anne-Marie A. AND D’hoop, Jan G. A. M. L. AND Wolters. 2013. “A Next-Generation Sequencing Method for Genotyping-by-Sequencing of Highly Heterozygous Autotetraploid Potato.” <em>PLOS ONE</em> 8 (5). Public Library of Science: 1–14. <a href="https://doi.org/10.1371/journal.pone.0062355" class="uri">https://doi.org/10.1371/journal.pone.0062355</a>.</p>
 </div>
   </div>
 

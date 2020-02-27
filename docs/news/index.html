@@ -126,9 +126,9 @@
       
     </div>
 
-    <div id="updog-121" class="section level1">
+    <div id="updog-1-2-1" class="section level1">
 <h1 class="page-header">
-<a href="#updog-121" class="anchor"></a>updog 1.2.1<small> Unreleased </small>
+<a href="#updog-1-2-1" class="anchor"></a>updog 1.2.1<small> Unreleased </small>
 </h1>
 <ul>
 <li>Adds <code><a href="../reference/filter_snp.html">filter_snp()</a></code> for filtering the output of <code><a href="../reference/multidog.html">multidog()</a></code> based on predicates in terms of the variables in <code>snpdf</code>.</li>
@@ -136,9 +136,9 @@
 <li>Removes Rmpfr from Suggests. No longer needed since CVXR is no longer suggested.</li>
 </ul>
 </div>
-    <div id="updog-120" class="section level1">
+    <div id="updog-1-2-0" class="section level1">
 <h1 class="page-header">
-<a href="#updog-120" class="anchor"></a>updog 1.2.0<small> 2020-01-28 </small>
+<a href="#updog-1-2-0" class="anchor"></a>updog 1.2.0<small> 2020-01-28 </small>
 </h1>
 <ul>
 <li>Adds <code><a href="../reference/multidog.html">multidog()</a></code> for genotypying multiple SNP’s using parallel computing.</li>
@@ -149,9 +149,9 @@
 <li>In .cpp files, we now coerce objects to be unsigned before comparing. This gets rid of some warnings during install.</li>
 </ul>
 </div>
-    <div id="updog-113" class="section level1">
+    <div id="updog-1-1-3" class="section level1">
 <h1 class="page-header">
-<a href="#updog-113" class="anchor"></a>updog 1.1.3<small> 2019-11-21 </small>
+<a href="#updog-1-1-3" class="anchor"></a>updog 1.1.3<small> 2019-11-21 </small>
 </h1>
 <ul>
 <li>Updates documentation to include the Bioinformatics publication, Gerard and Ferrão (2019) &lt;<a href="https://doi.org/10.1093/bioinformatics/btz852">doi:10.1093/bioinformatics/btz852</a>&gt;.</li>
@@ -159,18 +159,18 @@
 <li>Removes the tidyverse from the Suggests field. I was only using this in the vignettes, so I changed it to base R (except for ggplot2).</li>
 </ul>
 </div>
-    <div id="updog-111" class="section level1">
+    <div id="updog-1-1-1" class="section level1">
 <h1 class="page-header">
-<a href="#updog-111" class="anchor"></a>updog 1.1.1<small> 2019-09-09 </small>
+<a href="#updog-1-1-1" class="anchor"></a>updog 1.1.1<small> 2019-09-09 </small>
 </h1>
 <ul>
 <li>Updates documentation to include Gerard and Ferrão (2019) &lt;<a href="https://doi.org/10.1101/751784">doi:10.1101/751784</a>&gt; as a reference.</li>
 <li>Minor fixes to documentation.</li>
 </ul>
 </div>
-    <div id="updog-110" class="section level1">
+    <div id="updog-1-1-0" class="section level1">
 <h1 class="page-header">
-<a href="#updog-110" class="anchor"></a>updog 1.1.0<small> 2019-07-31 </small>
+<a href="#updog-1-1-0" class="anchor"></a>updog 1.1.0<small> 2019-07-31 </small>
 </h1>
 <ul>
 <li>Introduces more flexible priors for more general populations.</li>
@@ -179,12 +179,12 @@
 <li>Documentation updates.</li>
 </ul>
 </div>
-    <div id="updog-101" class="section level1">
+    <div id="updog-1-0-1" class="section level1">
 <h1 class="page-header">
-<a href="#updog-101" class="anchor"></a>updog 1.0.1<small> 2018-07-27 </small>
+<a href="#updog-1-0-1" class="anchor"></a>updog 1.0.1<small> 2018-07-27 </small>
 </h1>
 <ul>
-<li><p>Fixes a bug with option <code>model = "s1pp"</code> in <code><a href="../reference/flexdog.html">flexdog()</a></code>. I was originally not constraining the levels of preferential pairing to be the same in both segregations of the same parent. This is now fixed. But the downside is that <code>model = "s1pp"</code> is now only supported for <code>ploidy = 4</code> or <code>ploidy = 6</code>. This is because the optimization becomes more difficult for larger ploidy levels.</p></li>
+<li>Fixes a bug with option <code>model = "s1pp"</code> in <code><a href="../reference/flexdog.html">flexdog()</a></code>. I was originally not constraining the levels of preferential pairing to be the same in both segregations of the same parent. This is now fixed. But the downside is that <code>model = "s1pp"</code> is now only supported for <code>ploidy = 4</code> or <code>ploidy = 6</code>. This is because the optimization becomes more difficult for larger ploidy levels.</li>
 <li>
 <p>I fixed some documentation. Perhaps the biggest error comes from this snippet from the original documentation of <code>flexdog</code>:</p>
 <blockquote>
@@ -198,9 +198,9 @@
 <li><p>I’ve now exported some C++ functions that I think are useful. You can call them in the usual way: <a href="http://r-pkgs.had.co.nz/src.html#cpp-import" class="uri">http://r-pkgs.had.co.nz/src.html#cpp-import</a>.</p></li>
 </ul>
 </div>
-    <div id="updog-0990" class="section level1">
+    <div id="updog-0-99-0" class="section level1">
 <h1 class="page-header">
-<a href="#updog-0990" class="anchor"></a>updog 0.99.0<small> Unreleased </small>
+<a href="#updog-0-99-0" class="anchor"></a>updog 0.99.0<small> Unreleased </small>
 </h1>
 <ul>
 <li>This is a complete re-working of the code in <code>updog</code>. The old version may be found in the <a href="https://github.com/dcgerard/updogAlpha"><code>updogAlpha</code> package</a>.</li>
@@ -217,13 +217,13 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#updog-121">1.2.1</a></li>
-        <li><a href="#updog-120">1.2.0</a></li>
-        <li><a href="#updog-113">1.1.3</a></li>
-        <li><a href="#updog-111">1.1.1</a></li>
-        <li><a href="#updog-110">1.1.0</a></li>
-        <li><a href="#updog-101">1.0.1</a></li>
-        <li><a href="#updog-0990">0.99.0</a></li>
+        <li><a href="#updog-1-2-1">1.2.1</a></li>
+        <li><a href="#updog-1-2-0">1.2.0</a></li>
+        <li><a href="#updog-1-1-3">1.1.3</a></li>
+        <li><a href="#updog-1-1-1">1.1.1</a></li>
+        <li><a href="#updog-1-1-0">1.1.0</a></li>
+        <li><a href="#updog-1-0-1">1.0.1</a></li>
+        <li><a href="#updog-0-99-0">0.99.0</a></li>
       </ul>
     </div>
   </div>
