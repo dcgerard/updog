@@ -4,12 +4,14 @@
 \name{uitdewilligen}
 \alias{uitdewilligen}
 \title{Subset of individuals and SNPs from Uitdewilligen et al (2013).}
-\format{A list containing three objects. Two matrices and a numeric scalar:
+\format{
+A list containing three objects. Two matrices and a numeric scalar:
 \describe{
   \item{refmat}{A matrix of read counts containing the reference allele. The rows index the individuals and the columns index the SNPs.}
   \item{sizemat}{A matrix of the total number of read counts. The rows index the individuals and the columns index the SNPs.}
   \item{ploidy}{The ploidy level of the species (just 4).}
-}}
+}
+}
 \source{
 \url{https://doi.org/10.1371/journal.pone.0062355}
 }

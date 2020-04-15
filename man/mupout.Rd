@@ -4,7 +4,9 @@
 \name{mupout}
 \alias{mupout}
 \title{A mupdog fit of the \code{\link{uitdewilligen}} data.}
-\format{An object of class \code{\link{mupdog}}.}
+\format{
+An object of class \code{\link{mupdog}}.
+}
 \source{
 The raw data that this was fit to can be found in \code{\link{uitdewilligen}}.
 }

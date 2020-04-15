@@ -4,13 +4,15 @@
 \name{snpdat}
 \alias{snpdat}
 \title{GBS data from Shirasawa et al (2017)}
-\format{A \code{\link[tibble]{tibble}} with 419 rows and 4 columns:
+\format{
+A \code{\link[tibble]{tibble}} with 419 rows and 4 columns:
 \describe{
     \item{id}{The identification label of the individuals.}
     \item{snp}{The SNP label.}
     \item{counts}{The number of read-counts that support the reference allele.}
     \item{size}{The total number of read-counts at a given SNP.}
-}}
+}
+}
 \source{
 \url{https://doi.org/10.1038/srep44207}
 }
