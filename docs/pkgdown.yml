@@ -1,9 +1,10 @@
 pandoc: 2.3.1
-pkgdown: 1.4.1
+pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   multidog: multidog.html
   oracle_calculations: oracle_calculations.html
   simulate_ngs: simulate_ngs.html
   smells_like_updog: smells_like_updog.html
+last_built: 2020-04-15T17:58Z
 

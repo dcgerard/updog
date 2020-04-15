@@ -19,9 +19,9 @@
 #' See the details of \code{\link{flexdog}} for the possible values of
 #' \code{model}.
 #'
-#' If \code{model = "f1"}, \code{model = "f1pp"}, \code{model = "s1"},
-#' or \code{model = "s1pp"} then the user may provide the individual ID
-#' for parent(s) via the \code{p1_id} and \code{p2_id} arguments.
+#' If \code{model = "f1"} or \code{model = "s1"} then the user may
+#' provide the individual ID for parent(s) via the \code{p1_id}
+#' and \code{p2_id} arguments.
 #'
 #' The output is a list containing two data frames. The first data frame,
 #' called \code{snpdf}, contains information on each SNP, such as the allele bias
@@ -129,13 +129,18 @@
 multidog <- function(refmat,
                      sizemat,
                      ploidy,
-                     model = c("norm", "hw", "bb", "ash", "s1", "s1pp",
-                               "f1", "f1pp", "flex", "uniform", "custom"),
+                     model = c("norm",
+                               "hw",
+                               "bb",
+                               "s1",
+                               "f1",
+                               "flex",
+                               "uniform",
+                               "custom"),
                      nc = 1,
                      p1_id = NULL,
                      p2_id = NULL,
                      bias_init = exp(c(-1, -0.5, 0, 0.5, 1)),
-                     outliers = FALSE,
                      prior_vec = NULL,
                      ...) {
   ## Check input --------------------------------------------------------------
@@ -166,13 +171,13 @@ multidog <- function(refmat,
     stopifnot(is.character(p1_id))
     stopifnot(length(p1_id) == 1)
     stopifnot(is.element(el = p1_id, set = colnames(refmat)))
-    stopifnot(model == "f1" | model == "f1pp" | model == "s1" | model == "s1pp")
+    stopifnot(model == "f1" | model == "s1")
   }
   if (!is.null(p2_id)) {
     stopifnot(is.character(p2_id))
     stopifnot(length(p2_id) == 1)
     stopifnot(is.element(el = p2_id, set = colnames(refmat)))
-    stopifnot(model == "f1" | model == "f1pp")
+    stopifnot(model == "f1")
   }
   if (!is.null(p2_id) & is.null(p1_id)) {
     warning("setting p1_id to be p2_id and setting p2_id to be NULL.")
@@ -225,7 +230,7 @@ multidog <- function(refmat,
   ## Fit flexdog on all SNP's --------------------------------------------------
   i <- 1
   outlist <- foreach::foreach(i = seq_along(snplist),
-                              .export = c("flexdog", "get_bivalent_probs")) %dopar% {
+                              .export = c("flexdog")) %dopar% {
                                 current_snp <- snplist[[i]]
 
                                 refvec <- refmat[current_snp, indlist, drop = TRUE]
@@ -258,7 +263,6 @@ multidog <- function(refmat,
                                                 snpname   = current_snp,
                                                 bias_init = bias_init,
                                                 verbose   = FALSE,
-                                                outliers  = outliers,
                                                 prior_vec = prior_vec,
                                                 ...)
 
@@ -280,36 +284,7 @@ multidog <- function(refmat,
                                 )
 
 
-                                if (model == "f1pp") {
-                                  blist <- get_bivalent_probs(fout$input$ploidy)
-
-                                  p1weightvec <- rep(0, length = length(blist$lvec))
-                                  names(p1weightvec) <- paste0("p1(", apply(blist$pmat, 1, paste, collapse = ","), ")")
-                                  p1weightvec[blist$lvec == fout$par$p1geno] <- fout$par$p1_pair_weights
-
-                                  p2weightvec <- rep(0, length = length(blist$lvec))
-                                  names(p2weightvec) <- paste0("p2(", apply(blist$pmat, 1, paste, collapse = ","), ")")
-                                  p2weightvec[blist$lvec == fout$par$p2geno] <- fout$par$p2_pair_weights
-
-                                  fout$par$p1_pair_weights <- NULL
-                                  fout$par$p2_pair_weights <- NULL
-
-                                  par_vec_output <- c(unlist(fout$par), p1weightvec, p2weightvec)
-                                  snpprop <- cbind(snpprop, as.data.frame(matrix(par_vec_output, nrow = 1, dimnames = list(NULL, names(par_vec_output)))))
-
-                                } else if (model == "s1pp") {
-                                  blist <- get_bivalent_probs(fout$input$ploidy)
-
-                                  p1weightvec <- rep(0, length = length(blist$lvec))
-                                  names(p1weightvec) <- paste0("p1(", apply(blist$pmat, 1, paste, collapse = ","), ")")
-                                  p1weightvec[blist$lvec == fout$par$p1geno] <- fout$par$p1_pair_weights
-
-                                  fout$par$p1_pair_weights <- NULL
-
-                                  par_vec_output <- c(unlist(fout$par), p1weightvec)
-                                  snpprop <- cbind(snpprop, as.data.frame(matrix(par_vec_output, nrow = 1, dimnames = list(NULL, names(par_vec_output)))))
-
-                                } else if (length(fout$par) > 0) {
+                                if (length(fout$par) > 0) {
                                   par_vec_output <- unlist(fout$par)
                                   snpprop <- cbind(snpprop, as.data.frame(matrix(par_vec_output, nrow = 1, dimnames = list(NULL, names(par_vec_output)))))
                                 }
@@ -365,6 +340,13 @@ is.multidog <- function(x) {
 #' Produce genotype plots from the output of \code{\link{multidog}}. You may
 #' select which SNP's to plot.
 #'
+#' On a genotype plot, the x-axis contains the counts of the non-reference allele and the y-axis
+#' contains the counts of the reference allele. The dashed lines are the expected counts (both reference and alternative)
+#' given the sequencing error rate and the allele-bias. The plots are color-coded by the maximum-a-posterior genotypes.
+#' Transparency is proportional to the maximum posterior probability for an
+#' individual's genotype. Thus, we are less certain of the genotype of more transparent individuals. These
+#' types of plots are used in Gerard et. al. (2018) and Gerard and Ferrão (2019).
+#'
 #' @param x The output of \code{\link{multidog}}.
 #' @param indices A vector of integers. The indices of the SNP's to plot.
 #' @param ... not used.
@@ -374,6 +356,12 @@ is.multidog <- function(x) {
 #' @export
 #'
 #' @seealso \code{\link{plot_geno}}.
+#'
+#' @references
+#' \itemize{
+#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+#'   \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{Bioinformatics}. doi: \href{https://doi.org/10.1093/bioinformatics/btz852}{10.1093/bioinformatics/btz852}.}
+#' }
 #'
 plot.multidog <- function(x, indices = seq(1, min(5, nrow(x$snpdf))), ...) {
   assertthat::assert_that(is.multidog(x))

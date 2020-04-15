@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{wem}
 \alias{wem}
-\title{Generalized version of \code{\link{uni_em}}.}
+\title{EM algorithm to fit weighted ash objective.}
 \usage{
 wem(weight_vec, lmat, pi_init, lambda, itermax, obj_tol)
 }
@@ -22,8 +22,7 @@ corresponds to a row of \code{lmat}.}
 \item{obj_tol}{The objective stopping criterion.}
 }
 \value{
-A vector of numerics. The update of \code{pivec} in
-    \code{\link{flexdog_full}}.
+A vector of numerics.
 }
 \description{
 Solves the following optimization problem
@@ -45,10 +44,7 @@ wem(weight_vec = weight_vec,
     itermax    = 100,
     obj_tol    = 10^-6)
 
-}
-\seealso{
-\code{\link{uni_em}} for a description of the
-    optimization problem.
+
 }
 \author{
 David Gerard

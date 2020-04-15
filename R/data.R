@@ -19,28 +19,8 @@
 #'
 #' @source \url{https://doi.org/10.1371/journal.pone.0062355}
 #'
-#' @seealso \code{\link{mupout}}: a mupdog fit of these data.
 #'
 "uitdewilligen"
-
-
-#' A mupdog fit of the \code{\link{uitdewilligen}} data.
-#'
-#' @format An object of class \code{\link{mupdog}}.
-#'
-#' @return See the Format Section.
-#'
-#' @source The raw data that this was fit to can be found in \code{\link{uitdewilligen}}.
-#'
-#' @seealso
-#' \describe{
-#' \item{\code{\link{uitdewilligen}}}{The raw data.}
-#' \item{\code{\link{plot.mupdog}}}{A method to plot a \code{\link{mupdog}} object.}
-#' \item{\code{\link{summary.mupdog}}}{Calculate some summaries of a \code{\link{mupdog}} object.}
-#' \item{\code{\link{mupdog}}}{Function used to create this \code{\link{mupdog}} object.}
-#' }
-#'
-"mupout"
 
 #' GBS data from Shirasawa et al (2017)
 #'

@@ -7,17 +7,14 @@
 rgeno(
   n,
   ploidy,
-  model = c("hw", "bb", "norm", "ash", "f1", "s1", "f1pp", "s1pp", "flex", "uniform"),
+  model = c("hw", "bb", "norm", "f1", "s1", "flex", "uniform"),
   allele_freq = NULL,
   od = NULL,
   p1geno = NULL,
   p2geno = NULL,
-  mode = NULL,
   pivec = NULL,
   mu = NULL,
-  sigma = NULL,
-  p1_pair_weights = NULL,
-  p2_pair_weights = NULL
+  sigma = NULL
 )
 }
 \arguments{
@@ -34,17 +31,12 @@ For any other model, this should be \code{NULL}.}
 distribution. See \code{\link{betabinom}} for details. For any other model, this should be
 \code{NULL}.}
 
-\item{p1geno}{Either the first parent's genotype if \code{model = "f1"}
-(or \code{model = "f1pp"}), or the only parent's
-genotype if \code{model = "s1"} (or \code{model = "s1pp"}).
+\item{p1geno}{Either the first parent's genotype if \code{model = "f1"},
+or the only parent's
+genotype if \code{model = "s1"}.
 For any other model, this should be \code{NULL}.}
 
-\item{p2geno}{The second parent's genotype if \code{model = "f1"}
-(or \code{model = "f1pp"}).
-For any other model, this should be \code{NULL}.}
-
-\item{mode}{If \code{model = "ash"}, this is the center of the distribution. This should be a non-integer value
-(so the mode is either the floor or the ceiling of \code{mode}).
+\item{p2geno}{The second parent's genotype if \code{model = "f1"}.
 For any other model, this should be \code{NULL}.}
 
 \item{pivec}{A vector of probabilities. If \code{model = "ash"}, then this represents
@@ -57,20 +49,6 @@ For any other model, this should be \code{NULL}.}
 
 \item{sigma}{If \code{model = "norm"}, this is the standard deviation of the normal.
 For any other model, this should be \code{NULL}.}
-
-\item{p1_pair_weights}{The mixing weights for the bivalent
-pairs output in \code{\link{get_bivalent_probs}}
-at the \code{lvec} level of \code{p1geno}.
-If \code{model = "f1pp"} then this is for the first parent.
-If \code{model = "s1pp"}, then this is for the only parent.
-This should be \code{NULL} for all other values of \code{model}.}
-
-\item{p2_pair_weights}{If \code{model = "s1pp"},
-these are the mixing weights for the bivalent
-pairs output in \code{\link{get_bivalent_probs}} at the
-\code{lvec} level of \code{p2geno} for the second
-parent.
-This should be \code{NULL} for all other values of \code{model}.}
 }
 \value{
 A vector of length \code{n} with the genotypes of the sampled individuals.
@@ -81,15 +59,16 @@ This will simulate genotypes of a sample of individuals drawn from one of the po
 distributions are described in detail in Gerard and Ferrão (2019).
 }
 \details{
-The allowable variable values of \code{allele_freq}, \code{od}, \code{p1geno}, \code{p2geno}, \code{pivec},
-and \code{mode} varies based on the value of \code{model}. If \code{model = "ash"}, then only
-\code{mode} and \code{pivec} can be non-\code{NULL}. If \code{model = "flex"} then only
-\code{pivec} can be non-\code{NULL}. If \code{model = "hw"}, then only \code{allele_freq} can
-be non-\code{NULL}. If \code{model = "f1"} then only \code{p1geno} and \code{p2geno} can be non-\code{NULL}.
-If \code{model = "s1"} then only \code{p1geno} can be non-\code{NULL}. If \code{model = "uniform"}, then
-none of the above variables can be non-\code{NULL}. If \code{model = "bb"}, then only \code{allele_freq},
-and \code{od} can be non-\code{NULL}. If \code{model == "norm"}, then only \code{mu} and \code{sigma}
-can be non-\code{NULL}.
+List of non-\code{NULL} arguments:
+\describe{
+  \item{\code{model = "flex"}:}{\code{pivec}}
+  \item{\code{model = "hw"}:}{\code{allele_freq}}
+  \item{\code{model = "f1"}:}{\code{p1geno} and \code{p2geno}}
+  \item{\code{model = "s1"}:}{\code{p1geno}}
+  \item{\code{model = "uniform"}:}{no non-\code{NULL} arguments}
+  \item{\code{model = "bb"}:}{\code{allele_freq} and \code{od}}
+  \item{\code{model == "norm"}:}{\code{mu} and \code{sigma}}
+}
 }
 \examples{
 ## F1 Population where parent 1 has 1 copy of the referenc allele

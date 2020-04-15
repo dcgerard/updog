@@ -14,6 +14,7 @@
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 double eta_double(double p, double eps) {
   if ((p < -1.0 * TOL) or (1.0 - p < -1.0 * TOL)) {
@@ -38,6 +39,7 @@ double eta_double(double p, double eps) {
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 NumericVector eta_fun(NumericVector p, NumericVector eps) {
   int n = p.length();
@@ -76,6 +78,7 @@ NumericVector eta_fun(NumericVector p, NumericVector eps) {
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 double xi_double(double p, double eps, double h) {
   if (h < -TOL) {
@@ -100,6 +103,7 @@ double xi_double(double p, double eps, double h) {
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 NumericVector xi_fun(NumericVector p, NumericVector eps, NumericVector h) {
   int n = p.length();
@@ -190,6 +194,7 @@ double log_sum_exp_2(double x, double y) {
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 //'
 // [[Rcpp::export]]
 double logit(double x) {
@@ -207,6 +212,7 @@ double logit(double x) {
 //' @return The expit (logistic) of \code{x}.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @author David Gerard
 // [[Rcpp::export]]

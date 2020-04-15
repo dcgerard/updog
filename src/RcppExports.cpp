@@ -430,31 +430,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// get_probk_vec
-NumericVector get_probk_vec(NumericVector pivec, std::string model, double mode);
-RcppExport SEXP _updog_get_probk_vec(SEXP pivecSEXP, SEXP modelSEXP, SEXP modeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type pivec(pivecSEXP);
-    Rcpp::traits::input_parameter< std::string >::type model(modelSEXP);
-    Rcpp::traits::input_parameter< double >::type mode(modeSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_probk_vec(pivec, model, mode));
-    return rcpp_result_gen;
-END_RCPP
-}
-// get_inner_weights
-NumericMatrix get_inner_weights(int ploidy, double mode);
-RcppExport SEXP _updog_get_inner_weights(SEXP ploidySEXP, SEXP modeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
-    Rcpp::traits::input_parameter< double >::type mode(modeSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_inner_weights(ploidy, mode));
-    return rcpp_result_gen;
-END_RCPP
-}
 // get_wik_mat
 NumericMatrix get_wik_mat(NumericVector probk_vec, NumericVector refvec, NumericVector sizevec, int ploidy, double seq, double bias, double od);
 RcppExport SEXP _updog_get_wik_mat(SEXP probk_vecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP) {
@@ -492,36 +467,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type mean_od(mean_odSEXP);
     Rcpp::traits::input_parameter< double >::type var_od(var_odSEXP);
     rcpp_result_gen = Rcpp::wrap(flexdog_obj(probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od));
-    return rcpp_result_gen;
-END_RCPP
-}
-// uni_obj
-double uni_obj(arma::vec pivec, arma::vec weight_vec, arma::mat lmat, long double lambda);
-RcppExport SEXP _updog_uni_obj(SEXP pivecSEXP, SEXP weight_vecSEXP, SEXP lmatSEXP, SEXP lambdaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type pivec(pivecSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type lmat(lmatSEXP);
-    Rcpp::traits::input_parameter< long double >::type lambda(lambdaSEXP);
-    rcpp_result_gen = Rcpp::wrap(uni_obj(pivec, weight_vec, lmat, lambda));
-    return rcpp_result_gen;
-END_RCPP
-}
-// uni_em
-arma::vec uni_em(arma::vec weight_vec, arma::mat lmat, arma::vec pi_init, long double lambda, int itermax, double obj_tol);
-RcppExport SEXP _updog_uni_em(SEXP weight_vecSEXP, SEXP lmatSEXP, SEXP pi_initSEXP, SEXP lambdaSEXP, SEXP itermaxSEXP, SEXP obj_tolSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type lmat(lmatSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type pi_init(pi_initSEXP);
-    Rcpp::traits::input_parameter< long double >::type lambda(lambdaSEXP);
-    Rcpp::traits::input_parameter< int >::type itermax(itermaxSEXP);
-    Rcpp::traits::input_parameter< double >::type obj_tol(obj_tolSEXP);
-    rcpp_result_gen = Rcpp::wrap(uni_em(weight_vec, lmat, pi_init, lambda, itermax, obj_tol));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1103,338 +1048,6 @@ RcppExport SEXP _updog_oracle_joint(SEXP nSEXP, SEXP ploidySEXP, SEXP seqSEXP, S
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// doutdist
-double doutdist(int x, int n, bool logp);
-RcppExport SEXP _updog_doutdist(SEXP xSEXP, SEXP nSEXP, SEXP logpSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< bool >::type logp(logpSEXP);
-    rcpp_result_gen = Rcpp::wrap(doutdist(x, n, logp));
-    return rcpp_result_gen;
-END_RCPP
-}
-// get_wik_mat_out
-NumericMatrix get_wik_mat_out(NumericVector probk_vec, double out_prop, NumericVector refvec, NumericVector sizevec, int ploidy, double seq, double bias, double od);
-RcppExport SEXP _updog_get_wik_mat_out(SEXP probk_vecSEXP, SEXP out_propSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type probk_vec(probk_vecSEXP);
-    Rcpp::traits::input_parameter< double >::type out_prop(out_propSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type refvec(refvecSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type sizevec(sizevecSEXP);
-    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
-    Rcpp::traits::input_parameter< double >::type seq(seqSEXP);
-    Rcpp::traits::input_parameter< double >::type bias(biasSEXP);
-    Rcpp::traits::input_parameter< double >::type od(odSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_wik_mat_out(probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od));
-    return rcpp_result_gen;
-END_RCPP
-}
-// flexdog_obj_out
-double flexdog_obj_out(NumericVector probk_vec, double out_prop, NumericVector refvec, NumericVector sizevec, int ploidy, double seq, double bias, double od, double mean_bias, double var_bias, double mean_seq, double var_seq, double mean_od, double var_od);
-RcppExport SEXP _updog_flexdog_obj_out(SEXP probk_vecSEXP, SEXP out_propSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP mean_odSEXP, SEXP var_odSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type probk_vec(probk_vecSEXP);
-    Rcpp::traits::input_parameter< double >::type out_prop(out_propSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type refvec(refvecSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type sizevec(sizevecSEXP);
-    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
-    Rcpp::traits::input_parameter< double >::type seq(seqSEXP);
-    Rcpp::traits::input_parameter< double >::type bias(biasSEXP);
-    Rcpp::traits::input_parameter< double >::type od(odSEXP);
-    Rcpp::traits::input_parameter< double >::type mean_bias(mean_biasSEXP);
-    Rcpp::traits::input_parameter< double >::type var_bias(var_biasSEXP);
-    Rcpp::traits::input_parameter< double >::type mean_seq(mean_seqSEXP);
-    Rcpp::traits::input_parameter< double >::type var_seq(var_seqSEXP);
-    Rcpp::traits::input_parameter< double >::type mean_od(mean_odSEXP);
-    Rcpp::traits::input_parameter< double >::type var_od(var_odSEXP);
-    rcpp_result_gen = Rcpp::wrap(flexdog_obj_out(probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od));
-    return rcpp_result_gen;
-END_RCPP
-}
-// dist_from_p
-NumericVector dist_from_p(IntegerVector p, int ploidy);
-static SEXP _updog_dist_from_p_try(SEXP pSEXP, SEXP ploidySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< IntegerVector >::type p(pSEXP);
-    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
-    rcpp_result_gen = Rcpp::wrap(dist_from_p(p, ploidy));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _updog_dist_from_p(SEXP pSEXP, SEXP ploidySEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_updog_dist_from_p_try(pSEXP, ploidySEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// num_pairs
-int num_pairs(int ell, int ploidy);
-static SEXP _updog_num_pairs_try(SEXP ellSEXP, SEXP ploidySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< int >::type ell(ellSEXP);
-    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
-    rcpp_result_gen = Rcpp::wrap(num_pairs(ell, ploidy));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _updog_num_pairs(SEXP ellSEXP, SEXP ploidySEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_updog_num_pairs_try(ellSEXP, ploidySEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// get_pname
-std::string get_pname(IntegerVector pvec);
-static SEXP _updog_get_pname_try(SEXP pvecSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< IntegerVector >::type pvec(pvecSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_pname(pvec));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _updog_get_pname(SEXP pvecSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_updog_get_pname_try(pvecSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// get_bivalent_probs
-List get_bivalent_probs(int ploidy);
-static SEXP _updog_get_bivalent_probs_try(SEXP ploidySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
-    rcpp_result_gen = Rcpp::wrap(get_bivalent_probs(ploidy));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _updog_get_bivalent_probs(SEXP ploidySEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_updog_get_bivalent_probs_try(ploidySEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// count_pairings
-int count_pairings(int ploidy);
-static SEXP _updog_count_pairings_try(SEXP ploidySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
-    rcpp_result_gen = Rcpp::wrap(count_pairings(ploidy));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _updog_count_pairings(SEXP ploidySEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_updog_count_pairings_try(ploidySEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// count_doubles
-int count_doubles(int ell, int p2);
-static SEXP _updog_count_doubles_try(SEXP ellSEXP, SEXP p2SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< int >::type ell(ellSEXP);
-    Rcpp::traits::input_parameter< int >::type p2(p2SEXP);
-    rcpp_result_gen = Rcpp::wrap(count_doubles(ell, p2));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _updog_count_doubles(SEXP ellSEXP, SEXP p2SEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_updog_count_doubles_try(ellSEXP, p2SEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// count_pairings_given_p
-int count_pairings_given_p(int ploidy, IntegerVector pvec);
-static SEXP _updog_count_pairings_given_p_try(SEXP ploidySEXP, SEXP pvecSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type pvec(pvecSEXP);
-    rcpp_result_gen = Rcpp::wrap(count_pairings_given_p(ploidy, pvec));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _updog_count_pairings_given_p(SEXP ploidySEXP, SEXP pvecSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_updog_count_pairings_given_p_try(ploidySEXP, pvecSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// get_hyper_weights
-List get_hyper_weights(int ploidy, int ell);
-static SEXP _updog_get_hyper_weights_try(SEXP ploidySEXP, SEXP ellSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
-    Rcpp::traits::input_parameter< int >::type ell(ellSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_hyper_weights(ploidy, ell));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _updog_get_hyper_weights(SEXP ploidySEXP, SEXP ellSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_updog_get_hyper_weights_try(ploidySEXP, ellSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
 // eta_double
 double eta_double(double p, double eps);
 static SEXP _updog_eta_double_try(SEXP pSEXP, SEXP epsSEXP) {
@@ -1714,65 +1327,6 @@ RcppExport SEXP _updog_expit(SEXP xSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// uni_obj_const
-double uni_obj_const(arma::vec pivec, double alpha, arma::vec weight_vec, arma::mat lmat, arma::vec lambda);
-RcppExport SEXP _updog_uni_obj_const(SEXP pivecSEXP, SEXP alphaSEXP, SEXP weight_vecSEXP, SEXP lmatSEXP, SEXP lambdaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type pivec(pivecSEXP);
-    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type lmat(lmatSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type lambda(lambdaSEXP);
-    rcpp_result_gen = Rcpp::wrap(uni_obj_const(pivec, alpha, weight_vec, lmat, lambda));
-    return rcpp_result_gen;
-END_RCPP
-}
-// uni_em_const
-arma::vec uni_em_const(arma::vec weight_vec, arma::mat lmat, arma::vec pi_init, double alpha, arma::vec lambda, int itermax, double obj_tol);
-RcppExport SEXP _updog_uni_em_const(SEXP weight_vecSEXP, SEXP lmatSEXP, SEXP pi_initSEXP, SEXP alphaSEXP, SEXP lambdaSEXP, SEXP itermaxSEXP, SEXP obj_tolSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type lmat(lmatSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type pi_init(pi_initSEXP);
-    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type lambda(lambdaSEXP);
-    Rcpp::traits::input_parameter< int >::type itermax(itermaxSEXP);
-    Rcpp::traits::input_parameter< double >::type obj_tol(obj_tolSEXP);
-    rcpp_result_gen = Rcpp::wrap(uni_em_const(weight_vec, lmat, pi_init, alpha, lambda, itermax, obj_tol));
-    return rcpp_result_gen;
-END_RCPP
-}
-// convolve_up
-arma::vec convolve_up(arma::vec x, arma::vec y);
-RcppExport SEXP _updog_convolve_up(SEXP xSEXP, SEXP ySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(convolve_up(x, y));
-    return rcpp_result_gen;
-END_RCPP
-}
-// pp_brent_obj
-double pp_brent_obj(double firstmixweight, arma::mat probmat, arma::vec pvec, arma::vec weight_vec, double alpha);
-RcppExport SEXP _updog_pp_brent_obj(SEXP firstmixweightSEXP, SEXP probmatSEXP, SEXP pvecSEXP, SEXP weight_vecSEXP, SEXP alphaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type firstmixweight(firstmixweightSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type probmat(probmatSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type pvec(pvecSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
-    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    rcpp_result_gen = Rcpp::wrap(pp_brent_obj(firstmixweight, probmat, pvec, weight_vec, alpha));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _updog_RcppExport_validate(const char* sig) { 
@@ -1791,14 +1345,6 @@ static int _updog_RcppExport_validate(const char* sig) {
         signatures.insert("double(*oracle_mis)(int,int,double,double,double,NumericVector)");
         signatures.insert("NumericVector(*oracle_mis_vec)(int,int,double,double,double,NumericVector)");
         signatures.insert("NumericMatrix(*oracle_joint)(int,int,double,double,double,NumericVector)");
-        signatures.insert("NumericVector(*dist_from_p)(IntegerVector,int)");
-        signatures.insert("int(*num_pairs)(int,int)");
-        signatures.insert("std::string(*get_pname)(IntegerVector)");
-        signatures.insert("List(*get_bivalent_probs)(int)");
-        signatures.insert("int(*count_pairings)(int)");
-        signatures.insert("int(*count_doubles)(int,int)");
-        signatures.insert("int(*count_pairings_given_p)(int,IntegerVector)");
-        signatures.insert("List(*get_hyper_weights)(int,int)");
         signatures.insert("double(*eta_double)(double,double)");
         signatures.insert("NumericVector(*eta_fun)(NumericVector,NumericVector)");
         signatures.insert("double(*xi_double)(double,double,double)");
@@ -1826,14 +1372,6 @@ RcppExport SEXP _updog_RcppExport_registerCCallable() {
     R_RegisterCCallable("updog", "_updog_oracle_mis", (DL_FUNC)_updog_oracle_mis_try);
     R_RegisterCCallable("updog", "_updog_oracle_mis_vec", (DL_FUNC)_updog_oracle_mis_vec_try);
     R_RegisterCCallable("updog", "_updog_oracle_joint", (DL_FUNC)_updog_oracle_joint_try);
-    R_RegisterCCallable("updog", "_updog_dist_from_p", (DL_FUNC)_updog_dist_from_p_try);
-    R_RegisterCCallable("updog", "_updog_num_pairs", (DL_FUNC)_updog_num_pairs_try);
-    R_RegisterCCallable("updog", "_updog_get_pname", (DL_FUNC)_updog_get_pname_try);
-    R_RegisterCCallable("updog", "_updog_get_bivalent_probs", (DL_FUNC)_updog_get_bivalent_probs_try);
-    R_RegisterCCallable("updog", "_updog_count_pairings", (DL_FUNC)_updog_count_pairings_try);
-    R_RegisterCCallable("updog", "_updog_count_doubles", (DL_FUNC)_updog_count_doubles_try);
-    R_RegisterCCallable("updog", "_updog_count_pairings_given_p", (DL_FUNC)_updog_count_pairings_given_p_try);
-    R_RegisterCCallable("updog", "_updog_get_hyper_weights", (DL_FUNC)_updog_get_hyper_weights_try);
     R_RegisterCCallable("updog", "_updog_eta_double", (DL_FUNC)_updog_eta_double_try);
     R_RegisterCCallable("updog", "_updog_eta_fun", (DL_FUNC)_updog_eta_fun_try);
     R_RegisterCCallable("updog", "_updog_xi_double", (DL_FUNC)_updog_xi_double_try);
@@ -1860,12 +1398,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_updog_wem_fixp", (DL_FUNC) &_updog_wem_fixp, 8},
     {"_updog_wem_obj", (DL_FUNC) &_updog_wem_obj, 4},
     {"_updog_wem", (DL_FUNC) &_updog_wem, 6},
-    {"_updog_get_probk_vec", (DL_FUNC) &_updog_get_probk_vec, 3},
-    {"_updog_get_inner_weights", (DL_FUNC) &_updog_get_inner_weights, 2},
     {"_updog_get_wik_mat", (DL_FUNC) &_updog_get_wik_mat, 7},
     {"_updog_flexdog_obj", (DL_FUNC) &_updog_flexdog_obj, 13},
-    {"_updog_uni_obj", (DL_FUNC) &_updog_uni_obj, 4},
-    {"_updog_uni_em", (DL_FUNC) &_updog_uni_em, 6},
     {"_updog_f1_obj", (DL_FUNC) &_updog_f1_obj, 3},
     {"_updog_grad_for_mu_sigma2", (DL_FUNC) &_updog_grad_for_mu_sigma2, 5},
     {"_updog_grad_for_mu_sigma2_wrapper", (DL_FUNC) &_updog_grad_for_mu_sigma2_wrapper, 4},
@@ -1900,17 +1434,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_updog_oracle_mis", (DL_FUNC) &_updog_oracle_mis, 6},
     {"_updog_oracle_mis_vec", (DL_FUNC) &_updog_oracle_mis_vec, 6},
     {"_updog_oracle_joint", (DL_FUNC) &_updog_oracle_joint, 6},
-    {"_updog_doutdist", (DL_FUNC) &_updog_doutdist, 3},
-    {"_updog_get_wik_mat_out", (DL_FUNC) &_updog_get_wik_mat_out, 8},
-    {"_updog_flexdog_obj_out", (DL_FUNC) &_updog_flexdog_obj_out, 14},
-    {"_updog_dist_from_p", (DL_FUNC) &_updog_dist_from_p, 2},
-    {"_updog_num_pairs", (DL_FUNC) &_updog_num_pairs, 2},
-    {"_updog_get_pname", (DL_FUNC) &_updog_get_pname, 1},
-    {"_updog_get_bivalent_probs", (DL_FUNC) &_updog_get_bivalent_probs, 1},
-    {"_updog_count_pairings", (DL_FUNC) &_updog_count_pairings, 1},
-    {"_updog_count_doubles", (DL_FUNC) &_updog_count_doubles, 2},
-    {"_updog_count_pairings_given_p", (DL_FUNC) &_updog_count_pairings_given_p, 2},
-    {"_updog_get_hyper_weights", (DL_FUNC) &_updog_get_hyper_weights, 2},
     {"_updog_eta_double", (DL_FUNC) &_updog_eta_double, 2},
     {"_updog_eta_fun", (DL_FUNC) &_updog_eta_fun, 2},
     {"_updog_xi_double", (DL_FUNC) &_updog_xi_double, 3},
@@ -1919,10 +1442,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_updog_log_sum_exp_2", (DL_FUNC) &_updog_log_sum_exp_2, 2},
     {"_updog_logit", (DL_FUNC) &_updog_logit, 1},
     {"_updog_expit", (DL_FUNC) &_updog_expit, 1},
-    {"_updog_uni_obj_const", (DL_FUNC) &_updog_uni_obj_const, 5},
-    {"_updog_uni_em_const", (DL_FUNC) &_updog_uni_em_const, 7},
-    {"_updog_convolve_up", (DL_FUNC) &_updog_convolve_up, 2},
-    {"_updog_pp_brent_obj", (DL_FUNC) &_updog_pp_brent_obj, 5},
     {"_updog_RcppExport_registerCCallable", (DL_FUNC) &_updog_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };

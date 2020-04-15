@@ -8,13 +8,11 @@ multidog(
   refmat,
   sizemat,
   ploidy,
-  model = c("norm", "hw", "bb", "ash", "s1", "s1pp", "f1", "f1pp", "flex", "uniform",
-    "custom"),
+  model = c("norm", "hw", "bb", "s1", "f1", "flex", "uniform", "custom"),
   nc = 1,
   p1_id = NULL,
   p2_id = NULL,
   bias_init = exp(c(-1, -0.5, 0, 0.5, 1)),
-  outliers = FALSE,
   prior_vec = NULL,
   ...
 )
@@ -51,11 +49,6 @@ and \code{sizemat}.}
 
 \item{bias_init}{A vector of initial values for the bias parameter
 over the multiple runs of \code{flexdog_full}.}
-
-\item{outliers}{A logical. Should we allow for the inclusion of outliers
-(\code{TRUE}) or not (\code{FALSE}). Only supported when
-\code{model = "f1"} or \code{model = "s1"}. I wouldn't
-recommend it for any other model anyway.}
 
 \item{prior_vec}{The pre-specified genotype distribution. Only used if
 \code{model = "custom"} and must otherwise be \code{NULL}. If specified,
@@ -127,9 +120,9 @@ attributes.
 See the details of \code{\link{flexdog}} for the possible values of
 \code{model}.
 
-If \code{model = "f1"}, \code{model = "f1pp"}, \code{model = "s1"},
-or \code{model = "s1pp"} then the user may provide the individual ID
-for parent(s) via the \code{p1_id} and \code{p2_id} arguments.
+If \code{model = "f1"} or \code{model = "s1"} then the user may
+provide the individual ID for parent(s) via the \code{p1_id}
+and \code{p2_id} arguments.
 
 The output is a list containing two data frames. The first data frame,
 called \code{snpdf}, contains information on each SNP, such as the allele bias

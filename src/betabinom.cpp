@@ -13,6 +13,7 @@ double TOL = 10.0 * DBL_EPSILON; // defined here, used everywhere
 //' @return The density of the beta-binomial.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -36,6 +37,7 @@ double dbetabinom_alpha_beta_double(int x, int size, double alpha, double beta, 
 //' @return The density of the Bernoulli-binomial.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -82,6 +84,7 @@ double dbernbinom(int x, int size, double mu, bool log) {
 //' @return The density of the beta-binomial.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -204,6 +207,7 @@ NumericVector dbetabinom(IntegerVector x, IntegerVector size,
 //' @return The tail-probability of the beta-binomial.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -325,6 +329,7 @@ NumericVector pbetabinom(IntegerVector q, IntegerVector size,
 //' @return The quantile of the beta-binomial.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -431,6 +436,7 @@ IntegerVector qbetabinom(NumericVector p, IntegerVector size,
 //' @return A random sample from the beta-binomial.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @author David Gerard
 // [[Rcpp::export]]

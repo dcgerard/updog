@@ -1,15 +1,17 @@
 Package: updog
 Title: Flexible Genotyping for Polyploids
-Version: 1.2.1
-Authors@R: person("David", "Gerard", email = "gerard.1787@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9450-5023"))
+Version: 2.0.0
+Authors@R: person("David", 
+                  "Gerard",
+                  email = "gerard.1787@gmail.com", 
+                  role = c("aut", "cre"), 
+                  comment = c(ORCID = "0000-0001-9450-5023"))
 Description: Implements empirical Bayes approaches to genotype
        polyploids from next generation sequencing data while
        accounting for allelic bias, overdispersion, and sequencing
        error. The main functions are flexdog() and multidog(), 
        which allow the specification
-       of many different genotype distributions. An experimental
-       function that takes into account varying levels of relatedness
-       is implemented in mupdog(). Also provided are functions to
+       of many different genotype distributions. Also provided are functions to
        simulate genotypes, rgeno(), and read-counts, rflexdog(), as well as
        functions to calculate oracle genotyping error rates, oracle_mis(), and
        correlation with the true genotypes, oracle_cor(). These latter two

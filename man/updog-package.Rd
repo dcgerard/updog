@@ -11,8 +11,6 @@ polyploids from next generation sequencing data while
 accounting for allelic bias, overdispersion, and sequencing
 error. The main function is \code{\link{flexdog}}, which allows
 the specification of many different genotype distributions.
-An experimental function that takes into account varying
-levels of relatedness is implemented in \code{\link{mupdog}}.
 Also provided are functions to simulate genotypes
 (\code{\link{rgeno}}) and read-counts
 (\code{\link{rflexdog}}), as well as functions to calculate
@@ -50,17 +48,12 @@ issue at \url{http://github.com/dcgerard/updog/issues}.
       support for parallel computing.}
   \item{\code{\link{format_multidog}}}{Return matricized elements from the output of \code{\link{multidog}}.}
   \item{\code{\link{filter_snp}}}{Filter SNPs based on the output of \code{\link{multidog}}}
-  \item{\code{\link{mupdog}}}{An experimental approach to genotype
-      autopolyploids that accounts for varying levels of
-      relatedness between the individuals in the sample.}
   \item{\code{\link{rgeno}}}{simulate the genotypes of a sample
       from one of the models allowed in \code{\link{flexdog}}.}
   \item{\code{\link{rflexdog}}}{Simulate read-counts from the
       \code{\link{flexdog}} model.}
   \item{\code{\link{plot.flexdog}}}{Plotting the output of
       \code{\link{flexdog}}.}
-  \item{\code{\link{plot.mupdog}}}{Plotting the output of
-      \code{\link{mupdog}}.}
   \item{\code{\link{oracle_joint}}}{The joint distribution of the true genotype
       and an oracle estimator.}
   \item{\code{\link{oracle_plot}}}{Visualize the output of \code{\link{oracle_joint}}.}
@@ -74,10 +67,7 @@ issue at \url{http://github.com/dcgerard/updog/issues}.
 \describe{
   \item{\code{\link{snpdat}}}{A small example dataset for using
       \code{\link{flexdog}}.}
-  \item{\code{\link{uitdewilligen}}}{A small example dataset
-      for using \code{\link{mupdog}}.}
-  \item{\code{\link{mupout}}}{The output from fitting
-      \code{\link{mupdog}} to \code{\link{uitdewilligen}}.}
+  \item{\code{\link{uitdewilligen}}}{A small example dataset}
 }
 }
 

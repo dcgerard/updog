@@ -97,20 +97,20 @@ test_that("oracle_joint is consistent with oracle_mis and oracle_mis_vec", {
   expect_equal(1 - diag(sweep(x = jd, MARGIN = 2, STATS = colSums(jd), FUN = "/")), om_vec)
 })
 
-test_that("oracle_cor works", {
-  n      <- 30
-  ploidy <- 6
-  seq    <- 0.01
-  bias   <- 0.5
-  od     <- 0
-  dist   <- dbinom(x = 0:ploidy, size = ploidy, prob = 0.7)
-  oracle_cor(n      = n,
-             ploidy = ploidy,
-             seq    = seq,
-             bias   = bias,
-             od     = od,
-             dist   = dist)
-})
+# test_that("oracle_cor works", {
+#   n      <- 30
+#   ploidy <- 6
+#   seq    <- 0.01
+#   bias   <- 0.5
+#   od     <- 0
+#   dist   <- dbinom(x = 0:ploidy, size = ploidy, prob = 0.7)
+#   oracle_cor(n      = n,
+#              ploidy = ploidy,
+#              seq    = seq,
+#              bias   = bias,
+#              od     = od,
+#              dist   = dist)
+# })
 
 
 test_that("oracle_from_joint works", {

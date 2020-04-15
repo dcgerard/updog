@@ -10,6 +10,7 @@
 #' @return The density of the beta-binomial.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @author David Gerard
 dbetabinom_alpha_beta_double <- function(x, size, alpha, beta, log) {
@@ -23,6 +24,7 @@ dbetabinom_alpha_beta_double <- function(x, size, alpha, beta, log) {
 #' @return The density of the Bernoulli-binomial.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @author David Gerard
 dbernbinom <- function(x, size, mu, log) {
@@ -41,6 +43,7 @@ dbernbinom <- function(x, size, mu, log) {
 #' @return The density of the beta-binomial.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @author David Gerard
 dbetabinom_double <- function(x, size, mu, rho, log) {
@@ -66,6 +69,7 @@ dbetabinom <- function(x, size, mu, rho, log) {
 #' @return The tail-probability of the beta-binomial.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @author David Gerard
 pbetabinom_double <- function(q, size, mu, rho, log_p) {
@@ -89,6 +93,7 @@ pbetabinom <- function(q, size, mu, rho, log_p) {
 #' @return The quantile of the beta-binomial.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @author David Gerard
 qbetabinom_double <- function(p, size, mu, rho) {
@@ -111,6 +116,7 @@ qbetabinom <- function(p, size, mu, rho) {
 #' @return A random sample from the beta-binomial.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @author David Gerard
 rbetabinom_int <- function(size, mu, rho) {
@@ -133,9 +139,22 @@ wem_obj <- function(pivec, weight_vec, lmat, lambda) {
     .Call('_updog_wem_obj', PACKAGE = 'updog', pivec, weight_vec, lmat, lambda)
 }
 
-#' Generalized version of \code{\link{uni_em}}.
+#' EM algorithm to fit weighted ash objective.
 #'
-#' @inherit uni_em
+#' Solves the following optimization problem
+#' \deqn{\max_{\pi} \sum_k w_k \log(\sum_j \pi_j \ell_jk).}
+#' It does this using a weighted EM algorithm.
+#'
+#' @param weight_vec A vector of weights. Each element of \code{weight_vec} corresponds
+#'     to a column of \code{lmat}.
+#' @param lmat A matrix of inner weights. The columns are the "individuals" and the rows are the "classes."
+#' @param pi_init The initial values of \code{pivec}. Each element of \code{pi_init}
+#'     corresponds to a row of \code{lmat}.
+#' @param itermax The maximum number of EM iterations to take.
+#' @param obj_tol The objective stopping criterion.
+#' @param lambda The penalty on the pi's. Should be greater than 0 and really really small.
+#'
+#' @return A vector of numerics.
 #'
 #' @author David Gerard
 #'
@@ -156,45 +175,9 @@ wem_obj <- function(pivec, weight_vec, lmat, lambda) {
 #'     itermax    = 100,
 #'     obj_tol    = 10^-6)
 #'
-#' @seealso \code{\link{uni_em}} for a description of the
-#'     optimization problem.
 #'
 wem <- function(weight_vec, lmat, pi_init, lambda, itermax, obj_tol) {
     .Call('_updog_wem', PACKAGE = 'updog', weight_vec, lmat, pi_init, lambda, itermax, obj_tol)
-}
-
-#' Obtain the genotype distribution given the distribution of discrete uniforms.
-#'
-#' @inheritParams flexdog_full
-#' @param pivec The mixing probability of the i'th discrete uniform distribution.
-#'
-#' @author David Gerard
-#'
-#' @return A vector of numerics. Element k is the probability of genotype k.
-#'
-#' @seealso \code{\link{flexdog}} where this is used.
-#'
-#' @keywords internal
-#'
-get_probk_vec <- function(pivec, model, mode) {
-    .Call('_updog_get_probk_vec', PACKAGE = 'updog', pivec, model, mode)
-}
-
-#' Compute inner weights for updating the mixing proportions when using ash model.
-#'
-#' The (i,k)th element is \eqn{1(k \in F(a, i)) / |F(a,i)|}.
-#'
-#' @inheritParams flexdog_full
-#'
-#' @return A matrix of numerics. The weights used for the
-#'    weighted EM algorithm in \code{\link{flexdog_full}}.
-#'
-#' @author David Gerard
-#'
-#' @keywords internal
-#'
-get_inner_weights <- function(ploidy, mode) {
-    .Call('_updog_get_inner_weights', PACKAGE = 'updog', ploidy, mode)
 }
 
 #' E-step in \code{\link{flexdog}}.
@@ -210,6 +193,7 @@ get_inner_weights <- function(ploidy, mode) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @seealso \code{\link{flexdog}} for the full EM algorithm.
 #'
@@ -225,55 +209,13 @@ get_wik_mat <- function(probk_vec, refvec, sizevec, ploidy, seq, bias, od) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @return The objective (marginal log-likelihood) used in
 #'     \code{\link{flexdog_full}}.
 #'
 flexdog_obj <- function(probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od) {
     .Call('_updog_flexdog_obj', PACKAGE = 'updog', probk_vec, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od)
-}
-
-#' Objective function optimized by \code{\link{uni_em}}.
-#'
-#' @inheritParams uni_em
-#' @param pivec The current parameters.
-#'
-#' @author David Gerard
-#'
-#' @keywords internal
-#'
-#' @return The objective optimized by \code{\link{uni_em}} during
-#'     that separate unimodal EM algorithm.
-#'
-uni_obj <- function(pivec, weight_vec, lmat, lambda) {
-    .Call('_updog_uni_obj', PACKAGE = 'updog', pivec, weight_vec, lmat, lambda)
-}
-
-#' EM algorithm to fit weighted ash objective.
-#'
-#' Solves the following optimization problem
-#' \deqn{\max_{\pi} \sum_k w_k \log(\sum_j \pi_j \ell_jk).}
-#' It does this using a weighted EM algorithm.
-#'
-#' @param weight_vec A vector of weights. Each element of \code{weight_vec} corresponds
-#'     to a column of \code{lmat}.
-#' @param lmat A matrix of inner weights. The columns are the "individuals" and the rows are the "classes."
-#' @param pi_init The initial values of \code{pivec}. Each element of \code{pi_init}
-#'     corresponds to a row of \code{lmat}.
-#' @param itermax The maximum number of EM iterations to take.
-#' @param obj_tol The objective stopping criterion.
-#' @param lambda The penalty on the pi's. Should be greater than 0 and really really small.
-#'
-#'
-#' @return A vector of numerics. The update of \code{pivec} in
-#'     \code{\link{flexdog_full}}.
-#'
-#' @author David Gerard
-#'
-#' @keywords internal
-#'
-uni_em <- function(weight_vec, lmat, pi_init, lambda, itermax, obj_tol) {
-    .Call('_updog_uni_em', PACKAGE = 'updog', weight_vec, lmat, pi_init, lambda, itermax, obj_tol)
 }
 
 #' Objective for mixture of known dist and uniform dist.
@@ -289,6 +231,7 @@ uni_em <- function(weight_vec, lmat, pi_init, lambda, itermax, obj_tol) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 #'
 f1_obj <- function(alpha, pvec, weight_vec) {
     .Call('_updog_f1_obj', PACKAGE = 'updog', alpha, pvec, weight_vec)
@@ -307,6 +250,8 @@ f1_obj <- function(alpha, pvec, weight_vec) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
+#'
 grad_for_mu_sigma2 <- function(mu, sigma2, phifk_mat, cor_inv, log_bb_dense) {
     .Call('_updog_grad_for_mu_sigma2', PACKAGE = 'updog', mu, sigma2, phifk_mat, cor_inv, log_bb_dense)
 }
@@ -320,6 +265,7 @@ grad_for_mu_sigma2 <- function(mu, sigma2, phifk_mat, cor_inv, log_bb_dense) {
 #' @param muSigma2 A vector. The first half are mu and the second half are sigma2.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @author David Gerard
 grad_for_mu_sigma2_wrapper <- function(muSigma2, phifk_mat, cor_inv, log_bb_dense) {
@@ -338,6 +284,7 @@ grad_for_mu_sigma2_wrapper <- function(muSigma2, phifk_mat, cor_inv, log_bb_dens
 #' @return A double.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @author David Gerard
 dpen_dh <- function(h, mu_h, sigma2_h) {
@@ -356,6 +303,7 @@ dpen_dh <- function(h, mu_h, sigma2_h) {
 #' @return A double.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @author David Gerard
 dpen_deps <- function(eps, mu_eps, sigma2_eps) {
@@ -375,6 +323,7 @@ dpen_deps <- function(eps, mu_eps, sigma2_eps) {
 #' @return A double.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @seealso \code{\link{dbetabinom_double}}, \code{\link{dlbeta_dtau}},
 #'     \code{\link{dc_dtau}}.
@@ -390,6 +339,7 @@ dlbeta_dc <- function(x, n, xi, c) {
 #' @return A double.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @seealso \code{\link{dlbeta_dc}}, \code{\link{dlbeta_dtau}}
 #'
@@ -411,6 +361,7 @@ dc_dtau <- function(tau) {
 #' @return A double.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @seealso \code{\link{dlbeta_dc}}, \code{\link{dc_dtau}},
 #'     \code{\link{dbetabinom_double}}.
@@ -429,6 +380,7 @@ dlbeta_dtau <- function(x, n, p, eps, h, tau) {
 #' @param xi The mean of the underlying beta.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @author David Gerard
 dlbeta_dxi <- function(x, n, xi, tau) {
@@ -444,6 +396,7 @@ dlbeta_dxi <- function(x, n, xi, tau) {
 #' @param h The bias parameter.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @author David Gerard
 dxi_dh <- function(p, eps, h) {
@@ -457,6 +410,7 @@ dxi_dh <- function(p, eps, h) {
 #' @return A double.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @author David Gerard
 dlbeta_dh <- function(x, n, p, eps, h, tau) {
@@ -471,6 +425,7 @@ dlbeta_dh <- function(x, n, p, eps, h, tau) {
 #' @return A double.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @author David Gerard
 dxi_df <- function(h, f) {
@@ -485,6 +440,7 @@ dxi_df <- function(h, f) {
 #' @return A double.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @author David Gerard
 df_deps <- function(p, eps) {
@@ -499,6 +455,7 @@ df_deps <- function(p, eps) {
 #' @return A double.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @author David Gerard
 dlbeta_deps <- function(x, n, p, eps, h, tau) {
@@ -510,6 +467,7 @@ dlbeta_deps <- function(x, n, p, eps, h, tau) {
 #' @return A double.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @inheritParams obj_for_eps
 #'
@@ -527,6 +485,7 @@ grad_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, m
 #'     underlying beta.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @author David Gerard
 grad_for_weighted_lbb <- function(parvec, ploidy, weight_vec) {
@@ -543,6 +502,7 @@ grad_for_weighted_lbb <- function(parvec, ploidy, weight_vec) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 grad_for_weighted_lnorm <- function(parvec, ploidy, weight_vec) {
     .Call('_updog_grad_for_weighted_lnorm', PACKAGE = 'updog', parvec, ploidy, weight_vec)
 }
@@ -565,6 +525,7 @@ grad_for_weighted_lnorm <- function(parvec, ploidy, weight_vec) {
 #' @author David
 #'
 #' @keywords internal
+#' @noRd
 #'
 post_prob <- function(dosage, ploidy, mu, sigma2, alpha, rho) {
     .Call('_updog_post_prob', PACKAGE = 'updog', dosage, ploidy, mu, sigma2, alpha, rho)
@@ -588,6 +549,7 @@ post_prob <- function(dosage, ploidy, mu, sigma2, alpha, rho) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 #'
 compute_all_post_prob <- function(ploidy, mu, sigma2, alpha, rho) {
     .Call('_updog_compute_all_post_prob', PACKAGE = 'updog', ploidy, mu, sigma2, alpha, rho)
@@ -598,6 +560,7 @@ compute_all_post_prob <- function(ploidy, mu, sigma2, alpha, rho) {
 #' @inheritParams mupdog
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @return A three dimensional array. The rows index the individuals, the
 #'     columns index the SNPs, and the third dimension indexes the
@@ -621,6 +584,7 @@ compute_all_log_bb <- function(refmat, sizemat, ploidy, seq, bias, od) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 compute_all_phifk <- function(alpha, rho, ploidy) {
     .Call('_updog_compute_all_phifk', PACKAGE = 'updog', alpha, rho, ploidy)
 }
@@ -638,6 +602,7 @@ compute_all_phifk <- function(alpha, rho, ploidy) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 pen_bias <- function(h, mu_h, sigma2_h) {
     .Call('_updog_pen_bias', PACKAGE = 'updog', h, mu_h, sigma2_h)
 }
@@ -656,6 +621,7 @@ pen_bias <- function(h, mu_h, sigma2_h) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 pen_seq_error <- function(eps, mu_eps, sigma2_eps) {
     .Call('_updog_pen_seq_error', PACKAGE = 'updog', eps, mu_eps, sigma2_eps)
 }
@@ -680,6 +646,7 @@ pen_seq_error <- function(eps, mu_eps, sigma2_eps) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 obj_for_rho <- function(rho, mu, sigma2, alpha, log_bb_dense, ploidy) {
     .Call('_updog_obj_for_rho', PACKAGE = 'updog', rho, mu, sigma2, alpha, log_bb_dense, ploidy)
 }
@@ -701,6 +668,7 @@ obj_for_rho <- function(rho, mu, sigma2, alpha, log_bb_dense, ploidy) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 obj_for_alpha <- function(mu, sigma2, alpha, rho, log_bb_dense, ploidy) {
     .Call('_updog_obj_for_alpha', PACKAGE = 'updog', mu, sigma2, alpha, rho, log_bb_dense, ploidy)
 }
@@ -734,6 +702,7 @@ obj_for_alpha <- function(mu, sigma2, alpha, rho, log_bb_dense, ploidy) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 obj_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od, wmat, update_bias = TRUE, update_seq = TRUE, update_od = TRUE) {
     .Call('_updog_obj_for_eps', PACKAGE = 'updog', parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od, wmat, update_bias, update_seq, update_od)
 }
@@ -754,6 +723,7 @@ obj_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, me
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 obj_for_mu_sigma2 <- function(mu, sigma2, phifk_mat, cor_inv, log_bb_dense) {
     .Call('_updog_obj_for_mu_sigma2', PACKAGE = 'updog', mu, sigma2, phifk_mat, cor_inv, log_bb_dense)
 }
@@ -768,6 +738,7 @@ obj_for_mu_sigma2 <- function(mu, sigma2, phifk_mat, cor_inv, log_bb_dense) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 obj_for_mu_sigma2_wrapper <- function(muSigma2, phifk_mat, cor_inv, log_bb_dense) {
     .Call('_updog_obj_for_mu_sigma2_wrapper', PACKAGE = 'updog', muSigma2, phifk_mat, cor_inv, log_bb_dense)
 }
@@ -797,6 +768,7 @@ obj_for_mu_sigma2_wrapper <- function(muSigma2, phifk_mat, cor_inv, log_bb_dense
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 elbo <- function(warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mean_bias, var_bias, mean_seq, var_seq, ploidy) {
     .Call('_updog_elbo', PACKAGE = 'updog', warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mean_bias, var_bias, mean_seq, var_seq, ploidy)
 }
@@ -816,6 +788,7 @@ elbo <- function(warray, lbeta_array, cor_inv, postmean, postvar, bias, seq, mea
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 obj_for_weighted_lbb <- function(parvec, ploidy, weight_vec) {
     .Call('_updog_obj_for_weighted_lbb', PACKAGE = 'updog', parvec, ploidy, weight_vec)
 }
@@ -836,6 +809,7 @@ obj_for_weighted_lbb <- function(parvec, ploidy, weight_vec) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 #'
 obj_for_weighted_lnorm <- function(parvec, ploidy, weight_vec) {
     .Call('_updog_obj_for_weighted_lnorm', PACKAGE = 'updog', parvec, ploidy, weight_vec)
@@ -1024,155 +998,6 @@ oracle_joint <- function(n, ploidy, seq, bias, od, dist) {
     .Call('_updog_oracle_joint', PACKAGE = 'updog', n, ploidy, seq, bias, od, dist)
 }
 
-#' The outlier distribution we use. Right now it is just a
-#' beta binomial with mean 1/2 and od 1/3 (so underlying beta
-#' is just a uniform from 0 to 1).
-#'
-#' @param x The number of reference counts.
-#' @param n The total number of read-counts.
-#' @param logp Return the log density \code{TRUE} or not \code{FALSE}?
-#'
-#' @return A double. The outlier density value.
-#'
-#'
-#' @author David Gerard
-#'
-#' @keywords internal
-#'
-#'
-doutdist <- function(x, n, logp) {
-    .Call('_updog_doutdist', PACKAGE = 'updog', x, n, logp)
-}
-
-#' E-step in \code{\link{flexdog}} where we now allow an outlier distribution.
-#'
-#' @inheritParams flexdog_full
-#' @param probk_vec The vector of current prior probabilities of each genotype.
-#' @param out_prop The probability of being an outlier.
-#'
-#' @author David Gerard
-#'
-#' @keywords internal
-#'
-#' @seealso \code{\link{flexdog}} for the full EM algorithm.
-#'     \code{\link{get_wik_mat}} for the equivalent function
-#'     without outliers. \code{\link{doutdist}} for the outlier
-#'     density function.
-#'
-#' @return Same as \code{\link{get_wik_mat}} but the last column is
-#'     for the outlier class.
-#'
-get_wik_mat_out <- function(probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od) {
-    .Call('_updog_get_wik_mat_out', PACKAGE = 'updog', probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od)
-}
-
-#' Log-likelihood that \code{\link{flexdog}} maximizes when
-#' outliers are present.
-#'
-#' @inheritParams flexdog_full
-#' @param probk_vec The kth element is the prior probability of genotype k (when starting to count from 0).
-#' @param out_prop The probability of being an outlier.
-#'
-#' @return A double. The \code{\link{flexdog}} objective when
-#'     \code{outliers = TRUE}.
-#'
-#' @author David Gerard
-#'
-#' @keywords internal
-#'
-#' @seealso \code{\link{flexdog_obj}} for the objective function without outliers.
-#'
-flexdog_obj_out <- function(probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od) {
-    .Call('_updog_flexdog_obj_out', PACKAGE = 'updog', probk_vec, out_prop, refvec, sizevec, ploidy, seq, bias, od, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od)
-}
-
-dist_from_p <- function(p, ploidy) {
-    .Call('_updog_dist_from_p', PACKAGE = 'updog', p, ploidy)
-}
-
-num_pairs <- function(ell, ploidy) {
-    .Call('_updog_num_pairs', PACKAGE = 'updog', ell, ploidy)
-}
-
-get_pname <- function(pvec) {
-    .Call('_updog_get_pname', PACKAGE = 'updog', pvec)
-}
-
-#' Returns segregation probabilities, pairing representation
-#' and number of ref alleles given the ploidy.
-#'
-#'
-#' @param ploidy The ploidy of the individual. Should be even
-#'     and greater than 0.
-#'
-#' @return A list of three elements
-#' \describe{
-#' \item{\code{probmat}}{The rows index the pairing configuration
-#'     and the columns index the number of reference alleles
-#'     segregating. The elements are the probability of
-#'     segregating the given number of reference alleles
-#'     in a given category.}
-#' \item{\code{pmat}}{The pairing representation of the
-#'     configuration.}
-#' \item{\code{lvec}}{The number of reference alleles an individual
-#'     has given their pairing configuration in \code{pmat}.}
-#' }
-#'
-#' @author David Gerard
-#'
-#' @export
-#'
-#' @examples
-#' get_bivalent_probs(4)
-#'
-get_bivalent_probs <- function(ploidy) {
-    .Call('_updog_get_bivalent_probs', PACKAGE = 'updog', ploidy)
-}
-
-count_pairings <- function(ploidy) {
-    .Call('_updog_count_pairings', PACKAGE = 'updog', ploidy)
-}
-
-count_doubles <- function(ell, p2) {
-    .Call('_updog_count_doubles', PACKAGE = 'updog', ell, p2)
-}
-
-count_pairings_given_p <- function(ploidy, pvec) {
-    .Call('_updog_count_pairings_given_p', PACKAGE = 'updog', ploidy, pvec)
-}
-
-#' Return mixture weights needed to obtain a hypergeometric
-#' distribution.
-#'
-#' Obtains the mixing weights for the mixing distributions
-#' of \code{\link{get_bivalent_probs}} to return a hypergeometric
-#' distribution where \code{ploidy} is the population size,
-#' \code{ell} is the number of success states in the population,
-#' and \code{ploidy / 2} is the number of draws. If these
-#' are the mixing weights in the population, then there is no
-#' preferential pairing.
-#'
-#' @param ploidy The ploidy of the individual.
-#' @param ell The number of reference alleles in the individual.
-#'
-#' @return A list with the following two elements:
-#' \describe{
-#' \item{\code{pmat}}{Reach row is a category and the columns
-#'     index either aa, Aa, or AA.}
-#' \item{\code{weightvec}}{The mixing weights for each row of pmat.}
-#' }
-#'
-#' @author David Gerard
-#'
-#' @export
-#'
-#' @examples
-#' get_hyper_weights(4, 2)
-#'
-get_hyper_weights <- function(ploidy, ell) {
-    .Call('_updog_get_hyper_weights', PACKAGE = 'updog', ploidy, ell)
-}
-
 #' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
 #'
 #' @param p The allele dosage.
@@ -1184,6 +1009,7 @@ get_hyper_weights <- function(ploidy, ell) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 eta_double <- function(p, eps) {
     .Call('_updog_eta_double', PACKAGE = 'updog', p, eps)
 }
@@ -1198,6 +1024,7 @@ eta_double <- function(p, eps) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 eta_fun <- function(p, eps) {
     .Call('_updog_eta_fun', PACKAGE = 'updog', p, eps)
 }
@@ -1214,6 +1041,7 @@ eta_fun <- function(p, eps) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 xi_double <- function(p, eps, h) {
     .Call('_updog_xi_double', PACKAGE = 'updog', p, eps, h)
 }
@@ -1232,6 +1060,7 @@ xi_double <- function(p, eps, h) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 xi_fun <- function(p, eps, h) {
     .Call('_updog_xi_fun', PACKAGE = 'updog', p, eps, h)
 }
@@ -1273,6 +1102,7 @@ log_sum_exp_2 <- function(x, y) {
 #' @author David Gerard
 #'
 #' @keywords internal
+#' @noRd
 #'
 logit <- function(x) {
     .Call('_updog_logit', PACKAGE = 'updog', x)
@@ -1285,112 +1115,11 @@ logit <- function(x) {
 #' @return The expit (logistic) of \code{x}.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @author David Gerard
 expit <- function(x) {
     .Call('_updog_expit', PACKAGE = 'updog', x)
-}
-
-#' Objective function optimized by \code{\link{uni_em_const}}.
-#'
-#' @inheritParams uni_em_const
-#' @param pivec The current parameters.
-#'
-#' @author David Gerard
-#'
-#' @keywords internal
-#'
-#' @return The objective optimized by \code{\link{uni_em_const}} during
-#'     that separate unimodal EM algorithm.
-#'
-uni_obj_const <- function(pivec, alpha, weight_vec, lmat, lambda) {
-    .Call('_updog_uni_obj_const', PACKAGE = 'updog', pivec, alpha, weight_vec, lmat, lambda)
-}
-
-#' EM algorithm to fit weighted ash objective with a uniform
-#' mixing component.
-#'
-#' Solves the following optimization problem
-#' \deqn{\max_{\pi} \sum_k w_k \log(\alpha / (K+1) + (1 - \alpha)\sum_j \pi_j \ell_jk).}
-#' It does this using a weighted EM algorithm.
-#'
-#' @param weight_vec A vector of weights. Each element of \code{weight_vec} corresponds
-#'     to a column of \code{lmat}.
-#' @param lmat A matrix of inner weights. The columns are the "individuals" and the rows are the "classes."
-#' @param pi_init The initial values of \code{pivec}. Each element of \code{pi_init}
-#'     corresponds to a row of \code{lmat}.
-#' @param alpha The mixing weight for the uniform component.
-#'     This should be small (say, less tahn 10^-3).
-#' @param itermax The maximum number of EM iterations to take.
-#' @param obj_tol The objective stopping criterion.
-#' @param lambda A vector of penalties on the pi's (corresponding to the rows
-#'     of \code{lmat}).
-#'     This can either be of length 1, in which case the same penalty is applied
-#'     to each of the pi's. Or it can be the same length of \code{pivec}, in
-#'     which case a different penalty is applied to each of the pi's. Larger
-#'     penalties generally increase the value of the pi's, not shrink them.
-#'
-#'
-#' @return A vector of numerics. The update of \code{pivec} in
-#'     \code{\link{flexdog_full}}.
-#'
-#' @author David Gerard
-#'
-#' @keywords internal
-#'
-uni_em_const <- function(weight_vec, lmat, pi_init, alpha, lambda, itermax, obj_tol) {
-    .Call('_updog_uni_em_const', PACKAGE = 'updog', weight_vec, lmat, pi_init, alpha, lambda, itermax, obj_tol)
-}
-
-#' Convolution between two discrete probability mass functions
-#' with support on 0:K.
-#'
-#' @author David Gerard
-#'
-#' @param x The first probability vector. The ith element is the
-#'     probability of i - 1.
-#' @param y The second probability vector. The ith element is the
-#'     probability of i - 1.
-#'
-#' @return A vector that is the convolution of \code{x} and
-#'     \code{y}. The ith element is the probability of i - 1.
-#'
-#' @export
-#'
-#' @seealso \code{\link[stats]{convolve}} for a more generic convolution
-#'     function.
-#'
-#' @examples
-#' x <- c(1 / 6, 2 / 6, 3 / 6)
-#' y <- c(1 / 9, 2 / 9, 6 / 9)
-#' convolve_up(x, y)
-#' stats::convolve(x, rev(y), type = "o")
-#'
-convolve_up <- function(x, y) {
-    .Call('_updog_convolve_up', PACKAGE = 'updog', x, y)
-}
-
-#' Objective function when doing Brent's method in
-#' \code{\link{update_pp_f1}} when one parent only has
-#' two mixing components.
-#'
-#' @param firstmixweight The mixing weight of the first component.
-#' @param probmat The rows index the components and the columns
-#'     index the segregation amount. Should only have two rows.
-#' @param pvec The distribution of the other parent.
-#' @param weight_vec The weights for each element.
-#' @param alpha The mixing weight on the uniform component.
-#'
-#' @return The objective value, as calculated by taking a
-#'     convolution using \code{\link{convolve_up}} of the mixing
-#'     distribution and \code{pvec}, then putting that
-#'     probability distribution through \code{\link{f1_obj}}.
-#'
-#' @author David Gerard
-#'
-#' @keywords internal
-pp_brent_obj <- function(firstmixweight, probmat, pvec, weight_vec, alpha) {
-    .Call('_updog_pp_brent_obj', PACKAGE = 'updog', firstmixweight, probmat, pvec, weight_vec, alpha)
 }
 
 # Register entry points for exported C++ functions

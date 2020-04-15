@@ -20,6 +20,7 @@
 //' @author David
 //'
 //' @keywords internal
+//' @noRd
 //'
 // [[Rcpp::export]]
 double post_prob(int dosage, int ploidy, double mu, double sigma2,
@@ -68,6 +69,7 @@ double post_prob(int dosage, int ploidy, double mu, double sigma2,
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 //'
 // [[Rcpp::export]]
 arma::Cube<double> compute_all_post_prob(int ploidy,
@@ -110,6 +112,7 @@ arma::Cube<double> compute_all_post_prob(int ploidy,
 //' @inheritParams mupdog
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @return A three dimensional array. The rows index the individuals, the
 //'     columns index the SNPs, and the third dimension indexes the
@@ -173,6 +176,7 @@ arma::Cube<double> compute_all_log_bb(NumericMatrix refmat, NumericMatrix sizema
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 arma::Cube<double> compute_all_phifk(NumericVector alpha, NumericVector rho, int ploidy) {
   int nind = rho.length();
@@ -205,6 +209,7 @@ arma::Cube<double> compute_all_phifk(NumericVector alpha, NumericVector rho, int
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 double pen_bias(double h, double mu_h, double sigma2_h) {
 
@@ -239,6 +244,7 @@ double pen_bias(double h, double mu_h, double sigma2_h) {
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 double pen_seq_error(double eps, double mu_eps, double sigma2_eps) {
 
@@ -279,6 +285,7 @@ double pen_seq_error(double eps, double mu_eps, double sigma2_eps) {
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 double obj_for_rho(double rho,
 		   NumericVector mu,
@@ -336,6 +343,7 @@ double obj_for_rho(double rho,
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 double obj_for_alpha(arma::Col<double> mu,
 		  arma::Col<double> sigma2,
@@ -408,6 +416,7 @@ double obj_for_alpha(arma::Col<double> mu,
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 double obj_for_eps(NumericVector parvec,
 		   NumericVector refvec,
@@ -488,6 +497,7 @@ double obj_for_eps(NumericVector parvec,
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 double obj_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2, NumericMatrix phifk_mat,
                          arma::Mat<double> cor_inv, NumericMatrix log_bb_dense) {
@@ -543,6 +553,7 @@ double obj_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2, Numeric
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 double obj_for_mu_sigma2_wrapper(arma::Col<double> muSigma2, NumericMatrix phifk_mat,
                                  arma::Mat<double> cor_inv, NumericMatrix log_bb_dense) {
@@ -578,6 +589,7 @@ double obj_for_mu_sigma2_wrapper(arma::Col<double> muSigma2, NumericMatrix phifk
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 double elbo(arma::Cube<double> warray,
             arma::Cube<double> lbeta_array,
@@ -694,6 +706,7 @@ double elbo(arma::Cube<double> warray,
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 double obj_for_weighted_lbb(NumericVector parvec,
                             int ploidy,
@@ -731,6 +744,7 @@ double obj_for_weighted_lbb(NumericVector parvec,
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 //'
 // [[Rcpp::export]]
 double obj_for_weighted_lnorm(NumericVector parvec,

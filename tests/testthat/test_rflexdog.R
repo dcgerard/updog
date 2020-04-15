@@ -6,7 +6,6 @@ test_that("rgeno works", {
   trash <- rgeno(n = 10, ploidy = 6, model = "hw", allele_freq = 0.5)
   trash <- rgeno(n = 10, ploidy = 6, model = "f1", p1geno = 1, p2geno = 1)
   trash <- rgeno(n = 10, ploidy = 6, model = "s1", p1geno = 1)
-  trash <- rgeno(n = 10, ploidy = 6, model = "ash", pivec = pivec, mode = 1.2)
   trash <- rgeno(n = 10, ploidy = 6, model = "flex", pivec = pivec)
   trash <- rgeno(n = 10, ploidy = 6, model = "uniform")
   trash <- rgeno(n = 10, ploidy = 6, model = "bb", allele_freq = 0.5, od = 0.1)

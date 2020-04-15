@@ -1,3 +1,17 @@
+# updog 2.0.0
+
+This is a massive edit of the updog software. Major changes include:
+
+1. No more support of `model = "ash"`. It seemed that `model = "norm"`
+   was always better and faster, so I just got rid of the `"ash"` option.
+   This also extremely simplified the code.
+2. Removal of `mupdog()`. I think this was a good idea, but the 
+   computation was way too slow to be usable.
+3. Revision of `model = "f1pp"` and `model = "s1pp"`. These now include
+   interpretable parameterizations that are meant to be identified
+   via another R package. But support is only for tetraploids right now.
+
+
 # updog 1.2.1
 
 - Adds `filter_snp()` for filtering the output of `multidog()` based

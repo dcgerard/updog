@@ -1,5 +1,6 @@
 #include "mupdog.h"
 
+
 // [[Rcpp::export]]
 void wem_fixp(arma::vec & pivec,
               const arma::mat & lmat,
@@ -57,9 +58,22 @@ double wem_obj(const arma::vec & pivec,
 }
 
 
-//' Generalized version of \code{\link{uni_em}}.
+//' EM algorithm to fit weighted ash objective.
 //'
-//' @inherit uni_em
+//' Solves the following optimization problem
+//' \deqn{\max_{\pi} \sum_k w_k \log(\sum_j \pi_j \ell_jk).}
+//' It does this using a weighted EM algorithm.
+//'
+//' @param weight_vec A vector of weights. Each element of \code{weight_vec} corresponds
+//'     to a column of \code{lmat}.
+//' @param lmat A matrix of inner weights. The columns are the "individuals" and the rows are the "classes."
+//' @param pi_init The initial values of \code{pivec}. Each element of \code{pi_init}
+//'     corresponds to a row of \code{lmat}.
+//' @param itermax The maximum number of EM iterations to take.
+//' @param obj_tol The objective stopping criterion.
+//' @param lambda The penalty on the pi's. Should be greater than 0 and really really small.
+//'
+//' @return A vector of numerics.
 //'
 //' @author David Gerard
 //'
@@ -80,8 +94,6 @@ double wem_obj(const arma::vec & pivec,
 //'     itermax    = 100,
 //'     obj_tol    = 10^-6)
 //'
-//' @seealso \code{\link{uni_em}} for a description of the
-//'     optimization problem.
 //'
 // [[Rcpp::export]]
 arma::vec wem(arma::vec weight_vec,
@@ -94,19 +106,19 @@ arma::vec wem(arma::vec weight_vec,
   int nind   = weight_vec.n_elem;
   int nclass = pi_init.n_elem;
   if (obj_tol < TOL) {
-    Rcpp::stop("uni_em: obj_tol should be greater than 0.");
+    Rcpp::stop("wem: obj_tol should be greater than 0.");
   }
   if (itermax < 0) {
-    Rcpp::stop("uni_em: itermax should be greater than or equal to 0.");
+    Rcpp::stop("wem: itermax should be greater than or equal to 0.");
   }
   if (lmat.n_rows != pi_init.n_elem) {
-    Rcpp::stop("uni_em: lmat should have ploidy + 1 rows.");
+    Rcpp::stop("wem: lmat should have ploidy + 1 rows.");
   }
   if (lmat.n_cols != weight_vec.n_elem) {
-    Rcpp::stop("uni_em: lmat should have ploidy + 1 columns.");
+    Rcpp::stop("wem: lmat should have ploidy + 1 columns.");
   }
   if (lambda < 0.0) {
-    Rcpp::stop("uni_em: lambda cannot be negative.");
+    Rcpp::stop("wem: lambda cannot be negative.");
   }
 
   // Run SQUAREM ------------------------------------------------

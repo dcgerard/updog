@@ -15,37 +15,29 @@ v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org
 
 Updog provides a suite of methods for genotyping polyploids from
 next-generation sequencing (NGS) data. It does this while accounting for
-many common features of NGS data: allele bias, overdispersion,
-sequencing error, and (possibly) outlying observations. It is named
-updog for “Using Parental Data for Offspring Genotyping” because we
-originally developed the method for full-sib populations, but it works
-now for more general populations. The method is described in detail
-Gerard et. al. (2018)
+many common features of NGS data: allele bias, overdispersion, and
+sequencing error. It is named updog for “Using Parental Data for
+Offspring Genotyping” because we originally developed the method for
+full-sib populations, but it works now for more general populations. The
+method is described in detail Gerard et. al. (2018)
 \<[doi:10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468)\>.
 Additional details concerning prior specification are described in
 Gerard and Ferrão (2019)
 \<[doi:10.1093/bioinformatics/btz852](https://doi.org/10.1093/bioinformatics/btz852)\>.
 
 The main function is `flexdog()`, which provides many options for the
-distribution of the genotypes in your sample. Novel genotype
-distributions include the class of proportional normal distributions
-(`model = "norm"`) and the class of discrete unimodal distributions
-(`model = "ash"`). The default is `model = "norm"` because it is the
-most robust to varying genotype distributions, but feel free to use more
-specialized priors if you have more information on the data.
+distribution of the genotypes in your sample. A novel genotype
+distribution is included in the class of proportional normal
+distributions (`model = "norm"`). This is the default prior distribution
+because it is the most robust to varying genotype distributions, but
+feel free to use more specialized priors if you have more information on
+the data.
 
 `multidog()` is a convenience function that let’s you run `flexdog()`
 over many SNP’s. It has support for parallel computing.
 
 Also provided are:
 
-  - An experimental function `mupdog()`, which allows for correlation
-    between the individuals’ genotypes while jointly estimating the
-    genotypes of the individuals at all provided SNPs. The
-    implementation uses a variational approximation. This is designed
-    for samples where the individuals share a complex relatedness
-    structure (e.g. siblings, cousins, uncles, half-siblings, etc).
-    Right now there are no guarantees about this function’s performance.
   - Functions to simulate genotypes (`rgeno()`) and read-counts
     (`rflexdog()`). These support all of the models available in
     `flexdog()`.
@@ -126,8 +118,8 @@ Or, using BibTex:
 }
 ```
 
-If you are using the proportional normal prior class (`model = "norm"`)
-or the unimodal prior class (`model = "ash"`), then please also cite
+If you are using the proportional normal prior class (`model = "norm"`),
+which is also the default prior, then please also cite:
 
 > Gerard, D. & Ferrão L. F. V. (2019). “Priors for Genotyping
 > Polyploids.” *Bioinformatics* (in press). doi:

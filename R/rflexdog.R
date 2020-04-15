@@ -6,15 +6,16 @@
 #' \code{\link{flexdog}}. See the details of \code{\link{flexdog}} for the models allowed. These genotype
 #' distributions are described in detail in Gerard and Ferrão (2019).
 #'
-#' The allowable variable values of \code{allele_freq}, \code{od}, \code{p1geno}, \code{p2geno}, \code{pivec},
-#' and \code{mode} varies based on the value of \code{model}. If \code{model = "ash"}, then only
-#' \code{mode} and \code{pivec} can be non-\code{NULL}. If \code{model = "flex"} then only
-#' \code{pivec} can be non-\code{NULL}. If \code{model = "hw"}, then only \code{allele_freq} can
-#' be non-\code{NULL}. If \code{model = "f1"} then only \code{p1geno} and \code{p2geno} can be non-\code{NULL}.
-#' If \code{model = "s1"} then only \code{p1geno} can be non-\code{NULL}. If \code{model = "uniform"}, then
-#' none of the above variables can be non-\code{NULL}. If \code{model = "bb"}, then only \code{allele_freq},
-#' and \code{od} can be non-\code{NULL}. If \code{model == "norm"}, then only \code{mu} and \code{sigma}
-#' can be non-\code{NULL}.
+#' List of non-\code{NULL} arguments:
+#' \describe{
+#'   \item{\code{model = "flex"}:}{\code{pivec}}
+#'   \item{\code{model = "hw"}:}{\code{allele_freq}}
+#'   \item{\code{model = "f1"}:}{\code{p1geno} and \code{p2geno}}
+#'   \item{\code{model = "s1"}:}{\code{p1geno}}
+#'   \item{\code{model = "uniform"}:}{no non-\code{NULL} arguments}
+#'   \item{\code{model = "bb"}:}{\code{allele_freq} and \code{od}}
+#'   \item{\code{model == "norm"}:}{\code{mu} and \code{sigma}}
+#' }
 #'
 #' @param n The number of observations.
 #' @param ploidy The ploidy of the species.
@@ -24,37 +25,20 @@
 #' @param od If \code{model = "bb"}, then this is the overdispersion parameter of the beta-binomial
 #'     distribution. See \code{\link{betabinom}} for details. For any other model, this should be
 #'     \code{NULL}.
-#' @param p1geno Either the first parent's genotype if \code{model = "f1"}
-#'     (or \code{model = "f1pp"}), or the only parent's
-#'     genotype if \code{model = "s1"} (or \code{model = "s1pp"}).
+#' @param p1geno Either the first parent's genotype if \code{model = "f1"},
+#'     or the only parent's
+#'     genotype if \code{model = "s1"}.
 #'     For any other model, this should be \code{NULL}.
-#' @param p2geno The second parent's genotype if \code{model = "f1"}
-#'     (or \code{model = "f1pp"}).
+#' @param p2geno The second parent's genotype if \code{model = "f1"}.
 #'     For any other model, this should be \code{NULL}.
 #' @param pivec A vector of probabilities. If \code{model = "ash"}, then this represents
 #'     the mixing proportions of the discrete uniforms. If
 #'     \code{model = "flex"}, then element \code{i} is the probability of genotype \code{i - 1}.
 #'     For any other model, this should be \code{NULL}.
-#' @param mode If \code{model = "ash"}, this is the center of the distribution. This should be a non-integer value
-#'     (so the mode is either the floor or the ceiling of \code{mode}).
-#'     For any other model, this should be \code{NULL}.
 #' @param mu If \code{model = "norm"}, this is the mean of the normal.
 #'     For any other model, this should be \code{NULL}.
 #' @param sigma If \code{model = "norm"}, this is the standard deviation of the normal.
 #'     For any other model, this should be \code{NULL}.
-#' @param p1_pair_weights The mixing weights for the bivalent
-#'     pairs output in \code{\link{get_bivalent_probs}}
-#'     at the \code{lvec} level of \code{p1geno}.
-#'     If \code{model = "f1pp"} then this is for the first parent.
-#'     If \code{model = "s1pp"}, then this is for the only parent.
-#'     This should be \code{NULL} for all other values of \code{model}.
-#' @param p2_pair_weights If \code{model = "s1pp"},
-#'     these are the mixing weights for the bivalent
-#'     pairs output in \code{\link{get_bivalent_probs}} at the
-#'     \code{lvec} level of \code{p2geno} for the second
-#'     parent.
-#'     This should be \code{NULL} for all other values of \code{model}.
-#'
 #'
 #' @return A vector of length \code{n} with the genotypes of the sampled individuals.
 #'
@@ -80,17 +64,20 @@
 #'
 rgeno <- function(n,
                   ploidy,
-                  model       = c("hw", "bb", "norm", "ash", "f1", "s1", "f1pp", "s1pp", "flex", "uniform"),
+                  model       = c("hw",
+                                  "bb",
+                                  "norm",
+                                  "f1",
+                                  "s1",
+                                  "flex",
+                                  "uniform"),
                   allele_freq = NULL,
                   od          = NULL,
                   p1geno      = NULL,
                   p2geno      = NULL,
-                  mode        = NULL,
                   pivec       = NULL,
                   mu          = NULL,
-                  sigma       = NULL,
-                  p1_pair_weights = NULL,
-                  p2_pair_weights = NULL) {
+                  sigma       = NULL) {
   ## Check input ----------------------------------------------------------
   model <- match.arg(model)
   assertthat::are_equal(length(ploidy), 1)
@@ -100,35 +87,18 @@ rgeno <- function(n,
     stopifnot(!is.null(allele_freq))
     stopifnot(is.null(p1geno))
     stopifnot(is.null(p2geno))
-    stopifnot(is.null(mode))
     stopifnot(is.null(pivec))
     stopifnot(is.null(od))
     stopifnot(is.null(mu))
     stopifnot(is.null(sigma))
-    stopifnot(is.null(p1_pair_weights))
-    stopifnot(is.null(p2_pair_weights))
-  } else if (model == "ash") {
-    stopifnot(is.null(allele_freq))
-    stopifnot(is.null(p1geno))
-    stopifnot(is.null(p2geno))
-    stopifnot(!is.null(mode))
-    stopifnot(!is.null(pivec))
-    stopifnot(is.null(od))
-    stopifnot(is.null(mu))
-    stopifnot(is.null(sigma))
-    stopifnot(is.null(p1_pair_weights))
-    stopifnot(is.null(p2_pair_weights))
   } else if (model == "f1") {
     stopifnot(is.null(allele_freq))
     stopifnot(!is.null(p1geno))
     stopifnot(!is.null(p2geno))
-    stopifnot(is.null(mode))
     stopifnot(is.null(pivec))
     stopifnot(is.null(od))
     stopifnot(is.null(mu))
     stopifnot(is.null(sigma))
-    stopifnot(is.null(p1_pair_weights))
-    stopifnot(is.null(p2_pair_weights))
     if (ploidy %% 2 != 0) {
       stop("rgeno: ploidy must be even when model = 'f1'.")
     }
@@ -136,41 +106,10 @@ rgeno <- function(n,
     stopifnot(is.null(allele_freq))
     stopifnot(!is.null(p1geno))
     stopifnot(is.null(p2geno))
-    stopifnot(is.null(mode))
     stopifnot(is.null(pivec))
     stopifnot(is.null(od))
     stopifnot(is.null(mu))
     stopifnot(is.null(sigma))
-    stopifnot(is.null(p1_pair_weights))
-    stopifnot(is.null(p2_pair_weights))
-    if (ploidy %% 2 != 0) {
-      stop("rgeno: ploidy must be even when model = 's1'.")
-    }
-  } else if (model == "f1pp") {
-    stopifnot(is.null(allele_freq))
-    stopifnot(!is.null(p1geno))
-    stopifnot(!is.null(p2geno))
-    stopifnot(is.null(mode))
-    stopifnot(is.null(pivec))
-    stopifnot(is.null(od))
-    stopifnot(is.null(mu))
-    stopifnot(is.null(sigma))
-    stopifnot(!is.null(p1_pair_weights))
-    stopifnot(!is.null(p2_pair_weights))
-    if (ploidy %% 2 != 0) {
-      stop("rgeno: ploidy must be even when model = 'f1'.")
-    }
-  } else if (model == "s1pp") {
-    stopifnot(is.null(allele_freq))
-    stopifnot(!is.null(p1geno))
-    stopifnot(is.null(p2geno))
-    stopifnot(is.null(mode))
-    stopifnot(is.null(pivec))
-    stopifnot(is.null(od))
-    stopifnot(is.null(mu))
-    stopifnot(is.null(sigma))
-    stopifnot(!is.null(p1_pair_weights))
-    stopifnot(is.null(p2_pair_weights))
     if (ploidy %% 2 != 0) {
       stop("rgeno: ploidy must be even when model = 's1'.")
     }
@@ -178,46 +117,34 @@ rgeno <- function(n,
     stopifnot(is.null(allele_freq))
     stopifnot(is.null(p1geno))
     stopifnot(is.null(p2geno))
-    stopifnot(is.null(mode))
     stopifnot(!is.null(pivec))
     stopifnot(is.null(od))
     stopifnot(is.null(mu))
     stopifnot(is.null(sigma))
-    stopifnot(is.null(p1_pair_weights))
-    stopifnot(is.null(p2_pair_weights))
   } else if (model == "uniform") {
     stopifnot(is.null(allele_freq))
     stopifnot(is.null(p1geno))
     stopifnot(is.null(p2geno))
-    stopifnot(is.null(mode))
     stopifnot(is.null(pivec))
     stopifnot(is.null(od))
     stopifnot(is.null(mu))
     stopifnot(is.null(sigma))
-    stopifnot(is.null(p1_pair_weights))
-    stopifnot(is.null(p2_pair_weights))
   } else if (model == "bb") {
     stopifnot(!is.null(allele_freq))
     stopifnot(is.null(p1geno))
     stopifnot(is.null(p2geno))
-    stopifnot(is.null(mode))
     stopifnot(is.null(pivec))
     stopifnot(!is.null(od))
     stopifnot(is.null(mu))
     stopifnot(is.null(sigma))
-    stopifnot(is.null(p1_pair_weights))
-    stopifnot(is.null(p2_pair_weights))
   } else if (model == "norm") {
     stopifnot(is.null(allele_freq))
     stopifnot(is.null(p1geno))
     stopifnot(is.null(p2geno))
-    stopifnot(is.null(mode))
     stopifnot(is.null(pivec))
     stopifnot(is.null(od))
     stopifnot(!is.null(mu))
     stopifnot(!is.null(sigma))
-    stopifnot(is.null(p1_pair_weights))
-    stopifnot(is.null(p2_pair_weights))
   } else{
     stop("rgeno: how did you get here?")
   }
@@ -240,12 +167,6 @@ rgeno <- function(n,
     stopifnot(p2geno >=0, p2geno <= ploidy)
     stopifnot(p2geno %% 1 == 0)
   }
-  if (!is.null(mode)) {
-    stopifnot(length(mode) == 1)
-    if (mode %% 1 == 0) {
-      stop("pgeno: mode cannot be an integer.")
-    }
-  }
   if (!is.null(pivec)) {
     stopifnot(length(pivec) == (ploidy + 1))
     stopifnot(abs(sum(pivec) - 1) < 10^-8)
@@ -258,23 +179,11 @@ rgeno <- function(n,
     stopifnot(length(sigma) == 1)
     stopifnot(sigma > 0)
   }
-  if (!is.null(p1_pair_weights)) {
-    stopifnot(abs(sum(p1_pair_weights) - 1) < 10^-8)
-    stopifnot(p1_pair_weights >= 0, p1_pair_weights <= 1)
-  }
-  if (!is.null(p2_pair_weights)) {
-    stopifnot(abs(sum(p2_pair_weights) - 1) < 10^-8)
-    stopifnot(p2_pair_weights >= 0, p2_pair_weights <= 1)
-  }
 
   ## Generate probability vector ---------------------------------------
 
   if (model == "s1") {
     p2geno <- p1geno
-  }
-  if (model == "s1pp") {
-    p2geno <- p1geno
-    p2_pair_weights <- p1_pair_weights
   }
 
   if ((model == "s1") | (model == "f1")) {
@@ -287,24 +196,9 @@ rgeno <- function(n,
     pivec <- rep(x = 1 / (ploidy + 1), length = ploidy + 1)
   } else if (model == "flex") {
     pivec <- pivec
-  } else if (model == "ash") {
-    pivec <- get_probk_vec(pivec = pivec, model = "ash", mode = mode)
   } else if (model == "norm") {
     pivec <- stats::dnorm(x = 0:ploidy, mean = mu, sd = sigma, log = TRUE)
     pivec <- exp(pivec - log_sum_exp(pivec))
-  } else if (model == "f1pp" | model == "s1pp") {
-    blist <- get_bivalent_probs(ploidy = ploidy)
-    which_p1 <- blist$lvec == p1geno
-    which_p2 <- blist$lvec == p2geno
-    if (sum(which_p1) != length(p1_pair_weights)) {
-      stop("rgeno: p1_pair_weights should have length equal to the number\nof bivalent configurations in get_bivalent_probs() that corresponds\nto the dosage level of the parent (p1geno)\nas seen in lvec.")
-    }
-    if (sum(which_p2) != length(p2_pair_weights)) {
-      stop("rgeno: p2_pair_weights should have length equal to the number\nof bivalent configurations in get_bivalent_probs() that corresponds\nto the dosage level of the parent (p2geno)\nas seen in lvec.")
-    }
-    p1segprob <- colSums(blist$probmat[which_p1, , drop = FALSE] * p1_pair_weights)
-    p2segprob <- colSums(blist$probmat[which_p2, , drop = FALSE] * p2_pair_weights)
-    pivec <- c(convolve_up(p1segprob, p2segprob))
   } else {
     stop("rgeno: how did you get here?")
   }

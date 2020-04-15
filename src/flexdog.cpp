@@ -1,91 +1,5 @@
 #include "mupdog.h"
 
-
-
-//' Obtain the genotype distribution given the distribution of discrete uniforms.
-//'
-//' @inheritParams flexdog_full
-//' @param pivec The mixing probability of the i'th discrete uniform distribution.
-//'
-//' @author David Gerard
-//'
-//' @return A vector of numerics. Element k is the probability of genotype k.
-//'
-//' @seealso \code{\link{flexdog}} where this is used.
-//'
-//' @keywords internal
-//'
-// [[Rcpp::export]]
-NumericVector get_probk_vec(NumericVector pivec, std::string model, double mode) {
-  int K = pivec.length() - 1;
-  NumericVector probk_vec(K + 1);
-  if ((model == "flex") | (model == "hw") | (model == "f1") | (model == "s1") | (model == "uniform") |
-    (model == "bb") | (model == "norm") | (model == "f1pp") | (model == "s1pp") |
-    (model == "f1ppdr") | (model == "s1ppdr") | (model == "custom")) {
-    probk_vec = pivec;
-  } else if (model == "ash") {
-    double denom; // what you divide the pi's by.
-    for (int i = 0; i <= K; i++) { // iterate through pivec
-      if (std::fabs((double)i - mode) < TOL) {
-        probk_vec(i) += pivec(i);
-      } else if (i < mode) {
-        denom = (double)(std::floor(mode) - i + 1);
-        for (int j = i; j <= mode; j++) { //iterate through probk_vec
-          probk_vec(j) += pivec(i) / denom;
-        }
-      } else if (i > mode) { //iterate through probk_vec
-        denom = (double)(i - std::ceil(mode) + 1);
-        for (int j = i; j >= mode; j--) {
-          probk_vec(j) += pivec(i) / denom;
-        }
-      } else {
-        Rcpp::stop("get_probk_vec: How did you get here??");
-      }
-    }
-  } else {
-    Rcpp::stop("get_probk_vec: model must be one of 'flex', 'ash', 'hw', 'bb', 'norm', 'f1', 's1', 'f1pp', 's1pp', 'f1ppdr', 's1ppdr', 'uniform', or 'custom'");
-  }
-  return probk_vec;
-}
-
-//' Compute inner weights for updating the mixing proportions when using ash model.
-//'
-//' The (i,k)th element is \eqn{1(k \in F(a, i)) / |F(a,i)|}.
-//'
-//' @inheritParams flexdog_full
-//'
-//' @return A matrix of numerics. The weights used for the
-//'    weighted EM algorithm in \code{\link{flexdog_full}}.
-//'
-//' @author David Gerard
-//'
-//' @keywords internal
-//'
-// [[Rcpp::export]]
-NumericMatrix get_inner_weights(int ploidy, double mode) {
-  NumericMatrix inner_weights(ploidy + 1, ploidy + 1);
-  double denom;
-  for (int i = 0; i <= ploidy; i++) {
-    if (std::fabs((double)i - mode) < TOL) {
-      inner_weights(i, i) = 1.0;
-    } else if (i < mode) {
-      denom = (double)(std::floor(mode) - i + 1);
-      for (int j = i; j <= mode; j++) {
-        inner_weights(i, j) = 1.0 / denom;
-      }
-    } else if (i > mode) {
-      denom = (double)(i - std::ceil(mode) + 1);
-      for (int j = i; j >= mode; j--) {
-        inner_weights(i, j) = 1.0 / denom;
-      }
-    } else {
-      Rcpp::stop("get_inner_weights: How did you get here??");
-    }
-  }
-  return(inner_weights);
-}
-
-
 //' E-step in \code{\link{flexdog}}.
 //'
 //' @inheritParams flexdog_full
@@ -99,6 +13,7 @@ NumericMatrix get_inner_weights(int ploidy, double mode) {
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @seealso \code{\link{flexdog}} for the full EM algorithm.
 //'
@@ -149,6 +64,7 @@ NumericMatrix get_wik_mat(NumericVector probk_vec,
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @return The objective (marginal log-likelihood) used in
 //'     \code{\link{flexdog_full}}.
@@ -200,165 +116,6 @@ double flexdog_obj(NumericVector probk_vec,
   return obj;
 }
 
-
-//' Objective function optimized by \code{\link{uni_em}}.
-//'
-//' @inheritParams uni_em
-//' @param pivec The current parameters.
-//'
-//' @author David Gerard
-//'
-//' @keywords internal
-//'
-//' @return The objective optimized by \code{\link{uni_em}} during
-//'     that separate unimodal EM algorithm.
-//'
-// [[Rcpp::export]]
-double uni_obj(arma::vec pivec,
-               arma::vec weight_vec,
-               arma::mat lmat,
-               long double lambda) {
-  arma::vec lpi = lmat.t() * pivec;
-  double obj = 0.0;
-  for (int k = 0; (unsigned)k < weight_vec.n_elem; k++) {
-    if ((weight_vec(k) > TOL) && (lpi(k) > TOL)) {
-      obj = obj + weight_vec(k) * std::log(lpi(k));
-    } else if ((weight_vec(k) > TOL * 1000) && (lpi(k) < TOL)) {
-      obj = R_NegInf;
-      break;
-    } else {
-      // do nothing.
-    }
-  }
-
-  // Add the penalty ----
-  double pen = 0.0;
-  if (lambda > TOL) {
-    pen = lambda * arma::sum(arma::log(pivec));
-  }
-
-  return obj + pen;
-}
-
-//' EM algorithm to fit weighted ash objective.
-//'
-//' Solves the following optimization problem
-//' \deqn{\max_{\pi} \sum_k w_k \log(\sum_j \pi_j \ell_jk).}
-//' It does this using a weighted EM algorithm.
-//'
-//' @param weight_vec A vector of weights. Each element of \code{weight_vec} corresponds
-//'     to a column of \code{lmat}.
-//' @param lmat A matrix of inner weights. The columns are the "individuals" and the rows are the "classes."
-//' @param pi_init The initial values of \code{pivec}. Each element of \code{pi_init}
-//'     corresponds to a row of \code{lmat}.
-//' @param itermax The maximum number of EM iterations to take.
-//' @param obj_tol The objective stopping criterion.
-//' @param lambda The penalty on the pi's. Should be greater than 0 and really really small.
-//'
-//'
-//' @return A vector of numerics. The update of \code{pivec} in
-//'     \code{\link{flexdog_full}}.
-//'
-//' @author David Gerard
-//'
-//' @keywords internal
-//'
-// [[Rcpp::export]]
-arma::vec uni_em(arma::vec weight_vec,
-                 arma::mat lmat,
-                 arma::vec pi_init,
-                 long double lambda,
-                 int itermax,
-                 double obj_tol) {
-  // check input ----------------------------------------------
-  int ploidy = weight_vec.n_elem - 1;
-  if (obj_tol < TOL) {
-    Rcpp::stop("uni_em: obj_tol should be greater than 0.");
-  }
-  if (itermax < 0) {
-    Rcpp::stop("uni_em: itermax should be greater than or equal to 0.");
-  }
-  if (weight_vec.n_elem != pi_init.n_elem) {
-    Rcpp::stop("uni_em: weight_vec and pi_init should have the same number of elements.");
-  }
-  if (lmat.n_rows != weight_vec.n_elem) {
-    Rcpp::stop("uni_em: lmat should have ploidy + 1 rows.");
-  }
-  if (lmat.n_cols != weight_vec.n_elem) {
-    Rcpp::stop("uni_em: lmat should have ploidy + 1 columns.");
-  }
-  if (lambda < 0.0) {
-    Rcpp::stop("uni_em: lambda cannot be negative.");
-  }
-
-  // Run EM ---------------------------------------------------
-  int index       = 0;
-  double err      = obj_tol + 1.0;
-  arma::vec pivec = pi_init;
-  double obj      = uni_obj(pivec, weight_vec, lmat, lambda);
-  double old_obj  = obj;
-  double lsum     = 0.0;
-  arma::mat etamat(ploidy + 1, ploidy + 1);
-  arma::vec nvec(ploidy + 1);
-
-  while ((index < itermax) & (err > obj_tol)) {
-    old_obj = obj;
-    // get eta_jk -----------------
-    for (int k = 0; k <= ploidy; k++) {
-      lsum = 0.0;
-      for (int j = 0; j <= ploidy; j++) {
-        etamat(j, k) = pivec(j) * lmat(j, k);
-        lsum = lsum + etamat(j, k);
-      }
-      for (int j = 0; j <= ploidy; j++) {
-        etamat(j, k) = etamat(j, k) / lsum;
-      }
-    }
-    // get n_j's --------------------------------
-    nvec = etamat * weight_vec + lambda;
-    // normalize to get pi_j's ------------------
-    pivec = nvec / arma::sum(nvec);
-    // calculate objective and update stopping criteria
-    obj = uni_obj(pivec, weight_vec, lmat, lambda);
-    if (obj < old_obj - TOL) {
-      break; // this almost always is OK because other bias starting points will work
-
-      Rcpp::Rcout << "Index: "
-                  << index
-                  << std::endl
-                  << "obj: "
-                  << obj
-                  << std::endl
-                  << "pivec: "
-                  << std::endl
-                  << pivec.t()
-                  << std::endl
-                  << "weight_vec: "
-                  << std::endl
-                  << weight_vec.t()
-                  << std::endl
-                  << "lmat: "
-                  << std::endl
-                  << lmat
-                  << std::endl
-                  << "etamat: "
-                  << std::endl
-                  << etamat
-                  << "nvec: "
-                  << std::endl
-                  << nvec.t()
-                  << std::endl
-                  << std::endl;
-      Rcpp::stop("uni_em: Objective is not increasing.\n");
-    }
-    err = std::fabs(obj - old_obj);
-    index++;
-
-  }
-  return pivec;
-}
-
-
 //' Objective for mixture of known dist and uniform dist.
 //'
 //' @param alpha The mixing weight.
@@ -372,6 +129,7 @@ arma::vec uni_em(arma::vec weight_vec,
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 //'
 // [[Rcpp::export]]
 double f1_obj(double alpha,

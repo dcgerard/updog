@@ -13,6 +13,8 @@
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
+//'
 // [[Rcpp::export]]
 NumericVector grad_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2, NumericMatrix phifk_mat,
                                  arma::Mat<double> cor_inv, NumericMatrix log_bb_dense) {
@@ -92,6 +94,7 @@ NumericVector grad_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2,
 //' @param muSigma2 A vector. The first half are mu and the second half are sigma2.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -116,6 +119,7 @@ NumericVector grad_for_mu_sigma2_wrapper(arma::Col<double> muSigma2, NumericMatr
 //' @return A double.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -142,6 +146,7 @@ double dpen_dh(double h, double mu_h, double sigma2_h) {
 //' @return A double.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -170,6 +175,7 @@ double dpen_deps(double eps, double mu_eps, double sigma2_eps) {
 //' @return A double.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @seealso \code{\link{dbetabinom_double}}, \code{\link{dlbeta_dtau}},
 //'     \code{\link{dc_dtau}}.
@@ -194,6 +200,7 @@ double dlbeta_dc(int x, int n, double xi, double c) {
 //' @return A double.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @seealso \code{\link{dlbeta_dc}}, \code{\link{dlbeta_dtau}}
 //'
@@ -217,6 +224,7 @@ double dc_dtau(double tau) {
 //' @return A double.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @seealso \code{\link{dlbeta_dc}}, \code{\link{dc_dtau}},
 //'     \code{\link{dbetabinom_double}}.
@@ -241,6 +249,7 @@ double dlbeta_dtau(int x, int n, double p, double eps, double h, double tau) {
 //' @param xi The mean of the underlying beta.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -262,6 +271,7 @@ double dlbeta_dxi(int x, int n, double xi, double tau) {
 //' @param h The bias parameter.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -278,6 +288,7 @@ double dxi_dh(double p, double eps, double h) {
 //' @return A double.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -297,6 +308,7 @@ double dlbeta_dh(int x, int n, double p, double eps, double h, double tau) {
 //' @return A double.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -313,6 +325,7 @@ double dxi_df(double h, double f) {
 //' @return A double.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -329,6 +342,7 @@ double df_deps(double p, double eps) {
 //' @return A double.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -348,6 +362,7 @@ double dlbeta_deps(int x, int n, double p, double eps, double h, double tau) {
 //' @return A double.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @inheritParams obj_for_eps
 //'
@@ -430,6 +445,7 @@ NumericVector grad_for_eps(NumericVector parvec,
 //'     underlying beta.
 //'
 //' @keywords internal
+//' @noRd
 //'
 //' @author David Gerard
 // [[Rcpp::export]]
@@ -465,6 +481,7 @@ NumericVector grad_for_weighted_lbb(NumericVector parvec,
 //' @author David Gerard
 //'
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 NumericVector grad_for_weighted_lnorm(NumericVector parvec,
                                       int ploidy,
