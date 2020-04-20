@@ -77,7 +77,16 @@
 flexdog <- function(refvec,
                     sizevec,
                     ploidy,
-                    model       = c("norm", "hw", "bb", "s1", "f1", "flex", "uniform", "custom"),
+                    model       = c("norm",
+                                    "hw",
+                                    "bb",
+                                    "s1",
+                                    "s1pp",
+                                    "f1",
+                                    "f1pp",
+                                    "flex",
+                                    "uniform",
+                                    "custom"),
                     p1ref       = NULL,
                     p1size      = NULL,
                     p2ref       = NULL,
@@ -180,6 +189,10 @@ flexdog <- function(refvec,
 #'       a particular type of meiotic behavior: polysomic
 #'       inheritance with
 #'       bivalent, non-preferential pairing.}
+#'   \item{\code{"f1pp"}}{This prior estimates rates of double reduction
+#'       and preferential pairing in an F1 population while genotyping.}
+#'   \item{\code{"s1pp"}}{This prior estimates rates of double reduction
+#'       and preferential pairing in an S1 population while genotyping.}
 #'   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
 #'       this works well if you have a lot of individuals. In practice, it seems to
 #'       be much less robust to violations in modeling assumptions.}
@@ -402,7 +415,7 @@ flexdog <- function(refvec,
 flexdog_full <- function(refvec,
                          sizevec,
                          ploidy,
-                         model       = c("norm", "hw", "bb", "s1", "f1", "flex", "uniform", "custom"),
+                         model       = c("norm", "hw", "bb", "s1", "s1pp", "f1", "f1pp", "flex", "uniform", "custom"),
                          verbose     = TRUE,
                          mean_bias   = 0,
                          var_bias    = 0.7 ^ 2,
@@ -475,11 +488,11 @@ flexdog_full <- function(refvec,
   }
 
   ## Check p1ref, p2ref, p1size, p2size ----------------------------
-  if ((!is.null(p1ref) | !is.null(p1size)) & (model != "f1" & model != "s1")) {
-    stop("flexdog: if model is not 'f1' or 's1' then p1ref and p1size both need to be NULL.")
+  if ((!is.null(p1ref) | !is.null(p1size)) & (model != "f1" & model != "s1" & model != "f1pp" & model != "s1pp")) {
+    stop("flexdog: if model is not 'f1', 's1', 'f1pp', or 's1pp' then p1ref and p1size both need to be NULL.")
   }
-  if ((!is.null(p2ref) | !is.null(p2size)) & (model != "f1")) {
-    stop("flexdog: if model is not 'f1' then p2ref and p2size both need to be NULL.")
+  if ((!is.null(p2ref) | !is.null(p2size)) & (model != "f1" & model != "f1pp")) {
+    stop("flexdog: if model is not 'f1' or 'f1pp' then p2ref and p2size both need to be NULL.")
   }
   if ((is.null(p1ref) & !is.null(p1size)) | (!is.null(p1ref) & is.null(p1size))) {
     stop("flexdog: p1ref and p1size either need to be both NULL or both non-NULL.")
@@ -531,10 +544,11 @@ flexdog_full <- function(refvec,
   seq_init  <- seq
   od_init   <- od
 
-  ## Get inner weight vec only once
-  ## Used in convex optimization program
+  ## Some control variables
   if (model == "f1" | model == "s1") {
     control$qarray    <- get_q_array(ploidy = ploidy)
+    control$fs1_alpha <- fs1_alpha
+  } else if (model == "f1pp" | model == "s1pp") {
     control$fs1_alpha <- fs1_alpha
   } else if (model == "bb") {
     control$alpha <- mode ## initialize allele frequency for bb
@@ -551,7 +565,7 @@ flexdog_full <- function(refvec,
     pivec <- prior_vec
   }
   assertthat::are_equal(sum(pivec), 1)
-  control$pivec <- pivec ## initialization for unimodal optimization
+  control$pivec <- pivec
 
   ## Run EM ----------------------------------------
   iter_index  <- 1
@@ -596,7 +610,7 @@ flexdog_full <- function(refvec,
     od   <- oout$par[3]
 
     ## if F1 or S1, update betabinomial log-likelihood of parent counts
-    if (model == "f1") {
+    if (model == "f1" | model == "f1pp") {
       if (!is.null(p1ref)) {
         xi_vec <- xi_fun(p = 0:ploidy / ploidy, eps = seq, h = bias)
         control$p1_lbb <- dbetabinom(x    = rep(p1ref, ploidy + 1),
@@ -613,7 +627,7 @@ flexdog_full <- function(refvec,
                                      rho  = od,
                                      log  = TRUE)
       }
-    } else if (model == "s1") {
+    } else if (model == "s1" | model == "s1pp") {
       if (!is.null(p1ref)) {
         xi_vec <- xi_fun(p = 0:ploidy / ploidy, eps = seq, h = bias)
         control$p1_lbb <- dbetabinom(x    = rep(p1ref, ploidy + 1),
@@ -849,7 +863,9 @@ initialize_pivec <- function(ploidy,
                                        "bb",
                                        "norm",
                                        "f1",
+                                       "f1pp",
                                        "s1",
+                                       "s1pp",
                                        "flex",
                                        "uniform",
                                        "custom")) {
@@ -859,7 +875,7 @@ initialize_pivec <- function(ploidy,
   model <- match.arg(model)
   if (model == "flex" | model == "uniform") {
     pivec <- rep(x = 1 / (ploidy + 1), length = ploidy + 1)
-  } else if (model == "hw" | model == "f1" | model == "s1" | model == "bb" | model == "norm" |  model == "custom") {
+  } else if (model == "hw" | model == "f1" | model == "s1" | model == "f1pp" | model == "s1pp" | model == "bb" | model == "norm" |  model == "custom") {
     if (mode < 0 | mode > 1) {
       stop(paste0("initialize_pivec: initialization should be between 0 and 1.",
                   "\nIt is the initialization of the allele frequency."))
@@ -895,7 +911,9 @@ flex_update_pivec <- function(weight_vec,
                                         "bb",
                                         "norm",
                                         "f1",
+                                        "f1pp",
                                         "s1",
+                                        "s1pp",
                                         "flex",
                                         "uniform",
                                         "custom"),
@@ -970,6 +988,42 @@ flex_update_pivec <- function(weight_vec,
     return_list$par <- list()
     return_list$par$pgeno <- optim_best$ell
     return_list$par$alpha  <- optim_best$par
+  } else if (model == "f1pp") {
+    update_vec <- update_f1_s1_pp(weightvec = weight_vec,
+                                  pop = "f1",
+                                  fs1alpha = control$fs1_alpha,
+                                  p1pen = control$p1_lbb,
+                                  p2pen = control$p2_lbb)
+    return_list$par <- list()
+    return_list$par$ell1 <- update_vec[["ell1"]]
+    return_list$par$ell2 <- update_vec[["ell2"]]
+    return_list$par$tau1 <- update_vec[["tau1"]]
+    return_list$par$tau2 <- update_vec[["tau2"]]
+    return_list$par$gamma1 <- update_vec[["gamma1"]]
+    return_list$par$gamma2 <- update_vec[["gamma2"]]
+    return_list$pivec <- prob_dosage_pp_unif(ell1     = update_vec[["ell1"]],
+                                             ell2     = update_vec[["ell2"]],
+                                             tau1     = update_vec[["tau1"]],
+                                             tau2     = update_vec[["tau2"]],
+                                             gamma1   = update_vec[["gamma1"]],
+                                             gamma2   = update_vec[["gamma2"]],
+                                             fs1alpha = control$fs1_alpha)
+  } else if (model == "s1pp") {
+    update_vec <- update_f1_s1_pp(weightvec = weight_vec,
+                                  pop = "s1",
+                                  fs1alpha = control$fs1_alpha,
+                                  p1pen = control$p1_lbb)
+    return_list$par <- list()
+    return_list$par$ell1 <- update_vec[["ell1"]]
+    return_list$par$tau1 <- update_vec[["tau1"]]
+    return_list$par$gamma1 <- update_vec[["gamma1"]]
+    return_list$pivec <- prob_dosage_pp_unif(ell1     = update_vec[["ell1"]],
+                                             ell2     = update_vec[["ell1"]],
+                                             tau1     = update_vec[["tau1"]],
+                                             tau2     = update_vec[["tau1"]],
+                                             gamma1   = update_vec[["gamma1"]],
+                                             gamma2   = update_vec[["gamma1"]],
+                                             fs1alpha = control$fs1_alpha)
   } else if (model == "uniform") {
     return_list$pivec <- rep(x = 1 / (ploidy + 1), length = ploidy + 1)
     return_list$par <- list()

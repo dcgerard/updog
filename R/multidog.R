@@ -133,7 +133,9 @@ multidog <- function(refmat,
                                "hw",
                                "bb",
                                "s1",
+                               "s1pp",
                                "f1",
+                               "f1pp",
                                "flex",
                                "uniform",
                                "custom"),
@@ -143,6 +145,20 @@ multidog <- function(refmat,
                      bias_init = exp(c(-1, -0.5, 0, 0.5, 1)),
                      prior_vec = NULL,
                      ...) {
+
+  cat(paste0("    |                                   *.#,%    ",
+             "\n   |||                                 *******/  ",
+             "\n |||||||    (**..#**.                  */   **/  ",
+             "\n|||||||||    */****************************/*%   ",
+             "\n   |||    &****..,*.************************/    ",
+             "\n   |||     (....,,,*,...****%********/(******    ",
+             "\n   |||                ,,****%////,,,,./.****/   ",
+             "\n   |||                  /**//         .*///.... ",
+             "\n   |||                  .*/*/%#         .,/   .,",
+             "\n   |||               , **/   #%         .*    ..",
+             "\n   |||                               ,,,*       ",
+             "\n\nWorking on it..."))
+
   ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(refmat))
   assertthat::assert_that(is.matrix(sizemat))
@@ -171,13 +187,13 @@ multidog <- function(refmat,
     stopifnot(is.character(p1_id))
     stopifnot(length(p1_id) == 1)
     stopifnot(is.element(el = p1_id, set = colnames(refmat)))
-    stopifnot(model == "f1" | model == "s1")
+    stopifnot(model == "f1" | model == "s1" | model == "f1pp" | model == "s1pp")
   }
   if (!is.null(p2_id)) {
     stopifnot(is.character(p2_id))
     stopifnot(length(p2_id) == 1)
     stopifnot(is.element(el = p2_id, set = colnames(refmat)))
-    stopifnot(model == "f1")
+    stopifnot(model == "f1" | model == "f1pp")
   }
   if (!is.null(p2_id) & is.null(p1_id)) {
     warning("setting p1_id to be p2_id and setting p2_id to be NULL.")
@@ -264,7 +280,7 @@ multidog <- function(refmat,
                                                 bias_init = bias_init,
                                                 verbose   = FALSE,
                                                 prior_vec = prior_vec,
-                                                ...)
+                                                )
 
 
                                 names(fout$gene_dist)  <- paste0("Pr_", seq(0, ploidy, by = 1))
@@ -312,6 +328,9 @@ multidog <- function(refmat,
   retlist <- list(snpdf = as.data.frame(snpdf),
                   inddf = as.data.frame(inddf))
   class(retlist) <- "multidog"
+
+  cat("done!")
+
   return(retlist)
 }
 

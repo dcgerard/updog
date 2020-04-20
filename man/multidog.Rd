@@ -8,7 +8,8 @@ multidog(
   refmat,
   sizemat,
   ploidy,
-  model = c("norm", "hw", "bb", "s1", "f1", "flex", "uniform", "custom"),
+  model = c("norm", "hw", "bb", "s1", "s1pp", "f1", "f1pp", "flex", "uniform",
+    "custom"),
   nc = 1,
   p1_id = NULL,
   p2_id = NULL,
@@ -144,7 +145,7 @@ data("uitdewilligen")
 mout <- multidog(refmat = t(uitdewilligen$refmat),
                  sizemat = t(uitdewilligen$sizemat),
                  ploidy = uitdewilligen$ploidy,
-                 nc = 2)
+                 nc = 2, model = "f1pp")
 mout$inddf
 mout$snpdf
 }

@@ -8,7 +8,8 @@ flexdog(
   refvec,
   sizevec,
   ploidy,
-  model = c("norm", "hw", "bb", "s1", "f1", "flex", "uniform", "custom"),
+  model = c("norm", "hw", "bb", "s1", "s1pp", "f1", "f1pp", "flex", "uniform",
+    "custom"),
   p1ref = NULL,
   p1size = NULL,
   p2ref = NULL,
@@ -162,6 +163,10 @@ Possible values of the genotype distribution (values of \code{model}) are:
       a particular type of meiotic behavior: polysomic
       inheritance with
       bivalent, non-preferential pairing.}
+  \item{\code{"f1pp"}}{This prior estimates rates of double reduction
+      and preferential pairing in an F1 population while genotyping.}
+  \item{\code{"s1pp"}}{This prior estimates rates of double reduction
+      and preferential pairing in an S1 population while genotyping.}
   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
       this works well if you have a lot of individuals. In practice, it seems to
       be much less robust to violations in modeling assumptions.}
