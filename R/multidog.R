@@ -16,10 +16,16 @@
 #' and column names are how we ID the individuals, and so they are required
 #' attributes.
 #'
+#' If your data are in VCF files, I would recommend importing them using the
+#' VariantAnnotation package from Bioconductor
+#' \url{https://bioconductor.org/packages/VariantAnnotation/}. It's a great
+#' VCF parser.
+#'
 #' See the details of \code{\link{flexdog}} for the possible values of
 #' \code{model}.
 #'
-#' If \code{model = "f1"} or \code{model = "s1"} then the user may
+#' If \code{model = "f1"}, \code{model = "s1"}, \code{model = "f1pp"}
+#' or \code{model = "s1pp"} then the user may
 #' provide the individual ID for parent(s) via the \code{p1_id}
 #' and \code{p2_id} arguments.
 #'
@@ -33,7 +39,11 @@
 #' run \code{\link{flexdog}} in parallel. Only set \code{nc} greater than
 #' \code{1} if you are sure you have access to the proper number of cores.
 #' The upper bound on the value of \code{nc} you should try can be determined
-#' by running \code{parallel::detectCores()} in R.
+#' by running \code{parallel::detectCores()} in R. Most admins of high
+#' performance computing environments place limits on the number of cores
+#' you can use at any one time. So if you are using \code{multidog()} on
+#' a supercomputer, do not use \code{parallel::detectCores()} and discuss
+#' with your admin how you can safely run parallel jobs.
 #'
 #' SNP's that contain 0 reads (or all missing data) are entirely removed.
 #'
@@ -49,7 +59,9 @@
 #' @param nc The number of computing cores to use. This should never be
 #'     more than the number of cores available in your computing environment.
 #'     You can determine the maximum number of available cores by running
-#'     \code{parallel::detectCores()} in R.
+#'     \code{parallel::detectCores()} in R. But discuss how to run parallel
+#'     jobs with your admin if you are using \code{multidog()} on a
+#'     supercomputer.
 #' @param p1_id The ID of the first parent. This should be a character of
 #'     length 1. This should correspond to a single column name in \code{refmat}
 #'     and \code{sizemat}.
@@ -74,6 +86,10 @@
 #'     \item{\code{ploidy}}{The provided ploidy of the species.}
 #'     \item{\code{model}}{The provided model for the prior genotype
 #'         distribution.}
+#'     \item{\code{p1ref}}{The user-provided reference read counts of parent 1.}
+#'     \item{\code{p1size}}{The user-provided total read counts of parent 1.}
+#'     \item{\code{p2ref}}{The user-provided reference read counts of parent 2.}
+#'     \item{\code{p2size}}{The user-provided total read counts of parent 2.}
 #'     \item{\code{Pr_k}}{The estimated frequency of individuals with genotype
 #'         k, where k can be any integer between 0 and the ploidy level.}
 #'     \item{Model specific parameter estimates}{See the return value of
@@ -146,17 +162,17 @@ multidog <- function(refmat,
                      prior_vec = NULL,
                      ...) {
 
-  cat(paste0("    |                                   *.#,%    ",
+  cat(paste0(  "    |                                   *.#,%    ",
              "\n   |||                                 *******/  ",
              "\n |||||||    (**..#**.                  */   **/  ",
              "\n|||||||||    */****************************/*%   ",
              "\n   |||    &****..,*.************************/    ",
              "\n   |||     (....,,,*,...****%********/(******    ",
-             "\n   |||                ,,****%////,,,,./.****/   ",
-             "\n   |||                  /**//         .*///.... ",
-             "\n   |||                  .*/*/%#         .,/   .,",
-             "\n   |||               , **/   #%         .*    ..",
-             "\n   |||                               ,,,*       ",
+             "\n   |||                ,,****%////,,,,./.****/    ",
+             "\n   |||                  /**//         .*///....  ",
+             "\n   |||                  .*/*/%#         .,/   ., ",
+             "\n   |||               , **/   #%         .*    .. ",
+             "\n   |||                               ,,,*        ",
              "\n\nWorking on it..."))
 
   ## Check input --------------------------------------------------------------
@@ -286,6 +302,20 @@ multidog <- function(refmat,
                                 names(fout$gene_dist)  <- paste0("Pr_", seq(0, ploidy, by = 1))
                                 colnames(fout$postmat) <- paste0("Pr_", seq(0, ploidy, by = 1))
 
+                                ## change to NA so can return in data frame ----
+                                if (is.null(p1_ref)) {
+                                  p1_ref <- NA_real_
+                                }
+                                if (is.null(p1_size)) {
+                                  p1_size <- NA_real_
+                                }
+                                if (is.null(p2_ref)) {
+                                  p2_ref <- NA_real_
+                                }
+                                if (is.null(p2_size)) {
+                                  p2_size <- NA_real_
+                                }
+
                                 snpprop <- cbind(
                                   data.frame(snp      = current_snp,
                                              bias     = fout$bias,
@@ -295,7 +325,11 @@ multidog <- function(refmat,
                                              num_iter = fout$num_iter,
                                              llike    = fout$llike,
                                              ploidy   = fout$input$ploidy,
-                                             model    = fout$input$model),
+                                             model    = fout$input$model,
+                                             p1ref    = p1_ref,
+                                             p1size   = p1_size,
+                                             p2ref    = p2_ref,
+                                             p2size   = p2_size),
                                   as.data.frame(matrix(fout$gene_dist, nrow = 1, dimnames = list(NULL, names(fout$gene_dist))))
                                 )
 

@@ -10,6 +10,7 @@ This is a massive edit of the updog software. Major changes include:
 3. Revision of `model = "f1pp"` and `model = "s1pp"`. These now include
    interpretable parameterizations that are meant to be identified
    via another R package. But support is only for tetraploids right now.
+4. `multidog()` now prints some nice ASCII art when it's run.
 
 
 # updog 1.2.1

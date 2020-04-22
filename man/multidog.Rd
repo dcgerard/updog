@@ -38,7 +38,9 @@ See Details for possible values.}
 \item{nc}{The number of computing cores to use. This should never be
 more than the number of cores available in your computing environment.
 You can determine the maximum number of available cores by running
-\code{parallel::detectCores()} in R.}
+\code{parallel::detectCores()} in R. But discuss how to run parallel
+jobs with your admin if you are using \code{multidog()} on a
+supercomputer.}
 
 \item{p1_id}{The ID of the first parent. This should be a character of
 length 1. This should correspond to a single column name in \code{refmat}
@@ -49,14 +51,14 @@ length 1. This should correspond to a single column name in \code{refmat}
 and \code{sizemat}.}
 
 \item{bias_init}{A vector of initial values for the bias parameter
-over the multiple runs of \code{flexdog_full}.}
+over the multiple runs of \code{\link{flexdog_full}()}.}
 
 \item{prior_vec}{The pre-specified genotype distribution. Only used if
 \code{model = "custom"} and must otherwise be \code{NULL}. If specified,
 then it should be a vector of length \code{ploidy + 1} with
 non-negative elements that sum to 1.}
 
-\item{...}{Additional parameters to pass to \code{\link{flexdog_full}}.}
+\item{...}{Additional parameters to pass to \code{\link{flexdog_full}()}.}
 }
 \value{
 A list-like object of two data frames.
@@ -76,6 +78,10 @@ A list-like object of two data frames.
     \item{\code{ploidy}}{The provided ploidy of the species.}
     \item{\code{model}}{The provided model for the prior genotype
         distribution.}
+    \item{\code{p1ref}}{The user-provided reference read counts of parent 1.}
+    \item{\code{p1size}}{The user-provided total read counts of parent 1.}
+    \item{\code{p2ref}}{The user-provided reference read counts of parent 2.}
+    \item{\code{p2size}}{The user-provided total read counts of parent 2.}
     \item{\code{Pr_k}}{The estimated frequency of individuals with genotype
         k, where k can be any integer between 0 and the ploidy level.}
     \item{Model specific parameter estimates}{See the return value of
@@ -118,10 +124,16 @@ columns should index the individuals. Row names are how we ID the SNP's
 and column names are how we ID the individuals, and so they are required
 attributes.
 
+If your data are in VCF files, I would recommend importing them using the
+VariantAnnotation package from Bioconductor
+\url{https://bioconductor.org/packages/VariantAnnotation/}. It's a great
+VCF parser.
+
 See the details of \code{\link{flexdog}} for the possible values of
 \code{model}.
 
-If \code{model = "f1"} or \code{model = "s1"} then the user may
+If \code{model = "f1"}, \code{model = "s1"}, \code{model = "f1pp"}
+or \code{model = "s1pp"} then the user may
 provide the individual ID for parent(s) via the \code{p1_id}
 and \code{p2_id} arguments.
 
@@ -135,7 +147,11 @@ Using an \code{nc} value greater than \code{1} will allow you to
 run \code{\link{flexdog}} in parallel. Only set \code{nc} greater than
 \code{1} if you are sure you have access to the proper number of cores.
 The upper bound on the value of \code{nc} you should try can be determined
-by running \code{parallel::detectCores()} in R.
+by running \code{parallel::detectCores()} in R. Most admins of high
+performance computing environments place limits on the number of cores
+you can use at any one time. So if you are using \code{multidog()} on
+a supercomputer, do not use \code{parallel::detectCores()} and discuss
+with your admin how you can safely run parallel jobs.
 
 SNP's that contain 0 reads (or all missing data) are entirely removed.
 }
@@ -145,7 +161,7 @@ data("uitdewilligen")
 mout <- multidog(refmat = t(uitdewilligen$refmat),
                  sizemat = t(uitdewilligen$sizemat),
                  ploidy = uitdewilligen$ploidy,
-                 nc = 2, model = "f1pp")
+                 nc = 2)
 mout$inddf
 mout$snpdf
 }
