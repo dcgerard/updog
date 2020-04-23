@@ -230,7 +230,7 @@ set_par <- function(ell1,
                     gamma2 = NULL,
                     tau_lower = 0,
                     tau_upper = 1/6,
-                    gamma_lower = 1/3,
+                    gamma_lower = 0,
                     gamma_upper = 1) {
   if(ell1 %in% c(0, 4) & ell2 %in% c(0, 4)) {
     par <- NULL
@@ -355,8 +355,8 @@ update_f1_s1_pp <- function(weightvec,
                             pop = c("f1", "s1"),
                             tau1_init = 0.05,
                             tau2_init = 0.05,
-                            gamma1_init = 0.5,
-                            gamma2_init = 0.5,
+                            gamma1_init = 1/3,
+                            gamma2_init = 1/3,
                             fs1alpha = 0.001,
                             p1pen = rep(0, length(weightvec)),
                             p2pen = rep(0, length(weightvec))) {
@@ -394,7 +394,7 @@ update_f1_s1_pp <- function(weightvec,
                           gamma2      = gamma2_init,
                           tau_lower   = 0,
                           tau_upper   = 1/6,
-                          gamma_lower = 1/3,
+                          gamma_lower = 0,
                           gamma_upper = 1)
 
         if (pop == "s1") {
