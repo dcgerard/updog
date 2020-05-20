@@ -447,6 +447,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// get_genotype_likelihoods
+NumericMatrix get_genotype_likelihoods(NumericVector refvec, NumericVector sizevec, int ploidy, double seq, double bias, double od);
+RcppExport SEXP _updog_get_genotype_likelihoods(SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type refvec(refvecSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type sizevec(sizevecSEXP);
+    Rcpp::traits::input_parameter< int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< double >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< double >::type bias(biasSEXP);
+    Rcpp::traits::input_parameter< double >::type od(odSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_genotype_likelihoods(refvec, sizevec, ploidy, seq, bias, od));
+    return rcpp_result_gen;
+END_RCPP
+}
 // flexdog_obj
 double flexdog_obj(NumericVector probk_vec, NumericVector refvec, NumericVector sizevec, int ploidy, double seq, double bias, double od, double mean_bias, double var_bias, double mean_seq, double var_seq, double mean_od, double var_od);
 RcppExport SEXP _updog_flexdog_obj(SEXP probk_vecSEXP, SEXP refvecSEXP, SEXP sizevecSEXP, SEXP ploidySEXP, SEXP seqSEXP, SEXP biasSEXP, SEXP odSEXP, SEXP mean_biasSEXP, SEXP var_biasSEXP, SEXP mean_seqSEXP, SEXP var_seqSEXP, SEXP mean_odSEXP, SEXP var_odSEXP) {
@@ -1399,6 +1415,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_updog_wem_obj", (DL_FUNC) &_updog_wem_obj, 4},
     {"_updog_wem", (DL_FUNC) &_updog_wem, 6},
     {"_updog_get_wik_mat", (DL_FUNC) &_updog_get_wik_mat, 7},
+    {"_updog_get_genotype_likelihoods", (DL_FUNC) &_updog_get_genotype_likelihoods, 6},
     {"_updog_flexdog_obj", (DL_FUNC) &_updog_flexdog_obj, 13},
     {"_updog_f1_obj", (DL_FUNC) &_updog_f1_obj, 3},
     {"_updog_grad_for_mu_sigma2", (DL_FUNC) &_updog_grad_for_mu_sigma2, 5},

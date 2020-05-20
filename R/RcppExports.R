@@ -201,6 +201,17 @@ get_wik_mat <- function(probk_vec, refvec, sizevec, ploidy, seq, bias, od) {
     .Call('_updog_get_wik_mat', PACKAGE = 'updog', probk_vec, refvec, sizevec, ploidy, seq, bias, od)
 }
 
+#' Returns genotype log-likelihood matrix
+#'
+#' @inheritParams get_wik_mat
+#'
+#' @author David Gerard
+#'
+#' @noRd
+get_genotype_likelihoods <- function(refvec, sizevec, ploidy, seq, bias, od) {
+    .Call('_updog_get_genotype_likelihoods', PACKAGE = 'updog', refvec, sizevec, ploidy, seq, bias, od)
+}
+
 #' Log-likelihood that \code{\link{flexdog}} maximizes.
 #'
 #' @inheritParams flexdog_full

@@ -116,6 +116,9 @@
 #'     \item{\code{Pr_k}}{The posterior probability that a given individual
 #'          at a given SNP has genotype k, where k can vary from 0 to the
 #'          ploidy level of the species.}
+#'     \item{\code{logL_k}}{The genotype \emph{log}-likelihoods for dosage
+#'          k for a given individual at a given SNP, where k can vary f
+#'          rom 0 to the ploidy level of the species.}
 #'     }}
 #' }
 #'
@@ -301,6 +304,7 @@ multidog <- function(refmat,
 
                                 names(fout$gene_dist)  <- paste0("Pr_", seq(0, ploidy, by = 1))
                                 colnames(fout$postmat) <- paste0("Pr_", seq(0, ploidy, by = 1))
+                                colnames(fout$genologlike) <- paste0("logL_", seq(0, ploidy, by = 1))
 
                                 ## change to NA so can return in data frame ----
                                 if (is.null(p1_ref)) {
@@ -348,7 +352,8 @@ multidog <- function(refmat,
                                              geno        = fout$geno,
                                              postmean    = fout$postmean,
                                              maxpostprob = fout$maxpostprob),
-                                  fout$postmat)
+                                  fout$postmat,
+                                  fout$genologlike)
 
                                 list(indprop, snpprop)
                               }

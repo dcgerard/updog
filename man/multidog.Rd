@@ -108,6 +108,9 @@ A list-like object of two data frames.
     \item{\code{Pr_k}}{The posterior probability that a given individual
          at a given SNP has genotype k, where k can vary from 0 to the
          ploidy level of the species.}
+    \item{\code{logL_k}}{The genotype \emph{log}-likelihoods for dosage
+         k for a given individual at a given SNP, where k can vary f
+         rom 0 to the ploidy level of the species.}
     }}
 }
 }

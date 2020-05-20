@@ -174,4 +174,24 @@ test_that("actually using parent data", {
   expect_equal(fout3$par$pgeno, 3)
 })
 
+test_that("genotype likelihoods and posteriors are consistent", {
+  refvec <- c(1, 2, 1, 3, 2)
+  sizevec <- c(4, 2, 2, 3, 4)
+  ploidy <- 4
+
+  fout <- flexdog(refvec = refvec,
+                  sizevec = sizevec,
+                  ploidy = ploidy,
+                  verbose = FALSE)
+
+  ind <- 2
+  probhand <- fout$gene_dist * exp(fout$genologlike[ind,])
+  probhand <- probhand / sum(probhand)
+  expect_equal(
+    fout$postmat[ind,],
+    probhand,
+    tolerance = 0.005
+  )
+})
+
 

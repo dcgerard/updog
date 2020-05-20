@@ -75,6 +75,9 @@ An object of class \code{flexdog}, which consists
   \item{\code{postmat}}{A matrix of posterior probabilities of each
       genotype for each individual. The rows index the individuals
       and the columns index the allele dosage.}
+  \item{\code{genologlike}}{A matrix of genotype \emph{log}-likelihoods of each
+      genotype for each individual. The rows index the individuals
+      and the columns index the allele dosage.}
   \item{\code{gene_dist}}{The estimated genotype distribution. The
       \code{i}th element is the proportion of individuals with
       genotype \code{i-1}.}

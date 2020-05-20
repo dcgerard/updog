@@ -56,6 +56,42 @@ NumericMatrix get_wik_mat(NumericVector probk_vec,
   return wik_mat;
 }
 
+//' Returns genotype log-likelihood matrix
+//'
+//' @inheritParams get_wik_mat
+//'
+//' @author David Gerard
+//'
+//' @noRd
+// [[Rcpp::export]]
+NumericMatrix get_genotype_likelihoods(NumericVector refvec,
+                                       NumericVector sizevec,
+                                       int ploidy,
+                                       double seq,
+                                       double bias,
+                                       double od) {
+  // Check input -----------------------------------------------------------
+  int nind = refvec.length();
+  if (nind != sizevec.length()) {
+    Rcpp::stop("get_wik_mat: sizevec and refvec must have the same length.");
+  }
+
+  // Calculate the posterior probability of each genotype -------------------
+  NumericMatrix wik_mat(nind, ploidy + 1);
+  NumericVector xi(ploidy + 1);
+  for (int k = 0; k <= ploidy; k++) {
+    xi(k) = xi_double((double)k / (double)ploidy, seq, bias);
+  }
+
+  for (int i = 0; i < nind; i++) {
+    for (int k = 0; k <= ploidy; k++) {
+      wik_mat(i, k) = dbetabinom_double(refvec(i), sizevec(i), xi(k), od, true);
+    }
+  }
+
+  return wik_mat;
+}
+
 //' Log-likelihood that \code{\link{flexdog}} maximizes.
 //'
 //' @inheritParams flexdog_full

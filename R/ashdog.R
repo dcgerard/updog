@@ -314,6 +314,9 @@ flexdog <- function(refvec,
 #'   \item{\code{postmat}}{A matrix of posterior probabilities of each
 #'       genotype for each individual. The rows index the individuals
 #'       and the columns index the allele dosage.}
+#'   \item{\code{genologlike}}{A matrix of genotype \emph{log}-likelihoods of each
+#'       genotype for each individual. The rows index the individuals
+#'       and the columns index the allele dosage.}
 #'   \item{\code{gene_dist}}{The estimated genotype distribution. The
 #'       \code{i}th element is the proportion of individuals with
 #'       genotype \code{i-1}.}
@@ -784,6 +787,12 @@ flexdog_full <- function(refvec,
                       postmat   = wik_mat,
                       gene_dist = pivec,
                       par       = fupdate_out$par)
+  return_list$genologlike <- get_genotype_likelihoods(refvec = refvec,
+                                                      sizevec = sizevec,
+                                                      ploidy = ploidy,
+                                                      seq = seq,
+                                                      bias = bias,
+                                                      od = od)
 
   ## Summaries --------------------------------------------------------
   return_list$geno          <- apply(return_list$postmat, 1, which.max) - 1
@@ -825,6 +834,11 @@ flexdog_full <- function(refvec,
                                 ncol = ncol(return_list$postmat))
   temp[not_na_vec, ]  <- return_list$postmat
   return_list$postmat <- temp
+
+  temp                <- matrix(NA, nrow = length(not_na_vec),
+                                ncol = ncol(return_list$genologlike))
+  temp[not_na_vec, ]  <- return_list$genologlike
+  return_list$genologlike <- temp
 
   ## Set class to flexdog ---------------------------------------------
   class(return_list) <- "flexdog"
