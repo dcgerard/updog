@@ -2,19 +2,25 @@
 % Please edit documentation in R/multidog.R
 \name{format_multidog}
 \alias{format_multidog}
-\title{Return matricized elements from the output of \code{\link{multidog}}.}
+\title{Return arrayicized elements from the output of \code{\link{multidog}}.}
 \usage{
 format_multidog(x, varname = "geno")
 }
 \arguments{
 \item{x}{The output of \code{multidog}.}
 
-\item{varname}{The variable whose values populate the cells. This should
-be a single columne from \code{x$inddf}.}
+\item{varname}{A character vector of the variable names whose values
+populate the cells. These should be column names from \code{x$inddf}.}
 }
 \description{
 This function will allow you to have genotype estimates, maximum posterior
-probability, and other values in the form of a matrix.
+probability, and other values in the form of a matrix/array. If multiple
+variable names are provided, the data are formatted as a 3-dimensional
+array with the dimensions corresponding to (individuals, snps, variables).
+}
+\details{
+Note that the order of the individuals will be reshuffled. The order of the
+SNPs should be the same as in \code{x$snpdf}.
 }
 \author{
 David Gerard

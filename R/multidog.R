@@ -455,14 +455,19 @@ plot.multidog <- function(x, indices = seq(1, min(5, nrow(x$snpdf))), ...) {
 }
 
 
-#' Return matricized elements from the output of \code{\link{multidog}}.
+#' Return arrayicized elements from the output of \code{\link{multidog}}.
 #'
 #' This function will allow you to have genotype estimates, maximum posterior
-#' probability, and other values in the form of a matrix.
+#' probability, and other values in the form of a matrix/array. If multiple
+#' variable names are provided, the data are formatted as a 3-dimensional
+#' array with the dimensions corresponding to (individuals, snps, variables).
+#'
+#' Note that the order of the individuals will be reshuffled. The order of the
+#' SNPs should be the same as in \code{x$snpdf}.
 #'
 #' @param x The output of \code{multidog}.
-#' @param varname The variable whose values populate the cells. This should
-#'     be a single columne from \code{x$inddf}.
+#' @param varname A character vector of the variable names whose values
+#'     populate the cells. These should be column names from \code{x$inddf}.
 #'
 #' @author David Gerard
 #'
@@ -473,12 +478,25 @@ format_multidog <- function(x, varname = "geno") {
   assertthat::assert_that(!is.null(x$inddf))
   assertthat::assert_that(is.data.frame(x$inddf))
   assertthat::assert_that(is.character(varname))
-  assertthat::are_equal(length(varname), 1)
-  assertthat::assert_that(varname %in% colnames(x$inddf))
+  stopifnot(varname %in% colnames(x$inddf))
 
-  matout <- reshape2::acast(data      = x$inddf[, c("ind", "snp", varname)],
-                            formula   = snp ~ ind,
-                            value.var = varname)
+  snporder <- x$snpdf[["snp"]]
+  if (length(varname) == 1) {
+    matout <- reshape2::acast(data      = x$inddf[, c("ind", "snp", varname)],
+                              formula   = snp ~ ind,
+                              value.var = varname)
+    matout <- matout[match(snporder, rownames(matout)), ]
+  } else {
+    matout <- reshape2::acast(
+      data = reshape2::melt(data = x$inddf[, c("ind", "snp", varname)],
+                            id.vars = c("ind", "snp"),
+                            measure.vars = varname),
+      formula = snp ~ ind ~ variable,
+      value.var = "value"
+    )
+    names(dimnames(matout)) <- c("snp", "ind", "variable")
+    matout <- matout[match(snporder, dimnames(matout)[["snp"]]), , ]
+  }
 
   return(matout)
 }
