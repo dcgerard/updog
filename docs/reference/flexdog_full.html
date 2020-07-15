@@ -42,7 +42,7 @@
 <meta property="og:title" content="Flexible genotyping for polyploids from next-generation sequencing data. — flexdog_full" />
 <meta property="og:description" content="Genotype polyploid individuals from next generation
 sequencing (NGS) data while assuming the genotype distribution is one of
-several forms. flexdog does this while accounting for allele bias,
+several forms. flexdog_full() does this while accounting for allele bias,
 overdispersion, and sequencing error. This function has more
 options than flexdog and is only meant for expert users.
 The method is described in detail in Gerard et. al. (2018) and
@@ -78,7 +78,7 @@ Gerard and Ferrão (2019)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.1</span>
       </span>
     </div>
 
@@ -146,7 +146,7 @@ Gerard and Ferrão (2019)." />
     <div class="ref-description">
     <p>Genotype polyploid individuals from next generation
 sequencing (NGS) data while assuming the genotype distribution is one of
-several forms. <code>flexdog</code> does this while accounting for allele bias,
+several forms. <code>flexdog_full()</code> does this while accounting for allele bias,
 overdispersion, and sequencing error. This function has more
 options than <code><a href='flexdog.html'>flexdog</a></code> and is only meant for expert users.
 The method is described in detail in Gerard et. al. (2018) and
@@ -157,7 +157,8 @@ Gerard and Ferrão (2019).</p>
   <span class='no'>refvec</span>,
   <span class='no'>sizevec</span>,
   <span class='no'>ploidy</span>,
-  <span class='kw'>model</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"norm"</span>, <span class='st'>"hw"</span>, <span class='st'>"bb"</span>, <span class='st'>"s1"</span>, <span class='st'>"f1"</span>, <span class='st'>"flex"</span>, <span class='st'>"uniform"</span>, <span class='st'>"custom"</span>),
+  <span class='kw'>model</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"norm"</span>, <span class='st'>"hw"</span>, <span class='st'>"bb"</span>, <span class='st'>"s1"</span>, <span class='st'>"s1pp"</span>, <span class='st'>"f1"</span>, <span class='st'>"f1pp"</span>, <span class='st'>"flex"</span>, <span class='st'>"uniform"</span>,
+    <span class='st'>"custom"</span>),
   <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>mean_bias</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>var_bias</span> <span class='kw'>=</span> <span class='fl'>0.7</span>^<span class='fl'>2</span>,
@@ -277,32 +278,31 @@ iterations is less than <code>tol</code>.</p></td>
       <th>fs1_alpha</th>
       <td><p>The value at which to fix
 the mixing proportion for the uniform component
- when <code>model = "f1"</code> or
-<code>model = "s1"</code>.
-I would recommend some small
-value such as <code>10^-3</code>.</p></td>
+ when <code>model = "f1"</code>, <code>model = "s1"</code>,
+ <code>model = "f1pp"</code>, or <code>model = "s1pp"</code>.
+ I would recommend some small value such as <code>10^-3</code>.</p></td>
     </tr>
     <tr>
       <th>p1ref</th>
       <td><p>The reference counts for the first parent if
-<code>model = "f1"</code>, or for
-the only parent if <code>model = "s1"</code>.</p></td>
+<code>model = "f1"</code> or <code>model = "f1pp"</code>, or for
+the only parent if <code>model = "s1"</code> or <code>model = "s1pp"</code>.</p></td>
     </tr>
     <tr>
       <th>p1size</th>
       <td><p>The total counts for the first parent if
-<code>model = "f1"</code>,
-or for the only parent if <code>model = "s1"</code>.</p></td>
+<code>model = "f1"</code> or <code>model = "f1pp"</code>,
+or for the only parent if <code>model = "s1"</code> or <code>model = "s1pp"</code>.</p></td>
     </tr>
     <tr>
       <th>p2ref</th>
       <td><p>The reference counts for the second parent if
-<code>model = "f1"</code>.</p></td>
+<code>model = "f1"</code> or <code>model = "f1pp"</code>.</p></td>
     </tr>
     <tr>
       <th>p2size</th>
       <td><p>The total counts for the second parent if
-<code>model = "f1"</code>.</p></td>
+<code>model = "f1"</code> or <code>model = "f1pp"</code>.</p></td>
     </tr>
     <tr>
       <th>snpname</th>
@@ -331,6 +331,9 @@ non-negative elements that sum to 1.</p></td>
   <dt><code>postmat</code></dt><dd><p>A matrix of posterior probabilities of each
       genotype for each individual. The rows index the individuals
       and the columns index the allele dosage.</p></dd>
+  <dt><code>genologlike</code></dt><dd><p>A matrix of genotype <em>log</em>-likelihoods of each
+      genotype for each individual. The rows index the individuals
+      and the columns index the allele dosage.</p></dd>
   <dt><code>gene_dist</code></dt><dd><p>The estimated genotype distribution. The
       <code>i</code>th element is the proportion of individuals with
       genotype <code>i-1</code>.</p></dd>
@@ -338,21 +341,60 @@ non-negative elements that sum to 1.</p></td>
       of the genotype distribution. The elements included in <code>par</code>
       depends on the value of <code>model</code>:
       <dl'>
-      <dt><code>model = "norm"</code>:</dt><dd><p><code>mu</code> is the normal mean and <code>sigma</code>
-          is the normal standard deviation (not variance).</p></dd>
-      <dt><code>model = "hw"</code>:</dt><dd><p><code>alpha</code> is the major allele frequency.</p></dd>
-      <dt><code>model = "bb"</code>:</dt><dd><p><code>alpha</code> is the major allele frequency and
-          <code>tau</code> is the overdispersion parameter (see the description of
-          <code>rho</code> in the Details of <code><a href='betabinom.html'>betabinom</a></code>).</p></dd>
-      <dt><code>model = "s1"</code>:</dt><dd><p><code>pgeno</code> is the allele dosage of the parent and
-          <code>alpha</code> is the mixture proportion of the discrete uniform (included and
-          fixed at a small value mostly for numerical stability reasons). See the description
-          of <code>fs1_alpha</code> in <code>flexdog_full</code>.</p></dd>
-      <dt><code>model = "f1"</code>:</dt><dd><p><code>p1geno</code> is the allele dosage of the first parent,
-          <code>p2geno</code> is the allele dosage of the second parent, and <code>alpha</code>
-          is the mixture proportion of the discrete uniform (included and
-          fixed at a small value mostly for numerical stability reasons). See the description
-          of <code>fs1_alpha</code> in <code>flexdog_full</code>.</p></dd>
+      <dt><code>model = "norm"</code>:</dt><dd><p><dl'>
+          <dt><code>mu</code>:</dt><dd><p>The normal mean.</p></dd>
+          <dt><code>sigma</code>:</dt><dd><p>The normal standard deviation (not variance).</p></dd></dl></p></dd>
+      <dt><code>model = "hw"</code>:</dt><dd><p><dl'>
+          <dt><code>alpha</code>:</dt><dd><p>The major allele frequency.</p></dd></dl></p></dd>
+      <dt><code>model = "bb"</code>:</dt><dd><p><dl'>
+          <dt><code>alpha</code>:</dt><dd><p>The major allele frequency.</p></dd>
+          <dt><code>tau</code>:</dt><dd><p>The overdispersion parameter. See the
+              description of <code>rho</code> in the Details of
+              <code><a href='betabinom.html'>betabinom</a>()</code>.</p></dd></dl></p></dd>
+      <dt><code>model = "s1"</code>:</dt><dd><p><dl'>
+          <dt><code>pgeno</code>:</dt><dd><p>The allele dosage of the parent.</p></dd>
+          <dt><code>alpha</code>:</dt><dd><p>The mixture proportion of the discrete
+              uniform (included and fixed at a small value mostly for
+              numerical stability reasons). See the description
+              of <code>fs1_alpha</code> in <code>flexdog_full()</code>.</p></dd></dl></p></dd>
+      <dt><code>model = "f1"</code>:</dt><dd><p><dl'>
+          <dt><code>p1geno</code>:</dt><dd><p>The allele dosage of the first parent.</p></dd>
+          <dt><code>p2geno</code>:</dt><dd><p>The allele dosage of the second parent.</p></dd>
+          <dt><code>alpha</code>:</dt><dd><p>The mixture proportion of the discrete
+              uniform (included and fixed at a small value mostly for
+              numerical stability reasons). See the description
+              of <code>fs1_alpha</code> in <code>flexdog_full()</code>.</p></dd></dl></p></dd>
+      <dt><code>model = "s1pp"</code>:</dt><dd><p><dl'>
+          <dt><code>ell1</code>:</dt><dd><p>The estimated dosage of the parent.</p></dd>
+          <dt><code>tau1</code>:</dt><dd><p>The estimated double reduction parameter
+              of the parent. Available if <code>ell1</code> is <code>1</code>, <code>2</code>,
+              or <code>3</code>. Identified if <code>ell1</code> is <code>1</code> or <code>3</code>.</p></dd>
+          <dt><code>gamma1</code>:</dt><dd><p>The estimated preferential pairing parameter.
+              Available if <code>ell1</code> is <code>2</code>. However, it is not
+              returned in an identified form.</p></dd>
+          <dt><code>alpha</code>:</dt><dd><p>The mixture proportion of the discrete
+              uniform (included and fixed at a small value mostly for
+              numerical stability reasons). See the description
+              of <code>fs1_alpha</code> in <code>flexdog_full()</code>.</p></dd></dl></p></dd>
+      <dt><code>model = "f1pp"</code>:</dt><dd><p><dl'>
+          <dt><code>ell1</code>:</dt><dd><p>The estimated dosage of parent 1.</p></dd>
+          <dt><code>ell2</code>:</dt><dd><p>The estimated dosage of parent 2.</p></dd>
+          <dt><code>tau1</code>:</dt><dd><p>The estimated double reduction parameter
+              of parent 1. Available if <code>ell1</code> is <code>1</code>, <code>2</code>,
+              or <code>3</code>. Identified if <code>ell1</code> is <code>1</code> or <code>3</code>.</p></dd>
+          <dt><code>tau2</code>:</dt><dd><p>The estimated double reduction parameter
+              of parent 2. Available if <code>ell2</code> is <code>1</code>, <code>2</code>,
+              or <code>3</code>. Identified if <code>ell2</code> is <code>1</code> or <code>3</code>.</p></dd>
+          <dt><code>gamma1</code>:</dt><dd><p>The estimated preferential pairing parameter
+              of parent 1. Available if <code>ell1</code> is <code>2</code>. However,
+              it is not returned in an identified form.</p></dd>
+          <dt><code>gamma2</code>:</dt><dd><p>The estimated preferential pairing parameter
+              of parent 2. Available if <code>ell2</code> is <code>2</code>. However,
+              it is not returned in an identified form.</p></dd>
+          <dt><code>alpha</code>:</dt><dd><p>The mixture proportion of the discrete
+              uniform (included and fixed at a small value mostly for
+              numerical stability reasons). See the description
+              of <code>fs1_alpha</code> in <code>flexdog_full()</code>.</p></dd></dl></p></dd>
       <dt><code>model = "flex"</code>:</dt><dd><p><code>par</code> is an empty list.</p></dd>
       <dt><code>model = "uniform"</code>:</dt><dd><p><code>par</code> is an empty list.</p></dd>
       <dt><code>model = "custom"</code>:</dt><dd><p><code>par</code> is an empty list.</p></dd></dl></p></dd>
@@ -412,6 +454,10 @@ non-negative elements that sum to 1.</p></td>
       a particular type of meiotic behavior: polysomic
       inheritance with
       bivalent, non-preferential pairing.</p></dd>
+  <dt><code>"f1pp"</code></dt><dd><p>This prior allows for double reduction
+      and preferential pairing in an F1 population of tretraploids.</p></dd>
+  <dt><code>"s1pp"</code></dt><dd><p>This prior allows for double reduction
+      and preferential pairing in an S1 population of tretraploids.</p></dd>
   <dt><code>"flex"</code></dt><dd><p>Generically any categorical distribution. Theoretically,
       this works well if you have a lot of individuals. In practice, it seems to
       be much less robust to violations in modeling assumptions.</p></dd>
@@ -456,8 +502,8 @@ using WASP (<a href='https://doi.org/10.1101/011221'>https://doi.org/10.1101/011
 in removing the allelic bias (because its only source was the read-mapping
 step), then setting <code>update_bias = FALSE</code> and <code>bias_init = 1</code>
 would be reasonable. You can visually inspect SNPs for bias by
-using <code><a href='plot_geno.html'>plot_geno</a></code>.</p>
-<p><code>flexdog</code>, like most methods, is invariant to which allele you
+using <code><a href='plot_geno.html'>plot_geno</a>()</code>.</p>
+<p><code><a href='flexdog.html'>flexdog()</a></code>, like most methods, is invariant to which allele you
 label as the "reference" and which you label as the "alternative".
 That is, if you set <code>refvec</code> with the number of alternative
 read-counts, then the resulting genotype estimates
@@ -475,7 +521,7 @@ will be the estimated allele dosage of the alternative allele.</p>
     <div class='dont-index'><p>Run <code><a href='https://rdrr.io/r/utils/browseVignettes.html'>browseVignettes(package = "updog")</a></code> in R for example usage.
     Other useful functions include:</p><dl'>
     <dt><code><a href='multidog.html'>multidog</a></code></dt><dd><p>For running <code>flexdog</code> on multiple
-          SNP's.</p></dd>
+          SNPs in parallel.</p></dd>
     <dt><code><a href='flexdog.html'>flexdog</a></code></dt><dd><p>For a more user-friendly version of
           <code>flexdog_full</code>.</p></dd>
     <dt><code><a href='rgeno.html'>rgeno</a></code></dt><dd><p>For simulating genotypes under the allowable
@@ -508,7 +554,7 @@ will be the estimated allele dosage of the alternative allele.</p>
                         <span class='kw'>sizevec</span> <span class='kw'>=</span> <span class='no'>sizevec</span>,
                         <span class='kw'>ploidy</span>  <span class='kw'>=</span> <span class='no'>ploidy</span>,
                         <span class='kw'>model</span>   <span class='kw'>=</span> <span class='st'>"norm"</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>fout</span>)</div><div class='img'><img src='flexdog_full-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>fout</span>)</div><div class='img'><img src='flexdog_full-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

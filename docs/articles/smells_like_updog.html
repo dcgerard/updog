@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.1</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="smells_like_updog_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Example Use of Updog</h1>
@@ -108,7 +108,7 @@
 <p>Updog is a package containing empirical Bayes approaches to genotype individuals (particularly polyploids) from next generation sequencing (NGS) data. We had in mind NGS data that results from a reduced representation library, such as “genotyping-by-sequencing” (GBS) (Elshire et al., 2011) or “restriction site-associated DNA sequencing” (RAD-seq) (Baird et al., 2008).</p>
 <p>Updog wields the power of hierarchical modeling to account for some key features of NGS data overlooked in most other analyses, particularly allelic bias and overdispersion. Updog will also automatically account for sequencing errors.</p>
 <p>To efficiently account for these features, updog needs to know the distribution of the individual genotypes in the population. The function <code>flexdog</code> can accurately estimate this distribution under a wide variety of situations.</p>
-<p>You can read more about the updog method in Gerard et al. (2018).</p>
+<p>You can read more about the updog method in Gerard et al. (2018).</p>
 <p>In this vignette, we will go through one example of fitting <code>flexdog</code> on an S1 population of individuals.</p>
 </div>
 <div id="example-from-an-s1-population" class="section level1">
@@ -117,7 +117,7 @@
 <div id="fit-updog" class="section level2">
 <h2 class="hasAnchor">
 <a href="#fit-updog" class="anchor"></a>Fit updog</h2>
-<p>Load <code>updog</code> and the <code>snpdat</code> dataset. The data frame <code>snpdat</code> contains three example SNPs (single nucleotide polymorphisms) from the study of Shirasawa et al. (2017). The individuals in this dataset resulted from a single generation of selfing (an S1 population). You can read more about it by typing <code><a href="../reference/snpdat.html">?snpdat</a></code>.</p>
+<p>Load <code>updog</code> and the <code>snpdat</code> dataset. The data frame <code>snpdat</code> contains three example SNPs (single nucleotide polymorphisms) from the study of Shirasawa et al. (2017). The individuals in this dataset resulted from a single generation of selfing (an S1 population). You can read more about it by typing <code><a href="../reference/snpdat.html">?snpdat</a></code>.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">1</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">updog</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"snpdat"</span>)</pre></body></html></div>
@@ -180,7 +180,7 @@
 <h2 class="hasAnchor">
 <a href="#analyze-output" class="anchor"></a>Analyze Output</h2>
 <p>We use <code>plot.flexdog</code> to visualize the fit. Points are color coded according to the genotype with the highest posterior probability. For example, a genotype of “4” represents four copies of the reference allele and two copies of the alternative allele (AAAAaa). The level of transparency is proportional to the maximum posterior probability. This is equivalent to the posterior probability that this genotype estimate is correct. The lines represent the mean counts at a given genotype. The “+” symbol with a black dot is the location of the parent.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">uout</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">uout</span>)</pre></body></html></div>
 <p><img src="smells_like_updog_files/figure-html/unnamed-chunk-6-1.png" width="432"></p>
 </div>
 <div id="filtering-snps" class="section level2">

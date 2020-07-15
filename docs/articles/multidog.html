@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.1</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="multidog_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Genotyping Many SNP’s with multidog()</h1>
@@ -105,12 +105,12 @@
 <div id="abstract" class="section level1">
 <h1 class="hasAnchor">
 <a href="#abstract" class="anchor"></a>Abstract</h1>
-<p><code><a href="../reference/multidog.html">multidog()</a></code> provides support for genotyping many SNP’s by iterating <code><a href="../reference/flexdog.html">flexdog()</a></code> over the SNP’s. Support is provided for parallel computing. The genotyping method is described in Gerard et al. (2018) and Gerard and Ferrão (2019).</p>
+<p><code><a href="../reference/multidog.html">multidog()</a></code> provides support for genotyping many SNP’s by iterating <code><a href="../reference/flexdog.html">flexdog()</a></code> over the SNP’s. Support is provided for parallel computing. The genotyping method is described in Gerard et al. (2018) and Gerard and Ferrão (2019).</p>
 </div>
 <div id="analysis" class="section level1">
 <h1 class="hasAnchor">
 <a href="#analysis" class="anchor"></a>Analysis</h1>
-<p>Let’s load updog and the data from Uitdewilligen et al. (2013).</p>
+<p>Let’s load updog and the data from Uitdewilligen et al. (2013).</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">updog</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"uitdewilligen"</span>)</pre></body></html></div>
 <p><code>uitdewilligen$refmat</code> is a matrix of reference counts while <code>uitdewilligen$sizemat</code> is a matrix of total read counts. In these data, the rows index the individuals and the columns index the loci. But for insertion into <code><a href="../reference/multidog.html">multidog()</a></code> we need it the other way around (individuals in the columns and loci in the rows). So we will transpose these matrices.</p>
@@ -130,9 +130,22 @@
                  <span class="kw">sizemat</span> <span class="kw">=</span> <span class="no">sizemat</span>,
                  <span class="kw">ploidy</span> <span class="kw">=</span> <span class="no">ploidy</span>,
                  <span class="kw">model</span> <span class="kw">=</span> <span class="st">"norm"</span>,
-                 <span class="kw">nc</span> <span class="kw">=</span> <span class="fl">2</span>)</pre></body></html></div>
+                 <span class="kw">nc</span> <span class="kw">=</span> <span class="fl">2</span>)
+<span class="co">#&gt;     |                                   *.#,%    </span>
+<span class="co">#&gt;    |||                                 *******/  </span>
+<span class="co">#&gt;  |||||||    (**..#**.                  */   **/  </span>
+<span class="co">#&gt; |||||||||    */****************************/*%   </span>
+<span class="co">#&gt;    |||    &amp;****..,*.************************/    </span>
+<span class="co">#&gt;    |||     (....,,,*,...****%********/(******    </span>
+<span class="co">#&gt;    |||                ,,****%////,,,,./.****/    </span>
+<span class="co">#&gt;    |||                  /**//         .*///....  </span>
+<span class="co">#&gt;    |||                  .*/*/%#         .,/   ., </span>
+<span class="co">#&gt;    |||               , **/   #%         .*    .. </span>
+<span class="co">#&gt;    |||                               ,,,*        </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Working on it...done!</span></pre></body></html></div>
 <p>There is a plot method for the output of <code><a href="../reference/multidog.html">multidog()</a></code>.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">mout</span>, <span class="kw">indices</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">100</span>))
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mout</span>, <span class="kw">indices</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">100</span>))
 <span class="co">#&gt; [[1]]</span></pre></body></html></div>
 <p><img src="multidog_files/figure-html/unnamed-chunk-6-1.png" width="432"></p>
 <pre><code>#&gt; 
@@ -143,8 +156,8 @@
 <p><img src="multidog_files/figure-html/unnamed-chunk-6-3.png" width="432"></p>
 <p>The output of multidog contains two data frame. The first contains properties of the SNP’s, such as estimated allele bias and estimated sequencing error rate.</p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">mout</span>$<span class="no">snpdf</span>)
-<span class="co">#&gt; 'data.frame':    100 obs. of  16 variables:</span>
-<span class="co">#&gt;  $ snp     : Factor w/ 100 levels "PotVar0089524",..: 1 2 3 4 5 6 7 8 9 10 ...</span>
+<span class="co">#&gt; 'data.frame':    100 obs. of  20 variables:</span>
+<span class="co">#&gt;  $ snp     : chr  "PotVar0089524" "PotVar0052647" "PotVar0120897" "PotVar0066020" ...</span>
 <span class="co">#&gt;  $ bias    : num  0.519 1.026 0.929 1.221 0.847 ...</span>
 <span class="co">#&gt;  $ seq     : num  0.00485 0.00221 0.002 0.0039 0.00206 ...</span>
 <span class="co">#&gt;  $ od      : num  0.00304 0.00295 0.00337 0.00275 0.00335 ...</span>
@@ -152,7 +165,11 @@
 <span class="co">#&gt;  $ num_iter: num  6 3 3 5 7 7 4 8 8 4 ...</span>
 <span class="co">#&gt;  $ llike   : num  -14.7 -25.3 -10.4 -22.7 -32 ...</span>
 <span class="co">#&gt;  $ ploidy  : num  4 4 4 4 4 4 4 4 4 4 ...</span>
-<span class="co">#&gt;  $ model   : Factor w/ 1 level "norm": 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="co">#&gt;  $ model   : chr  "norm" "norm" "norm" "norm" ...</span>
+<span class="co">#&gt;  $ p1ref   : num  NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;  $ p1size  : num  NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;  $ p2ref   : num  NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;  $ p2size  : num  NA NA NA NA NA NA NA NA NA NA ...</span>
 <span class="co">#&gt;  $ Pr_0    : num  0.000279 0.248211 0.66369 0.015803 0.08409 ...</span>
 <span class="co">#&gt;  $ Pr_1    : num  0.00707 0.45067 0.26892 0.06938 0.20154 ...</span>
 <span class="co">#&gt;  $ Pr_2    : num  0.0745 0.2542 0.0597 0.1931 0.2968 ...</span>
@@ -162,9 +179,9 @@
 <span class="co">#&gt;  $ sigma   : num  1.067 0.925 1.289 1.481 1.433 ...</span></pre></body></html></div>
 <p>The second data frame contains properties of each individual at each SNP, such as the estimated genotypes (<code>geno</code>) and the posterior probability of being genotyping correctly (<code>maxpostprob</code>).</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">mout</span>$<span class="no">inddf</span>)
-<span class="co">#&gt; 'data.frame':    1000 obs. of  12 variables:</span>
-<span class="co">#&gt;  $ snp        : Factor w/ 100 levels "PotVar0089524",..: 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="co">#&gt;  $ ind        : Factor w/ 10 levels "P1PEM10","P2PEM05",..: 8 4 3 10 7 2 1 5 9 6 ...</span>
+<span class="co">#&gt; 'data.frame':    1000 obs. of  17 variables:</span>
+<span class="co">#&gt;  $ snp        : chr  "PotVar0089524" "PotVar0089524" "PotVar0089524" "PotVar0089524" ...</span>
+<span class="co">#&gt;  $ ind        : chr  "P5PEM08" "P3PEM05" "P2PEM10" "P7PEM09" ...</span>
 <span class="co">#&gt;  $ ref        : num  122 113 86 80 69 85 130 228 60 211 ...</span>
 <span class="co">#&gt;  $ size       : num  142 143 96 80 69 86 130 228 86 212 ...</span>
 <span class="co">#&gt;  $ geno       : num  3 3 3 4 4 4 4 4 2 4 ...</span>
@@ -174,7 +191,12 @@
 <span class="co">#&gt;  $ Pr_1       : num  7.97e-23 3.86e-16 2.61e-20 6.80e-30 1.21e-26 ...</span>
 <span class="co">#&gt;  $ Pr_2       : num  4.94e-06 1.17e-02 3.27e-06 2.82e-14 1.01e-12 ...</span>
 <span class="co">#&gt;  $ Pr_3       : num  1.00 9.88e-01 1.00 6.74e-06 2.75e-05 ...</span>
-<span class="co">#&gt;  $ Pr_4       : num  1.45e-10 1.14e-15 3.56e-06 1.00 1.00 ...</span></pre></body></html></div>
+<span class="co">#&gt;  $ Pr_4       : num  1.45e-10 1.14e-15 3.56e-06 1.00 1.00 ...</span>
+<span class="co">#&gt;  $ logL_0     : num  -201 -176 -172 -190 -172 ...</span>
+<span class="co">#&gt;  $ logL_1     : num  -49.6 -35.6 -44 -62.9 -55.4 ...</span>
+<span class="co">#&gt;  $ logL_2     : num  -13.27 -6.95 -13.93 -29.29 -25.69 ...</span>
+<span class="co">#&gt;  $ logL_3     : num  -2.55 -4 -2.79 -11.49 -10.06 ...</span>
+<span class="co">#&gt;  $ logL_4     : num  -25.804 -38.999 -15.935 -0.181 -0.158 ...</span></pre></body></html></div>
 <p>You can obtain the columns in <code>inddf</code> in matrix form with <code><a href="../reference/format_multidog.html">format_multidog()</a></code>.</p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">genomat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/format_multidog.html">format_multidog</a></span>(<span class="no">mout</span>, <span class="kw">varname</span> <span class="kw">=</span> <span class="st">"geno"</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">genomat</span>)
@@ -194,14 +216,14 @@
 <span class="co">#&gt; PotVar0131622       3       3</span></pre></body></html></div>
 <p>To filter SNPs based on quality metrics (bias, sequencing error rate, overdispersion, etc), you can use <code><a href="../reference/filter_snp.html">filter_snp()</a></code>, which uses the same non-standard evaluation you are used to from <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter()</a></code>. That is, you can define predicates in terms of the variable names in the <code>snpdf</code> data frame from the output of <code>mupdog()</code>. It then keeps rows in both <code>snpdf</code> and <code>inddf</code> where the predicate for a SNP evaluates to <code>TRUE</code>.</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(<span class="no">mout</span>$<span class="no">snpdf</span>)
-<span class="co">#&gt; [1] 100  16</span>
+<span class="co">#&gt; [1] 100  20</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(<span class="no">mout</span>$<span class="no">inddf</span>)
-<span class="co">#&gt; [1] 1000   12</span>
+<span class="co">#&gt; [1] 1000   17</span>
 <span class="no">mout_cleaned</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/filter_snp.html">filter_snp</a></span>(<span class="no">mout</span>, <span class="no">prop_mis</span> <span class="kw">&lt;</span> <span class="fl">0.05</span> <span class="kw">&amp;</span> <span class="no">bias</span> <span class="kw">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(-<span class="fl">1</span>) <span class="kw">&amp;</span> <span class="no">bias</span> <span class="kw">&lt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(<span class="fl">1</span>))
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(<span class="no">mout_cleaned</span>$<span class="no">snpdf</span>)
-<span class="co">#&gt; [1] 97 16</span>
+<span class="co">#&gt; [1] 97 20</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(<span class="no">mout_cleaned</span>$<span class="no">inddf</span>)
-<span class="co">#&gt; [1] 970  12</span></pre></body></html></div>
+<span class="co">#&gt; [1] 970  17</span></pre></body></html></div>
 </div>
 <div id="references" class="section level1">
 <h1 class="hasAnchor">

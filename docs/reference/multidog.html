@@ -75,7 +75,7 @@ http://github.com/dcgerard/updog/issues." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.1</span>
       </span>
     </div>
 
@@ -151,7 +151,8 @@ This function has not been extensively tested. Please report any bugs to
   <span class='no'>refmat</span>,
   <span class='no'>sizemat</span>,
   <span class='no'>ploidy</span>,
-  <span class='kw'>model</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"norm"</span>, <span class='st'>"hw"</span>, <span class='st'>"bb"</span>, <span class='st'>"s1"</span>, <span class='st'>"f1"</span>, <span class='st'>"flex"</span>, <span class='st'>"uniform"</span>, <span class='st'>"custom"</span>),
+  <span class='kw'>model</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"norm"</span>, <span class='st'>"hw"</span>, <span class='st'>"bb"</span>, <span class='st'>"s1"</span>, <span class='st'>"s1pp"</span>, <span class='st'>"f1"</span>, <span class='st'>"f1pp"</span>, <span class='st'>"flex"</span>, <span class='st'>"uniform"</span>,
+    <span class='st'>"custom"</span>),
   <span class='kw'>nc</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>p1_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>p2_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -192,7 +193,9 @@ See Details for possible values.</p></td>
       <td><p>The number of computing cores to use. This should never be
 more than the number of cores available in your computing environment.
 You can determine the maximum number of available cores by running
-<code><a href='https://rdrr.io/r/parallel/detectCores.html'>parallel::detectCores()</a></code> in R.</p></td>
+<code><a href='https://rdrr.io/r/parallel/detectCores.html'>parallel::detectCores()</a></code> in R. But discuss how to run parallel
+jobs with your admin if you are using <code>multidog()</code> on a
+supercomputer.</p></td>
     </tr>
     <tr>
       <th>p1_id</th>
@@ -209,7 +212,7 @@ and <code>sizemat</code>.</p></td>
     <tr>
       <th>bias_init</th>
       <td><p>A vector of initial values for the bias parameter
-over the multiple runs of <code>flexdog_full</code>.</p></td>
+over the multiple runs of <code><a href='flexdog_full.html'>flexdog_full</a>()</code>.</p></td>
     </tr>
     <tr>
       <th>prior_vec</th>
@@ -220,7 +223,7 @@ non-negative elements that sum to 1.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional parameters to pass to <code><a href='flexdog_full.html'>flexdog_full</a></code>.</p></td>
+      <td><p>Additional parameters to pass to <code><a href='flexdog_full.html'>flexdog_full</a>()</code>.</p></td>
     </tr>
     </table>
 
@@ -242,6 +245,10 @@ non-negative elements that sum to 1.</p></td>
     <dt><code>ploidy</code></dt><dd><p>The provided ploidy of the species.</p></dd>
     <dt><code>model</code></dt><dd><p>The provided model for the prior genotype
         distribution.</p></dd>
+    <dt><code>p1ref</code></dt><dd><p>The user-provided reference read counts of parent 1.</p></dd>
+    <dt><code>p1size</code></dt><dd><p>The user-provided total read counts of parent 1.</p></dd>
+    <dt><code>p2ref</code></dt><dd><p>The user-provided reference read counts of parent 2.</p></dd>
+    <dt><code>p2size</code></dt><dd><p>The user-provided total read counts of parent 2.</p></dd>
     <dt><code>Pr_k</code></dt><dd><p>The estimated frequency of individuals with genotype
         k, where k can be any integer between 0 and the ploidy level.</p></dd>
     <dt>Model specific parameter estimates</dt><dd><p>See the return value of
@@ -266,7 +273,10 @@ non-negative elements that sum to 1.</p></td>
          correctly.</p></dd>
     <dt><code>Pr_k</code></dt><dd><p>The posterior probability that a given individual
          at a given SNP has genotype k, where k can vary from 0 to the
-         ploidy level of the species.</p></dd></dl></p></dd>
+         ploidy level of the species.</p></dd>
+    <dt><code>logL_k</code></dt><dd><p>The genotype <em>log</em>-likelihoods for dosage
+         k for a given individual at a given SNP, where k can vary f
+         rom 0 to the ploidy level of the species.</p></dd></dl></p></dd>
 
 </dl>
 
@@ -277,9 +287,14 @@ separate matrices. The rows should index the markers (SNP's) and the
 columns should index the individuals. Row names are how we ID the SNP's
 and column names are how we ID the individuals, and so they are required
 attributes.</p>
+<p>If your data are in VCF files, I would recommend importing them using the
+VariantAnnotation package from Bioconductor
+<a href='https://bioconductor.org/packages/VariantAnnotation/'>https://bioconductor.org/packages/VariantAnnotation/</a>. It's a great
+VCF parser.</p>
 <p>See the details of <code><a href='flexdog.html'>flexdog</a></code> for the possible values of
 <code>model</code>.</p>
-<p>If <code>model = "f1"</code> or <code>model = "s1"</code> then the user may
+<p>If <code>model = "f1"</code>, <code>model = "s1"</code>, <code>model = "f1pp"</code>
+or <code>model = "s1pp"</code> then the user may
 provide the individual ID for parent(s) via the <code>p1_id</code>
 and <code>p2_id</code> arguments.</p>
 <p>The output is a list containing two data frames. The first data frame,
@@ -291,7 +306,11 @@ genotype and the posterior probability of being classified correctly.</p>
 run <code><a href='flexdog.html'>flexdog</a></code> in parallel. Only set <code>nc</code> greater than
 <code>1</code> if you are sure you have access to the proper number of cores.
 The upper bound on the value of <code>nc</code> you should try can be determined
-by running <code><a href='https://rdrr.io/r/parallel/detectCores.html'>parallel::detectCores()</a></code> in R.</p>
+by running <code><a href='https://rdrr.io/r/parallel/detectCores.html'>parallel::detectCores()</a></code> in R. Most admins of high
+performance computing environments place limits on the number of cores
+you can use at any one time. So if you are using <code>multidog()</code> on
+a supercomputer, do not use <code><a href='https://rdrr.io/r/parallel/detectCores.html'>parallel::detectCores()</a></code> and discuss
+with your admin how you can safely run parallel jobs.</p>
 <p>SNP's that contain 0 reads (or all missing data) are entirely removed.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
