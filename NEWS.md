@@ -1,4 +1,4 @@
-# updog 2.0.1
+# updog 2.0.2
 
 This is a massive edit of the updog software. Major changes include:
 

@@ -5,7 +5,7 @@
 \alias{snpdat}
 \title{GBS data from Shirasawa et al (2017)}
 \format{
-A \code{\link[tibble]{tibble}} with 419 rows and 4 columns:
+A \code{tibble} with 419 rows and 4 columns:
 \describe{
     \item{id}{The identification label of the individuals.}
     \item{snp}{The SNP label.}
@@ -20,7 +20,7 @@ A \code{\link[tibble]{tibble}} with 419 rows and 4 columns:
 snpdat
 }
 \value{
-A \code{\link[tibble]{tibble}}. See the Format Section.
+A \code{tibble}. See the Format Section.
 }
 \description{
 Contains counts of reference alleles and total read counts from the GBS data of Shirasawa et al (2017) for

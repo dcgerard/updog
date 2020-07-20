@@ -27,7 +27,7 @@
 #' Contains counts of reference alleles and total read counts from the GBS data of Shirasawa et al (2017) for
 #' the three SNPs used as examples in Gerard et. al. (2018).
 #'
-#' @format A \code{\link[tibble]{tibble}} with 419 rows and 4 columns:
+#' @format A \code{tibble} with 419 rows and 4 columns:
 #' \describe{
 #'     \item{id}{The identification label of the individuals.}
 #'     \item{snp}{The SNP label.}
@@ -35,7 +35,7 @@
 #'     \item{size}{The total number of read-counts at a given SNP.}
 #' }
 #'
-#' @return A \code{\link[tibble]{tibble}}. See the Format Section.
+#' @return A \code{tibble}. See the Format Section.
 #'
 #' @source \url{https://doi.org/10.1038/srep44207}
 #'
