@@ -14,7 +14,7 @@
 <script src="pkgdown.js"></script><meta property="og:title" content="Flexible Genotyping for Polyploids">
 <meta property="og:description" content='Implements empirical Bayes approaches to genotype
        polyploids from next generation sequencing data while
-       accounting for allelic bias, overdispersion, and sequencing
+       accounting for allele bias, overdispersion, and sequencing
        error. The main functions are flexdog() and multidog(), 
        which allow the specification
        of many different genotype distributions. Also provided are functions to
@@ -24,7 +24,7 @@
        functions are useful for read depth calculations. Run
        browseVignettes(package = "updog") in R for example usage. See
        Gerard et al. (2018) &lt;doi:10.1534/genetics.118.301468&gt; and
-       Gerard and Ferrao (2019) &lt;doi:10.1093/bioinformatics/btz852&gt; for details 
+       Gerard and Ferrao (2020) &lt;doi:10.1093/bioinformatics/btz852&gt; for details 
        on the implemented methods.'>
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -67,7 +67,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/multidog.html">Genotyping Many SNP's with multidog()</a>
+      <a href="articles/multidog.html">Genotyping Many SNPs with multidog()</a>
     </li>
     <li>
       <a href="articles/oracle_calculations.html">Oracle Calculations</a>
@@ -107,11 +107,15 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#updog" class="anchor"></a>updog</h1></div>
 
-<p>Updog provides a suite of methods for genotyping polyploids from next-generation sequencing (NGS) data. It does this while accounting for many common features of NGS data: allele bias, overdispersion, and sequencing error. It is named updog for “Using Parental Data for Offspring Genotyping” because we originally developed the method for full-sib populations, but it works now for more general populations. The method is described in detail Gerard et. al. (2018) &lt;<a href="https://doi.org/10.1534/genetics.118.301468">doi:10.1534/genetics.118.301468</a>&gt;. Additional details concerning prior specification are described in Gerard and Ferrão (2019) &lt;<a href="https://doi.org/10.1093/bioinformatics/btz852">doi:10.1093/bioinformatics/btz852</a>&gt;.</p>
-<p>The main function is <code><a href="reference/flexdog.html">flexdog()</a></code>, which provides many options for the distribution of the genotypes in your sample. A novel genotype distribution is included in the class of proportional normal distributions (<code>model = "norm"</code>). This is the default prior distribution because it is the most robust to varying genotype distributions, but feel free to use more specialized priors if you have more information on the data.</p>
-<p><code><a href="reference/multidog.html">multidog()</a></code> is a convenience function that let’s you run <code><a href="reference/flexdog.html">flexdog()</a></code> over many SNP’s. It has support for parallel computing.</p>
+<p>Updog provides a suite of methods for genotyping polyploids from next-generation sequencing (NGS) data. It does this while accounting for many common features of NGS data: allele bias, overdispersion, and sequencing error. It is named updog for “Using Parental Data for Offspring Genotyping” because we originally developed the method for full-sib populations, but it works now for more general populations. The method is described in detail Gerard et. al. (2018) &lt;<a href="https://doi.org/10.1534/genetics.118.301468">doi:10.1534/genetics.118.301468</a>&gt;. Additional details concerning prior specification are described in Gerard and Ferrão (2020) &lt;<a href="https://doi.org/10.1093/bioinformatics/btz852">doi:10.1093/bioinformatics/btz852</a>&gt;.</p>
+<p>The main functions are <code><a href="reference/flexdog.html">flexdog()</a></code> and <code><a href="reference/multidog.html">multidog()</a></code>, which provide many options for the distribution of the genotypes in your sample. A novel genotype distribution is included in the class of proportional normal distributions (<code>model = "norm"</code>). This is the default prior distribution because it is the most robust to varying genotype distributions, but feel free to use more specialized priors if you have more information on the data.</p>
 <p>Also provided are:</p>
 <ul>
+<li>
+<code><a href="reference/filter_snp.html">filter_snp()</a></code>: filter out SNPs based on the output of <code><a href="reference/multidog.html">multidog()</a></code>.</li>
+<li>
+<code><a href="reference/format_multidog.html">format_multidog()</a></code>: format the output of <code><a href="reference/multidog.html">multidog()</a></code> in terms of a multidimensional array.</li>
+<li>Plot methods. Both <code><a href="reference/flexdog.html">flexdog()</a></code> and <code><a href="reference/multidog.html">multidog()</a></code> have plot methods. See the help files of <code><a href="reference/plot.flexdog.html">plot.flexdog()</a></code> and <code><a href="reference/plot.multidog.html">plot.multidog()</a></code> for details.</li>
 <li>Functions to simulate genotypes (<code><a href="reference/rgeno.html">rgeno()</a></code>) and read-counts (<code><a href="reference/rflexdog.html">rflexdog()</a></code>). These support all of the models available in <code><a href="reference/flexdog.html">flexdog()</a></code>.</li>
 <li>Functions to evaluate oracle genotyping performance: <code><a href="reference/oracle_joint.html">oracle_joint()</a></code>, <code><a href="reference/oracle_mis.html">oracle_mis()</a></code>, <code><a href="reference/oracle_mis_vec.html">oracle_mis_vec()</a></code>, and <code><a href="reference/oracle_cor.html">oracle_cor()</a></code>. We mean “oracle” in the sense that we assume that the entire data generation process is known (i.e. the genotype distribution, sequencing error rate, allele bias, and overdispersion are all known). These are good approximations when there are a lot of individuals (but not necessarily large read-depth).</li>
 </ul>
@@ -160,19 +164,21 @@
 <span id="cb3-13"><a href="#cb3-13"></a>}</span></code></pre></div>
 <p>If you are using the proportional normal prior class (<code>model = "norm"</code>), which is also the default prior, then please also cite:</p>
 <blockquote>
-<p>Gerard, D. &amp; Ferrão L. F. V. (2019). “Priors for Genotyping Polyploids.” <em>Bioinformatics</em> (in press). doi: <a href="https://doi.org/10.1093/bioinformatics/btz852">10.1093/bioinformatics/btz852</a></p>
+<p>Gerard D, Ferrão L (2020). “Priors for Genotyping Polyploids.” <em>Bioinformatics</em>, 36(6), 1795-1800. ISSN 1367-4803, doi: <a href="https://doi.org/10.1093/bioinformatics/btz852">10.1093/bioinformatics/btz852</a>.</p>
 </blockquote>
 <p>Or, using BibTex:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode tex"><code class="sourceCode latex"><span id="cb4-1"><a href="#cb4-1"></a>@article{gerard2019priors,</span>
-<span id="cb4-2"><a href="#cb4-2"></a>    author = {Gerard, David and Ferr{<span class="fu">\~</span>a}o, Lu{<span class="fu">\'</span>i}s Felipe Ventorim},</span>
-<span id="cb4-3"><a href="#cb4-3"></a>    title = {Priors for Genotyping Polyploids},</span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode tex"><code class="sourceCode latex"><span id="cb4-1"><a href="#cb4-1"></a>@article{gerard2020priors,</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    title = {Priors for Genotyping Polyploids},</span>
+<span id="cb4-3"><a href="#cb4-3"></a>    year = {2020},</span>
 <span id="cb4-4"><a href="#cb4-4"></a>    journal = {Bioinformatics},</span>
-<span id="cb4-5"><a href="#cb4-5"></a>    year = {2019},</span>
-<span id="cb4-6"><a href="#cb4-6"></a>    month = {11},</span>
-<span id="cb4-7"><a href="#cb4-7"></a>    issn = {1367-4803},</span>
-<span id="cb4-8"><a href="#cb4-8"></a>    doi = {10.1093/bioinformatics/btz852},</span>
-<span id="cb4-9"><a href="#cb4-9"></a>    note = {btz852},</span>
-<span id="cb4-10"><a href="#cb4-10"></a>}</span></code></pre></div>
+<span id="cb4-5"><a href="#cb4-5"></a>    publisher = {Oxford University Press},</span>
+<span id="cb4-6"><a href="#cb4-6"></a>    volume = {36},</span>
+<span id="cb4-7"><a href="#cb4-7"></a>    number = {6},</span>
+<span id="cb4-8"><a href="#cb4-8"></a>    pages = {1795--1800},</span>
+<span id="cb4-9"><a href="#cb4-9"></a>    issn = {1367-4803},</span>
+<span id="cb4-10"><a href="#cb4-10"></a>    doi = {10.1093/bioinformatics/btz852},</span>
+<span id="cb4-11"><a href="#cb4-11"></a>    author = {David Gerard and Lu{<span class="fu">\'</span>i}s Felipe Ventorim Ferr{<span class="fu">\~</span>a}o},</span>
+<span id="cb4-12"><a href="#cb4-12"></a>  }</span></code></pre></div>
 </div>
 <div id="code-of-conduct" class="section level2">
 <h2 class="hasAnchor">

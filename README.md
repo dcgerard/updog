@@ -19,25 +19,28 @@ many common features of NGS data: allele bias, overdispersion, and
 sequencing error. It is named updog for “Using Parental Data for
 Offspring Genotyping” because we originally developed the method for
 full-sib populations, but it works now for more general populations. The
-method is described in detail Gerard et. al. (2018)
+method is described in detail Gerard et. al. (2018)
 \<[doi:10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468)\>.
 Additional details concerning prior specification are described in
-Gerard and Ferrão (2019)
+Gerard and Ferrão (2020)
 \<[doi:10.1093/bioinformatics/btz852](https://doi.org/10.1093/bioinformatics/btz852)\>.
 
-The main function is `flexdog()`, which provides many options for the
-distribution of the genotypes in your sample. A novel genotype
-distribution is included in the class of proportional normal
+The main functions are `flexdog()` and `multidog()`, which provide many
+options for the distribution of the genotypes in your sample. A novel
+genotype distribution is included in the class of proportional normal
 distributions (`model = "norm"`). This is the default prior distribution
 because it is the most robust to varying genotype distributions, but
 feel free to use more specialized priors if you have more information on
 the data.
 
-`multidog()` is a convenience function that let’s you run `flexdog()`
-over many SNP’s. It has support for parallel computing.
-
 Also provided are:
 
+  - `filter_snp()`: filter out SNPs based on the output of `multidog()`.
+  - `format_multidog()`: format the output of `multidog()` in terms of a
+    multidimensional array.
+  - Plot methods. Both `flexdog()` and `multidog()` have plot methods.
+    See the help files of `plot.flexdog()` and `plot.multidog()` for
+    details.
   - Functions to simulate genotypes (`rgeno()`) and read-counts
     (`rflexdog()`). These support all of the models available in
     `flexdog()`.
@@ -121,23 +124,25 @@ Or, using BibTex:
 If you are using the proportional normal prior class (`model = "norm"`),
 which is also the default prior, then please also cite:
 
-> Gerard, D. & Ferrão L. F. V. (2019). “Priors for Genotyping
-> Polyploids.” *Bioinformatics* (in press). doi:
-> [10.1093/bioinformatics/btz852](https://doi.org/10.1093/bioinformatics/btz852)
+> Gerard D, Ferrão L (2020). “Priors for Genotyping Polyploids.”
+> *Bioinformatics*, 36(6), 1795-1800. ISSN 1367-4803, doi:
+> [10.1093/bioinformatics/btz852](https://doi.org/10.1093/bioinformatics/btz852).
 
 Or, using BibTex:
 
 ``` tex
-@article{gerard2019priors,
-    author = {Gerard, David and Ferr{\~a}o, Lu{\'i}s Felipe Ventorim},
+@article{gerard2020priors,
     title = {Priors for Genotyping Polyploids},
+    year = {2020},
     journal = {Bioinformatics},
-    year = {2019},
-    month = {11},
+    publisher = {Oxford University Press},
+    volume = {36},
+    number = {6},
+    pages = {1795--1800},
     issn = {1367-4803},
     doi = {10.1093/bioinformatics/btz852},
-    note = {btz852},
-}
+    author = {David Gerard and Lu{\'i}s Felipe Ventorim Ferr{\~a}o},
+  }
 ```
 
 ## Code of Conduct

@@ -24,7 +24,7 @@ A \code{\link[tibble]{tibble}}. See the Format Section.
 }
 \description{
 Contains counts of reference alleles and total read counts from the GBS data of Shirasawa et al (2017) for
-the three SNP's used as examples in Gerard et. al. (2018).
+the three SNPs used as examples in Gerard et. al. (2018).
 }
 \references{
 \itemize{

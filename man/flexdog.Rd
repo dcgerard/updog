@@ -194,7 +194,7 @@ Genotype polyploid individuals from next generation
 sequencing (NGS) data while assuming the genotype distribution is one of
 several forms. \code{flexdog} does this while accounting for allele bias,
 overdispersion, sequencing error. The method is described
-in detail in Gerard et. al. (2018) and Gerard and Ferrão (2019). See
+in detail in Gerard et. al. (2018) and Gerard and Ferrão (2020). See
 \code{\link{multidog}()} for running flexdog on multiple SNPs in parallel.
 }
 \details{
@@ -205,7 +205,7 @@ Possible values of the genotype distribution (values of \code{model}) are:
       Unlike the \code{"bb"} and \code{"hw"} options, this will allow for
       distributions both more and less dispersed than a binomial.
       This seems to be the most robust to violations in modeling assumptions, and so is the
-      default. This prior class was developed in Gerard and Ferrão (2019).}
+      default. This prior class was developed in Gerard and Ferrão (2020).}
   \item{\code{"hw"}}{A binomial distribution that results from assuming that
       the population is in Hardy-Weinberg equilibrium (HWE). This actually does
       pretty well even when there are minor to moderate deviations from HWE.
@@ -324,7 +324,7 @@ plot(fout)
 \references{
 \itemize{
   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
-  \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{Bioinformatics}. doi: \href{https://doi.org/10.1093/bioinformatics/btz852}{10.1093/bioinformatics/btz852}.}
+  \item{Gerard, David, and Luís Felipe Ventorim Ferrão. "Priors for genotyping polyploids." Bioinformatics 36, no. 6 (2020): 1795-1800. \href{https://doi.org/10.1093/bioinformatics/btz852}{DOI:10.1093/bioinformatics/btz852}.}
 }
 }
 \seealso{

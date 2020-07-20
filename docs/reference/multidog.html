@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fit <code><a href='flexdog.html'>flexdog</a></code> to multiple SNP's. — multidog • updog</title>
+<title>Fit <code><a href='flexdog.html'>flexdog</a></code> to multiple SNPs. — multidog • updog</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Fit <code><a href='flexdog.html'>flexdog</a></code> to multiple SNP's. — multidog" />
-<meta property="og:description" content="This is a convenience function that will run flexdog over many SNP's.
+<meta property="og:title" content="Fit <code><a href='flexdog.html'>flexdog</a></code> to multiple SNPs. — multidog" />
+<meta property="og:description" content="This is a convenience function that will run flexdog over many SNPs.
 Support is provided for parallel computing through the doParallel package.
 This function has not been extensively tested. Please report any bugs to
 http://github.com/dcgerard/updog/issues." />
@@ -98,7 +98,7 @@ http://github.com/dcgerard/updog/issues." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/multidog.html">Genotyping Many SNP's with multidog()</a>
+      <a href="../articles/multidog.html">Genotyping Many SNPs with multidog()</a>
     </li>
     <li>
       <a href="../articles/oracle_calculations.html">Oracle Calculations</a>
@@ -135,13 +135,13 @@ http://github.com/dcgerard/updog/issues." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fit <code><a href='flexdog.html'>flexdog</a></code> to multiple SNP's.</h1>
+    <h1>Fit <code><a href='flexdog.html'>flexdog</a></code> to multiple SNPs.</h1>
     <small class="dont-index">Source: <a href='http://github.com/dcgerard/updog/blob/master/R/multidog.R'><code>R/multidog.R</code></a></small>
     <div class="hidden name"><code>multidog.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This is a convenience function that will run <code><a href='flexdog.html'>flexdog</a></code> over many SNP's.
+    <p>This is a convenience function that will run <code><a href='flexdog.html'>flexdog</a></code> over many SNPs.
 Support is provided for parallel computing through the doParallel package.
 This function has not been extensively tested. Please report any bugs to
 <a href='http://github.com/dcgerard/updog/issues'>http://github.com/dcgerard/updog/issues</a>.</p>
@@ -167,14 +167,14 @@ This function has not been extensively tested. Please report any bugs to
     <tr>
       <th>refmat</th>
       <td><p>A matrix of reference read counts. The columns index
-the individuals and the rows index the markers (SNP's). This matrix must have
+the individuals and the rows index the markers (SNPs). This matrix must have
 rownames (for the names of the markers) and column names (for the names
 of the individuals). These names must match the names in <code>sizemat</code>.</p></td>
     </tr>
     <tr>
       <th>sizemat</th>
       <td><p>A matrix of total read counts. The columns index
-the individuals and the rows index the markers (SNP's). This matrix must have
+the individuals and the rows index the markers (SNPs). This matrix must have
 rownames (for the names of the markers) and column names (for the names
 of the individuals). These names must match the names in <code>refmat</code>.</p></td>
     </tr>
@@ -230,8 +230,8 @@ non-negative elements that sum to 1.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list-like object of two data frames.</p><dl'>
-<dt><code>snpdf</code></dt><dd><p>A data frame containing properties of the SNP's (markers).
-    The rows index the SNP's. The variables include:
+<dt><code>snpdf</code></dt><dd><p>A data frame containing properties of the SNPs (markers).
+    The rows index the SNPs. The variables include:
     <dl'>
     <dt><code>snp</code></dt><dd><p>The name of the SNP (marker).</p></dd>
     <dt><code>bias</code></dt><dd><p>The estimated allele bias of the SNP.</p></dd>
@@ -283,8 +283,8 @@ non-negative elements that sum to 1.</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>You should format your reference counts and total read counts in two
-separate matrices. The rows should index the markers (SNP's) and the
-columns should index the individuals. Row names are how we ID the SNP's
+separate matrices. The rows should index the markers (SNPs) and the
+columns should index the individuals. Row names are how we ID the SNPs
 and column names are how we ID the individuals, and so they are required
 attributes.</p>
 <p>If your data are in VCF files, I would recommend importing them using the
@@ -311,7 +311,7 @@ performance computing environments place limits on the number of cores
 you can use at any one time. So if you are using <code>multidog()</code> on
 a supercomputer, do not use <code><a href='https://rdrr.io/r/parallel/detectCores.html'>parallel::detectCores()</a></code> and discuss
 with your admin how you can safely run parallel jobs.</p>
-<p>SNP's that contain 0 reads (or all missing data) are entirely removed.</p>
+<p>SNPs that contain 0 reads (or all missing data) are entirely removed.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'>

@@ -3,16 +3,16 @@
 ################
 
 
-#' Fit \code{\link{flexdog}} to multiple SNP's.
+#' Fit \code{\link{flexdog}} to multiple SNPs.
 #'
-#' This is a convenience function that will run \code{\link{flexdog}} over many SNP's.
+#' This is a convenience function that will run \code{\link{flexdog}} over many SNPs.
 #' Support is provided for parallel computing through the doParallel package.
 #' This function has not been extensively tested. Please report any bugs to
 #' \url{http://github.com/dcgerard/updog/issues}.
 #'
 #' You should format your reference counts and total read counts in two
-#' separate matrices. The rows should index the markers (SNP's) and the
-#' columns should index the individuals. Row names are how we ID the SNP's
+#' separate matrices. The rows should index the markers (SNPs) and the
+#' columns should index the individuals. Row names are how we ID the SNPs
 #' and column names are how we ID the individuals, and so they are required
 #' attributes.
 #'
@@ -45,15 +45,15 @@
 #' a supercomputer, do not use \code{parallel::detectCores()} and discuss
 #' with your admin how you can safely run parallel jobs.
 #'
-#' SNP's that contain 0 reads (or all missing data) are entirely removed.
+#' SNPs that contain 0 reads (or all missing data) are entirely removed.
 #'
 #' @inheritParams flexdog
 #' @param refmat A matrix of reference read counts. The columns index
-#'     the individuals and the rows index the markers (SNP's). This matrix must have
+#'     the individuals and the rows index the markers (SNPs). This matrix must have
 #'     rownames (for the names of the markers) and column names (for the names
 #'     of the individuals). These names must match the names in \code{sizemat}.
 #' @param sizemat A matrix of total read counts. The columns index
-#'     the individuals and the rows index the markers (SNP's). This matrix must have
+#'     the individuals and the rows index the markers (SNPs). This matrix must have
 #'     rownames (for the names of the markers) and column names (for the names
 #'     of the individuals). These names must match the names in \code{refmat}.
 #' @param nc The number of computing cores to use. This should never be
@@ -71,8 +71,8 @@
 #'
 #' @return A list-like object of two data frames.
 #' \describe{
-#' \item{\code{snpdf}}{A data frame containing properties of the SNP's (markers).
-#'     The rows index the SNP's. The variables include:
+#' \item{\code{snpdf}}{A data frame containing properties of the SNPs (markers).
+#'     The rows index the SNPs. The variables include:
 #'     \describe{
 #'     \item{\code{snp}}{The name of the SNP (marker).}
 #'     \item{\code{bias}}{The estimated allele bias of the SNP.}
@@ -248,7 +248,7 @@ multidog <- function(refmat,
     refmat  <- refmat[!(rownames(refmat) %in% bad_snps), , drop = FALSE]
   }
 
-  ## Get list of SNP's ---------------------------------------------------------
+  ## Get list of SNPs ---------------------------------------------------------
   snplist <- rownames(refmat)
 
   ## Register workers ----------------------------------------------------------
@@ -262,7 +262,7 @@ multidog <- function(refmat,
     }
   }
 
-  ## Fit flexdog on all SNP's --------------------------------------------------
+  ## Fit flexdog on all SNPs --------------------------------------------------
   i <- 1
   outlist <- foreach::foreach(i = seq_along(snplist),
                               .export = c("flexdog")) %dopar% {
@@ -396,17 +396,17 @@ is.multidog <- function(x) {
 #' Plot the output of \code{\link{multidog}}.
 #'
 #' Produce genotype plots from the output of \code{\link{multidog}}. You may
-#' select which SNP's to plot.
+#' select which SNPs to plot.
 #'
 #' On a genotype plot, the x-axis contains the counts of the non-reference allele and the y-axis
 #' contains the counts of the reference allele. The dashed lines are the expected counts (both reference and alternative)
 #' given the sequencing error rate and the allele-bias. The plots are color-coded by the maximum-a-posterior genotypes.
 #' Transparency is proportional to the maximum posterior probability for an
 #' individual's genotype. Thus, we are less certain of the genotype of more transparent individuals. These
-#' types of plots are used in Gerard et. al. (2018) and Gerard and Ferrão (2019).
+#' types of plots are used in Gerard et. al. (2018) and Gerard and Ferrão (2020).
 #'
 #' @param x The output of \code{\link{multidog}}.
-#' @param indices A vector of integers. The indices of the SNP's to plot.
+#' @param indices A vector of integers. The indices of the SNPs to plot.
 #' @param ... not used.
 #'
 #' @author David Gerard
@@ -418,7 +418,7 @@ is.multidog <- function(x) {
 #' @references
 #' \itemize{
 #'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
-#'   \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{Bioinformatics}. doi: \href{https://doi.org/10.1093/bioinformatics/btz852}{10.1093/bioinformatics/btz852}.}
+#'   \item{Gerard, David, and Luís Felipe Ventorim Ferrão. "Priors for genotyping polyploids." Bioinformatics 36, no. 6 (2020): 1795-1800. \href{https://doi.org/10.1093/bioinformatics/btz852}{DOI:10.1093/bioinformatics/btz852}.}
 #' }
 #'
 plot.multidog <- function(x, indices = seq(1, min(5, nrow(x$snpdf))), ...) {
@@ -460,7 +460,7 @@ plot.multidog <- function(x, indices = seq(1, min(5, nrow(x$snpdf))), ...) {
 #' This function will allow you to have genotype estimates, maximum posterior
 #' probability, and other values in the form of a matrix/array. If multiple
 #' variable names are provided, the data are formatted as a 3-dimensional
-#' array with the dimensions corresponding to (individuals, snps, variables).
+#' array with the dimensions corresponding to (individuals, SNPs, variables).
 #'
 #' Note that the order of the individuals will be reshuffled. The order of the
 #' SNPs should be the same as in \code{x$snpdf}.

@@ -56,7 +56,7 @@ A vector of length \code{n} with the genotypes of the sampled individuals.
 \description{
 This will simulate genotypes of a sample of individuals drawn from one of the populations supported by
 \code{\link{flexdog}}. See the details of \code{\link{flexdog}} for the models allowed. These genotype
-distributions are described in detail in Gerard and Ferrão (2019).
+distributions are described in detail in Gerard and Ferrão (2020).
 }
 \details{
 List of non-\code{NULL} arguments:
@@ -84,7 +84,7 @@ rgeno(n = 10, ploidy = ploidy, model = "hw", allele_freq = 0.75)
 \references{
 \itemize{
   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
-  \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{Bioinformatics}. doi: \href{https://doi.org/10.1093/bioinformatics/btz852}{10.1093/bioinformatics/btz852}.}
+  \item{Gerard, David, and Luís Felipe Ventorim Ferrão. "Priors for genotyping polyploids." Bioinformatics 36, no. 6 (2020): 1795-1800. \href{https://doi.org/10.1093/bioinformatics/btz852}{DOI:10.1093/bioinformatics/btz852}.}
 }
 }
 \author{

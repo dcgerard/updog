@@ -1,4 +1,4 @@
-# updog 2.0.0
+# updog 2.0.1
 
 This is a massive edit of the updog software. Major changes include:
 
@@ -11,6 +11,9 @@ This is a massive edit of the updog software. Major changes include:
    interpretable parameterizations that are meant to be identified
    via another R package. But support is only for tetraploids right now.
 4. `multidog()` now prints some nice ASCII art when it's run.
+5. `format_multidog()` now allows you to format multiple variables in terms of a multidimensional array.
+6. Fixes a bug where `format_multidog()` was reordering the SNP dimensions. This was find as long as folks used dimnames properly, but now it should allow folks to also use dim positions.
+7. Updog now returns genotype log-likelihoods.
 
 
 # updog 1.2.1
@@ -24,7 +27,7 @@ This is a massive edit of the updog software. Major changes include:
 
 # updog 1.2.0
 
-- Adds `multidog()` for genotypying multiple SNP's using parallel computing.
+- Adds `multidog()` for genotypying multiple SNPs using parallel computing.
 - Adds `plot.multidog()` for plotting the output of `multidog()`.
 - Adds `format_multidog()` for formatting the output of `multidog()` to be
   a matrix.
@@ -38,7 +41,7 @@ This is a massive edit of the updog software. Major changes include:
 # updog 1.1.3
 
 - Updates documentation to include the Bioinformatics publication,
-  Gerard and Ferrão (2019) 
+  Gerard and Ferrão (2020) 
   \<[doi:10.1093/bioinformatics/btz852](https://doi.org/10.1093/bioinformatics/btz852)\>.
 - Adds the "internal" keyword to functions that most users don't need.
 - Removes the tidyverse from the Suggests field. I was only using this in 
@@ -46,7 +49,7 @@ This is a massive edit of the updog software. Major changes include:
 
 # updog 1.1.1
 
-- Updates documentation to include Gerard and Ferrão (2019) 
+- Updates documentation to include Gerard and Ferrão (2020) 
   \<[doi:10.1101/751784](https://doi.org/10.1101/751784)\>
   as a reference.
 - Minor fixes to documentation.

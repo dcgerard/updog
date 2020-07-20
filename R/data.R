@@ -25,7 +25,7 @@
 #' GBS data from Shirasawa et al (2017)
 #'
 #' Contains counts of reference alleles and total read counts from the GBS data of Shirasawa et al (2017) for
-#' the three SNP's used as examples in Gerard et. al. (2018).
+#' the three SNPs used as examples in Gerard et. al. (2018).
 #'
 #' @format A \code{\link[tibble]{tibble}} with 419 rows and 4 columns:
 #' \describe{

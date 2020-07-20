@@ -6,7 +6,7 @@
 #' sequencing (NGS) data while assuming the genotype distribution is one of
 #' several forms. \code{flexdog} does this while accounting for allele bias,
 #' overdispersion, sequencing error. The method is described
-#' in detail in Gerard et. al. (2018) and Gerard and Ferrão (2019). See
+#' in detail in Gerard et. al. (2018) and Gerard and Ferrão (2020). See
 #' \code{\link{multidog}()} for running flexdog on multiple SNPs in parallel.
 #'
 #' @inherit flexdog_full
@@ -159,7 +159,7 @@ flexdog <- function(refvec,
 #' overdispersion, and sequencing error. This function has more
 #' options than \code{\link{flexdog}} and is only meant for expert users.
 #' The method is described in detail in Gerard et. al. (2018) and
-#' Gerard and Ferrão (2019).
+#' Gerard and Ferrão (2020).
 #'
 #' Possible values of the genotype distribution (values of \code{model}) are:
 #' \describe{
@@ -168,7 +168,7 @@ flexdog <- function(refvec,
 #'       Unlike the \code{"bb"} and \code{"hw"} options, this will allow for
 #'       distributions both more and less dispersed than a binomial.
 #'       This seems to be the most robust to violations in modeling assumptions, and so is the
-#'       default. This prior class was developed in Gerard and Ferrão (2019).}
+#'       default. This prior class was developed in Gerard and Ferrão (2020).}
 #'   \item{\code{"hw"}}{A binomial distribution that results from assuming that
 #'       the population is in Hardy-Weinberg equilibrium (HWE). This actually does
 #'       pretty well even when there are minor to moderate deviations from HWE.
@@ -433,7 +433,7 @@ flexdog <- function(refvec,
 #' @references
 #' \itemize{
 #'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
-#'   \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{Bioinformatics}. doi: \href{https://doi.org/10.1093/bioinformatics/btz852}{10.1093/bioinformatics/btz852}.}
+#'   \item{Gerard, David, and Luís Felipe Ventorim Ferrão. "Priors for genotyping polyploids." Bioinformatics 36, no. 6 (2020): 1795-1800. \href{https://doi.org/10.1093/bioinformatics/btz852}{DOI:10.1093/bioinformatics/btz852}.}
 #' }
 #'
 #' @seealso
@@ -855,7 +855,7 @@ flexdog_full <- function(refvec,
 #' given the sequencing error rate and the allele-bias. The plots are color-coded by the maximum-a-posterior genotypes.
 #' Transparency is proportional to the maximum posterior probability for an
 #' individual's genotype. Thus, we are less certain of the genotype of more transparent individuals. These
-#' types of plots are used in Gerard et. al. (2018) and Gerard and Ferrão (2019).
+#' types of plots are used in Gerard et. al. (2018) and Gerard and Ferrão (2020).
 #'
 #' @param x A \code{flexdog} object.
 #' @param use_colorblind Should we use a colorblind-safe palette
@@ -874,7 +874,7 @@ flexdog_full <- function(refvec,
 #' @references
 #' \itemize{
 #'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
-#'   \item{Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. \emph{Bioinformatics}. doi: \href{https://doi.org/10.1093/bioinformatics/btz852}{10.1093/bioinformatics/btz852}.}
+#'   \item{Gerard, David, and Luís Felipe Ventorim Ferrão. "Priors for genotyping polyploids." Bioinformatics 36, no. 6 (2020): 1795-1800. \href{https://doi.org/10.1093/bioinformatics/btz852}{DOI:10.1093/bioinformatics/btz852}.}
 #' }
 #'
 #' @return A \code{\link[ggplot2]{ggplot}} object for the genotype plot.

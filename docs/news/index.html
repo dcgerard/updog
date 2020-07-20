@@ -94,7 +94,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/multidog.html">Genotyping Many SNP's with multidog()</a>
+      <a href="../articles/multidog.html">Genotyping Many SNPs with multidog()</a>
     </li>
     <li>
       <a href="../articles/oracle_calculations.html">Oracle Calculations</a>
@@ -135,9 +135,9 @@
       <small>Source: <a href='http://github.com/dcgerard/updog/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="updog-200" class="section level1">
-<h1 class="page-header" data-toc-text="2.0.0">
-<a href="#updog-200" class="anchor"></a>updog 2.0.0<small> Unreleased </small>
+    <div id="updog-201" class="section level1">
+<h1 class="page-header" data-toc-text="2.0.1">
+<a href="#updog-201" class="anchor"></a>updog 2.0.1<small> Unreleased </small>
 </h1>
 <p>This is a massive edit of the updog software. Major changes include:</p>
 <ol>
@@ -146,6 +146,10 @@
 <li>Revision of <code>model = "f1pp"</code> and <code>model = "s1pp"</code>. These now include interpretable parameterizations that are meant to be identified via another R package. But support is only for tetraploids right now.</li>
 <li>
 <code><a href="../reference/multidog.html">multidog()</a></code> now prints some nice ASCII art when it’s run.</li>
+<li>
+<code><a href="../reference/format_multidog.html">format_multidog()</a></code> now allows you to format multiple variables in terms of a multidimensional array.</li>
+<li>Fixes a bug where <code><a href="../reference/format_multidog.html">format_multidog()</a></code> was reordering the SNP dimensions. This was find as long as folks used dimnames properly, but now it should allow folks to also use dim positions.</li>
+<li>Updog now returns genotype log-likelihoods.</li>
 </ol>
 </div>
     <div id="updog-121" class="section level1">
@@ -163,7 +167,7 @@
 <a href="#updog-120" class="anchor"></a>updog 1.2.0<small> 2020-01-28 </small>
 </h1>
 <ul>
-<li>Adds <code><a href="../reference/multidog.html">multidog()</a></code> for genotypying multiple SNP’s using parallel computing.</li>
+<li>Adds <code><a href="../reference/multidog.html">multidog()</a></code> for genotypying multiple SNPs using parallel computing.</li>
 <li>Adds <code><a href="../reference/plot.multidog.html">plot.multidog()</a></code> for plotting the output of <code><a href="../reference/multidog.html">multidog()</a></code>.</li>
 <li>Adds <code><a href="../reference/format_multidog.html">format_multidog()</a></code> for formatting the output of <code><a href="../reference/multidog.html">multidog()</a></code> to be a matrix.</li>
 <li>Removes dependency on CVXR. This makes install and maintenance a little easier. The defaults for this specific problem were a little faster anyway.</li>
@@ -176,7 +180,7 @@
 <a href="#updog-113" class="anchor"></a>updog 1.1.3<small> 2019-11-21 </small>
 </h1>
 <ul>
-<li>Updates documentation to include the Bioinformatics publication, Gerard and Ferrão (2019) &lt;<a href="https://doi.org/10.1093/bioinformatics/btz852">doi:10.1093/bioinformatics/btz852</a>&gt;.</li>
+<li>Updates documentation to include the Bioinformatics publication, Gerard and Ferrão (2020) &lt;<a href="https://doi.org/10.1093/bioinformatics/btz852">doi:10.1093/bioinformatics/btz852</a>&gt;.</li>
 <li>Adds the “internal” keyword to functions that most users don’t need.</li>
 <li>Removes the tidyverse from the Suggests field. I was only using this in the vignettes, so I changed it to base R (except for ggplot2).</li>
 </ul>
@@ -186,7 +190,7 @@
 <a href="#updog-111" class="anchor"></a>updog 1.1.1<small> 2019-09-09 </small>
 </h1>
 <ul>
-<li>Updates documentation to include Gerard and Ferrão (2019) &lt;<a href="https://doi.org/10.1101/751784">doi:10.1101/751784</a>&gt; as a reference.</li>
+<li>Updates documentation to include Gerard and Ferrão (2020) &lt;<a href="https://doi.org/10.1101/751784">doi:10.1101/751784</a>&gt; as a reference.</li>
 <li>Minor fixes to documentation.</li>
 </ul>
 </div>

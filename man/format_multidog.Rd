@@ -16,7 +16,7 @@ populate the cells. These should be column names from \code{x$inddf}.}
 This function will allow you to have genotype estimates, maximum posterior
 probability, and other values in the form of a matrix/array. If multiple
 variable names are provided, the data are formatted as a 3-dimensional
-array with the dimensions corresponding to (individuals, snps, variables).
+array with the dimensions corresponding to (individuals, SNPs, variables).
 }
 \details{
 Note that the order of the individuals will be reshuffled. The order of the

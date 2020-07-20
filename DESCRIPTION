@@ -8,7 +8,7 @@ Authors@R: person("David",
                   comment = c(ORCID = "0000-0001-9450-5023"))
 Description: Implements empirical Bayes approaches to genotype
        polyploids from next generation sequencing data while
-       accounting for allelic bias, overdispersion, and sequencing
+       accounting for allele bias, overdispersion, and sequencing
        error. The main functions are flexdog() and multidog(), 
        which allow the specification
        of many different genotype distributions. Also provided are functions to
@@ -18,7 +18,7 @@ Description: Implements empirical Bayes approaches to genotype
        functions are useful for read depth calculations. Run
        browseVignettes(package = "updog") in R for example usage. See
        Gerard et al. (2018) <doi:10.1534/genetics.118.301468> and
-       Gerard and Ferrao (2019) <doi:10.1093/bioinformatics/btz852> for details 
+       Gerard and Ferrao (2020) <doi:10.1093/bioinformatics/btz852> for details 
        on the implemented methods.
 Depends: R (>= 3.4.0)
 License: GPL-3

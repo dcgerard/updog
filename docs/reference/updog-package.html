@@ -42,18 +42,22 @@
 <meta property="og:title" content="<code>updog</code> Flexible Genotyping for Polyploids — updog-package" />
 <meta property="og:description" content="Implements empirical Bayes approaches to genotype
 polyploids from next generation sequencing data while
-accounting for allelic bias, overdispersion, and sequencing
-error. The main function is flexdog, which allows
-the specification of many different genotype distributions.
-Also provided are functions to simulate genotypes
-(rgeno) and read-counts
-(rflexdog), as well as functions to calculate
-oracle genotyping error rates (oracle_mis) and
-correlation with the true genotypes (oracle_cor).
-These latter two functions are useful for read depth calculations.
-Run browseVignettes(package = &quot;updog&quot;) in R
-for example usage. The methods are described in detail in
-Gerard et. al. (2018) and Gerard and Ferrão (2019)." />
+accounting for allele bias, overdispersion, and sequencing
+error. The main functions are flexdog()
+and multidog(), which allow the specification
+of many different genotype distributions. Also provided
+are functions to simulate genotypes, rgeno(),
+and read-counts, rflexdog(), as well as
+functions to calculate oracle genotyping error rates,
+oracle_mis(), and correlation with the true
+genotypes, oracle_cor(). These latter two
+functions are useful for read depth calculations. Run
+browseVignettes(package = &quot;updog&quot;) in R for example usage. See
+Gerard et al. (2018)
+&amp;lt;doi:10.1534/genetics.118.301468&amp;gt;
+and Gerard and Ferrao (2020)
+&amp;lt;doi:10.1093/bioinformatics/btz852&amp;gt;
+for details on the implemented methods." />
 
 
 
@@ -108,7 +112,7 @@ Gerard et. al. (2018) and Gerard and Ferrão (2019)." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/multidog.html">Genotyping Many SNP's with multidog()</a>
+      <a href="../articles/multidog.html">Genotyping Many SNPs with multidog()</a>
     </li>
     <li>
       <a href="../articles/oracle_calculations.html">Oracle Calculations</a>
@@ -153,18 +157,22 @@ Gerard et. al. (2018) and Gerard and Ferrão (2019)." />
     <div class="ref-description">
     <p>Implements empirical Bayes approaches to genotype
 polyploids from next generation sequencing data while
-accounting for allelic bias, overdispersion, and sequencing
-error. The main function is <code><a href='flexdog.html'>flexdog</a></code>, which allows
-the specification of many different genotype distributions.
-Also provided are functions to simulate genotypes
-(<code><a href='rgeno.html'>rgeno</a></code>) and read-counts
-(<code><a href='rflexdog.html'>rflexdog</a></code>), as well as functions to calculate
-oracle genotyping error rates (<code><a href='oracle_mis.html'>oracle_mis</a></code>) and
-correlation with the true genotypes (<code><a href='oracle_cor.html'>oracle_cor</a></code>).
-These latter two functions are useful for read depth calculations.
-Run <code><a href='https://rdrr.io/r/utils/browseVignettes.html'>browseVignettes(package = "updog")</a></code> in R
-for example usage. The methods are described in detail in
-Gerard et. al. (2018) and Gerard and Ferrão (2019).</p>
+accounting for allele bias, overdispersion, and sequencing
+error. The main functions are <code><a href='flexdog.html'>flexdog</a>()</code>
+and <code><a href='multidog.html'>multidog</a>()</code>, which allow the specification
+of many different genotype distributions. Also provided
+are functions to simulate genotypes, <code><a href='rgeno.html'>rgeno</a>()</code>,
+and read-counts, <code><a href='rflexdog.html'>rflexdog</a>()</code>, as well as
+functions to calculate oracle genotyping error rates,
+<code><a href='oracle_mis.html'>oracle_mis</a>()</code>, and correlation with the true
+genotypes, <code><a href='oracle_cor.html'>oracle_cor</a>()</code>. These latter two
+functions are useful for read depth calculations. Run
+<code><a href='https://rdrr.io/r/utils/browseVignettes.html'>browseVignettes(package = "updog")</a></code> in R for example usage. See
+Gerard et al. (2018)
+&lt;<a href='https://doi.org/10.1534/genetics.118.301468'>doi:10.1534/genetics.118.301468</a>&gt;
+and Gerard and Ferrao (2020)
+&lt;<a href='https://doi.org/10.1093/bioinformatics/btz852'>doi:10.1093/bioinformatics/btz852</a>&gt;
+for details on the implemented methods.</p>
     </div>
 
 
@@ -188,25 +196,27 @@ issue at <a href='http://github.com/dcgerard/updog/issues'>http://github.com/dcg
     
 
 <dl'>
-  <dt><code><a href='flexdog.html'>flexdog</a></code></dt><dd><p>The main function that
+  <dt><code><a href='flexdog.html'>flexdog</a>()</code></dt><dd><p>The main function that
       fits an empirical Bayes approach to genotype polyploids
       from next generation sequencing data.</p></dd>
-  <dt><code><a href='multidog.html'>multidog</a></code></dt><dd><p>A convenience function for running
-      <code><a href='flexdog.html'>flexdog</a></code> over many SNPs. This function provides
+  <dt><code><a href='multidog.html'>multidog</a>()</code></dt><dd><p>A convenience function for running
+      <code><a href='flexdog.html'>flexdog</a>()</code> over many SNPs. This function provides
       support for parallel computing.</p></dd>
-  <dt><code><a href='format_multidog.html'>format_multidog</a></code></dt><dd><p>Return matricized elements from the output of <code><a href='multidog.html'>multidog</a></code>.</p></dd>
-  <dt><code><a href='filter_snp.html'>filter_snp</a></code></dt><dd><p>Filter SNPs based on the output of <code><a href='multidog.html'>multidog</a></code></p></dd>
-  <dt><code><a href='rgeno.html'>rgeno</a></code></dt><dd><p>simulate the genotypes of a sample
-      from one of the models allowed in <code><a href='flexdog.html'>flexdog</a></code>.</p></dd>
-  <dt><code><a href='rflexdog.html'>rflexdog</a></code></dt><dd><p>Simulate read-counts from the
-      <code><a href='flexdog.html'>flexdog</a></code> model.</p></dd>
-  <dt><code><a href='plot.flexdog.html'>plot.flexdog</a></code></dt><dd><p>Plotting the output of
-      <code><a href='flexdog.html'>flexdog</a></code>.</p></dd>
-  <dt><code><a href='oracle_joint.html'>oracle_joint</a></code></dt><dd><p>The joint distribution of the true genotype
+  <dt><code><a href='format_multidog.html'>format_multidog</a>()</code></dt><dd><p>Return arrayicized elements from the output of <code><a href='multidog.html'>multidog</a>()</code>.</p></dd>
+  <dt><code><a href='filter_snp.html'>filter_snp</a>()</code></dt><dd><p>Filter SNPs based on the output of <code><a href='multidog.html'>multidog</a>()</code></p></dd>
+  <dt><code><a href='rgeno.html'>rgeno</a>()</code></dt><dd><p>simulate the genotypes of a sample
+      from one of the models allowed in <code><a href='flexdog.html'>flexdog</a>()</code>.</p></dd>
+  <dt><code><a href='rflexdog.html'>rflexdog</a>()</code></dt><dd><p>Simulate read-counts from the
+      <code><a href='flexdog.html'>flexdog</a>()</code> model.</p></dd>
+  <dt><code><a href='plot.flexdog.html'>plot.flexdog</a>()</code></dt><dd><p>Plotting the output of
+      <code><a href='flexdog.html'>flexdog</a>()</code>.</p></dd>
+  <dt><code><a href='plot.multidog.html'>plot.multidog</a>()</code></dt><dd><p>Plotting the output of
+      <code><a href='multidog.html'>multidog</a>()</code>.</p></dd>
+  <dt><code><a href='oracle_joint.html'>oracle_joint</a>()</code></dt><dd><p>The joint distribution of the true genotype
       and an oracle estimator.</p></dd>
-  <dt><code><a href='oracle_plot.html'>oracle_plot</a></code></dt><dd><p>Visualize the output of <code><a href='oracle_joint.html'>oracle_joint</a></code>.</p></dd>
-  <dt><code><a href='oracle_mis.html'>oracle_mis</a></code></dt><dd><p>The oracle misclassification error rate (Bayes rate).</p></dd>
-  <dt><code><a href='oracle_cor.html'>oracle_cor</a></code></dt><dd><p>Correlation between the true genotype and the oracle estimated genotype.</p></dd>
+  <dt><code><a href='oracle_plot.html'>oracle_plot</a>()</code></dt><dd><p>Visualize the output of <code><a href='oracle_joint.html'>oracle_joint</a>()</code>.</p></dd>
+  <dt><code><a href='oracle_mis.html'>oracle_mis</a>()</code></dt><dd><p>The oracle misclassification error rate (Bayes rate).</p></dd>
+  <dt><code><a href='oracle_cor.html'>oracle_cor</a>()</code></dt><dd><p>Correlation between the true genotype and the oracle estimated genotype.</p></dd>
 
 </dl>
 
@@ -226,7 +236,7 @@ issue at <a href='http://github.com/dcgerard/updog/issues'>http://github.com/dcg
     
 <ul>
 <li><p>Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., &amp; Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. <em>Genetics</em>, 210(3), 789-807. doi: <a href='https://doi.org/10.1534/genetics.118.301468'>10.1534/genetics.118.301468</a>.</p></li>
-<li><p>Gerard, D. and Ferrão, L. F. V. (2019). Priors for Genotyping Polyploids. <em>Bioinformatics</em>. doi: <a href='https://doi.org/10.1093/bioinformatics/btz852'>10.1093/bioinformatics/btz852</a>.</p></li>
+<li><p>Gerard, David, and Luís Felipe Ventorim Ferrão. "Priors for genotyping polyploids." Bioinformatics 36, no. 6 (2020): 1795-1800. <a href='https://doi.org/10.1093/bioinformatics/btz852'>DOI:10.1093/bioinformatics/btz852</a>.</p></li>
 </ul>
 
 

@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Genotyping Many SNP's with multidog() • updog</title>
+<title>Genotyping Many SNPs with multidog() • updog</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Genotyping Many SNP's with multidog()">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Genotyping Many SNPs with multidog()">
 <meta property="og:description" content="updog">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -54,7 +54,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/multidog.html">Genotyping Many SNP's with multidog()</a>
+      <a href="../articles/multidog.html">Genotyping Many SNPs with multidog()</a>
     </li>
     <li>
       <a href="../articles/oracle_calculations.html">Oracle Calculations</a>
@@ -91,7 +91,7 @@
       </header><script src="multidog_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Genotyping Many SNP’s with multidog()</h1>
+      <h1 data-toc-skip>Genotyping Many SNPs with multidog()</h1>
                         <h4 class="author">David Gerard</h4>
             
       
@@ -105,7 +105,7 @@
 <div id="abstract" class="section level1">
 <h1 class="hasAnchor">
 <a href="#abstract" class="anchor"></a>Abstract</h1>
-<p><code><a href="../reference/multidog.html">multidog()</a></code> provides support for genotyping many SNP’s by iterating <code><a href="../reference/flexdog.html">flexdog()</a></code> over the SNP’s. Support is provided for parallel computing. The genotyping method is described in Gerard et al. (2018) and Gerard and Ferrão (2019).</p>
+<p><code><a href="../reference/multidog.html">multidog()</a></code> provides support for genotyping many SNPs by iterating <code><a href="../reference/flexdog.html">flexdog()</a></code> over the SNPs. Support is provided for parallel computing. The genotyping method is described in Gerard et al. (2018) and Gerard and Ferrão (2020).</p>
 </div>
 <div id="analysis" class="section level1">
 <h1 class="hasAnchor">
@@ -154,7 +154,7 @@
 <pre><code>#&gt; 
 #&gt; [[3]]</code></pre>
 <p><img src="multidog_files/figure-html/unnamed-chunk-6-3.png" width="432"></p>
-<p>The output of multidog contains two data frame. The first contains properties of the SNP’s, such as estimated allele bias and estimated sequencing error rate.</p>
+<p>The output of multidog contains two data frame. The first contains properties of the SNPs, such as estimated allele bias and estimated sequencing error rate.</p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">mout</span>$<span class="no">snpdf</span>)
 <span class="co">#&gt; 'data.frame':    100 obs. of  20 variables:</span>
 <span class="co">#&gt;  $ snp     : chr  "PotVar0089524" "PotVar0052647" "PotVar0120897" "PotVar0066020" ...</span>
@@ -228,7 +228,7 @@
 <div id="references" class="section level1">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
-<p>Gerard, David, and Luís Felipe Ventorim Ferrão. 2019. “Priors for Genotyping Polyploids.” <em>Bioinformatics</em>, November. <a href="https://doi.org/10.1093/bioinformatics/btz852" class="uri">https://doi.org/10.1093/bioinformatics/btz852</a>.</p>
+<p>Gerard, David, and Luís Felipe Ventorim Ferrão. “Priors for genotyping polyploids.” <em>Bioinformatics</em> 36, no. 6 (2020): 1795-1800. <a href="https://doi.org/10.1093/bioinformatics/btz852" class="uri">https://doi.org/10.1093/bioinformatics/btz852</a>.</p>
 <p>Gerard, David, Luís Felipe Ventorim Ferrão, Antonio Augusto Franco Garcia, and Matthew Stephens. 2018. “Genotyping Polyploids from Messy Sequencing Data.” <em>Genetics</em> 210 (3). Genetics: 789–807. <a href="https://doi.org/10.1534/genetics.118.301468" class="uri">https://doi.org/10.1534/genetics.118.301468</a>.</p>
 <p>Uitdewilligen, Anne-Marie A. AND D’hoop, Jan G. A. M. L. AND Wolters. 2013. “A Next-Generation Sequencing Method for Genotyping-by-Sequencing of Highly Heterozygous Autotetraploid Potato.” <em>PLOS ONE</em> 8 (5). Public Library of Science: 1–14. <a href="https://doi.org/10.1371/journal.pone.0062355" class="uri">https://doi.org/10.1371/journal.pone.0062355</a>.</p>
 </div>

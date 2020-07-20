@@ -2,7 +2,7 @@
 % Please edit documentation in R/multidog.R
 \name{multidog}
 \alias{multidog}
-\title{Fit \code{\link{flexdog}} to multiple SNP's.}
+\title{Fit \code{\link{flexdog}} to multiple SNPs.}
 \usage{
 multidog(
   refmat,
@@ -20,12 +20,12 @@ multidog(
 }
 \arguments{
 \item{refmat}{A matrix of reference read counts. The columns index
-the individuals and the rows index the markers (SNP's). This matrix must have
+the individuals and the rows index the markers (SNPs). This matrix must have
 rownames (for the names of the markers) and column names (for the names
 of the individuals). These names must match the names in \code{sizemat}.}
 
 \item{sizemat}{A matrix of total read counts. The columns index
-the individuals and the rows index the markers (SNP's). This matrix must have
+the individuals and the rows index the markers (SNPs). This matrix must have
 rownames (for the names of the markers) and column names (for the names
 of the individuals). These names must match the names in \code{refmat}.}
 
@@ -63,8 +63,8 @@ non-negative elements that sum to 1.}
 \value{
 A list-like object of two data frames.
 \describe{
-\item{\code{snpdf}}{A data frame containing properties of the SNP's (markers).
-    The rows index the SNP's. The variables include:
+\item{\code{snpdf}}{A data frame containing properties of the SNPs (markers).
+    The rows index the SNPs. The variables include:
     \describe{
     \item{\code{snp}}{The name of the SNP (marker).}
     \item{\code{bias}}{The estimated allele bias of the SNP.}
@@ -115,15 +115,15 @@ A list-like object of two data frames.
 }
 }
 \description{
-This is a convenience function that will run \code{\link{flexdog}} over many SNP's.
+This is a convenience function that will run \code{\link{flexdog}} over many SNPs.
 Support is provided for parallel computing through the doParallel package.
 This function has not been extensively tested. Please report any bugs to
 \url{http://github.com/dcgerard/updog/issues}.
 }
 \details{
 You should format your reference counts and total read counts in two
-separate matrices. The rows should index the markers (SNP's) and the
-columns should index the individuals. Row names are how we ID the SNP's
+separate matrices. The rows should index the markers (SNPs) and the
+columns should index the individuals. Row names are how we ID the SNPs
 and column names are how we ID the individuals, and so they are required
 attributes.
 
@@ -156,7 +156,7 @@ you can use at any one time. So if you are using \code{multidog()} on
 a supercomputer, do not use \code{parallel::detectCores()} and discuss
 with your admin how you can safely run parallel jobs.
 
-SNP's that contain 0 reads (or all missing data) are entirely removed.
+SNPs that contain 0 reads (or all missing data) are entirely removed.
 }
 \examples{
 \dontrun{

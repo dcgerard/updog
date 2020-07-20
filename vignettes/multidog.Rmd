@@ -1,9 +1,9 @@
 ---
-title: "Genotyping Many SNP's with multidog()"
+title: "Genotyping Many SNPs with multidog()"
 author: "David Gerard"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Genotyping Many SNP's with multidog()}
+  %\VignetteIndexEntry{Genotyping Many SNPs with multidog()}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -19,9 +19,9 @@ knitr::opts_chunk$set(
 
 # Abstract
 
-`multidog()` provides support for genotyping many SNP's by iterating
-`flexdog()` over the SNP's. Support is provided for parallel computing. The genotyping method
-is described in Gerard et al. (2018) and Gerard and Ferrão (2019).
+`multidog()` provides support for genotyping many SNPs by iterating
+`flexdog()` over the SNPs. Support is provided for parallel computing. The genotyping method
+is described in Gerard et al. (2018) and Gerard and Ferrão (2020).
 
 # Analysis
 
@@ -71,7 +71,7 @@ plot(mout, indices = c(1, 5, 100))
 ```
 
 The output of multidog contains two data frame. The first contains properties
-of the SNP's, such as estimated allele bias and estimated sequencing error rate.
+of the SNPs, such as estimated allele bias and estimated sequencing error rate.
 
 ```{r}
 str(mout$snpdf)
@@ -110,11 +110,11 @@ dim(mout_cleaned$inddf)
 
 # References
 
-Gerard, David, and Luís Felipe Ventorim Ferrão. 2019. "Priors for Genotyping Polyploids." *Bioinformatics*, November. <https://doi.org/10.1093/bioinformatics/btz852>.
+Gerard, David, and Luís Felipe Ventorim Ferrão. "Priors for genotyping polyploids." *Bioinformatics* 36, no. 6 (2020): 1795-1800. <https://doi.org/10.1093/bioinformatics/btz852>.
 
 Gerard, David, Luís Felipe Ventorim Ferrão, Antonio Augusto Franco Garcia, and Matthew Stephens. 2018. "Genotyping Polyploids from Messy Sequencing Data." *Genetics* 210 (3). Genetics: 789–807. <https://doi.org/10.1534/genetics.118.301468>.
 
-Uitdewilligen, Anne-Marie A. AND D’hoop, Jan G. A. M. L. AND Wolters. 2013. "A Next-Generation Sequencing Method for Genotyping-by-Sequencing of Highly Heterozygous Autotetraploid Potato." *PLOS ONE* 8 (5). Public Library of Science: 1–14. https://doi.org/10.1371/journal.pone.0062355.
+Uitdewilligen, Anne-Marie A. AND D’hoop, Jan G. A. M. L. AND Wolters. 2013. "A Next-Generation Sequencing Method for Genotyping-by-Sequencing of Highly Heterozygous Autotetraploid Potato." *PLOS ONE* 8 (5). Public Library of Science: 1–14. <https://doi.org/10.1371/journal.pone.0062355>.
 
 
 
