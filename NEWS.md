@@ -12,7 +12,7 @@ This is a massive edit of the updog software. Major changes include:
    via another R package. But support is only for tetraploids right now.
 4. `multidog()` now prints some nice ASCII art when it's run.
 5. `format_multidog()` now allows you to format multiple variables in terms of a multidimensional array.
-6. Fixes a bug where `format_multidog()` was reordering the SNP dimensions. This was find as long as folks used dimnames properly, but now it should allow folks to also use dim positions.
+6. Fixes a bug where `format_multidog()` was reordering the SNP dimensions. This was fine as long as folks used dimnames properly, but now it should allow folks to also use dim positions.
 7. Updog now returns genotype log-likelihoods.
 
 
