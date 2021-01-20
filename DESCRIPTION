@@ -40,7 +40,8 @@ Imports:
     future,
     doFuture,
     doRNG,
-    methods
+    methods,
+    iterators
 Suggests: 
     covr,
     testthat,

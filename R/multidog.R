@@ -311,7 +311,27 @@ multidog <- function(refmat,
   ## Get list of SNPs ---------------------------------------------------------
   snplist <- rownames(refmat)
 
-  ## Register doFuture  -----------------------------------------------------
+  ## Extract parent vectors ---------------------------------------------------
+  if (!is.null(p1_id)) {
+    p1_refvec <- refmat[, p1_id]
+    p1_sizevec <- sizemat[, p1_id]
+  } else {
+    p1_refvec <- rep(NA_real_, length.out = length(snplist))
+    p1_sizevec <- rep(NA_real_, length.out = length(snplist))
+  }
+
+  if (!is.null(p2_id)) {
+    p2_refvec <- refmat[, p2_id]
+    p2_sizevec <- sizemat[, p2_id]
+  } else {
+    p2_refvec <- rep(NA_real_, length.out = length(snplist))
+    p2_sizevec <- rep(NA_real_, length.out = length(snplist))
+  }
+
+  refmat <- refmat[, indlist, drop = FALSE]
+  sizemat <- sizemat[, indlist, drop = FALSE]
+
+  ## Register doFuture  -------------------------------------------------------
   oldDoPar <- doFuture::registerDoFuture()
   on.exit(with(oldDoPar, foreach::setDoPar(fun=fun, data=data, info=info)), add = TRUE)
 
@@ -324,28 +344,30 @@ multidog <- function(refmat,
   }
 
   ## Fit flexdog on all SNPs --------------------------------------------------
-  i <- NULL
-  retlist <- foreach::foreach(i = seq_along(snplist),
-                              .export = c("flexdog"),
-                              .combine = combine_flex,
+  current_snp <- NULL
+  refvec <- NULL
+  sizevec <- NULL
+  p1_ref <- NULL
+  p1_size <- NULL
+  p2_ref <- NULL
+  p2_size <- NULL
+  retlist <- foreach::foreach(current_snp   = iterators::iter(snplist),
+                              refvec        = iterators::iter(refmat, by = "row"),
+                              sizevec       = iterators::iter(sizemat, by = "row"),
+                              p1_ref        = iterators::iter(p1_refvec),
+                              p1_size       = iterators::iter(p1_sizevec),
+                              p2_ref        = iterators::iter(p2_refvec),
+                              p2_size       = iterators::iter(p2_sizevec),
+                              .export       = c("flexdog"),
+                              .combine      = combine_flex,
                               .multicombine = TRUE) %dorng% {
-                                current_snp <- snplist[[i]]
 
-                                refvec <- refmat[current_snp, indlist, drop = TRUE]
-                                sizevec <- sizemat[current_snp, indlist, drop = TRUE]
-
-                                if (!is.null(p1_id)) {
-                                  p1_ref <- refmat[current_snp, p1_id, drop = TRUE]
-                                  p1_size <- sizemat[current_snp, p1_id, drop = TRUE]
-                                } else {
+                                if (is.na(p1_ref) || is.na(p1_size)) {
                                   p1_ref <- NULL
                                   p1_size <- NULL
                                 }
 
-                                if (!is.null(p2_id)) {
-                                    p2_ref <- refmat[current_snp, p2_id, drop = TRUE]
-                                    p2_size <- sizemat[current_snp, p2_id, drop = TRUE]
-                                } else {
+                                if (is.na(p2_ref) || is.na(p2_size)) {
                                   p2_ref <- NULL
                                   p2_size <- NULL
                                 }
