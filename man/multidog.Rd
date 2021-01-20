@@ -35,12 +35,18 @@ individual.}
 \item{model}{What form should the prior (genotype distribution) take?
 See Details for possible values.}
 
-\item{nc}{The number of computing cores to use. This should never be
-more than the number of cores available in your computing environment.
-You can determine the maximum number of available cores by running
-\code{parallel::detectCores()} in R. But discuss how to run parallel
-jobs with your admin if you are using \code{multidog()} on a
-supercomputer.}
+\item{nc}{The number of computing cores to use when doing parallelization
+    on your local machine. See the section "Parallel Computation" for how
+    to implement more complicated evaluation strategies using the
+    \code{future} package.
+
+    When you are specifying other evaluation strategies using the
+    \code{future} package, you should also set \code{nc = NA}.
+
+    The value of \code{nc} should never be
+    more than the number of cores available in your computing environment.
+    You can determine the maximum number of available cores by running
+    \code{future::availableCores()} in R.}
 
 \item{p1_id}{The ID of the first parent. This should be a character of
 length 1. This should correspond to a single column name in \code{refmat}
@@ -146,27 +152,65 @@ and the sequencing error rate. The second data frame, called \code{inddf},
 contains information on each individual at each SNP, such as the estimated
 genotype and the posterior probability of being classified correctly.
 
-Using an \code{nc} value greater than \code{1} will allow you to
-run \code{\link{flexdog}} in parallel. Only set \code{nc} greater than
-\code{1} if you are sure you have access to the proper number of cores.
-The upper bound on the value of \code{nc} you should try can be determined
-by running \code{parallel::detectCores()} in R. Most admins of high
-performance computing environments place limits on the number of cores
-you can use at any one time. So if you are using \code{multidog()} on
-a supercomputer, do not use \code{parallel::detectCores()} and discuss
-with your admin how you can safely run parallel jobs.
-
 SNPs that contain 0 reads (or all missing data) are entirely removed.
 }
+\section{Parallel Computation}{
+
+
+The \code{multidog()} function supports parallel computing. It does
+so through the \href{https://cran.r-project.org/package=future}{future}
+package.
+
+If you are just running \code{multidog()} on a local machine, then you
+can use the \code{nc} argument to specify the parallelization. Any value
+of \code{nc} greater than 1 will result in multiple background R sessions to
+genotype all of the SNPs. The maximum value of \code{nc} you should
+try can be found by running \code{future::availableCores()}. Running
+\code{multidog()} using \code{nc} is equivalent to setting the future
+plan with \code{future::plan(future::multisession, workers = nc)}.
+
+Using the future package means that different evaluation strategies
+are possible. In particular, if you are using a high performance machine,
+you can explore using the
+\href{https://cran.r-project.org/package=future.batchtools}{future.batchtools}
+package to evaluate \code{multidog()} using schedulers like Slurm
+or TORQUE/PBS.
+
+To use a different strategy, set \code{nc = NA} and then
+ run \code{future::plan()} prior to
+running \code{multidog()}. For example, to set up forked R processes
+on your current machine (instead of using background R sessions), you would
+run (will not work on Windows):
+\code{future::plan(future::multicore)}, followed by
+running \code{multidog()} with \code{nc = NA}. See the examples below.
+}
+
 \examples{
 \dontrun{
 data("uitdewilligen")
+
+## Run multiple R sessions using the `nc` variable.
 mout <- multidog(refmat = t(uitdewilligen$refmat),
                  sizemat = t(uitdewilligen$sizemat),
                  ploidy = uitdewilligen$ploidy,
                  nc = 2)
 mout$inddf
 mout$snpdf
+
+## Run multiple external R sessions on the local machine.
+## Note that we set `nc = NA`.
+cl <- parallel::makeCluster(2, timeout = 60)
+future::plan(future::cluster, workers = cl)
+mout <- multidog(refmat = t(uitdewilligen$refmat),
+                 sizemat = t(uitdewilligen$sizemat),
+                 ploidy = uitdewilligen$ploidy,
+                 nc = NA)
+mout$inddf
+mout$snpdf
+
+## Close cluster and reset future to current R process
+parallel::stopCluster(cl)
+future::plan(future::sequential)
 }
 
 }

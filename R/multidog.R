@@ -3,6 +3,14 @@
 ################
 
 
+#' Function to combine the parallel output from \code{\link{multidog}()}
+#'
+#' @noRd
+combine_flex <- function(...) {
+
+}
+
+
 #' Fit \code{\link{flexdog}} to multiple SNPs.
 #'
 #' This is a convenience function that will run \code{\link{flexdog}} over many SNPs.
@@ -35,17 +43,36 @@
 #' contains information on each individual at each SNP, such as the estimated
 #' genotype and the posterior probability of being classified correctly.
 #'
-#' Using an \code{nc} value greater than \code{1} will allow you to
-#' run \code{\link{flexdog}} in parallel. Only set \code{nc} greater than
-#' \code{1} if you are sure you have access to the proper number of cores.
-#' The upper bound on the value of \code{nc} you should try can be determined
-#' by running \code{parallel::detectCores()} in R. Most admins of high
-#' performance computing environments place limits on the number of cores
-#' you can use at any one time. So if you are using \code{multidog()} on
-#' a supercomputer, do not use \code{parallel::detectCores()} and discuss
-#' with your admin how you can safely run parallel jobs.
-#'
 #' SNPs that contain 0 reads (or all missing data) are entirely removed.
+#'
+#' @section Parallel Computation:
+#'
+#' The \code{multidog()} function supports parallel computing. It does
+#' so through the \href{https://cran.r-project.org/package=future}{future}
+#' package.
+#'
+#' If you are just running \code{multidog()} on a local machine, then you
+#' can use the \code{nc} argument to specify the parallelization. Any value
+#' of \code{nc} greater than 1 will result in multiple background R sessions to
+#' genotype all of the SNPs. The maximum value of \code{nc} you should
+#' try can be found by running \code{future::availableCores()}. Running
+#' \code{multidog()} using \code{nc} is equivalent to setting the future
+#' plan with \code{future::plan(future::multisession, workers = nc)}.
+#'
+#' Using the future package means that different evaluation strategies
+#' are possible. In particular, if you are using a high performance machine,
+#' you can explore using the
+#' \href{https://cran.r-project.org/package=future.batchtools}{future.batchtools}
+#' package to evaluate \code{multidog()} using schedulers like Slurm
+#' or TORQUE/PBS.
+#'
+#' To use a different strategy, set \code{nc = NA} and then
+#'  run \code{future::plan()} prior to
+#' running \code{multidog()}. For example, to set up forked R processes
+#' on your current machine (instead of using background R sessions), you would
+#' run (will not work on Windows):
+#' \code{future::plan(future::multicore)}, followed by
+#' running \code{multidog()} with \code{nc = NA}. See the examples below.
 #'
 #' @inheritParams flexdog
 #' @param refmat A matrix of reference read counts. The columns index
@@ -56,12 +83,18 @@
 #'     the individuals and the rows index the markers (SNPs). This matrix must have
 #'     rownames (for the names of the markers) and column names (for the names
 #'     of the individuals). These names must match the names in \code{refmat}.
-#' @param nc The number of computing cores to use. This should never be
+#' @param nc The number of computing cores to use when doing parallelization
+#'     on your local machine. See the section "Parallel Computation" for how
+#'     to implement more complicated evaluation strategies using the
+#'     \code{future} package.
+#'
+#'     When you are specifying other evaluation strategies using the
+#'     \code{future} package, you should also set \code{nc = NA}.
+#'
+#'     The value of \code{nc} should never be
 #'     more than the number of cores available in your computing environment.
 #'     You can determine the maximum number of available cores by running
-#'     \code{parallel::detectCores()} in R. But discuss how to run parallel
-#'     jobs with your admin if you are using \code{multidog()} on a
-#'     supercomputer.
+#'     \code{future::availableCores()} in R.
 #' @param p1_id The ID of the first parent. This should be a character of
 #'     length 1. This should correspond to a single column name in \code{refmat}
 #'     and \code{sizemat}.
@@ -136,12 +169,29 @@
 #' @examples
 #' \dontrun{
 #' data("uitdewilligen")
+#'
+#' ## Run multiple R sessions using the `nc` variable.
 #' mout <- multidog(refmat = t(uitdewilligen$refmat),
 #'                  sizemat = t(uitdewilligen$sizemat),
 #'                  ploidy = uitdewilligen$ploidy,
 #'                  nc = 2)
 #' mout$inddf
 #' mout$snpdf
+#'
+#' ## Run multiple external R sessions on the local machine.
+#' ## Note that we set `nc = NA`.
+#' cl <- parallel::makeCluster(2, timeout = 60)
+#' future::plan(future::cluster, workers = cl)
+#' mout <- multidog(refmat = t(uitdewilligen$refmat),
+#'                  sizemat = t(uitdewilligen$sizemat),
+#'                  ploidy = uitdewilligen$ploidy,
+#'                  nc = NA)
+#' mout$inddf
+#' mout$snpdf
+#'
+#' ## Close cluster and reset future to current R process
+#' parallel::stopCluster(cl)
+#' future::plan(future::sequential)
 #' }
 #'
 #' @export
@@ -198,10 +248,12 @@ multidog <- function(refmat,
                 setdiff(rownames(refmat), rownames(sizemat))))
   }
   model <- match.arg(model)
-  assertthat::assert_that(is.numeric(nc))
-  nc <- round(nc)
-  assertthat::assert_that(nc >= 1)
   assertthat::assert_that(length(nc) == 1)
+  if (!is.na(nc)) {
+    assertthat::assert_that(is.numeric(nc))
+    nc <- round(nc)
+    assertthat::assert_that(nc >= 1)
+  }
   if (!is.null(p1_id)) {
     stopifnot(is.character(p1_id))
     stopifnot(length(p1_id) == 1)
@@ -251,21 +303,22 @@ multidog <- function(refmat,
   ## Get list of SNPs ---------------------------------------------------------
   snplist <- rownames(refmat)
 
+  ## Register doFutures() -----------------------------------------------------
+  oldDoPar <- doFuture::registerDoFuture()
+  on.exit(with(oldDoPar, foreach::setDoPar(fun=fun, data=data, info=info)), add = TRUE)
+
   ## Register workers ----------------------------------------------------------
-  if (nc == 1) {
-    foreach::registerDoSEQ()
-  } else {
-    cl = parallel::makeCluster(nc)
-    doParallel::registerDoParallel(cl = cl)
-    if (foreach::getDoParWorkers() == 1) {
-      stop("multidog: nc > 1 but only one core registered from foreach::getDoParWorkers().")
+  if (!is.na(nc)) {
+    if (nc > 1) {
+      oplan <- future::plan(future::multisession, workers = nc)
+      on.exit(future::plan(oplan), add = TRUE)
     }
   }
 
   ## Fit flexdog on all SNPs --------------------------------------------------
-  i <- 1
+  i <- NULL
   outlist <- foreach::foreach(i = seq_along(snplist),
-                              .export = c("flexdog")) %dopar% {
+                              .export = c("flexdog")) %dorng% {
                                 current_snp <- snplist[[i]]
 
                                 refvec <- refmat[current_snp, indlist, drop = TRUE]
@@ -357,9 +410,6 @@ multidog <- function(refmat,
 
                                 list(indprop, snpprop)
                               }
-  if (nc > 1) {
-    parallel::stopCluster(cl)
-  }
 
   inddf <- do.call("rbind", lapply(outlist, function(x) x[[1]]))
   snpdf <- do.call("rbind", lapply(outlist, function(x) x[[2]]))
@@ -541,5 +591,119 @@ filter_snp <- function(x, expr) {
   goodsnps <- x$snpdf$snp
   x$inddf <- x$inddf[x$inddf$snp %in% goodsnps, , drop = FALSE]
   return(x)
+}
+
+
+
+
+#' Save the output of \code{\link{multidog}} as a VCF file.
+#'
+#' Most of the output of \code{\link{multidog}} can be converted
+#' to a VCF.
+#'
+#' This function uses the Bioconductor packages VariantAnnotation,
+#' GenomicRanges, S4Vectors, and IRanges. You can install these using the
+#' BiocManager package via:
+#'
+#' \code{# install.packages("BiocManager")}
+#'
+#' \code{BiocManager::install(c("VariantAnnotation", "GenomicRanges", "S4Vectors", "IRanges"))}
+#'
+#'
+#' @param obj An object of class \code{\link{multidog}}.
+#' @param filename A string, the path to save the vcf file.
+#'
+export_vcf <- function(obj, filename) {
+  if (requireNamespace("VariantAnnotation", quietly = TRUE) &&
+      requireNamespace("GenomicRanges", quietly = TRUE) &&
+      requireNamespace("S4Vectors", quietly = TRUE) &&
+      requireNamespace("IRanges", quietly = TRUE)) {
+
+    ploidy <- unique(obj$snpdf$ploidy)
+    stopifnot(length(ploidy) == 1)
+    obj$inddf$alt <- obj$inddf$size - obj$inddf$ref
+    geno <- S4Vectors::SimpleList(
+      AD = format_multidog(x = obj, varname = c("alt", "ref")),
+      DP = format_multidog(x = obj, varname = "size"),
+      DS = format_multidog(x = obj, varname = "postmean"),
+      GP = format_multidog(x = obj, varname = paste0("Pr_", 0:ploidy)),
+      GL = format_multidog(x = obj, varname = paste0("logL_", 0:ploidy)) / log(10)
+    )
+    for (i in seq_along(geno)) {
+      dimnames(geno[[i]]) <- NULL
+    }
+
+    nind <- ncol(geno$AD)
+    nsnp <- nrow(obj$snpdf)
+
+
+    infodf <- S4Vectors::DataFrame(
+      row.names = c("snp",
+                    "bias",
+                    "seq",
+                    "od",
+                    "prop_mis",
+                    "llike",
+                    "ploidy",
+                    "model",
+                    paste0("Pr_", 0:ploidy)),
+      Description = c("SNP name",
+                      "Allele bias",
+                      "Sequencing error rate",
+                      "Overdispersion",
+                      "Proportion of individuals genotyped incorrectly",
+                      "Maximized marginal log-likelihood",
+                      "Ploidy",
+                      "Model used",
+                      paste0("Prior probability of dosage ", 0:ploidy)),
+      Type = c("String", "Float", "Float", "Float",
+               "Float", "Float", "Integer", "String",
+               rep("Float", ploidy + 1)),
+      Number = 1)
+
+    vcfobj <- VariantAnnotation::VCF(
+      rowRanges = GenomicRanges::GRanges(
+        seqnames=paste0("snp:", seq_len(nsnp)),
+        ranges=NULL,
+        strand=NULL,
+        seqinfo = NULL,
+        names = obj$snpdf$snp),
+      colData = as(matrix(nrow = nind, ncol = 0), "DataFrame"),
+      exptData = list(
+        header = VariantAnnotation::VCFHeader(
+          reference = character(),
+          samples = character(),
+          header = IRanges::DataFrameList(
+            fileformat = S4Vectors::DataFrame(row.names = "fileformat", Value = "VCFv4.3"),
+            fileDate = S4Vectors::DataFrame(row.names = "fileDate", Value = gsub("-", "", Sys.Date())),
+            source = S4Vectors::DataFrame(row.names = "source", Value = paste0("updogv", utils::packageVersion("updog"))),
+            FORMAT = S4Vectors::DataFrame(row.names = c("AD", "DP", "DS", "GP", "GL"),
+                                          Number = c("R", "1", "1", "G", "G"),
+                                          Type = c("Integer", "Integer", "Float", "Float", "Float"),
+                                          Description = c("Read depth for each allele",
+                                                          "Read depth",
+                                                          "Posterior mean genotype",
+                                                          "Genotype posterior probabilities",
+                                                          "Genotype likelihoods")),
+            INFO = infodf
+            )
+          )
+        ),
+      fixed = as(matrix(nrow = nsnp, ncol = 0), "DataFrame"),
+      geno = geno,
+      info = as(obj$snpdf[, row.names(infodf)], "DataFrame"),
+      collapsed = TRUE,
+      verbose = TRUE
+      )
+
+    VariantAnnotation::writeVcf(obj = vcfobj, filename = filename)
+  } else {
+    message(paste0("Need to have VariantAnnotation, S4Vectors,\n",
+                   "GenomicRanges, and IRanges installed to run",
+                   "\nexport_vcf()\n",
+                   "To install, run in R:\n\n",
+                   "BiocManager::install(c(\"VariantAnnotation\",",
+                   " \"GenomicRanges\", \"S4Vectors\", \"IRanges\"))\n"))
+  }
 }
 
