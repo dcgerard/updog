@@ -3,6 +3,7 @@
 
 # updog
 
+[![R-CMD-check](https://github.com/dcgerard/updog/workflows/R-CMD-check/badge.svg)](https://github.com/dcgerard/updog/actions)
 [![Build
 Status](https://travis-ci.org/dcgerard/updog.svg?branch=master)](https://travis-ci.org/dcgerard/updog)
 [![Appveyor Build
@@ -20,10 +21,10 @@ sequencing error. It is named updog for “Using Parental Data for
 Offspring Genotyping” because we originally developed the method for
 full-sib populations, but it works now for more general populations. The
 method is described in detail Gerard et. al. (2018)
-\<[doi:10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468)\>.
+&lt;[doi:10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468)&gt;.
 Additional details concerning prior specification are described in
 Gerard and Ferrão (2020)
-\<[doi:10.1093/bioinformatics/btz852](https://doi.org/10.1093/bioinformatics/btz852)\>.
+&lt;[doi:10.1093/bioinformatics/btz852](https://doi.org/10.1093/bioinformatics/btz852)&gt;.
 
 The main functions are `flexdog()` and `multidog()`, which provide many
 options for the distribution of the genotypes in your sample. A novel
@@ -35,16 +36,16 @@ the data.
 
 Also provided are:
 
-  - `filter_snp()`: filter out SNPs based on the output of `multidog()`.
-  - `format_multidog()`: format the output of `multidog()` in terms of a
+-   `filter_snp()`: filter out SNPs based on the output of `multidog()`.
+-   `format_multidog()`: format the output of `multidog()` in terms of a
     multidimensional array.
-  - Plot methods. Both `flexdog()` and `multidog()` have plot methods.
+-   Plot methods. Both `flexdog()` and `multidog()` have plot methods.
     See the help files of `plot.flexdog()` and `plot.multidog()` for
     details.
-  - Functions to simulate genotypes (`rgeno()`) and read-counts
+-   Functions to simulate genotypes (`rgeno()`) and read-counts
     (`rflexdog()`). These support all of the models available in
     `flexdog()`.
-  - Functions to evaluate oracle genotyping performance:
+-   Functions to evaluate oracle genotyping performance:
     `oracle_joint()`, `oracle_mis()`, `oracle_mis_vec()`, and
     `oracle_cor()`. We mean “oracle” in the sense that we assume that
     the entire data generation process is known (i.e. the genotype
