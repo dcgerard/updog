@@ -13,3 +13,5 @@ inst/doc
 *.html
 doc
 Meta
+codecov.yml
+*.gcno

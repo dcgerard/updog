@@ -4,11 +4,7 @@
 # updog
 
 [![R-CMD-check](https://github.com/dcgerard/updog/workflows/R-CMD-check/badge.svg)](https://github.com/dcgerard/updog/actions)
-[![Build
-Status](https://travis-ci.org/dcgerard/updog.svg?branch=master)](https://travis-ci.org/dcgerard/updog)
-[![Appveyor Build
-status](https://ci.appveyor.com/api/projects/status/c80fdy61ead6s3vr?svg=true)](https://ci.appveyor.com/project/dcgerard/updog-06s8t)
-[![codecov](https://codecov.io/gh/dcgerard/updog/branch/master/graph/badge.svg)](https://codecov.io/gh/dcgerard/updog)
+[![codecov](https://codecov.io/gh/dcgerard/updog/branch/master/graph/badge.svg?token=zjDBKZWjCs)](https://codecov.io/gh/dcgerard/updog)
 [![License: GPL
 v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/updog)](https://cran.r-project.org/package=updog)
