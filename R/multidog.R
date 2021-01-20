@@ -5,11 +5,19 @@
 
 #' Function to combine the parallel output from \code{\link{multidog}()}
 #'
+#' @param ... Each element should be a list with two data frames. The first
+#'     data frames should all have the same column names, and the second
+#'     data frames should all have the same column names.
+#'
+#' @author David Gerard
+#'
 #' @noRd
 combine_flex <- function(...) {
-
+  list(
+    do.call(rbind, lapply(list(...), function(x) x[[1]])),
+    do.call(rbind, lapply(list(...), function(x) x[[2]]))
+  )
 }
-
 
 #' Fit \code{\link{flexdog}} to multiple SNPs.
 #'
@@ -303,7 +311,7 @@ multidog <- function(refmat,
   ## Get list of SNPs ---------------------------------------------------------
   snplist <- rownames(refmat)
 
-  ## Register doFutures() -----------------------------------------------------
+  ## Register doFuture  -----------------------------------------------------
   oldDoPar <- doFuture::registerDoFuture()
   on.exit(with(oldDoPar, foreach::setDoPar(fun=fun, data=data, info=info)), add = TRUE)
 
@@ -317,8 +325,10 @@ multidog <- function(refmat,
 
   ## Fit flexdog on all SNPs --------------------------------------------------
   i <- NULL
-  outlist <- foreach::foreach(i = seq_along(snplist),
-                              .export = c("flexdog")) %dorng% {
+  retlist <- foreach::foreach(i = seq_along(snplist),
+                              .export = c("flexdog"),
+                              .combine = combine_flex,
+                              .multicombine = TRUE) %dorng% {
                                 current_snp <- snplist[[i]]
 
                                 refvec <- refmat[current_snp, indlist, drop = TRUE]
@@ -408,14 +418,12 @@ multidog <- function(refmat,
                                   fout$postmat,
                                   fout$genologlike)
 
-                                list(indprop, snpprop)
+                                list(snpdf = snpprop, inddf = indprop)
                               }
 
-  inddf <- do.call("rbind", lapply(outlist, function(x) x[[1]]))
-  snpdf <- do.call("rbind", lapply(outlist, function(x) x[[2]]))
-
-  retlist <- list(snpdf = as.data.frame(snpdf),
-                  inddf = as.data.frame(inddf))
+  names(retlist) <- c("snpdf", "inddf")
+  attr(retlist, "rng") <- NULL
+  attr(retlist, "doRNG_version") <- NULL
   class(retlist) <- "multidog"
 
   cat("done!")
