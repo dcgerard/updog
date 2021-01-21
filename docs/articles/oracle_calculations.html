@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -74,7 +74,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="http://github.com/dcgerard/updog/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -88,7 +88,7 @@
 
       
 
-      </header><script src="oracle_calculations_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="oracle_calculations_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Oracle Calculations</h1>
@@ -112,38 +112,42 @@
 <a href="#controlling-misclassification-error" class="anchor"></a>Controlling Misclassification Error</h1>
 <p>Suppose we have a sample of tetraploid individuals derived from an S1 cross (a single generation of selfing). Using domain expertise (either from previous studies or a pilot analysis), we’ve determined that our sequencing technology will produce relatively clean data. That is, the sequencing error rate will not be too large (say, ~0.001), the bias will be moderate (say, ~0.7 at the most extreme), and the majority of SNPs will have reasonable levels of overdispersion (say, less than 0.01). We want to know how deep we need to sequence.</p>
 <p>Using <code>oracle_mis</code>, we can see how deep we need to sequence under the worst-case scenario we want to control (sequencing error rate = 0.001, bias = 0.7, overdispersion = 0.01) in order to obtain a misclassification error rate of at most, say, 0.05.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">bias</span>   <span class="kw">&lt;-</span> <span class="fl">0.7</span>
-<span class="no">od</span>     <span class="kw">&lt;-</span> <span class="fl">0.01</span>
-<span class="no">seq</span>    <span class="kw">&lt;-</span> <span class="fl">0.001</span>
-<span class="no">maxerr</span> <span class="kw">&lt;-</span> <span class="fl">0.05</span></pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">bias</span>   <span class="op">&lt;-</span> <span class="fl">0.7</span>
+<span class="va">od</span>     <span class="op">&lt;-</span> <span class="fl">0.01</span>
+<span class="va">seq</span>    <span class="op">&lt;-</span> <span class="fl">0.001</span>
+<span class="va">maxerr</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></code></pre></div>
 <p>Before we do this, we also need the distribution of the offspring genotypes. We can get this distribution assuming various parental genotypes using the <code>get_q_array</code> function. Typically, error rates will be larger when the allele-frequency is closer to 0.5. So we’ll start in the worst-case scenario of assuming that the parent has 2 copies of the reference allele.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">updog</span>)
-<span class="no">ploidy</span> <span class="kw">&lt;-</span> <span class="fl">4</span>
-<span class="no">pgeno</span> <span class="kw">&lt;-</span> <span class="fl">2</span>
-<span class="no">gene_dist</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_q_array.html">get_q_array</a></span>(<span class="kw">ploidy</span> <span class="kw">=</span> <span class="no">ploidy</span>)[<span class="no">pgeno</span> + <span class="fl">1</span>, <span class="no">pgeno</span> + <span class="fl">1</span>, ]</pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/dcgerard/updog/">updog</a></span><span class="op">)</span>
+<span class="va">ploidy</span> <span class="op">&lt;-</span> <span class="fl">4</span>
+<span class="va">pgeno</span> <span class="op">&lt;-</span> <span class="fl">2</span>
+<span class="va">gene_dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_q_array.html">get_q_array</a></span><span class="op">(</span>ploidy <span class="op">=</span> <span class="va">ploidy</span><span class="op">)</span><span class="op">[</span><span class="va">pgeno</span> <span class="op">+</span> <span class="fl">1</span>, <span class="va">pgeno</span> <span class="op">+</span> <span class="fl">1</span>, <span class="op">]</span></code></pre></div>
 <p>This is what the genotype distribution for the offspring looks like:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
-<span class="no">distdf</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="fl">0</span>:<span class="no">ploidy</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="kw">yend</span> <span class="kw">=</span> <span class="no">gene_dist</span>)
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">distdf</span>, <span class="kw">mapping</span> <span class="kw">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">x</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">y</span>, <span class="kw">xend</span> <span class="kw">=</span> <span class="no">x</span>, <span class="kw">yend</span> <span class="kw">=</span> <span class="no">yend</span>)) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html">geom_segment</a></span>(<span class="kw">lineend</span> <span class="kw">=</span> <span class="st">"round"</span>, <span class="kw">lwd</span> <span class="kw">=</span> <span class="fl">2</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>() +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Allele Dosage"</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Probability"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="va">distdf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="va">ploidy</span>, y <span class="op">=</span> <span class="fl">0</span>, yend <span class="op">=</span> <span class="va">gene_dist</span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">distdf</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, xend <span class="op">=</span> <span class="va">x</span>, yend <span class="op">=</span> <span class="va">yend</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html">geom_segment</a></span><span class="op">(</span>lineend <span class="op">=</span> <span class="st">"round"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Allele Dosage"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Probability"</span><span class="op">)</span></code></pre></div>
 <p><img src="oracle_calculations_files/figure-html/unnamed-chunk-3-1.png" width="432"></p>
 <p>Now, we are ready to iterate through read-depth’s until we reach one with an error rate less than 0.05.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">err</span>    <span class="kw">&lt;-</span> <span class="fl">Inf</span>
-<span class="no">depth</span>  <span class="kw">&lt;-</span> <span class="fl">0</span>
-<span class="kw">while</span>(<span class="no">err</span> <span class="kw">&gt;</span> <span class="no">maxerr</span>) {
-  <span class="no">depth</span> <span class="kw">&lt;-</span> <span class="no">depth</span> + <span class="fl">1</span>
-  <span class="no">err</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/oracle_mis.html">oracle_mis</a></span>(<span class="kw">n</span> <span class="kw">=</span> <span class="no">depth</span>,
-                    <span class="kw">ploidy</span> <span class="kw">=</span> <span class="no">ploidy</span>,
-                    <span class="kw">seq</span> <span class="kw">=</span> <span class="no">seq</span>,
-                    <span class="kw">bias</span> <span class="kw">=</span> <span class="no">bias</span>,
-                    <span class="kw">od</span> <span class="kw">=</span> <span class="no">od</span>,
-                    <span class="kw">dist</span> <span class="kw">=</span> <span class="no">gene_dist</span>)
-}
-<span class="no">depth</span>
-<span class="co">#&gt; [1] 90</span></pre></body></html></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">err</span>    <span class="op">&lt;-</span> <span class="cn">Inf</span>
+<span class="va">depth</span>  <span class="op">&lt;-</span> <span class="fl">0</span>
+<span class="kw">while</span><span class="op">(</span><span class="va">err</span> <span class="op">&gt;</span> <span class="va">maxerr</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">depth</span> <span class="op">&lt;-</span> <span class="va">depth</span> <span class="op">+</span> <span class="fl">1</span>
+  <span class="va">err</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/oracle_mis.html">oracle_mis</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">depth</span>,
+                    ploidy <span class="op">=</span> <span class="va">ploidy</span>,
+                    seq <span class="op">=</span> <span class="va">seq</span>,
+                    bias <span class="op">=</span> <span class="va">bias</span>,
+                    od <span class="op">=</span> <span class="va">od</span>,
+                    dist <span class="op">=</span> <span class="va">gene_dist</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="va">depth</span>
+<span class="co">#&gt; [1] 90</span></code></pre></div>
 <p>Looks like we need a depth of 90 in order to get a misclassification error rate under 0.05.</p>
 <p>Note that <code>oracle_mis</code> returns the <strong>best misclassification error rate possible</strong> under these conditions (<code>ploidy</code> = 4, <code>bias</code> = 0.7, <code>seq</code> = 0.001, <code>od</code> = 0.01, and <code>pgeno</code> = 2). In your actual analysis, you will have a worse misclassification error rate than that returned by <code>oracle_mis</code>. However, if you have a lot of individuals in your sample, then this will act as a reasonable approximation to the error rate. In general though, you should sequence a little deeper than suggested by <code>oracle_mis</code>.</p>
 </div>
@@ -151,25 +155,27 @@
 <h1 class="hasAnchor">
 <a href="#visualizing-the-joint-distribution" class="anchor"></a>Visualizing the Joint Distribution</h1>
 <p>Suppose we only have a budget to sequence to a depth of 30. Then what errors can we expect? We can use <code>oracle_joint</code> and <code>oracle_plot</code> to visualize the errors we can expect.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">depth</span> <span class="kw">&lt;-</span> <span class="fl">30</span>
-<span class="no">jd</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/oracle_joint.html">oracle_joint</a></span>(<span class="kw">n</span> <span class="kw">=</span> <span class="no">depth</span>,
-                   <span class="kw">ploidy</span> <span class="kw">=</span> <span class="no">ploidy</span>,
-                   <span class="kw">seq</span> <span class="kw">=</span> <span class="no">seq</span>,
-                   <span class="kw">bias</span> <span class="kw">=</span> <span class="no">bias</span>,
-                   <span class="kw">od</span> <span class="kw">=</span> <span class="no">od</span>,
-                   <span class="kw">dist</span> <span class="kw">=</span> <span class="no">gene_dist</span>)
-<span class="fu"><a href="../reference/oracle_plot.html">oracle_plot</a></span>(<span class="no">jd</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">depth</span> <span class="op">&lt;-</span> <span class="fl">30</span>
+<span class="va">jd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/oracle_joint.html">oracle_joint</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">depth</span>,
+                   ploidy <span class="op">=</span> <span class="va">ploidy</span>,
+                   seq <span class="op">=</span> <span class="va">seq</span>,
+                   bias <span class="op">=</span> <span class="va">bias</span>,
+                   od <span class="op">=</span> <span class="va">od</span>,
+                   dist <span class="op">=</span> <span class="va">gene_dist</span><span class="op">)</span>
+<span class="fu"><a href="../reference/oracle_plot.html">oracle_plot</a></span><span class="op">(</span><span class="va">jd</span><span class="op">)</span></code></pre></div>
 <p><img src="oracle_calculations_files/figure-html/unnamed-chunk-5-1.png" width="432"></p>
 <p>Most of the errors will be mistakes between genotypes 2/3 and mistakes between genotypes 1/2.</p>
 <p>Even though the misclassification error rate is pretty high (0.14), the correlation of the oracle estimator with the true genotype is pretty reasonable (0.89). You can obtain this using the <code>oracle_cor</code> function.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">ocorr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/oracle_cor.html">oracle_cor</a></span>(<span class="kw">n</span> <span class="kw">=</span> <span class="no">depth</span>,
-                    <span class="kw">ploidy</span> <span class="kw">=</span> <span class="no">ploidy</span>,
-                    <span class="kw">seq</span> <span class="kw">=</span> <span class="no">seq</span>,
-                    <span class="kw">bias</span> <span class="kw">=</span> <span class="no">bias</span>,
-                    <span class="kw">od</span> <span class="kw">=</span> <span class="no">od</span>,
-                    <span class="kw">dist</span> <span class="kw">=</span> <span class="no">gene_dist</span>)
-<span class="no">ocorr</span>
-<span class="co">#&gt; [1] 0.8935101</span></pre></body></html></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ocorr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/oracle_cor.html">oracle_cor</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">depth</span>,
+                    ploidy <span class="op">=</span> <span class="va">ploidy</span>,
+                    seq <span class="op">=</span> <span class="va">seq</span>,
+                    bias <span class="op">=</span> <span class="va">bias</span>,
+                    od <span class="op">=</span> <span class="va">od</span>,
+                    dist <span class="op">=</span> <span class="va">gene_dist</span><span class="op">)</span>
+<span class="va">ocorr</span>
+<span class="co">#&gt; [1] 0.8935101</span></code></pre></div>
 </div>
 <div id="references" class="section level1">
 <h1 class="hasAnchor">
@@ -193,7 +199,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

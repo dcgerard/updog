@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Simulate GBS data from the <code><a href='flexdog.html'>flexdog</a></code> likelihood. — rflexdog • updog</title>
+<title>Simulate GBS data from the flexdog likelihood. — rflexdog • updog</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Simulate GBS data from the <code><a href='flexdog.html'>flexdog</a></code> likelihood. — rflexdog" />
+<meta property="og:title" content="Simulate GBS data from the flexdog likelihood. — rflexdog" />
 <meta property="og:description" content="This will take a vector of genotypes and a vector of total read-counts, then generate a vector of reference
 counts. To get the genotypes, you could use rgeno. The likelihood used to generate read-counts
 is described in detail in Gerard et. al. (2018)." />
@@ -74,7 +74,7 @@ is described in detail in Gerard et. al. (2018)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@ is described in detail in Gerard et. al. (2018)." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -117,7 +117,7 @@ is described in detail in Gerard et. al. (2018)." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="http://github.com/dcgerard/updog/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -145,7 +145,7 @@ counts. To get the genotypes, you could use <code><a href='rgeno.html'>rgeno</a>
 is described in detail in Gerard et. al. (2018).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rflexdog</span>(<span class='no'>sizevec</span>, <span class='no'>geno</span>, <span class='no'>ploidy</span>, <span class='kw'>seq</span> <span class='kw'>=</span> <span class='fl'>0.005</span>, <span class='kw'>bias</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>od</span> <span class='kw'>=</span> <span class='fl'>0.001</span>)</pre>
+    <pre class="usage"><span class='fu'>rflexdog</span><span class='op'>(</span><span class='va'>sizevec</span>, <span class='va'>geno</span>, <span class='va'>ploidy</span>, seq <span class='op'>=</span> <span class='fl'>0.005</span>, bias <span class='op'>=</span> <span class='fl'>1</span>, od <span class='op'>=</span> <span class='fl'>0.001</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,7 +174,7 @@ each individual has.</p></td>
     <tr>
       <th>od</th>
       <td><p>The overdispersion parameter. See the
-Details of the <code>rho</code> variable in <code><a href='betabinom.html'>betabinom</a></code>.</p></td>
+Details of the <code>rho</code> variable in <code><a href='dbetabinom.html'>betabinom</a></code>.</p></td>
     </tr>
     </table>
 
@@ -192,36 +192,40 @@ Details of the <code>rho</code> variable in <code><a href='betabinom.html'>betab
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='rgeno.html'>rgeno</a></code> for a way to generate genotypes of individuals. <code><a href='betabinom.html'>rbetabinom</a></code>
+    <div class='dont-index'><p><code><a href='rgeno.html'>rgeno</a></code> for a way to generate genotypes of individuals. <code><a href='dbetabinom.html'>rbetabinom</a></code>
     for how we generate the read-counts.</p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>David Gerard</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>)
-<span class='no'>n</span>       <span class='kw'>&lt;-</span> <span class='fl'>100</span>
-<span class='no'>ploidy</span>  <span class='kw'>&lt;-</span> <span class='fl'>6</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>n</span>       <span class='op'>&lt;-</span> <span class='fl'>100</span>
+<span class='va'>ploidy</span>  <span class='op'>&lt;-</span> <span class='fl'>6</span>
 
 <span class='co'>## Generate the genotypes of individuals from an F1 population,</span>
 <span class='co'>## where the first parent has 1 copy of the reference allele</span>
 <span class='co'>## and the second parent has two copies of the reference</span>
 <span class='co'>## allele.</span>
-<span class='no'>genovec</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rgeno.html'>rgeno</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>, <span class='kw'>ploidy</span> <span class='kw'>=</span> <span class='no'>ploidy</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"f1"</span>,
-                 <span class='kw'>p1geno</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p2geno</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='va'>genovec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rgeno.html'>rgeno</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='va'>n</span>, ploidy <span class='op'>=</span> <span class='va'>ploidy</span>, model <span class='op'>=</span> <span class='st'>"f1"</span>,
+                 p1geno <span class='op'>=</span> <span class='fl'>1</span>, p2geno <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 
 <span class='co'>## Get the total number of read-counts for each individual.</span>
 <span class='co'>## Ideally, you would take this from real data as the total</span>
 <span class='co'>## read-counts are definitely not Poisson.</span>
-<span class='no'>sizevec</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>200</span>)
+<span class='va'>sizevec</span> <span class='op'>&lt;-</span> <span class='fu'>stats</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='va'>n</span>, lambda <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span>
 
 <span class='co'>## Generate the counts of reads with the reference allele</span>
 <span class='co'>## when there is a strong bias for the reference allele</span>
 <span class='co'>## and there is no overdispersion.</span>
-<span class='no'>refvec</span>  <span class='kw'>&lt;-</span> <span class='fu'>rflexdog</span>(<span class='kw'>sizevec</span> <span class='kw'>=</span> <span class='no'>sizevec</span>, <span class='kw'>geno</span> <span class='kw'>=</span> <span class='no'>genovec</span>,
-                    <span class='kw'>ploidy</span> <span class='kw'>=</span> <span class='no'>ploidy</span>, <span class='kw'>seq</span> <span class='kw'>=</span> <span class='fl'>0.001</span>,
-                    <span class='kw'>bias</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>od</span> <span class='kw'>=</span> <span class='fl'>0</span>)
+<span class='va'>refvec</span>  <span class='op'>&lt;-</span> <span class='fu'>rflexdog</span><span class='op'>(</span>sizevec <span class='op'>=</span> <span class='va'>sizevec</span>, geno <span class='op'>=</span> <span class='va'>genovec</span>,
+                    ploidy <span class='op'>=</span> <span class='va'>ploidy</span>, seq <span class='op'>=</span> <span class='fl'>0.001</span>,
+                    bias <span class='op'>=</span> <span class='fl'>0.5</span>, od <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
 
 <span class='co'>## Plot the simulated data using plot_geno.</span>
-<span class='fu'><a href='plot_geno.html'>plot_geno</a></span>(<span class='kw'>refvec</span> <span class='kw'>=</span> <span class='no'>refvec</span>, <span class='kw'>sizevec</span> <span class='kw'>=</span> <span class='no'>sizevec</span>,
-          <span class='kw'>ploidy</span> <span class='kw'>=</span> <span class='no'>ploidy</span>, <span class='kw'>seq</span> <span class='kw'>=</span> <span class='fl'>0.001</span>, <span class='kw'>bias</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)</div><div class='img'><img src='rflexdog-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='plot_geno.html'>plot_geno</a></span><span class='op'>(</span>refvec <span class='op'>=</span> <span class='va'>refvec</span>, sizevec <span class='op'>=</span> <span class='va'>sizevec</span>,
+          ploidy <span class='op'>=</span> <span class='va'>ploidy</span>, seq <span class='op'>=</span> <span class='fl'>0.001</span>, bias <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
+</div><div class='img'><img src='rflexdog-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -238,7 +242,7 @@ Details of the <code>rho</code> variable in <code><a href='betabinom.html'>betab
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

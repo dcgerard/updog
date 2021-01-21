@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
       </span>
     </div>
 
@@ -79,7 +79,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -114,7 +114,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="http://github.com/dcgerard/updog/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -135,9 +135,23 @@
       <small>Source: <a href='http://github.com/dcgerard/updog/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="updog-210" class="section level1">
+<h1 class="page-header" data-toc-text="2.1.0">
+<a href="#updog-210" class="anchor"></a>updog 2.1.0<small> Unreleased </small>
+</h1>
+<ol>
+<li>The parallel backend in <code><a href="../reference/multidog.html">multidog()</a></code> is now handled by the <a href="https://cran.r-project.org/package=future"><code>future</code></a> package. If you use the <code>nc</code> argument in <code><a href="../reference/multidog.html">multidog()</a></code>, it should still run in parallel using multiple R sessions on your local machine. However, you can now use the functionality of <code>future</code> to choose your own evaluation strategy, after setting <code>nc = NA</code>. This will also allow you to use schedulers in high performance computing environments through the <a href="https://cran.r-project.org/package=future.batchtools"><code>future.batchtools</code></a> package. See the <code><a href="../reference/multidog.html">multidog()</a></code> function documentation for more details.</li>
+<li>The vignette “Genotyping Many SNPs with multidog()” goes through an example of using the <code>future</code> package.</li>
+<li>A new experimental function, <code><a href="../reference/export_vcf.html">export_vcf()</a></code>, is available to export <code>multidog</code> objects to a VCF file.</li>
+<li>
+<code><a href="../reference/plot.multidog.html">plot.multidog()</a></code> will now plot the parent read-counts in F1 and S1 populations.</li>
+<li>Internally, <code><a href="../reference/multidog.html">multidog()</a></code> now uses iterators through the <a href="https://cran.r-project.org/package=iterators"><code>iterators</code></a> package to send only subsets of the data to each R process.</li>
+<li>A new internal <code>.combine</code> function is used in the <code>foreach()</code> call of <code><a href="../reference/multidog.html">multidog()</a></code> in order to decrease the memory usage of <code><a href="../reference/multidog.html">multidog()</a></code>.</li>
+</ol>
+</div>
     <div id="updog-202" class="section level1">
 <h1 class="page-header" data-toc-text="2.0.2">
-<a href="#updog-202" class="anchor"></a>updog 2.0.2<small> Unreleased </small>
+<a href="#updog-202" class="anchor"></a>updog 2.0.2<small> 2020-07-21 </small>
 </h1>
 <p>This is a massive edit of the updog software. Major changes include:</p>
 <ol>
@@ -200,7 +214,7 @@
 </h1>
 <ul>
 <li>Introduces more flexible priors for more general populations.</li>
-<li>Places a normal prior distribution on the logit of the overdispersion parameter. This might change genotype calls from previous versions of updog. To reproduce the genotype calls from previous versions of updog, simply set <code>mean_od = 0</code> and <code>var_od = Inf</code> in <code><a href="../reference/flexdog.html">flexdog()</a></code>.</li>
+<li>Places a normal prior distribution on the logit of the overdispersion parameter. This might change genotype calls from previous versions of updog. To reproduce the genotype calls from previous versions of updog, simply set <code>mean_od = 0</code> and <code>var_od =   Inf</code> in <code><a href="../reference/flexdog.html">flexdog()</a></code>.</li>
 <li>Adds the <code>method = "custom"</code> option to <code><a href="../reference/flexdog.html">flexdog()</a></code>. This lets users choose the genotype distribution if it is completely known a priori.</li>
 <li>Documentation updates.</li>
 </ul>
@@ -254,7 +268,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

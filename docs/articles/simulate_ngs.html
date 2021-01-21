@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -74,7 +74,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="http://github.com/dcgerard/updog/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -88,7 +88,7 @@
 
       
 
-      </header><script src="simulate_ngs_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="simulate_ngs_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simulate Next-Generation Sequencing Data</h1>
@@ -111,43 +111,48 @@
 <h1 class="hasAnchor">
 <a href="#analysis" class="anchor"></a>Analysis</h1>
 <p>Let’s suppose that we have 100 hexaploid individuals, with varying levels of read-depth.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">1</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">updog</span>)
-<span class="no">nind</span>    <span class="kw">&lt;-</span> <span class="fl">100</span>
-<span class="no">ploidy</span>  <span class="kw">&lt;-</span> <span class="fl">6</span>
-<span class="no">sizevec</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="kw pkg">stats</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span>(<span class="kw">n</span>   <span class="kw">=</span> <span class="no">nind</span>,
-                              <span class="kw">min</span> <span class="kw">=</span> <span class="fl">50</span>,
-                              <span class="kw">max</span> <span class="kw">=</span> <span class="fl">200</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/dcgerard/updog/">updog</a></span><span class="op">)</span>
+<span class="va">nind</span>    <span class="op">&lt;-</span> <span class="fl">100</span>
+<span class="va">ploidy</span>  <span class="op">&lt;-</span> <span class="fl">6</span>
+<span class="va">sizevec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span>n   <span class="op">=</span> <span class="va">nind</span>, 
+                              min <span class="op">=</span> <span class="fl">50</span>, 
+                              max <span class="op">=</span> <span class="fl">200</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>We can simulate their read-counts under various genotype distributions, allele biases, overdispersions, and sequencing error rates using the <code>rgeno</code> and <code>rflexdog</code> functions.</p>
 <div id="f1-population" class="section level2">
 <h2 class="hasAnchor">
 <a href="#f1-population" class="anchor"></a>F1 Population</h2>
 <p>Suppose these individuals are all siblings where the first parent has 4 copies of the reference allele and the second parent has 5 copies of the reference allele. Then the following code, using <code>rgeno</code>, will simulate the individuals’ genotypes.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">true_geno</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/rgeno.html">rgeno</a></span>(<span class="kw">n</span>      <span class="kw">=</span> <span class="no">nind</span>,
-                   <span class="kw">ploidy</span> <span class="kw">=</span> <span class="no">ploidy</span>,
-                   <span class="kw">model</span>  <span class="kw">=</span> <span class="st">"f1"</span>,
-                   <span class="kw">p1geno</span> <span class="kw">=</span> <span class="fl">4</span>,
-                   <span class="kw">p2geno</span> <span class="kw">=</span> <span class="fl">5</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">true_geno</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rgeno.html">rgeno</a></span><span class="op">(</span>n      <span class="op">=</span> <span class="va">nind</span>, 
+                   ploidy <span class="op">=</span> <span class="va">ploidy</span>,
+                   model  <span class="op">=</span> <span class="st">"f1"</span>, 
+                   p1geno <span class="op">=</span> <span class="fl">4</span>,
+                   p2geno <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <p>Once we have their genotypes, we can simulate their read-counts using <code>rflexdog</code>. Let’s suppose that there is a moderate level of allelic bias (0.7) and a small level of overdispersion (0.005). Generally, in the real data that I’ve seen, the bias will range between 0.5 and 2 and the overdispersion will range between 0 and 0.02, with only a few extremely overdispersed SNPs above 0.02.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">refvec</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/rflexdog.html">rflexdog</a></span>(<span class="kw">sizevec</span> <span class="kw">=</span> <span class="no">sizevec</span>,
-                   <span class="kw">geno</span>    <span class="kw">=</span> <span class="no">true_geno</span>,
-                   <span class="kw">ploidy</span>  <span class="kw">=</span> <span class="no">ploidy</span>,
-                   <span class="kw">seq</span>     <span class="kw">=</span> <span class="fl">0.001</span>,
-                   <span class="kw">bias</span>    <span class="kw">=</span> <span class="fl">0.7</span>,
-                   <span class="kw">od</span>      <span class="kw">=</span> <span class="fl">0.005</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">refvec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rflexdog.html">rflexdog</a></span><span class="op">(</span>sizevec <span class="op">=</span> <span class="va">sizevec</span>, 
+                   geno    <span class="op">=</span> <span class="va">true_geno</span>, 
+                   ploidy  <span class="op">=</span> <span class="va">ploidy</span>, 
+                   seq     <span class="op">=</span> <span class="fl">0.001</span>, 
+                   bias    <span class="op">=</span> <span class="fl">0.7</span>, 
+                   od      <span class="op">=</span> <span class="fl">0.005</span><span class="op">)</span></code></pre></div>
 <p>When we plot the data, it looks realistic</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/plot_geno.html">plot_geno</a></span>(<span class="kw">refvec</span>  <span class="kw">=</span> <span class="no">refvec</span>,
-          <span class="kw">sizevec</span> <span class="kw">=</span> <span class="no">sizevec</span>,
-          <span class="kw">ploidy</span>  <span class="kw">=</span> <span class="no">ploidy</span>,
-          <span class="kw">bias</span>    <span class="kw">=</span> <span class="fl">0.7</span>,
-          <span class="kw">seq</span>     <span class="kw">=</span> <span class="fl">0.001</span>,
-          <span class="kw">geno</span>    <span class="kw">=</span> <span class="no">true_geno</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plot_geno.html">plot_geno</a></span><span class="op">(</span>refvec  <span class="op">=</span> <span class="va">refvec</span>, 
+          sizevec <span class="op">=</span> <span class="va">sizevec</span>, 
+          ploidy  <span class="op">=</span> <span class="va">ploidy</span>, 
+          bias    <span class="op">=</span> <span class="fl">0.7</span>, 
+          seq     <span class="op">=</span> <span class="fl">0.001</span>,
+          geno    <span class="op">=</span> <span class="va">true_geno</span><span class="op">)</span></code></pre></div>
 <p><img src="simulate_ngs_files/figure-html/unnamed-chunk-4-1.png" width="432"></p>
 <p>We can test <code>flexdog</code> on these data</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">fout</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/flexdog.html">flexdog</a></span>(<span class="kw">refvec</span>  <span class="kw">=</span> <span class="no">refvec</span>,
-                <span class="kw">sizevec</span> <span class="kw">=</span> <span class="no">sizevec</span>,
-                <span class="kw">ploidy</span>  <span class="kw">=</span> <span class="no">ploidy</span>,
-                <span class="kw">model</span>   <span class="kw">=</span> <span class="st">"f1"</span>)
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fout</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flexdog.html">flexdog</a></span><span class="op">(</span>refvec  <span class="op">=</span> <span class="va">refvec</span>, 
+                sizevec <span class="op">=</span> <span class="va">sizevec</span>, 
+                ploidy  <span class="op">=</span> <span class="va">ploidy</span>, 
+                model   <span class="op">=</span> <span class="st">"f1"</span><span class="op">)</span>
 <span class="co">#&gt;          Fit: 1 of 5 </span>
 <span class="co">#&gt; Initial Bias: 0.3678794 </span>
 <span class="co">#&gt; Log-Likelihood: -363.9369 </span>
@@ -173,37 +178,40 @@
 <span class="co">#&gt; Log-Likelihood: -412.7397 </span>
 <span class="co">#&gt; Keeping old fit.</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Done!</span></pre></body></html></div>
+<span class="co">#&gt; Done!</span></code></pre></div>
 <p><code>flexdog</code> gives us reasonable genotyping, and it accurately estimates the proportion of individuals mis-genotyped.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fout</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fout</span><span class="op">)</span></code></pre></div>
 <p><img src="simulate_ngs_files/figure-html/unnamed-chunk-6-1.png" width="432"></p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## Estimated proportion misgenotyped</span>
-<span class="no">fout</span>$<span class="no">prop_mis</span>
+<span class="va">fout</span><span class="op">$</span><span class="va">prop_mis</span>
 <span class="co">#&gt; [1] 0.07011089</span>
 
 <span class="co">## Actual proportion misgenotyped</span>
-<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">fout</span>$<span class="no">geno</span> <span class="kw">!=</span> <span class="no">true_geno</span>)
-<span class="co">#&gt; [1] 0.05</span></pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">fout</span><span class="op">$</span><span class="va">geno</span> <span class="op">!=</span> <span class="va">true_geno</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.05</span></code></pre></div>
 </div>
 <div id="hwe-population" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hwe-population" class="anchor"></a>HWE Population</h2>
 <p>Now run the same simulations assuming the individuals are in Hardy-Weinberg population with an allele frequency of 0.75.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">true_geno</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/rgeno.html">rgeno</a></span>(<span class="kw">n</span>      <span class="kw">=</span> <span class="no">nind</span>,
-                   <span class="kw">ploidy</span> <span class="kw">=</span> <span class="no">ploidy</span>,
-                   <span class="kw">model</span>  <span class="kw">=</span> <span class="st">"hw"</span>,
-                   <span class="kw">allele_freq</span> <span class="kw">=</span> <span class="fl">0.75</span>)
-<span class="no">refvec</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/rflexdog.html">rflexdog</a></span>(<span class="kw">sizevec</span> <span class="kw">=</span> <span class="no">sizevec</span>,
-                   <span class="kw">geno</span>    <span class="kw">=</span> <span class="no">true_geno</span>,
-                   <span class="kw">ploidy</span>  <span class="kw">=</span> <span class="no">ploidy</span>,
-                   <span class="kw">seq</span>     <span class="kw">=</span> <span class="fl">0.001</span>,
-                   <span class="kw">bias</span>    <span class="kw">=</span> <span class="fl">0.7</span>,
-                   <span class="kw">od</span>      <span class="kw">=</span> <span class="fl">0.005</span>)
-<span class="no">fout</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/flexdog.html">flexdog</a></span>(<span class="kw">refvec</span>  <span class="kw">=</span> <span class="no">refvec</span>,
-                <span class="kw">sizevec</span> <span class="kw">=</span> <span class="no">sizevec</span>,
-                <span class="kw">ploidy</span>  <span class="kw">=</span> <span class="no">ploidy</span>,
-                <span class="kw">model</span>   <span class="kw">=</span> <span class="st">"hw"</span>)
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">true_geno</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rgeno.html">rgeno</a></span><span class="op">(</span>n      <span class="op">=</span> <span class="va">nind</span>,
+                   ploidy <span class="op">=</span> <span class="va">ploidy</span>,
+                   model  <span class="op">=</span> <span class="st">"hw"</span>, 
+                   allele_freq <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span>
+<span class="va">refvec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rflexdog.html">rflexdog</a></span><span class="op">(</span>sizevec <span class="op">=</span> <span class="va">sizevec</span>, 
+                   geno    <span class="op">=</span> <span class="va">true_geno</span>, 
+                   ploidy  <span class="op">=</span> <span class="va">ploidy</span>, 
+                   seq     <span class="op">=</span> <span class="fl">0.001</span>, 
+                   bias    <span class="op">=</span> <span class="fl">0.7</span>, 
+                   od      <span class="op">=</span> <span class="fl">0.005</span><span class="op">)</span>
+<span class="va">fout</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flexdog.html">flexdog</a></span><span class="op">(</span>refvec  <span class="op">=</span> <span class="va">refvec</span>, 
+                sizevec <span class="op">=</span> <span class="va">sizevec</span>, 
+                ploidy  <span class="op">=</span> <span class="va">ploidy</span>, 
+                model   <span class="op">=</span> <span class="st">"hw"</span><span class="op">)</span>
 <span class="co">#&gt;          Fit: 1 of 5 </span>
 <span class="co">#&gt; Initial Bias: 0.3678794 </span>
 <span class="co">#&gt; Log-Likelihood: -377.9226 </span>
@@ -230,20 +238,21 @@
 <span class="co">#&gt; Keeping old fit.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Done!</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fout</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fout</span><span class="op">)</span></code></pre></div>
 <p><img src="simulate_ngs_files/figure-html/unnamed-chunk-7-1.png" width="432"></p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## Estimated proportion misgenotyped</span>
-<span class="no">fout</span>$<span class="no">prop_mis</span>
+<span class="va">fout</span><span class="op">$</span><span class="va">prop_mis</span>
 <span class="co">#&gt; [1] 0.07625985</span>
 
 <span class="co">## Actual proportion misgenotyped</span>
-<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">fout</span>$<span class="no">geno</span> <span class="kw">!=</span> <span class="no">true_geno</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">fout</span><span class="op">$</span><span class="va">geno</span> <span class="op">!=</span> <span class="va">true_geno</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.07</span>
 
 <span class="co">## Estimated allele frequency close to true allele frequency</span>
-<span class="no">fout</span>$<span class="no">par</span>$<span class="no">alpha</span>
-<span class="co">#&gt; [1] 0.7473264</span></pre></body></html></div>
+<span class="va">fout</span><span class="op">$</span><span class="va">par</span><span class="op">$</span><span class="va">alpha</span>
+<span class="co">#&gt; [1] 0.7473264</span></code></pre></div>
 </div>
 </div>
 <div id="references" class="section level1">
@@ -268,7 +277,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

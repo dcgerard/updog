@@ -78,7 +78,7 @@ each genotype." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
       </span>
     </div>
 
@@ -86,7 +86,7 @@ each genotype." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -121,7 +121,7 @@ each genotype." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="http://github.com/dcgerard/updog/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -153,7 +153,7 @@ returns a vector of misclassification error rates <em>conditional</em> on
 each genotype.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>oracle_mis_vec</span>(<span class='no'>n</span>, <span class='no'>ploidy</span>, <span class='no'>seq</span>, <span class='no'>bias</span>, <span class='no'>od</span>, <span class='no'>dist</span>)</pre>
+    <pre class="usage"><span class='fu'>oracle_mis_vec</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>ploidy</span>, <span class='va'>seq</span>, <span class='va'>bias</span>, <span class='va'>od</span>, <span class='va'>dist</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -208,18 +208,24 @@ function from the updog package: <code>get_q_array(ploidy)[ref_count1 + 1, ref_c
 <li><p>Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., &amp; Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. <em>Genetics</em>, 210(3), 789-807. doi: <a href='https://doi.org/10.1534/genetics.118.301468'>10.1534/genetics.118.301468</a>.</p></li>
 </ul>
 
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>David Gerard</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>## Hardy-Weinberg population with allele-frequency of 0.75.</span>
 <span class='co'>## Moderate bias and moderate overdispersion.</span>
-<span class='no'>ploidy</span> <span class='kw'>&lt;-</span> <span class='fl'>4</span>
-<span class='no'>dist</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>dbinom</a></span>(<span class='fl'>0</span>:<span class='no'>ploidy</span>, <span class='no'>ploidy</span>, <span class='fl'>0.75</span>)
-<span class='no'>om</span> <span class='kw'>&lt;-</span> <span class='fu'>oracle_mis_vec</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>ploidy</span> <span class='kw'>=</span> <span class='no'>ploidy</span>, <span class='kw'>seq</span> <span class='kw'>=</span> <span class='fl'>0.001</span>,
-                     <span class='kw'>bias</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>od</span> <span class='kw'>=</span> <span class='fl'>0.01</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='no'>dist</span>)
-<span class='no'>om</span></div><div class='output co'>#&gt; [1] 0.0001497595 0.0657395175 0.0702925658 0.0267344300 0.0008221220</div><div class='input'>
+<span class='va'>ploidy</span> <span class='op'>&lt;-</span> <span class='fl'>4</span>
+<span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'>stats</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>dbinom</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>:</span><span class='va'>ploidy</span>, <span class='va'>ploidy</span>, <span class='fl'>0.75</span><span class='op'>)</span>
+<span class='va'>om</span> <span class='op'>&lt;-</span> <span class='fu'>oracle_mis_vec</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, ploidy <span class='op'>=</span> <span class='va'>ploidy</span>, seq <span class='op'>=</span> <span class='fl'>0.001</span>,
+                     bias <span class='op'>=</span> <span class='fl'>0.7</span>, od <span class='op'>=</span> <span class='fl'>0.01</span>, dist <span class='op'>=</span> <span class='va'>dist</span><span class='op'>)</span>
+<span class='va'>om</span>
+</div><div class='output co'>#&gt; [1] 0.0001497595 0.0657395175 0.0702925658 0.0267344300 0.0008221220</div><div class='input'>
 <span class='co'>## Get same output as oracle_mis this way:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>dist</span> * <span class='no'>om</span>)</div><div class='output co'>#&gt; [1] 0.02944818</div><div class='input'><span class='fu'><a href='oracle_mis.html'>oracle_mis</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>ploidy</span> <span class='kw'>=</span> <span class='no'>ploidy</span>, <span class='kw'>seq</span> <span class='kw'>=</span> <span class='fl'>0.001</span>,
-           <span class='kw'>bias</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>od</span> <span class='kw'>=</span> <span class='fl'>0.01</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] 0.02944818</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>dist</span> <span class='op'>*</span> <span class='va'>om</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.02944818</div><div class='input'><span class='fu'><a href='oracle_mis.html'>oracle_mis</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, ploidy <span class='op'>=</span> <span class='va'>ploidy</span>, seq <span class='op'>=</span> <span class='fl'>0.001</span>,
+           bias <span class='op'>=</span> <span class='fl'>0.7</span>, od <span class='op'>=</span> <span class='fl'>0.01</span>, dist <span class='op'>=</span> <span class='va'>dist</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.02944818</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -236,7 +242,7 @@ function from the updog package: <code>get_q_array(ploidy)[ref_count1 + 1, ref_c
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

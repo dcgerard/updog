@@ -78,7 +78,7 @@ Gerard and Ferrão (2020)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
       </span>
     </div>
 
@@ -86,7 +86,7 @@ Gerard and Ferrão (2020)." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -121,7 +121,7 @@ Gerard and Ferrão (2020)." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="http://github.com/dcgerard/updog/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -153,35 +153,35 @@ The method is described in detail in Gerard et. al. (2018) and
 Gerard and Ferrão (2020).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>flexdog_full</span>(
-  <span class='no'>refvec</span>,
-  <span class='no'>sizevec</span>,
-  <span class='no'>ploidy</span>,
-  <span class='kw'>model</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"norm"</span>, <span class='st'>"hw"</span>, <span class='st'>"bb"</span>, <span class='st'>"s1"</span>, <span class='st'>"s1pp"</span>, <span class='st'>"f1"</span>, <span class='st'>"f1pp"</span>, <span class='st'>"flex"</span>, <span class='st'>"uniform"</span>,
-    <span class='st'>"custom"</span>),
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>mean_bias</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>var_bias</span> <span class='kw'>=</span> <span class='fl'>0.7</span>^<span class='fl'>2</span>,
-  <span class='kw'>mean_seq</span> <span class='kw'>=</span> -<span class='fl'>4.7</span>,
-  <span class='kw'>var_seq</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>mean_od</span> <span class='kw'>=</span> -<span class='fl'>5.5</span>,
-  <span class='kw'>var_od</span> <span class='kw'>=</span> <span class='fl'>0.5</span>^<span class='fl'>2</span>,
-  <span class='kw'>seq</span> <span class='kw'>=</span> <span class='fl'>0.005</span>,
-  <span class='kw'>bias</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>od</span> <span class='kw'>=</span> <span class='fl'>0.001</span>,
-  <span class='kw'>update_bias</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>update_seq</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>update_od</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>itermax</span> <span class='kw'>=</span> <span class='fl'>200</span>,
-  <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>10</span>^-<span class='fl'>4</span>,
-  <span class='kw'>fs1_alpha</span> <span class='kw'>=</span> <span class='fl'>10</span>^-<span class='fl'>3</span>,
-  <span class='kw'>p1ref</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>p1size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>p2ref</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>p2size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>snpname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>prior_vec</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>flexdog_full</span><span class='op'>(</span>
+  <span class='va'>refvec</span>,
+  <span class='va'>sizevec</span>,
+  <span class='va'>ploidy</span>,
+  model <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"norm"</span>, <span class='st'>"hw"</span>, <span class='st'>"bb"</span>, <span class='st'>"s1"</span>, <span class='st'>"s1pp"</span>, <span class='st'>"f1"</span>, <span class='st'>"f1pp"</span>, <span class='st'>"flex"</span>, <span class='st'>"uniform"</span>,
+    <span class='st'>"custom"</span><span class='op'>)</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  mean_bias <span class='op'>=</span> <span class='fl'>0</span>,
+  var_bias <span class='op'>=</span> <span class='fl'>0.7</span><span class='op'>^</span><span class='fl'>2</span>,
+  mean_seq <span class='op'>=</span> <span class='op'>-</span><span class='fl'>4.7</span>,
+  var_seq <span class='op'>=</span> <span class='fl'>1</span>,
+  mean_od <span class='op'>=</span> <span class='op'>-</span><span class='fl'>5.5</span>,
+  var_od <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>^</span><span class='fl'>2</span>,
+  seq <span class='op'>=</span> <span class='fl'>0.005</span>,
+  bias <span class='op'>=</span> <span class='fl'>1</span>,
+  od <span class='op'>=</span> <span class='fl'>0.001</span>,
+  update_bias <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  update_seq <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  update_od <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  itermax <span class='op'>=</span> <span class='fl'>200</span>,
+  tol <span class='op'>=</span> <span class='fl'>10</span><span class='op'>^</span><span class='op'>-</span><span class='fl'>4</span>,
+  fs1_alpha <span class='op'>=</span> <span class='fl'>10</span><span class='op'>^</span><span class='op'>-</span><span class='fl'>3</span>,
+  p1ref <span class='op'>=</span> <span class='cn'>NULL</span>,
+  p1size <span class='op'>=</span> <span class='cn'>NULL</span>,
+  p2ref <span class='op'>=</span> <span class='cn'>NULL</span>,
+  p2size <span class='op'>=</span> <span class='cn'>NULL</span>,
+  snpname <span class='op'>=</span> <span class='cn'>NULL</span>,
+  prior_vec <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -321,7 +321,7 @@ non-negative elements that sum to 1.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of class <code>flexdog</code>, which consists
-    of a list with some or all of the following elements:</p><dl'>
+    of a list with some or all of the following elements:</p><dl>
   <dt><code>bias</code></dt><dd><p>The estimated bias parameter.</p></dd>
   <dt><code>seq</code></dt><dd><p>The estimated sequencing error rate.</p></dd>
   <dt><code>od</code></dt><dd><p>The estimated overdispersion parameter.</p></dd>
@@ -340,31 +340,31 @@ non-negative elements that sum to 1.</p></td>
   <dt><code>par</code></dt><dd><p>A list of the final estimates of the parameters
       of the genotype distribution. The elements included in <code>par</code>
       depends on the value of <code>model</code>:
-      <dl'>
-      <dt><code>model = "norm"</code>:</dt><dd><p><dl'>
+      <dl>
+      <dt><code>model = "norm"</code>:</dt><dd><p><dl>
           <dt><code>mu</code>:</dt><dd><p>The normal mean.</p></dd>
           <dt><code>sigma</code>:</dt><dd><p>The normal standard deviation (not variance).</p></dd></dl></p></dd>
-      <dt><code>model = "hw"</code>:</dt><dd><p><dl'>
+      <dt><code>model = "hw"</code>:</dt><dd><p><dl>
           <dt><code>alpha</code>:</dt><dd><p>The major allele frequency.</p></dd></dl></p></dd>
-      <dt><code>model = "bb"</code>:</dt><dd><p><dl'>
+      <dt><code>model = "bb"</code>:</dt><dd><p><dl>
           <dt><code>alpha</code>:</dt><dd><p>The major allele frequency.</p></dd>
           <dt><code>tau</code>:</dt><dd><p>The overdispersion parameter. See the
               description of <code>rho</code> in the Details of
-              <code><a href='betabinom.html'>betabinom</a>()</code>.</p></dd></dl></p></dd>
-      <dt><code>model = "s1"</code>:</dt><dd><p><dl'>
+              <code><a href='dbetabinom.html'>betabinom</a>()</code>.</p></dd></dl></p></dd>
+      <dt><code>model = "s1"</code>:</dt><dd><p><dl>
           <dt><code>pgeno</code>:</dt><dd><p>The allele dosage of the parent.</p></dd>
           <dt><code>alpha</code>:</dt><dd><p>The mixture proportion of the discrete
               uniform (included and fixed at a small value mostly for
               numerical stability reasons). See the description
               of <code>fs1_alpha</code> in <code>flexdog_full()</code>.</p></dd></dl></p></dd>
-      <dt><code>model = "f1"</code>:</dt><dd><p><dl'>
+      <dt><code>model = "f1"</code>:</dt><dd><p><dl>
           <dt><code>p1geno</code>:</dt><dd><p>The allele dosage of the first parent.</p></dd>
           <dt><code>p2geno</code>:</dt><dd><p>The allele dosage of the second parent.</p></dd>
           <dt><code>alpha</code>:</dt><dd><p>The mixture proportion of the discrete
               uniform (included and fixed at a small value mostly for
               numerical stability reasons). See the description
               of <code>fs1_alpha</code> in <code>flexdog_full()</code>.</p></dd></dl></p></dd>
-      <dt><code>model = "s1pp"</code>:</dt><dd><p><dl'>
+      <dt><code>model = "s1pp"</code>:</dt><dd><p><dl>
           <dt><code>ell1</code>:</dt><dd><p>The estimated dosage of the parent.</p></dd>
           <dt><code>tau1</code>:</dt><dd><p>The estimated double reduction parameter
               of the parent. Available if <code>ell1</code> is <code>1</code>, <code>2</code>,
@@ -376,7 +376,7 @@ non-negative elements that sum to 1.</p></td>
               uniform (included and fixed at a small value mostly for
               numerical stability reasons). See the description
               of <code>fs1_alpha</code> in <code>flexdog_full()</code>.</p></dd></dl></p></dd>
-      <dt><code>model = "f1pp"</code>:</dt><dd><p><dl'>
+      <dt><code>model = "f1pp"</code>:</dt><dd><p><dl>
           <dt><code>ell1</code>:</dt><dd><p>The estimated dosage of parent 1.</p></dd>
           <dt><code>ell2</code>:</dt><dd><p>The estimated dosage of parent 2.</p></dd>
           <dt><code>tau1</code>:</dt><dd><p>The estimated double reduction parameter
@@ -426,7 +426,7 @@ non-negative elements that sum to 1.</p></td>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Possible values of the genotype distribution (values of <code>model</code>) are:</p><dl'>
+    <p>Possible values of the genotype distribution (values of <code>model</code>) are:</p><dl>
   <dt><code>"norm"</code></dt><dd><p>A distribution whose genotype frequencies are proportional
       to the density value of a normal with some mean and some standard deviation.
       Unlike the <code>"bb"</code> and <code>"hw"</code> options, this will allow for
@@ -519,7 +519,7 @@ will be the estimated allele dosage of the alternative allele.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Run <code><a href='https://rdrr.io/r/utils/browseVignettes.html'>browseVignettes(package = "updog")</a></code> in R for example usage.
-    Other useful functions include:</p><dl'>
+    Other useful functions include:</p><dl>
     <dt><code><a href='multidog.html'>multidog</a></code></dt><dd><p>For running <code>flexdog</code> on multiple
           SNPs in parallel.</p></dd>
     <dt><code><a href='flexdog.html'>flexdog</a></code></dt><dd><p>For a more user-friendly version of
@@ -541,20 +541,24 @@ will be the estimated allele dosage of the alternative allele.</p>
 
 </dl>
 </div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>David Gerard</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>## A natural population. We will assume a</span>
 <span class='co'>## normal prior since there are so few</span>
 <span class='co'>## individuals.</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"uitdewilligen"</span>)
-<span class='no'>ploidy</span>  <span class='kw'>&lt;-</span> <span class='fl'>4</span>
-<span class='no'>refvec</span>  <span class='kw'>&lt;-</span> <span class='no'>uitdewilligen</span>$<span class='no'>refmat</span>[, <span class='fl'>1</span>]
-<span class='no'>sizevec</span> <span class='kw'>&lt;-</span> <span class='no'>uitdewilligen</span>$<span class='no'>sizemat</span>[, <span class='fl'>1</span>]
-<span class='no'>fout</span>    <span class='kw'>&lt;-</span> <span class='fu'>flexdog_full</span>(<span class='kw'>refvec</span>  <span class='kw'>=</span> <span class='no'>refvec</span>,
-                        <span class='kw'>sizevec</span> <span class='kw'>=</span> <span class='no'>sizevec</span>,
-                        <span class='kw'>ploidy</span>  <span class='kw'>=</span> <span class='no'>ploidy</span>,
-                        <span class='kw'>model</span>   <span class='kw'>=</span> <span class='st'>"norm"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>fout</span>)</div><div class='img'><img src='flexdog_full-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"uitdewilligen"</span><span class='op'>)</span>
+<span class='va'>ploidy</span>  <span class='op'>&lt;-</span> <span class='fl'>4</span>
+<span class='va'>refvec</span>  <span class='op'>&lt;-</span> <span class='va'>uitdewilligen</span><span class='op'>$</span><span class='va'>refmat</span><span class='op'>[</span>, <span class='fl'>1</span><span class='op'>]</span>
+<span class='va'>sizevec</span> <span class='op'>&lt;-</span> <span class='va'>uitdewilligen</span><span class='op'>$</span><span class='va'>sizemat</span><span class='op'>[</span>, <span class='fl'>1</span><span class='op'>]</span>
+<span class='va'>fout</span>    <span class='op'>&lt;-</span> <span class='fu'>flexdog_full</span><span class='op'>(</span>refvec  <span class='op'>=</span> <span class='va'>refvec</span>,
+                        sizevec <span class='op'>=</span> <span class='va'>sizevec</span>,
+                        ploidy  <span class='op'>=</span> <span class='va'>ploidy</span>,
+                        model   <span class='op'>=</span> <span class='st'>"norm"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>fout</span><span class='op'>)</span>
+</div><div class='img'><img src='flexdog_full-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -571,7 +575,7 @@ will be the estimated allele dosage of the alternative allele.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
