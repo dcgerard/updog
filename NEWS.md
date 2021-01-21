@@ -1,3 +1,12 @@
+# updog 2.1.0
+
+1. The parallel backend in `multidog()` is now handled by the [`future`](https://cran.r-project.org/package=future) package. If you use the `nc` argument in `multidog()`, it should still run in parallel using multiple R sessions on your local machine. However, you can now use the functionality of `future` to choose your own evaluation strategy, after setting `nc = NA`. This will also allow you to use schedulers in high performance computing environments through the [`future.batchtools`](https://cran.r-project.org/package=future.batchtools) package. See the `multidog()` function documentation for more details.
+2. The vignette "Genotyping Many SNPs with multidog()" goes through an example of using the `future` package.
+3. A new experimental function, `export_vcf()`, is available to export `multidog` objects to a VCF file.
+4. `plot.multidog()` will now plot the parent read-counts in F1 and S1 populations.
+5. Internally, `multidog()` now uses iterators through the [`iterators`](https://cran.r-project.org/package=iterators) package to send only subsets of the data to each R process.
+6. A new internal `.combine` function is used in the `foreach()` call of `multidog()` in order to decrease the memory usage of `multidog()`.
+
 # updog 2.0.2
 
 This is a massive edit of the updog software. Major changes include:

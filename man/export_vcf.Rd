@@ -2,25 +2,49 @@
 % Please edit documentation in R/multidog.R
 \name{export_vcf}
 \alias{export_vcf}
-\title{Save the output of \code{\link{multidog}} as a VCF file.}
+\title{Save the output of \code{\link{multidog}()} to a VCF file.}
 \usage{
 export_vcf(obj, filename)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{multidog}}.}
+\item{obj}{An object of class \code{\link{multidog}()}.}
 
-\item{filename}{A string, the path to save the vcf file.}
+\item{filename}{A string, the path to save the VCF file.}
 }
 \description{
-Most of the output of \code{\link{multidog}} can be converted
-to a VCF.
+This is an experimental function to save the output of
+\code{\link{multidog}()} to a VCF file.
 }
 \details{
 This function uses the Bioconductor packages VariantAnnotation,
 GenomicRanges, S4Vectors, and IRanges. You can install these using the
 BiocManager package via:
 
-\code{# install.packages("BiocManager")}
+\code{install.packages("BiocManager")}
 
 \code{BiocManager::install(c("VariantAnnotation", "GenomicRanges", "S4Vectors", "IRanges"))}
+
+To read more about the VCF format, see the official documentation
+on the Samtools website: \url{http://samtools.github.io/hts-specs/}.
+}
+\examples{
+\dontrun{
+library(VariantAnnotation)
+data("snpdat")
+refmat <- reshape2::acast(data = snpdat,
+                          formula = snp ~ id,
+                          value.var = "counts")
+sizemat <- reshape2::acast(data = snpdat,
+                           formula = snp ~ id,
+                           value.var = "size")
+mout <- multidog(refmat = refmat,
+                 sizemat = sizemat,
+                 ploidy = 6,
+                 model = "s1",
+                 p1_id = "Xushu18")
+export_vcf(obj = mout, filename = "./sweet_potato.vcf")
+spvcf <- readVcf("./sweet_potato.vcf")
+}
+
+
 }

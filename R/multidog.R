@@ -519,6 +519,21 @@ plot.multidog <- function(x, indices = seq(1, min(5, nrow(x$snpdf))), ...) {
     geno <- x$inddf[x$inddf$snp == current_snp, "geno", drop = TRUE]
     maxpostprob <- x$inddf[x$inddf$snp == current_snp, "maxpostprob", drop = TRUE]
 
+    if (is.na(x$snpdf$p1ref[[current_index]]) | is.na(x$snpdf$p1size[[current_index]])) {
+      p1_ref <- NULL
+      p1_size <- NULL
+    } else {
+      p1_ref <- x$snpdf$p1ref[[current_index]]
+      p1_size <- x$snpdf$p1size[[current_index]]
+    }
+
+    if (is.na(x$snpdf$p2ref[[current_index]]) | is.na(x$snpdf$p2size[[current_index]])) {
+      p2_ref <- NULL
+      p2_size <- NULL
+    } else {
+      p2_ref <- x$snpdf$p2ref[[current_index]]
+      p2_size <- x$snpdf$p2size[[current_index]]
+    }
 
     pllist[[i]] <- plot_geno(refvec         = refvec,
                              sizevec        = sizevec,
@@ -527,7 +542,11 @@ plot.multidog <- function(x, indices = seq(1, min(5, nrow(x$snpdf))), ...) {
                              seq            = seq,
                              bias           = bias,
                              maxpostprob    = maxpostprob,
-                             use_colorblind = ploidy <= 6) +
+                             use_colorblind = ploidy <= 6,
+                             p1ref          = p1_ref,
+                             p1size         = p1_size,
+                             p2ref          = p2_ref,
+                             p2size         = p2_size) +
       ggplot2::ggtitle(current_snp)
   }
 
@@ -626,22 +645,46 @@ filter_snp <- function(x, expr) {
 
 
 
-#' Save the output of \code{\link{multidog}} as a VCF file.
+#' Save the output of \code{\link{multidog}()} to a VCF file.
 #'
-#' Most of the output of \code{\link{multidog}} can be converted
-#' to a VCF.
+#' This is an experimental function to save the output of
+#' \code{\link{multidog}()} to a VCF file.
 #'
 #' This function uses the Bioconductor packages VariantAnnotation,
 #' GenomicRanges, S4Vectors, and IRanges. You can install these using the
 #' BiocManager package via:
 #'
-#' \code{# install.packages("BiocManager")}
+#' \code{install.packages("BiocManager")}
 #'
 #' \code{BiocManager::install(c("VariantAnnotation", "GenomicRanges", "S4Vectors", "IRanges"))}
 #'
+#' To read more about the VCF format, see the official documentation
+#' on the Samtools website: \url{http://samtools.github.io/hts-specs/}.
 #'
-#' @param obj An object of class \code{\link{multidog}}.
-#' @param filename A string, the path to save the vcf file.
+#' @param obj An object of class \code{\link{multidog}()}.
+#' @param filename A string, the path to save the VCF file.
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' library(VariantAnnotation)
+#' data("snpdat")
+#' refmat <- reshape2::acast(data = snpdat,
+#'                           formula = snp ~ id,
+#'                           value.var = "counts")
+#' sizemat <- reshape2::acast(data = snpdat,
+#'                            formula = snp ~ id,
+#'                            value.var = "size")
+#' mout <- multidog(refmat = refmat,
+#'                  sizemat = sizemat,
+#'                  ploidy = 6,
+#'                  model = "s1",
+#'                  p1_id = "Xushu18")
+#' export_vcf(obj = mout, filename = "./sweet_potato.vcf")
+#' spvcf <- readVcf("./sweet_potato.vcf")
+#' }
+#'
 #'
 export_vcf <- function(obj, filename) {
   if (requireNamespace("VariantAnnotation", quietly = TRUE) &&
@@ -665,7 +708,6 @@ export_vcf <- function(obj, filename) {
 
     nind <- ncol(geno$AD)
     nsnp <- nrow(obj$snpdf)
-
 
     infodf <- S4Vectors::DataFrame(
       row.names = c("snp",
@@ -732,6 +774,7 @@ export_vcf <- function(obj, filename) {
                    "GenomicRanges, and IRanges installed to run",
                    "\nexport_vcf()\n",
                    "To install, run in R:\n\n",
+                   "install.packages(\"BiocManager\")\n",
                    "BiocManager::install(c(\"VariantAnnotation\",",
                    " \"GenomicRanges\", \"S4Vectors\", \"IRanges\"))\n"))
   }

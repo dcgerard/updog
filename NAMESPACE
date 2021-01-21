@@ -3,6 +3,7 @@
 S3method(plot,flexdog)
 S3method(plot,multidog)
 export(dbetabinom)
+export(export_vcf)
 export(filter_snp)
 export(flexdog)
 export(flexdog_full)

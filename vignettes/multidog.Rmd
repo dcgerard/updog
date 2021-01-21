@@ -19,14 +19,13 @@ knitr::opts_chunk$set(
 
 # Abstract
 
-`multidog()` provides support for genotyping many SNPs by iterating
-`flexdog()` over the SNPs. Support is provided for parallel computing. The genotyping method
-is described in Gerard et al. (2018) and Gerard and Ferrão (2020).
+`multidog()` provides support for genotyping many SNPs by iterating `flexdog()` over the SNPs. Support is provided for parallel computing through the [`future`](https://cran.r-project.org/package=future) package. The genotyping method is described in Gerard et al. (2018) and Gerard and Ferrão (2020).
 
-# Analysis
+# Fit `multidog()`
 
-Let's load updog and the data from Uitdewilligen et al. (2013).
+Let's load `updog`, `future`, and the data from Uitdewilligen et al. (2013).
 ```{r setup}
+library(future)
 library(updog)
 data("uitdewilligen")
 ```
@@ -53,7 +52,7 @@ setdiff(rownames(sizemat), rownames(refmat))
 If we want to do parallel computing, we should check that we have the
 proper number of cores:
 ```{r}
-parallel::detectCores()
+future::availableCores()
 ```
 
 Now let's run `multidog()`:
@@ -64,6 +63,25 @@ mout <- multidog(refmat = refmat,
                  model = "norm",
                  nc = 2)
 ```
+
+By default, parallelization is run using 
+```{r, eval = FALSE}
+future::plan(future::multisession, workers = nc)
+```
+if `nc` is greater than 1. You can choose your own evaluation strategy by running `future::plan()` prior to running `multidog()`, and then setting `nc = NA`. This should be particularly useful in higher performance computing environments that use schedulers, where you can control the evaluation strategy through the [`future.batchtools`](https://cran.r-project.org/package=future.batchtools) package. For example, the following will run `multidog()` using forked R processes:
+```{r, eval = FALSE}
+future::plan(future::multicore, workers = 2)
+mout <- multidog(refmat = refmat, 
+                 sizemat = sizemat, 
+                 ploidy = ploidy, 
+                 model = "norm",
+                 nc = NA)
+
+## Shut down parallel workers
+future::plan(future::sequential)
+```
+
+# `multidog()` Output
 
 There is a plot method for the output of `multidog()`.
 ```{r}
@@ -107,6 +125,12 @@ dim(mout_cleaned$snpdf)
 dim(mout_cleaned$inddf)
 ```
 
+An experimental function is provided to export the `multidog()` output to a VCF file. You need to make sure you have the the following Bioconductor packages installed to use it: `VariantAnnotation`, `GenomicRanges`, `S4Vectors`, and `IRanges`.
+```{r, eval = FALSE}
+# install.packages("BiocManager")
+# BiocManager::install(c("VariantAnnotation", "GenomicRanges", "S4Vectors", "IRanges"))
+export_vcf(obj = mout, filename = "./multidog_fit.vcf")
+```
 
 # References
 
