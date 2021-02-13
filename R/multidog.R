@@ -384,6 +384,7 @@ multidog <- function(refmat,
                                                 bias_init = bias_init,
                                                 verbose   = FALSE,
                                                 prior_vec = prior_vec,
+                                                ...
                                                 )
 
 
