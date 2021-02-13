@@ -13,7 +13,7 @@ A list containing three objects. Two matrices and a numeric scalar:
 }
 }
 \source{
-\url{https://doi.org/10.1371/journal.pone.0062355}
+\doi{10.1371/journal.pone.0062355}
 }
 \usage{
 uitdewilligen
@@ -27,7 +27,7 @@ This is a subset of the data from Uitdewilligen et al (2013).
 }
 \references{
 \itemize{
-  \item{Uitdewilligen, J. G., Wolters, A. M. A., Bjorn, B., Borm, T. J., Visser, R. G., & van Eck, H. J. (2013). \href{https://doi.org/10.1371/journal.pone.0062355}{A next-generation sequencing method for genotyping-by-sequencing of highly heterozygous autotetraploid potato.} \emph{PLoS One}, 8(5), e62355.}
+  \item{Uitdewilligen, J. G., Wolters, A. M. A., Bjorn, B., Borm, T. J., Visser, R. G., & van Eck, H. J. (2013). A next-generation sequencing method for genotyping-by-sequencing of highly heterozygous autotetraploid potato. \emph{PLoS One}, 8(5), e62355. \doi{10.1371/journal.pone.0062355}}
 }
 }
 \keyword{datasets}

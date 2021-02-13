@@ -12,12 +12,12 @@
 #'
 #' @references
 #' \itemize{
-#'   \item{Uitdewilligen, J. G., Wolters, A. M. A., Bjorn, B., Borm, T. J., Visser, R. G., & van Eck, H. J. (2013). \href{https://doi.org/10.1371/journal.pone.0062355}{A next-generation sequencing method for genotyping-by-sequencing of highly heterozygous autotetraploid potato.} \emph{PLoS One}, 8(5), e62355.}
+#'   \item{Uitdewilligen, J. G., Wolters, A. M. A., Bjorn, B., Borm, T. J., Visser, R. G., & van Eck, H. J. (2013). A next-generation sequencing method for genotyping-by-sequencing of highly heterozygous autotetraploid potato. \emph{PLoS One}, 8(5), e62355. \doi{10.1371/journal.pone.0062355}}
 #' }
 #'
 #' @return A list. See the Format Section.
 #'
-#' @source \url{https://doi.org/10.1371/journal.pone.0062355}
+#' @source \doi{10.1371/journal.pone.0062355}
 #'
 #'
 "uitdewilligen"
@@ -37,12 +37,12 @@
 #'
 #' @return A \code{tibble}. See the Format Section.
 #'
-#' @source \url{https://doi.org/10.1038/srep44207}
+#' @source \doi{10.1038/srep44207}
 #'
 #' @references
 #' \itemize{
-#'   \item{Shirasawa, Kenta, Masaru Tanaka, Yasuhiro Takahata, Daifu Ma, Qinghe Cao, Qingchang Liu, Hong Zhai, Sang-Soo Kwak, Jae Cheol Jeong, Ung-Han Yoon, Hyeong-Un Lee, Hideki Hirakawa, and Sahiko Isobe "A high-density SNP genetic map consisting of a complete set of homologous groups in autohexaploid sweetpotato (Ipomoea batatas)." \emph{Scientific Reports 7} (2017). DOI: 10.1038/srep44207}
-#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. doi: \href{https://doi.org/10.1534/genetics.118.301468}{10.1534/genetics.118.301468}.}
+#'   \item{Shirasawa, Kenta, Masaru Tanaka, Yasuhiro Takahata, Daifu Ma, Qinghe Cao, Qingchang Liu, Hong Zhai, Sang-Soo Kwak, Jae Cheol Jeong, Ung-Han Yoon, Hyeong-Un Lee, Hideki Hirakawa, and Sahiko Isobe "A high-density SNP genetic map consisting of a complete set of homologous groups in autohexaploid sweetpotato (Ipomoea batatas)." \emph{Scientific Reports 7} (2017). \doi{10.1038/srep44207}}
+#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. \doi{10.1534/genetics.118.301468}.}
 #' }
 #'
 "snpdat"
