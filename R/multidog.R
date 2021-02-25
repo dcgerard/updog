@@ -3,21 +3,7 @@
 ################
 
 
-#' Function to combine the parallel output from \code{\link{multidog}()}
-#'
-#' @param ... Each element should be a list with two data frames. The first
-#'     data frames should all have the same column names, and the second
-#'     data frames should all have the same column names.
-#'
-#' @author David Gerard
-#'
-#' @noRd
-combine_flex <- function(...) {
-  list(
-    do.call(rbind, lapply(list(...), function(x) x[[1]])),
-    do.call(rbind, lapply(list(...), function(x) x[[2]]))
-  )
-}
+
 
 #' Fit \code{\link{flexdog}} to multiple SNPs.
 #'
@@ -45,11 +31,11 @@ combine_flex <- function(...) {
 #' provide the individual ID for parent(s) via the \code{p1_id}
 #' and \code{p2_id} arguments.
 #'
-#' The output is a list containing two data frames. The first data frame,
-#' called \code{snpdf}, contains information on each SNP, such as the allele bias
-#' and the sequencing error rate. The second data frame, called \code{inddf},
-#' contains information on each individual at each SNP, such as the estimated
-#' genotype and the posterior probability of being classified correctly.
+#' The output of the function is written in multiple tables parallely. This
+#' can cause corruption of some lines in the writing process. These lines
+#' will be eliminated, and thus also the markers that they contain. However,
+#' the proportion of corrupted lines is very small (our tests indicate 0.17%)
+#' and it occurs rarely in smaller datasets.
 #'
 #' SNPs that contain 0 reads (or all missing data) are entirely removed.
 #'
@@ -110,6 +96,19 @@ combine_flex <- function(...) {
 #'     length 1. This should correspond to a single column name in \code{refmat}
 #'     and \code{sizemat}.
 #'
+#'#' @param out Location where the output files will be written. A prefix for the file
+#'     might also be added. Defaults to "updog".
+#' @param outpars Character vector indicating which outputs from \code{flexdog}
+#'     should be written out.
+#'     Can take either of the following values:
+#'\describe{
+#'    \item{\code{"model"}:}{All snp genotyping parameters and model parameters, such as
+#'    bias, overdispersion, sequencing error, log-likelihood, etc.}
+#'    \item{\code{"all"}:}{All possible outputs}
+#'    \item{Any of the outputs in \code{flexdog()}:}{bias, seq, od, num_iter, llike, prop_mis, gene_dist,
+#'    par, geno, maxpostprob, postmean, postmat, genologlike}
+#'    }. For a full description of what each parameter means see \code{\link{flexdog}()}.
+#'    
 #' @return A list-like object of two data frames.
 #' \describe{
 #' \item{\code{snpdf}}{A data frame containing properties of the SNPs (markers).
@@ -311,295 +310,215 @@ multidog <- function(refmat,
   ## Get list of SNPs ---------------------------------------------------------
   snplist <- rownames(refmat)
 
-  ## Extract parent vectors ---------------------------------------------------
-  if (!is.null(p1_id)) {
-    p1_refvec <- refmat[, p1_id]
-    p1_sizevec <- sizemat[, p1_id]
-  } else {
-    p1_refvec <- rep(NA_real_, length.out = length(snplist))
-    p1_sizevec <- rep(NA_real_, length.out = length(snplist))
+  ## Initialize write files -----------------------------------------------
+  #I make write groups of 100 markers, but other numbers are possible
+  #Larger numbers should reduce the chance of corruption
+  #But the number should always be larger than snps/ncores
+  write_groups <- split(snplist,ceiling(seq_along(1:length(snplist))/100))
+  
+  #We need to initialize the outfiles by writing the column names
+  snp_cols <- c(snp_pars[!snp_pars %in% c("par","gene_dist")])
+  if("gene_dist" %in% snp_pars){
+    snp_pars <- c(snp_pars[!snp_pars %in% "gene_dist"],"gene_dist")
+    snp_cols <- c(snp_cols,paste("gene_dist",0:ploidy,sep = "_"))
   }
-
-  if (!is.null(p2_id)) {
-    p2_refvec <- refmat[, p2_id]
-    p2_sizevec <- sizemat[, p2_id]
-  } else {
-    p2_refvec <- rep(NA_real_, length.out = length(snplist))
-    p2_sizevec <- rep(NA_real_, length.out = length(snplist))
+  if("par" %in% snp_pars){
+    snp_pars <- c(snp_pars[!snp_pars %in% "par"],"par")
+    snp_cols <- c(snp_cols,par_in_model(model))
   }
-
-  refmat <- refmat[, indlist, drop = FALSE]
-  sizemat <- sizemat[, indlist, drop = FALSE]
-
-  ## Register doFuture  -------------------------------------------------------
-  oldDoPar <- doFuture::registerDoFuture()
-  on.exit(with(oldDoPar, foreach::setDoPar(fun=fun, data=data, info=info)), add = TRUE)
-
+  names_snp_ind_geno <- as.vector(sapply(snp_ind_geno_pars,paste,0:ploidy,sep = "_")  )
+  outfiles <- paste0(out,c(snp_ind_pars,names_snp_ind_geno))
+  names(outfiles) <- c(snp_ind_pars,names_snp_ind_geno)
+  if(length(snp_pars) > 1){
+    outfiles <- c(paste0(out,"model"),outfiles)
+    names(outfiles)[1] <- "model"
+  }
+  
+  for(n in names(outfiles)){
+    if(n == "model"){
+      cat("marker",snp_cols,"\n",file = outfiles[n])
+    }else{
+      cat("marker",indlist,"\n",file = outfiles[n])
+    }
+  }
+  
   ## Register workers ----------------------------------------------------------
-  if (!is.na(nc)) {
-    if (nc > 1) {
-      oplan <- future::plan(future::multisession, workers = nc)
-      on.exit(future::plan(oplan), add = TRUE)
-    }
-  }
-
-  ## Fit flexdog on all SNPs --------------------------------------------------
-  current_snp <- NULL
-  refvec <- NULL
-  sizevec <- NULL
-  p1_ref <- NULL
-  p1_size <- NULL
-  p2_ref <- NULL
-  p2_size <- NULL
-  retlist <- foreach::foreach(current_snp   = iterators::iter(snplist),
-                              refvec        = iterators::iter(refmat, by = "row"),
-                              sizevec       = iterators::iter(sizemat, by = "row"),
-                              p1_ref        = iterators::iter(p1_refvec),
-                              p1_size       = iterators::iter(p1_sizevec),
-                              p2_ref        = iterators::iter(p2_refvec),
-                              p2_size       = iterators::iter(p2_sizevec),
-                              .export       = c("flexdog"),
-                              .combine      = combine_flex,
-                              .multicombine = TRUE) %dorng% {
-
-                                if (is.na(p1_ref) || is.na(p1_size)) {
-                                  p1_ref <- NULL
-                                  p1_size <- NULL
-                                }
-
-                                if (is.na(p2_ref) || is.na(p2_size)) {
-                                  p2_ref <- NULL
-                                  p2_size <- NULL
-                                }
-
-                                fout <- flexdog(refvec    = refvec,
-                                                sizevec   = sizevec,
-                                                ploidy    = ploidy,
-                                                model     = model,
-                                                p1ref     = p1_ref,
-                                                p1size    = p1_size,
-                                                p2ref     = p2_ref,
-                                                p2size    = p2_size,
-                                                snpname   = current_snp,
-                                                bias_init = bias_init,
-                                                verbose   = FALSE,
-                                                prior_vec = prior_vec,
-                                                ...
-                                                )
-
-
-                                names(fout$gene_dist)  <- paste0("Pr_", seq(0, ploidy, by = 1))
-                                colnames(fout$postmat) <- paste0("Pr_", seq(0, ploidy, by = 1))
-                                colnames(fout$genologlike) <- paste0("logL_", seq(0, ploidy, by = 1))
-
-                                ## change to NA so can return in data frame ----
-                                if (is.null(p1_ref)) {
-                                  p1_ref <- NA_real_
-                                }
-                                if (is.null(p1_size)) {
-                                  p1_size <- NA_real_
-                                }
-                                if (is.null(p2_ref)) {
-                                  p2_ref <- NA_real_
-                                }
-                                if (is.null(p2_size)) {
-                                  p2_size <- NA_real_
-                                }
-
-                                snpprop <- cbind(
-                                  data.frame(snp      = current_snp,
-                                             bias     = fout$bias,
-                                             seq      = fout$seq,
-                                             od       = fout$od,
-                                             prop_mis = fout$prop_mis,
-                                             num_iter = fout$num_iter,
-                                             llike    = fout$llike,
-                                             ploidy   = fout$input$ploidy,
-                                             model    = fout$input$model,
-                                             p1ref    = p1_ref,
-                                             p1size   = p1_size,
-                                             p2ref    = p2_ref,
-                                             p2size   = p2_size),
-                                  as.data.frame(matrix(fout$gene_dist, nrow = 1, dimnames = list(NULL, names(fout$gene_dist))))
-                                )
-
-
-                                if (length(fout$par) > 0) {
-                                  par_vec_output <- unlist(fout$par)
-                                  snpprop <- cbind(snpprop, as.data.frame(matrix(par_vec_output, nrow = 1, dimnames = list(NULL, names(par_vec_output)))))
-                                }
-
-
-                                indprop <- cbind(
-                                  data.frame(snp         = current_snp,
-                                             ind         = indlist,
-                                             ref         = fout$input$refvec,
-                                             size        = fout$input$sizevec,
-                                             geno        = fout$geno,
-                                             postmean    = fout$postmean,
-                                             maxpostprob = fout$maxpostprob),
-                                  fout$postmat,
-                                  fout$genologlike)
-
-                                list(snpdf = snpprop, inddf = indprop)
-                              }
-
-  names(retlist) <- c("snpdf", "inddf")
-  attr(retlist, "rng") <- NULL
-  attr(retlist, "doRNG_version") <- NULL
-  class(retlist) <- "multidog"
-
-  cat("done!")
-
-  return(retlist)
-}
-
-#' Tests if an argument is a \code{multidog} object.
-#'
-#' @param x Anything.
-#'
-#' @return A logical. \code{TRUE} if \code{x} is a \code{multidog} object, and \code{FALSE} otherwise.
-#'
-#' @author David Gerard
-#'
-#' @export
-#'
-#' @examples
-#' is.multidog("anything")
-#' # FALSE
-#'
-is.multidog <- function(x) {
-  inherits(x, "multidog")
-}
-
-
-
-#' Plot the output of \code{\link{multidog}}.
-#'
-#' Produce genotype plots from the output of \code{\link{multidog}}. You may
-#' select which SNPs to plot.
-#'
-#' On a genotype plot, the x-axis contains the counts of the non-reference allele and the y-axis
-#' contains the counts of the reference allele. The dashed lines are the expected counts (both reference and alternative)
-#' given the sequencing error rate and the allele-bias. The plots are color-coded by the maximum-a-posterior genotypes.
-#' Transparency is proportional to the maximum posterior probability for an
-#' individual's genotype. Thus, we are less certain of the genotype of more transparent individuals. These
-#' types of plots are used in Gerard et. al. (2018) and Gerard and Ferrão (2020).
-#'
-#' @param x The output of \code{\link{multidog}}.
-#' @param indices A vector of integers. The indices of the SNPs to plot.
-#' @param ... not used.
-#'
-#' @author David Gerard
-#'
-#' @export
-#'
-#' @seealso \code{\link{plot_geno}}.
-#'
-#' @references
-#' \itemize{
-#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. \doi{10.1534/genetics.118.301468}.}
-#'   \item{Gerard, David, and Luís Felipe Ventorim Ferrão. "Priors for genotyping polyploids." Bioinformatics 36, no. 6 (2020): 1795-1800. \doi{10.1093/bioinformatics/btz852}.}
-#' }
-#'
-plot.multidog <- function(x, indices = seq(1, min(5, nrow(x$snpdf))), ...) {
-  assertthat::assert_that(is.multidog(x))
-
-  all(indices <= nrow(x$snpdf))
-
-  pllist <- list()
-  for (i in seq_along(indices)) {
-    current_index <- indices[[i]]
-    current_snp <- x$snpdf$snp[[current_index]]
-    bias <- x$snpdf$bias[[current_index]]
-    seq <- x$snpdf$seq[[current_index]]
-    ploidy <- x$snpdf$ploidy[[current_index]]
-
-    refvec <- x$inddf[x$inddf$snp == current_snp, "ref", drop = TRUE]
-    sizevec <- x$inddf[x$inddf$snp == current_snp, "size", drop = TRUE]
-    geno <- x$inddf[x$inddf$snp == current_snp, "geno", drop = TRUE]
-    maxpostprob <- x$inddf[x$inddf$snp == current_snp, "maxpostprob", drop = TRUE]
-
-    if (is.na(x$snpdf$p1ref[[current_index]]) | is.na(x$snpdf$p1size[[current_index]])) {
-      p1_ref <- NULL
-      p1_size <- NULL
-    } else {
-      p1_ref <- x$snpdf$p1ref[[current_index]]
-      p1_size <- x$snpdf$p1size[[current_index]]
-    }
-
-    if (is.na(x$snpdf$p2ref[[current_index]]) | is.na(x$snpdf$p2size[[current_index]])) {
-      p2_ref <- NULL
-      p2_size <- NULL
-    } else {
-      p2_ref <- x$snpdf$p2ref[[current_index]]
-      p2_size <- x$snpdf$p2size[[current_index]]
-    }
-
-    pllist[[i]] <- plot_geno(refvec         = refvec,
-                             sizevec        = sizevec,
-                             ploidy         = ploidy,
-                             geno           = geno,
-                             seq            = seq,
-                             bias           = bias,
-                             maxpostprob    = maxpostprob,
-                             use_colorblind = ploidy <= 6,
-                             p1ref          = p1_ref,
-                             p1size         = p1_size,
-                             p2ref          = p2_ref,
-                             p2size         = p2_size) +
-      ggplot2::ggtitle(current_snp)
-  }
-
-  return(pllist)
-}
-
-
-#' Return arrayicized elements from the output of \code{\link{multidog}}.
-#'
-#' This function will allow you to have genotype estimates, maximum posterior
-#' probability, and other values in the form of a matrix/array. If multiple
-#' variable names are provided, the data are formatted as a 3-dimensional
-#' array with the dimensions corresponding to (individuals, SNPs, variables).
-#'
-#' Note that the order of the individuals will be reshuffled. The order of the
-#' SNPs should be the same as in \code{x$snpdf}.
-#'
-#' @param x The output of \code{multidog}.
-#' @param varname A character vector of the variable names whose values
-#'     populate the cells. These should be column names from \code{x$inddf}.
-#'
-#' @author David Gerard
-#'
-#' @export
-#'
-format_multidog <- function(x, varname = "geno") {
-  assertthat::assert_that(is.multidog(x))
-  assertthat::assert_that(!is.null(x$inddf))
-  assertthat::assert_that(is.data.frame(x$inddf))
-  assertthat::assert_that(is.character(varname))
-  stopifnot(varname %in% colnames(x$inddf))
-
-  snporder <- x$snpdf[["snp"]]
-  if (length(varname) == 1) {
-    matout <- reshape2::acast(data      = x$inddf[, c("ind", "snp", varname)],
-                              formula   = snp ~ ind,
-                              value.var = varname)
-    matout <- matout[match(snporder, rownames(matout)), ]
+  if (nc == 1) {
+    foreach::registerDoSEQ()
   } else {
-    matout <- reshape2::acast(
-      data = reshape2::melt(data = x$inddf[, c("ind", "snp", varname)],
-                            id.vars = c("ind", "snp"),
-                            measure.vars = varname),
-      formula = snp ~ ind ~ variable,
-      value.var = "value"
-    )
-    names(dimnames(matout)) <- c("snp", "ind", "variable")
-    matout <- matout[match(snporder, dimnames(matout)[["snp"]]), , ]
+    cl = parallel::makeCluster(nc)
+    doParallel::registerDoParallel(cl = cl)
+    if (foreach::getDoParWorkers() == 1) {
+      stop("multidog: nc > 1 but only one core registered from foreach::getDoParWorkers().")
+    }
   }
-
-  return(matout)
+  
+  ## Fit flexdog on all SNPs --------------------------------------------------
+  #The result object N is an empty object, had to add it to prevent printing it
+  N <- foreach::foreach(w = write_groups,
+                        .export = "flexdog",
+                        .combine = c) %dopar% {
+                          
+                          fout <- lapply(w,function(current_snp){
+                            #here we calculate genotypes for groups of 100 markers
+                            #m stands for marker
+                            refvec <- refmat[current_snp, indlist, drop = TRUE]
+                            sizevec <- sizemat[current_snp, indlist, drop = TRUE]
+                            
+                            if (!is.null(p1_id)) {
+                              p1_ref <- refmat[current_snp, p1_id, drop = TRUE]
+                              p1_size <- sizemat[current_snp, p1_id, drop = TRUE]
+                            } else {
+                              p1_ref <- NULL
+                              p1_size <- NULL
+                            }
+                            
+                            if (!is.null(p2_id)) {
+                              p2_ref <- refmat[current_snp, p2_id, drop = TRUE]
+                              p2_size <- sizemat[current_snp, p2_id, drop = TRUE]
+                            } else {
+                              p2_ref <- NULL
+                              p2_size <- NULL
+                            }
+                            
+                            fout <- flexdog(refvec    = refvec,
+                                            sizevec   = sizevec,
+                                            ploidy    = ploidy,
+                                            model     = model,
+                                            p1ref     = p1_ref,
+                                            p1size    = p1_size,
+                                            p2ref     = p2_ref,
+                                            p2size    = p2_size,
+                                            snpname   = current_snp,
+                                            bias_init = bias_init,
+                                            verbose   = FALSE,
+                                            prior_vec = prior_vec)
+                            
+                            #We only return that which will be printed out. This saves a lot of memory
+                            return(fout[c(snp_pars,snp_ind_pars,snp_ind_geno_pars)])
+                          })
+                          
+                          #We process the results to obtain printable lines
+                          #First the snp-lines. All these parameters go into one matrix
+                          if(length(snp_pars) > 0){
+                            snp <- sapply(snp_pars,function(s) sapply(fout,'[[',s))
+                            snp <- t(do.call(rbind,snp))
+                            snp <- round(matrix(unlist(snp),ncol = ncol(snp)),4)
+                            snp <- cbind(w,snp)
+                            write(t(snp),outfiles["model"],append = T,ncolumns = ncol(snp))
+                          }
+                          
+                          #Then the snp x ind matrices
+                          if(length(snp_ind_pars) > 0){
+                            snp_ind <- lapply(snp_ind_pars,function(s){
+                              output_matrix <- sapply(fout,'[[',s)
+                              rbind(w,output_matrix)
+                            })
+                            names(snp_ind) <- snp_ind_pars
+                            for(out in names(snp_ind)){
+                              write(snp_ind[[out]],outfiles[out],
+                                    append = T,
+                                    ncol = length(indlist) + 1)
+                            }
+                          }
+                          
+                          #Then the snp x ind x geno which we will split into snp x ind matrices
+                          if(length(snp_ind_geno_pars) > 0){
+                            snp_ind_geno <- lapply(snp_ind_geno_pars,function(s){
+                              output_matlist <- lapply(fout,'[[',s)
+                              lapply(1:(ploidy+1),function(i){
+                                output_1_col <- t(sapply(output_matlist,'[',,i))
+                                cbind(w,round(output_1_col,4))
+                              })
+                            })
+                            snp_ind_geno <- unlist(snp_ind_geno,recursive = F)
+                            names(snp_ind_geno) <- names_snp_ind_geno
+                            for(out in names(snp_ind_geno)){
+                              write(t(snp_ind_geno[[out]]),
+                                    file = outfiles[out],
+                                    append = T,
+                                    ncolumns = length(indlist) + 1)
+                            }
+                          }
+                        }
+  
+  if (nc > 1) {
+    parallel::stopCluster(cl)
+  }
+  
+  ## Correct and sort outfiles ----------------------------------
+  corrupt_lines <- sapply(outfiles,function(f){
+    out_table <- corrupt_read(f)
+    new_order <- match(snplist[snplist %in% out_table$marker],out_table$marker)
+    out_table <- out_table[new_order,]
+    write.table(out_table,f,quote = F, row.names = F)
+    return(attr(out_table,"corrupt"))
+  })
+  
+  cat("done!")
+  
+  return(list(files = outfiles,
+              corrupt = corrupt_lines))
 }
+
+
+par_in_model <- function(model){
+  parlist <- list(norm=c("mu","alpha"),
+                  hw = "alpha",
+                  bb=c("alpha","tau"),
+                  s1 = c("p1geno","alpha"),
+                  f1 = c("p1geno","p2geno","alpha"),
+                  s1pp = c("ell1","tau1","gamma1","alpha"),
+                  f1pp = c("ell1","ell2","tau1","tau2","gamma1","gamma2","alpha"),
+                  flex = NULL,
+                  uniform = NULL,
+                  custom = NULL)
+  return(parlist[[model]])
+}
+
+clean_table <- function(file, out = NULL){
+  if(is.null(out)) out = paste0(file,"_clean")
+  con <- file(file,"r")
+  corrupt = c(NA)
+  for( i in 1:R.utils::countLines(file)){
+    line <- readLines(con,n = 1)
+    if(i == 1){
+      fields <- length(strsplit(line," ")[[1]])
+      cat(paste0(line,"\n"), file = out)
+    }else{
+      n <- length(strsplit(line," ")[[1]])
+      if(n == fields){
+        cat(paste0(line,"\n"),file = out,append = T)
+      }else{
+        corrupt = c(corrupt,i)
+      }
+    }
+  }
+  close(con)
+  if(length(corrupt) > 1){ corrupt <- corrupt[2:length(corrupt)]}
+  attr(corrupt,"msg") <- paste("There were",sum(!is.na(corrupt)),"corrupted lines in",file)
+  return(corrupt)
+}
+
+corrupt_read <- function(file){
+  tab <- tryCatch(as.data.frame(data.table::fread(file)),
+                  warning = function(w){
+                    corrupt <- clean_table(file, out = paste0(file,"_clean"))
+                    system(paste("mv",paste0(file,"_clean"),file))
+                    res <- as.data.frame(data.table::fread(file))
+                    attr(res,"corrupt") <- corrupt
+                    return(res)
+                  })
+  if(!is.null(attr(tab,"corrupt"))){
+    markers_lost <- length(attr(tab,"corrupt"))
+  }else{
+    markers_lost <- 0
+  }
+  attr(tab,"corrupt") <- markers_lost
+  return(tab)
+}
+
+
 
 #' Filter SNPs based on the output of \code{\link{multidog}()}.
 #'
