@@ -31,7 +31,8 @@ flexdog_full(
   p2ref = NULL,
   p2size = NULL,
   snpname = NULL,
-  prior_vec = NULL
+  prior_vec = NULL,
+  seq_upper = 0.05
 )
 }
 \arguments{
@@ -112,6 +113,10 @@ This is just returned in the \code{input} list for your reference.}
 \code{model = "custom"} and must otherwise be \code{NULL}. If specified,
 then it should be a vector of length \code{ploidy + 1} with
 non-negative elements that sum to 1.}
+
+\item{seq_upper}{The upper bound on the possible sequencing error rate.
+Default is 0.05, but you should adjust this if you have prior knowledge
+on the sequencing error rate of the sequencing technology.}
 }
 \value{
 An object of class \code{flexdog}, which consists

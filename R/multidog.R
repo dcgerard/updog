@@ -387,7 +387,6 @@ multidog <- function(refmat,
                                                 ...
                                                 )
 
-
                                 names(fout$gene_dist)  <- paste0("Pr_", seq(0, ploidy, by = 1))
                                 colnames(fout$postmat) <- paste0("Pr_", seq(0, ploidy, by = 1))
                                 colnames(fout$genologlike) <- paste0("logL_", seq(0, ploidy, by = 1))

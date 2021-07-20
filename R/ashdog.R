@@ -301,6 +301,9 @@ flexdog <- function(refvec,
 #'     \code{model = "custom"} and must otherwise be \code{NULL}. If specified,
 #'     then it should be a vector of length \code{ploidy + 1} with
 #'     non-negative elements that sum to 1.
+#' @param seq_upper The upper bound on the possible sequencing error rate.
+#'     Default is 0.05, but you should adjust this if you have prior knowledge
+#'     on the sequencing error rate of the sequencing technology.
 #'
 #' @return An object of class \code{flexdog}, which consists
 #'     of a list with some or all of the following elements:
@@ -509,7 +512,8 @@ flexdog_full <- function(refvec,
                          p2ref       = NULL,
                          p2size      = NULL,
                          snpname     = NULL,
-                         prior_vec   = NULL) {
+                         prior_vec   = NULL,
+                         seq_upper   = 0.05) {
 
   ## Check input -----------------------------------------------------
   model <- match.arg(model)
@@ -520,6 +524,8 @@ flexdog_full <- function(refvec,
                    "\nif you have data from a population study."))
   }
 
+  assertthat::assert_that(seq_upper > 0)
+  assertthat::assert_that(seq_upper < 1)
   assertthat::are_equal(length(refvec), length(sizevec))
   assertthat::assert_that(all(sizevec >= refvec, na.rm = TRUE))
   assertthat::assert_that(all(refvec >= 0, na.rm = TRUE))
@@ -527,7 +533,8 @@ flexdog_full <- function(refvec,
                         length(var_bias), length(mean_seq),
                         length(var_seq), length(seq),
                         length(bias), length(od),
-                        length(mean_od), length(var_od))
+                        length(mean_od), length(var_od),
+                        length(seq_upper))
   assertthat::assert_that(var_bias > 0)
   assertthat::assert_that(var_seq > 0)
   assertthat::assert_that(seq >= 0, seq <= 1)
@@ -666,7 +673,7 @@ flexdog_full <- function(refvec,
                          gr          = grad_for_eps,
                          method      = "L-BFGS-B",
                          lower       = rep(boundary_tol, 3),
-                         upper       = c(1 - boundary_tol, Inf,
+                         upper       = c(seq_upper, Inf,
                                          1 - boundary_tol),
                          control     = list(fnscale = -1, maxit = 20),
                          refvec      = refvec,

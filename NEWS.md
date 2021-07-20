@@ -1,3 +1,7 @@
+# updog 2.1.1
+
+1. Added an upper bound to the sequencing error rate in `flexdog_full()` (and, hence, `flexdog()` and `multidog()`). This protects against some poor behavior observed in a corner case. Specifically, F1 populations where the offspring are all the same genotype and is sequenced at moderate to low depth.
+
 # updog 2.1.0
 
 1. The parallel backend in `multidog()` is now handled by the [`future`](https://cran.r-project.org/package=future) package. If you use the `nc` argument in `multidog()`, it should still run in parallel using multiple R sessions on your local machine. However, you can now use the functionality of `future` to choose your own evaluation strategy, after setting `nc = NA`. This will also allow you to use schedulers in high performance computing environments through the [`future.batchtools`](https://cran.r-project.org/package=future.batchtools) package. See the `multidog()` function documentation for more details.
@@ -36,7 +40,7 @@ This is a massive edit of the updog software. Major changes include:
 
 # updog 1.2.0
 
-- Adds `multidog()` for genotypying multiple SNPs using parallel computing.
+- Adds `multidog()` for genotyping multiple SNPs using parallel computing.
 - Adds `plot.multidog()` for plotting the output of `multidog()`.
 - Adds `format_multidog()` for formatting the output of `multidog()` to be
   a matrix.
