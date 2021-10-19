@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.1</span>
       </span>
     </div>
 
@@ -73,7 +73,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="http://github.com/dcgerard/updog/">
+  <a href="https://github.com/dcgerard/updog/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,14 +88,14 @@
 
       
 
-      </header><script src="smells_like_updog_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
+      </header><script src="smells_like_updog_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Example Use of Updog</h1>
                         <h4 class="author">David Gerard</h4>
             
       
-      <small class="dont-index">Source: <a href="http://github.com/dcgerard/updog/blob/master/vignettes/smells_like_updog.Rmd"><code>vignettes/smells_like_updog.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/dcgerard/updog/blob/master/vignettes/smells_like_updog.Rmd"><code>vignettes/smells_like_updog.Rmd</code></a></small>
       <div class="hidden name"><code>smells_like_updog.Rmd</code></div>
 
     </div>
@@ -120,13 +120,13 @@
 <p>Load <code>updog</code> and the <code>snpdat</code> dataset. The data frame <code>snpdat</code> contains three example SNPs (single nucleotide polymorphisms) from the study of Shirasawa et al. (2017). The individuals in this dataset resulted from a single generation of selfing (an S1 population). You can read more about it by typing <code><a href="../reference/snpdat.html">?snpdat</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/dcgerard/updog/">updog</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dcgerard/updog/">updog</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"snpdat"</span><span class="op">)</span></code></pre></div>
 <p>We’ll extract the First SNP.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">smalldat</span> <span class="op">&lt;-</span> <span class="va">snpdat</span><span class="op">[</span><span class="va">snpdat</span><span class="op">$</span><span class="va">snp</span> <span class="op">==</span> <span class="st">"SNP1"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"counts"</span>, <span class="st">"size"</span>, <span class="st">"id"</span><span class="op">)</span><span class="op">]</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">smalldat</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 6 x 3</span>
+<span class="co">#&gt; # A tibble: 6 × 3</span>
 <span class="co">#&gt;   counts  size id           </span>
 <span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;chr&gt;        </span>
 <span class="co">#&gt; 1    298   354 Xushu18      </span>
@@ -156,13 +156,13 @@
                 p1size  <span class="op">=</span> <span class="va">psize</span><span class="op">)</span>
 <span class="co">#&gt;          Fit: 1 of 5 </span>
 <span class="co">#&gt; Initial Bias: 0.3678794 </span>
-<span class="co">#&gt; Log-Likelihood: -592.9507 </span>
+<span class="co">#&gt; Log-Likelihood: -592.9506 </span>
 <span class="co">#&gt; Keeping new fit.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;          Fit: 2 of 5 </span>
 <span class="co">#&gt; Initial Bias: 0.6065307 </span>
 <span class="co">#&gt; Log-Likelihood: -592.9506 </span>
-<span class="co">#&gt; Keeping new fit.</span>
+<span class="co">#&gt; Keeping old fit.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;          Fit: 3 of 5 </span>
 <span class="co">#&gt; Initial Bias: 1 </span>
@@ -196,7 +196,7 @@
 <p>The most intuitive measure would be the (posterior) proportion of individuals mis-genotyped:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">uout</span><span class="op">$</span><span class="va">prop_mis</span>
-<span class="co">#&gt; [1] 0.04216397</span></code></pre></div>
+<span class="co">#&gt; [1] 0.04216399</span></code></pre></div>
 <p>For this SNP, we expect about 4.22 percent of the individuals to be mis-genotyped. The specific cutoff you use is context and data dependent. But as a starting point, you could try a loose cutoff by keeping SNPs only if they have a <code>prop_mis</code> of less than 0.2.</p>
 <p>From our simulation studies, we also generally get rid of SNPs with overdispersion parameters greater than 0.05 or SNPs with bias parameters either less than 0.5 or greater than 2. However, if you have higher or lower read depths than what we looked at in our simulations, you should adjust these levels accordingly.</p>
 </div>

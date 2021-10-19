@@ -43,7 +43,7 @@
 <meta property="og:description" content="This is a convenience function that will run flexdog over many SNPs.
 Support is provided for parallel computing through the doParallel package.
 This function has not been extensively tested. Please report any bugs to
-http://github.com/dcgerard/updog/issues." />
+https://github.com/dcgerard/updog/issues." />
 
 
 
@@ -75,7 +75,7 @@ http://github.com/dcgerard/updog/issues." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.1</span>
       </span>
     </div>
 
@@ -117,7 +117,7 @@ http://github.com/dcgerard/updog/issues." />
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="http://github.com/dcgerard/updog/">
+  <a href="https://github.com/dcgerard/updog/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -136,7 +136,7 @@ http://github.com/dcgerard/updog/issues." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Fit <code><a href='flexdog.html'>flexdog</a></code> to multiple SNPs.</h1>
-    <small class="dont-index">Source: <a href='http://github.com/dcgerard/updog/blob/master/R/multidog.R'><code>R/multidog.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/dcgerard/updog/blob/master/R/multidog.R'><code>R/multidog.R</code></a></small>
     <div class="hidden name"><code>multidog.Rd</code></div>
     </div>
 
@@ -144,7 +144,7 @@ http://github.com/dcgerard/updog/issues." />
     <p>This is a convenience function that will run <code><a href='flexdog.html'>flexdog</a></code> over many SNPs.
 Support is provided for parallel computing through the doParallel package.
 This function has not been extensively tested. Please report any bugs to
-<a href='http://github.com/dcgerard/updog/issues'>http://github.com/dcgerard/updog/issues</a>.</p>
+<a href='https://github.com/dcgerard/updog/issues'>https://github.com/dcgerard/updog/issues</a>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>multidog</span><span class='op'>(</span>
@@ -199,7 +199,7 @@ See Details for possible values.</p></td>
 <p>The value of <code>nc</code> should never be
     more than the number of cores available in your computing environment.
     You can determine the maximum number of available cores by running
-    <code><a href='https://rdrr.io/pkg/future/man/re-exports.html'>future::availableCores()</a></code> in R.</p></td>
+    <code><a href='https://future.futureverse.org/reference/re-exports.html'>future::availableCores()</a></code> in R.</p></td>
     </tr>
     <tr>
       <th>p1_id</th>
@@ -319,9 +319,9 @@ package.</p>
 can use the <code>nc</code> argument to specify the parallelization. Any value
 of <code>nc</code> greater than 1 will result in multiple background R sessions to
 genotype all of the SNPs. The maximum value of <code>nc</code> you should
-try can be found by running <code><a href='https://rdrr.io/pkg/future/man/re-exports.html'>future::availableCores()</a></code>. Running
+try can be found by running <code><a href='https://future.futureverse.org/reference/re-exports.html'>future::availableCores()</a></code>. Running
 <code>multidog()</code> using <code>nc</code> is equivalent to setting the future
-plan with <code><a href='https://rdrr.io/pkg/future/man/plan.html'>future::plan(future::multisession, workers = nc)</a></code>.</p>
+plan with <code><a href='https://future.futureverse.org/reference/plan.html'>future::plan(future::multisession, workers = nc)</a></code>.</p>
 <p>Using the future package means that different evaluation strategies
 are possible. In particular, if you are using a high performance machine,
 you can explore using the
@@ -329,11 +329,11 @@ you can explore using the
 package to evaluate <code>multidog()</code> using schedulers like Slurm
 or TORQUE/PBS.</p>
 <p>To use a different strategy, set <code>nc = NA</code> and then
- run <code><a href='https://rdrr.io/pkg/future/man/plan.html'>future::plan()</a></code> prior to
+ run <code><a href='https://future.futureverse.org/reference/plan.html'>future::plan()</a></code> prior to
 running <code>multidog()</code>. For example, to set up forked R processes
 on your current machine (instead of using background R sessions), you would
 run (will not work on Windows):
-<code><a href='https://rdrr.io/pkg/future/man/plan.html'>future::plan(future::multicore)</a></code>, followed by
+<code><a href='https://future.futureverse.org/reference/plan.html'>future::plan(future::multicore)</a></code>, followed by
 running <code>multidog()</code> with <code>nc = NA</code>. See the examples below.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -365,7 +365,7 @@ running <code>multidog()</code> with <code>nc = NA</code>. See the examples belo
 <span class='co'>## Run multiple external R sessions on the local machine.</span>
 <span class='co'>## Note that we set `nc = NA`.</span>
 <span class='va'>cl</span> <span class='op'>&lt;-</span> <span class='fu'>parallel</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/parallel/makeCluster.html'>makeCluster</a></span><span class='op'>(</span><span class='fl'>2</span>, timeout <span class='op'>=</span> <span class='fl'>60</span><span class='op'>)</span>
-<span class='fu'>future</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></span><span class='op'>(</span><span class='fu'>future</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/future/man/cluster.html'>cluster</a></span>, workers <span class='op'>=</span> <span class='va'>cl</span><span class='op'>)</span>
+<span class='fu'>future</span><span class='fu'>::</span><span class='fu'><a href='https://future.futureverse.org/reference/plan.html'>plan</a></span><span class='op'>(</span><span class='fu'>future</span><span class='fu'>::</span><span class='va'><a href='https://future.futureverse.org/reference/cluster.html'>cluster</a></span>, workers <span class='op'>=</span> <span class='va'>cl</span><span class='op'>)</span>
 <span class='va'>mout</span> <span class='op'>&lt;-</span> <span class='fu'>multidog</span><span class='op'>(</span>refmat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>uitdewilligen</span><span class='op'>$</span><span class='va'>refmat</span><span class='op'>)</span>,
                  sizemat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>uitdewilligen</span><span class='op'>$</span><span class='va'>sizemat</span><span class='op'>)</span>,
                  ploidy <span class='op'>=</span> <span class='va'>uitdewilligen</span><span class='op'>$</span><span class='va'>ploidy</span>,
@@ -375,7 +375,7 @@ running <code>multidog()</code> with <code>nc = NA</code>. See the examples belo
 
 <span class='co'>## Close cluster and reset future to current R process</span>
 <span class='fu'>parallel</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/parallel/makeCluster.html'>stopCluster</a></span><span class='op'>(</span><span class='va'>cl</span><span class='op'>)</span>
-<span class='fu'>future</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></span><span class='op'>(</span><span class='fu'>future</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/future/man/sequential.html'>sequential</a></span><span class='op'>)</span>
+<span class='fu'>future</span><span class='fu'>::</span><span class='fu'><a href='https://future.futureverse.org/reference/plan.html'>plan</a></span><span class='op'>(</span><span class='fu'>future</span><span class='fu'>::</span><span class='va'><a href='https://future.futureverse.org/reference/sequential.html'>sequential</a></span><span class='op'>)</span>
 <span class='op'>}</span>
 
 </div></pre>

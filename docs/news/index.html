@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.1</span>
       </span>
     </div>
 
@@ -113,7 +113,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="http://github.com/dcgerard/updog/">
+  <a href="https://github.com/dcgerard/updog/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -132,9 +132,18 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='http://github.com/dcgerard/updog/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+      <small>Source: <a href='https://github.com/dcgerard/updog/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="updog-211" class="section level1">
+<h1 class="page-header" data-toc-text="2.1.1">
+<a href="#updog-211" class="anchor"></a>updog 2.1.1<small> Unreleased </small>
+</h1>
+<ol>
+<li>Added an upper bound to the sequencing error rate in <code><a href="../reference/flexdog_full.html">flexdog_full()</a></code> (and, hence, <code><a href="../reference/flexdog.html">flexdog()</a></code> and <code><a href="../reference/multidog.html">multidog()</a></code>). This protects against some poor behavior observed in a corner case. Specifically, F1 populations where the offspring are all the same genotype and is sequenced at moderate to low depth.</li>
+<li>Fixed some stale URL’s, fixed some style issues found by lintr.</li>
+</ol>
+</div>
     <div id="updog-210" class="section level1">
 <h1 class="page-header" data-toc-text="2.1.0">
 <a href="#updog-210" class="anchor"></a>updog 2.1.0<small> Unreleased </small>
@@ -181,7 +190,7 @@
 <a href="#updog-120" class="anchor"></a>updog 1.2.0<small> 2020-01-28 </small>
 </h1>
 <ul>
-<li>Adds <code><a href="../reference/multidog.html">multidog()</a></code> for genotypying multiple SNPs using parallel computing.</li>
+<li>Adds <code><a href="../reference/multidog.html">multidog()</a></code> for genotyping multiple SNPs using parallel computing.</li>
 <li>Adds <code><a href="../reference/plot.multidog.html">plot.multidog()</a></code> for plotting the output of <code><a href="../reference/multidog.html">multidog()</a></code>.</li>
 <li>Adds <code><a href="../reference/format_multidog.html">format_multidog()</a></code> for formatting the output of <code><a href="../reference/multidog.html">multidog()</a></code> to be a matrix.</li>
 <li>Removes dependency on CVXR. This makes install and maintenance a little easier. The defaults for this specific problem were a little faster anyway.</li>
@@ -235,7 +244,7 @@
 <p>The value of prop_mis is a very intuitive measure for the quality of the SNP. prop_mis is the posterior proportion of individuals mis-genotyped. So if you want only SNPS that accurately genotype, say, 95% of the individuals, you could discard all SNPs with a prop_mis <strong>over 0.05</strong>.</p>
 </blockquote>
 </li>
-<li><p>I’ve now exported some C++ functions that I think are useful. You can call them in the usual way: <a href="http://r-pkgs.had.co.nz/src.html#cpp-import" class="uri">http://r-pkgs.had.co.nz/src.html#cpp-import</a>.</p></li>
+<li><p>I’ve now exported some C++ functions that I think are useful. You can call them in the usual way: <a href="https://r-pkgs.org/src.html#cpp-import" class="uri">https://r-pkgs.org/src.html#cpp-import</a>.</p></li>
 </ul>
 </div>
     <div id="updog-0990" class="section level1">

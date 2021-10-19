@@ -78,7 +78,7 @@ Gerard and Ferrão (2020)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.1</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@ Gerard and Ferrão (2020)." />
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="http://github.com/dcgerard/updog/">
+  <a href="https://github.com/dcgerard/updog/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -139,7 +139,7 @@ Gerard and Ferrão (2020)." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Flexible genotyping for polyploids from next-generation sequencing data.</h1>
-    <small class="dont-index">Source: <a href='http://github.com/dcgerard/updog/blob/master/R/ashdog.R'><code>R/ashdog.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/dcgerard/updog/blob/master/R/ashdog.R'><code>R/ashdog.R</code></a></small>
     <div class="hidden name"><code>flexdog_full.Rd</code></div>
     </div>
 
@@ -180,7 +180,8 @@ Gerard and Ferrão (2020).</p>
   p2ref <span class='op'>=</span> <span class='cn'>NULL</span>,
   p2size <span class='op'>=</span> <span class='cn'>NULL</span>,
   snpname <span class='op'>=</span> <span class='cn'>NULL</span>,
-  prior_vec <span class='op'>=</span> <span class='cn'>NULL</span>
+  prior_vec <span class='op'>=</span> <span class='cn'>NULL</span>,
+  seq_upper <span class='op'>=</span> <span class='fl'>0.05</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -315,6 +316,12 @@ This is just returned in the <code>input</code> list for your reference.</p></td
 <code>model = "custom"</code> and must otherwise be <code>NULL</code>. If specified,
 then it should be a vector of length <code>ploidy + 1</code> with
 non-negative elements that sum to 1.</p></td>
+    </tr>
+    <tr>
+      <th>seq_upper</th>
+      <td><p>The upper bound on the possible sequencing error rate.
+Default is 0.05, but you should adjust this if you have prior knowledge
+on the sequencing error rate of the sequencing technology.</p></td>
     </tr>
     </table>
 

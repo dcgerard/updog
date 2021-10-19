@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.1</span>
       </span>
     </div>
 
@@ -73,7 +73,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="http://github.com/dcgerard/updog/">
+  <a href="https://github.com/dcgerard/updog/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,14 +88,14 @@
 
       
 
-      </header><script src="multidog_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
+      </header><script src="multidog_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Genotyping Many SNPs with multidog()</h1>
                         <h4 class="author">David Gerard</h4>
             
       
-      <small class="dont-index">Source: <a href="http://github.com/dcgerard/updog/blob/master/vignettes/multidog.Rmd"><code>vignettes/multidog.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/dcgerard/updog/blob/master/vignettes/multidog.Rmd"><code>vignettes/multidog.Rmd</code></a></small>
       <div class="hidden name"><code>multidog.Rmd</code></div>
 
     </div>
@@ -113,8 +113,8 @@
 </h1>
 <p>Let’s load <code>updog</code>, <code>future</code>, and the data from Uitdewilligen et al. (2013).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HenrikBengtsson/future">future</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/dcgerard/updog/">updog</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org">future</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dcgerard/updog/">updog</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"uitdewilligen"</span><span class="op">)</span></code></pre></div>
 <p><code>uitdewilligen$refmat</code> is a matrix of reference counts while <code>uitdewilligen$sizemat</code> is a matrix of total read counts. In these data, the rows index the individuals and the columns index the loci. But for insertion into <code><a href="../reference/multidog.html">multidog()</a></code> we need it the other way around (individuals in the columns and loci in the rows). So we will transpose these matrices.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -129,9 +129,9 @@
 <span class="co">#&gt; character(0)</span></code></pre></div>
 <p>If we want to do parallel computing, we should check that we have the proper number of cores:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/future/man/re-exports.html">availableCores</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/re-exports.html">availableCores</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; system </span>
-<span class="co">#&gt;      8</span></code></pre></div>
+<span class="co">#&gt;     16</span></code></pre></div>
 <p>Now let’s run <code><a href="../reference/multidog.html">multidog()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mout</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/multidog.html">multidog</a></span><span class="op">(</span>refmat <span class="op">=</span> <span class="va">refmat</span>, 
@@ -154,10 +154,10 @@
 <span class="co">#&gt; Working on it...done!</span></code></pre></div>
 <p>By default, parallelization is run using</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/future/man/plan.html">plan</a></span><span class="op">(</span><span class="fu">future</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/future/man/multisession.html">multisession</a></span>, workers <span class="op">=</span> <span class="va">nc</span><span class="op">)</span></code></pre></div>
-<p>if <code>nc</code> is greater than 1. You can choose your own evaluation strategy by running <code><a href="https://rdrr.io/pkg/future/man/plan.html">future::plan()</a></code> prior to running <code><a href="../reference/multidog.html">multidog()</a></code>, and then setting <code>nc = NA</code>. This should be particularly useful in higher performance computing environments that use schedulers, where you can control the evaluation strategy through the <a href="https://cran.r-project.org/package=future.batchtools"><code>future.batchtools</code></a> package. For example, the following will run <code><a href="../reference/multidog.html">multidog()</a></code> using forked R processes:</p>
+<code class="sourceCode R"><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="fu">future</span><span class="fu">::</span><span class="va"><a href="https://future.futureverse.org/reference/multisession.html">multisession</a></span>, workers <span class="op">=</span> <span class="va">nc</span><span class="op">)</span></code></pre></div>
+<p>if <code>nc</code> is greater than 1. You can choose your own evaluation strategy by running <code><a href="https://future.futureverse.org/reference/plan.html">future::plan()</a></code> prior to running <code><a href="../reference/multidog.html">multidog()</a></code>, and then setting <code>nc = NA</code>. This should be particularly useful in higher performance computing environments that use schedulers, where you can control the evaluation strategy through the <a href="https://cran.r-project.org/package=future.batchtools"><code>future.batchtools</code></a> package. For example, the following will run <code><a href="../reference/multidog.html">multidog()</a></code> using forked R processes:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/future/man/plan.html">plan</a></span><span class="op">(</span><span class="fu">future</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/future/man/multicore.html">multicore</a></span>, workers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="fu">future</span><span class="fu">::</span><span class="va"><a href="https://future.futureverse.org/reference/multicore.html">multicore</a></span>, workers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="va">mout</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/multidog.html">multidog</a></span><span class="op">(</span>refmat <span class="op">=</span> <span class="va">refmat</span>, 
                  sizemat <span class="op">=</span> <span class="va">sizemat</span>, 
                  ploidy <span class="op">=</span> <span class="va">ploidy</span>, 
@@ -165,7 +165,7 @@
                  nc <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>
 
 <span class="co">## Shut down parallel workers</span>
-<span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/future/man/plan.html">plan</a></span><span class="op">(</span><span class="fu">future</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/future/man/sequential.html">sequential</a></span><span class="op">)</span></code></pre></div>
+<span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="fu">future</span><span class="fu">::</span><span class="va"><a href="https://future.futureverse.org/reference/sequential.html">sequential</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div id="multidog-output" class="section level1">
 <h1 class="hasAnchor">

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.1</span>
       </span>
     </div>
 
@@ -73,7 +73,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="http://github.com/dcgerard/updog/">
+  <a href="https://github.com/dcgerard/updog/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,14 +88,14 @@
 
       
 
-      </header><script src="oracle_calculations_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
+      </header><script src="oracle_calculations_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Oracle Calculations</h1>
                         <h4 class="author">David Gerard</h4>
             
       
-      <small class="dont-index">Source: <a href="http://github.com/dcgerard/updog/blob/master/vignettes/oracle_calculations.Rmd"><code>vignettes/oracle_calculations.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/dcgerard/updog/blob/master/vignettes/oracle_calculations.Rmd"><code>vignettes/oracle_calculations.Rmd</code></a></small>
       <div class="hidden name"><code>oracle_calculations.Rmd</code></div>
 
     </div>
@@ -119,7 +119,7 @@
 <span class="va">maxerr</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></code></pre></div>
 <p>Before we do this, we also need the distribution of the offspring genotypes. We can get this distribution assuming various parental genotypes using the <code>get_q_array</code> function. Typically, error rates will be larger when the allele-frequency is closer to 0.5. So we’ll start in the worst-case scenario of assuming that the parent has 2 copies of the reference allele.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/dcgerard/updog/">updog</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dcgerard/updog/">updog</a></span><span class="op">)</span>
 <span class="va">ploidy</span> <span class="op">&lt;-</span> <span class="fl">4</span>
 <span class="va">pgeno</span> <span class="op">&lt;-</span> <span class="fl">2</span>
 <span class="va">gene_dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_q_array.html">get_q_array</a></span><span class="op">(</span>ploidy <span class="op">=</span> <span class="va">ploidy</span><span class="op">)</span><span class="op">[</span><span class="va">pgeno</span> <span class="op">+</span> <span class="fl">1</span>, <span class="va">pgeno</span> <span class="op">+</span> <span class="fl">1</span>, <span class="op">]</span></code></pre></div>
