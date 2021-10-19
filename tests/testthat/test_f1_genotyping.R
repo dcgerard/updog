@@ -1,6 +1,8 @@
 context("F1 genotyping")
 
 test_that("get intuitive F1 genotyping", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   load("testdat.RData")
   ploidy <- 2
 
@@ -18,6 +20,8 @@ test_that("get intuitive F1 genotyping", {
 
 
 test_that("flex_update_pivec gives intuitive results", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   weight_vec <- c(70.87955, 64.10825, 0.01219)
   control <- list(qarray = structure(c(1, 0.5, 0, 0.5, 0.25, 0, 0, 0, 0, 0,
                                        0.5, 1, 0.5, 0.5, 0.5, 1, 0.5, 0, 0,

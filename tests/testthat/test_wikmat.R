@@ -1,6 +1,8 @@
 context("wik_mat and probvec")
 
 test_that("wik_mat gives probvec when sizevec == 0", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   refvec <- c(1, 1, 0)
   sizevec <- c(1, 2, 0)
   ploidy <- 4

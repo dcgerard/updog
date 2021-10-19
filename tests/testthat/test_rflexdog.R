@@ -1,6 +1,8 @@
 context("rflexdog")
 
 test_that("rgeno works", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   pivec <- runif(7)
   pivec <- pivec / sum(pivec)
   trash <- rgeno(n = 10, ploidy = 6, model = "hw", allele_freq = 0.5)
@@ -14,6 +16,8 @@ test_that("rgeno works", {
 })
 
 test_that("rflexdog works", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   set.seed(1)
   sizevec <- rep(1000000, length = 7)
   geno    <- 0:6

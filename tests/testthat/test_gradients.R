@@ -1,6 +1,8 @@
 context("gradients")
 
 test_that("grad_for_mu_sigma2 is the gradient for obj_for_mu_sigma2", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   set.seed(1)
   nind <- 11
   mu <- rnorm(nind)
@@ -35,6 +37,8 @@ test_that("grad_for_mu_sigma2 is the gradient for obj_for_mu_sigma2", {
 )
 
 test_that("grad_for_mu_sigma2 doesn't return nan's", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   set.seed(1)
   nind <- 11
   mu <- rnorm(nind)
@@ -54,6 +58,8 @@ test_that("grad_for_mu_sigma2 doesn't return nan's", {
 )
 
 test_that("dpen_dh works", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   h        <- 1.3
   mu_h     <- 0.5
   sigma2_h <- 0.4
@@ -70,6 +76,8 @@ test_that("dpen_dh works", {
 )
 
 test_that("dpen_deps works", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   eps <- 0.01
   mu_eps <- -4.7
   sigma2_eps <- 1
@@ -86,6 +94,8 @@ test_that("dpen_deps works", {
 )
 
 test_that("dlbeta_dxi works", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   x   <- 3
   n   <- 13
   xi  <- 0.3
@@ -104,6 +114,8 @@ test_that("dlbeta_dxi works", {
 )
 
 test_that("dlbeta_dh, dlbeta_deps, and dlbeta_dtau work", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   x <- 3
   n <- 13
   p <- 1/6
@@ -139,6 +151,8 @@ test_that("dlbeta_dh, dlbeta_deps, and dlbeta_dtau work", {
 
 
 test_that("grad_for_eps works", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   set.seed(1)
   parvec  <- c(0.02, 1.5, 0.01)
   sizevec <- rpois(n = 11, lambda = 20)
@@ -197,6 +211,8 @@ test_that("grad_for_eps works", {
 
 
 test_that("grad_for_weighted_lbb is gradient for obj_for_weighted_lbb", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   set.seed(1)
   ploidy <- 6
   weight_vec <- runif(ploidy + 1)
@@ -217,6 +233,8 @@ test_that("grad_for_weighted_lbb is gradient for obj_for_weighted_lbb", {
 
 
 test_that("grad_for_weighted_lnorm is gradient for obj_for_weighted_lnorm", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   set.seed(1)
   ploidy <- 6
   weight_vec <- runif(ploidy + 1)

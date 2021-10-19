@@ -1,6 +1,8 @@
 context("oracle")
 
 test_that("oracle error rates are correct", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
  n      <- 100
  ploidy <- 6
  seq    <- 0.01
@@ -38,6 +40,8 @@ test_that("oracle error rates are correct", {
 
 
 test_that("oracle_mis_vec sums to get oracle_mis", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   n      <- 100
   ploidy <- 6
   seq    <- 0.01
@@ -62,6 +66,8 @@ test_that("oracle_mis_vec sums to get oracle_mis", {
 })
 
 test_that("oracle_joint is consistent with oracle_mis and oracle_mis_vec", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   n      <- 100
   ploidy <- 6
   seq    <- 0.01
@@ -114,6 +120,8 @@ test_that("oracle_joint is consistent with oracle_mis and oracle_mis_vec", {
 
 
 test_that("oracle_from_joint works", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   ploidy <- 6
   dist <- stats::dbinom(0:ploidy, ploidy, 0.75)
   jd <- oracle_joint(n = 100, ploidy = ploidy, seq = 0.001,
@@ -137,6 +145,8 @@ test_that("oracle_from_joint works", {
 
 
 test_that("no NaN in oracle_joint", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   ploidy <- 4
   seq    <- 0.001
   bias   <- 0.9

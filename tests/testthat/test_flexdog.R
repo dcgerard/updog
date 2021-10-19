@@ -1,6 +1,8 @@
 context("flexdog")
 
 test_that("flexdog works", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   refvec    <- 1:20
   sizevec   <- 40:21
 
@@ -79,6 +81,8 @@ test_that("flexdog works", {
 )
 
 test_that("don't update bias, seq, od when supposed not to", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   refvec  <- 1:20
   sizevec <- 40:21
   ploidy  <- 4
@@ -102,6 +106,8 @@ test_that("don't update bias, seq, od when supposed not to", {
 })
 
 test_that("fs1_alpha works", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   refvec  <- 1:20
   sizevec <- 40:21
   ploidy  <- 4
@@ -125,6 +131,8 @@ test_that("fs1_alpha works", {
 })
 
 test_that("actually using parent data", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   refvec  <- 1:20
   sizevec <- 40:21
   ploidy  <- 6
@@ -175,6 +183,8 @@ test_that("actually using parent data", {
 })
 
 test_that("genotype likelihoods and posteriors are consistent", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
   refvec <- c(1, 2, 1, 3, 2)
   sizevec <- c(4, 2, 2, 3, 4)
   ploidy <- 4
