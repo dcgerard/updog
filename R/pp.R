@@ -61,7 +61,7 @@ prob_send_pp <- function(ell,
     probvec[[2]] <- 0.5 - 0.5 * tau
     probvec[[3]] <- 0.5 + 0.25 * tau
   } else if(ell == 4) {
-    probvec = c(0, 0, 1)
+    probvec <- c(0, 0, 1)
   }
   return(probvec)
 }

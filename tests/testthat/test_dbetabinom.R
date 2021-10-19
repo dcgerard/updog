@@ -88,7 +88,7 @@ test_that("qbetabinom works", {
   rway <- qbinom(p = probseq, size = 2, prob = 0.5)
 
   myway <- rep(NA, length = length(probseq))
-  for (index in 1:length(probseq)) {
+  for (index in seq_along(probseq)) {
     myway[index] <- qbetabinom_double(p = probseq[index], size = 2, mu = 0.5, rho = 0)
   }
 
@@ -108,7 +108,7 @@ test_that("qbetabinom works", {
     pvec <- c(0, p0, p0 + 10^-6, 1 - 10^-6, 1)
     suppway <- qbetabinom_suppdists(pvec, 2, 0.5, 0.1, FALSE)
     myway <- rep(NA, length = length(pvec))
-    for (index in 1:length(pvec)) {
+    for (index in seq_along(pvec)) {
       myway[index] <- qbetabinom_double(pvec[index], 2, 0.5, 0.1)
     }
 

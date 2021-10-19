@@ -73,10 +73,10 @@ test_that("obj_for_mu_sigma2 and elbo match", {
   cor_inv <- solve(cov2cor(crossprod(matrix(rnorm(nind ^ 2), nrow = nind))))
   postmean <- matrix(0, nrow = nind, ncol = nsnps)
   postvar <- matrix(1, nrow = nind, ncol = nsnps)
-  var_bias = 1
-  mean_bias = 0
-  var_seq = 1
-  mean_seq = -4.7
+  var_bias <- 1
+  mean_bias <- 0
+  var_seq <- 1
+  mean_seq <- -4.7
   ploidy <- 6
 
   warray <- compute_all_post_prob(ploidy = ploidy, mu = postmean, sigma2 = postvar,
@@ -137,12 +137,12 @@ test_that("obj_for_weighted_lnorm is correct", {
 test_that("no penalty when variance is Inf", {
   expect_equal(pen_bias(h = 0.1, mu_h = 1, sigma2_h = Inf), 0)
   expect_equal(pen_seq_error(eps = 0.1, mu_eps = -1, sigma2_eps = Inf), 0)
-  expect_equal(dpen_deps(eps = 0.1, mu_eps = -1, sigma2_eps = Inf), 0)  
-  expect_equal(dpen_dh(h = 0.1, mu_h = 1, sigma2_h = Inf), 0)  
-  
+  expect_equal(dpen_deps(eps = 0.1, mu_eps = -1, sigma2_eps = Inf), 0)
+  expect_equal(dpen_dh(h = 0.1, mu_h = 1, sigma2_h = Inf), 0)
+
   expect_true(pen_bias(h = 0.1, mu_h = 1, sigma2_h = 10000) != 0)
   expect_true(pen_seq_error(eps = 0.1, mu_eps = -1, sigma2_eps = 10000) != 0)
-  expect_true(dpen_deps(eps = 0.1, mu_eps = -1, sigma2_eps = 10000) != 0)  
-  expect_true(dpen_dh(h = 0.1, mu_h = 1, sigma2_h = 10000) != 0)  
-  
+  expect_true(dpen_deps(eps = 0.1, mu_eps = -1, sigma2_eps = 10000) != 0)
+  expect_true(dpen_dh(h = 0.1, mu_h = 1, sigma2_h = 10000) != 0)
+
 })

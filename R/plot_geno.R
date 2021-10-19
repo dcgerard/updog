@@ -177,7 +177,7 @@ plot_geno <- function(refvec,
   if (!is.null(geno) | !is.null(p1geno) | !is.null(p2geno)) {
     if (use_colorblind & requireNamespace("ggthemes", quietly = TRUE)) {
       possible_colors <- paste0(ggthemes::colorblind_pal()(ploidy + 1))
-      possible_colors <- possible_colors[length(possible_colors):1]
+      possible_colors <- possible_colors[rev(seq_along(possible_colors))]
       pl <- pl + ggplot2::scale_color_manual(values = possible_colors, drop = FALSE, na.translate = TRUE, na.value = "gray50")
     } else if (use_colorblind) {
       pl <- pl + ggplot2::scale_color_hue(drop = FALSE, na.translate = TRUE, na.value = "gray50")

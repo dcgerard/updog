@@ -14,10 +14,10 @@ knitr::opts_chunk$set(
 
 # updog
 [![R-CMD-check](https://github.com/dcgerard/updog/workflows/R-CMD-check/badge.svg)](https://github.com/dcgerard/updog/actions)
-[![codecov](https://codecov.io/gh/dcgerard/updog/branch/master/graph/badge.svg?token=zjDBKZWjCs)](https://codecov.io/gh/dcgerard/updog)
+[![codecov](https://codecov.io/gh/dcgerard/updog/branch/master/graph/badge.svg?token=zjDBKZWjCs)](https://app.codecov.io/gh/dcgerard/updog)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/updog)](https://cran.r-project.org/package=updog)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/updog)](https://cran.r-project.org/package=updog)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/updog)](https://cran.r-project.org/package=updog)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/updog)](https://cran.r-project.org/package=updog)
 
 Updog provides a suite of methods for genotyping polyploids from
 next-generation sequencing (NGS) data. It does this while accounting
@@ -49,7 +49,7 @@ found [here](https://github.com/dcgerard/updogAlpha).
 
 See also [ebg](https://github.com/pblischak/polyploid-genotyping),
 [fitPoly](https://cran.r-project.org/package=fitPoly), and
-[TET](http://www.g3journal.org/content/suppl/2017/01/19/g3.117.039008.DC1),
+[TET](https://www.g3journal.org/content/suppl/2017/01/19/g3.117.039008.DC1),
 and [polyRAD](https://cran.r-project.org/package=polyRAD). Our best
 "competitor" is probably
 [fitPoly](https://cran.r-project.org/package=fitPoly), though 
@@ -66,7 +66,7 @@ I've included many vignettes in `updog`, which you can access online
 ## Bug Reports
 
 If you find a bug or want an enhancement, please submit an issue
-[here](http://github.com/dcgerard/updog/issues).
+[here](https://github.com/dcgerard/updog/issues).
 
 ## Installation
 

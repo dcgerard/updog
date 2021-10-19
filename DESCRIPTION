@@ -22,11 +22,11 @@ Description: Implements empirical Bayes approaches to genotype
        on the implemented methods.
 Depends: R (>= 3.4.0)
 License: GPL-3
-BugReports: http://github.com/dcgerard/updog/issues
-URL: http://github.com/dcgerard/updog/
+BugReports: https://github.com/dcgerard/updog/issues
+URL: https://github.com/dcgerard/updog/
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 LinkingTo: Rcpp,
     RcppArmadillo
 Imports: 

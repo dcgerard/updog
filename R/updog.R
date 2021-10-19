@@ -32,7 +32,7 @@
 #' when you have next-generation sequencing data.
 #'
 #' If you find a bug or want an enhancement, please submit an
-#' issue at \url{http://github.com/dcgerard/updog/issues}.
+#' issue at \url{https://github.com/dcgerard/updog/issues}.
 #'
 #' @references
 #' \itemize{

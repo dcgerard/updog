@@ -25,7 +25,7 @@ BiocManager package via:
 \code{BiocManager::install(c("VariantAnnotation", "GenomicRanges", "S4Vectors", "IRanges"))}
 
 To read more about the VCF format, see the official documentation
-on the Samtools website: \url{http://samtools.github.io/hts-specs/}.
+on the Samtools website: \url{https://samtools.github.io/hts-specs/}.
 }
 \examples{
 \dontrun{

@@ -124,7 +124,7 @@ A list-like object of two data frames.
 This is a convenience function that will run \code{\link{flexdog}} over many SNPs.
 Support is provided for parallel computing through the doParallel package.
 This function has not been extensively tested. Please report any bugs to
-\url{http://github.com/dcgerard/updog/issues}.
+\url{https://github.com/dcgerard/updog/issues}.
 }
 \details{
 You should format your reference counts and total read counts in two

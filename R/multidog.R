@@ -24,7 +24,7 @@ combine_flex <- function(...) {
 #' This is a convenience function that will run \code{\link{flexdog}} over many SNPs.
 #' Support is provided for parallel computing through the doParallel package.
 #' This function has not been extensively tested. Please report any bugs to
-#' \url{http://github.com/dcgerard/updog/issues}.
+#' \url{https://github.com/dcgerard/updog/issues}.
 #'
 #' You should format your reference counts and total read counts in two
 #' separate matrices. The rows should index the markers (SNPs) and the
@@ -659,7 +659,7 @@ filter_snp <- function(x, expr) {
 #' \code{BiocManager::install(c("VariantAnnotation", "GenomicRanges", "S4Vectors", "IRanges"))}
 #'
 #' To read more about the VCF format, see the official documentation
-#' on the Samtools website: \url{http://samtools.github.io/hts-specs/}.
+#' on the Samtools website: \url{https://samtools.github.io/hts-specs/}.
 #'
 #' @param obj An object of class \code{\link{multidog}()}.
 #' @param filename A string, the path to save the VCF file.
