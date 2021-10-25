@@ -141,7 +141,7 @@
 </h1>
 <ol>
 <li>Added an upper bound to the sequencing error rate in <code><a href="../reference/flexdog_full.html">flexdog_full()</a></code> (and, hence, <code><a href="../reference/flexdog.html">flexdog()</a></code> and <code><a href="../reference/multidog.html">multidog()</a></code>). This protects against some poor behavior observed in a corner case. Specifically, F1 populations where the offspring are all the same genotype and is sequenced at moderate to low depth.</li>
-<li>Fixed some stale URL’s, fixed some style issues found by lintr.</li>
+<li>Fixed some stale URLs, fixed some style issues found by lintr.</li>
 </ol>
 </div>
     <div id="updog-210" class="section level1">
@@ -151,7 +151,7 @@
 <ol>
 <li>The parallel backend in <code><a href="../reference/multidog.html">multidog()</a></code> is now handled by the <a href="https://cran.r-project.org/package=future"><code>future</code></a> package. If you use the <code>nc</code> argument in <code><a href="../reference/multidog.html">multidog()</a></code>, it should still run in parallel using multiple R sessions on your local machine. However, you can now use the functionality of <code>future</code> to choose your own evaluation strategy, after setting <code>nc = NA</code>. This will also allow you to use schedulers in high performance computing environments through the <a href="https://cran.r-project.org/package=future.batchtools"><code>future.batchtools</code></a> package. See the <code><a href="../reference/multidog.html">multidog()</a></code> function documentation for more details.</li>
 <li>The vignette “Genotyping Many SNPs with multidog()” goes through an example of using the <code>future</code> package.</li>
-<li>A new experimental function, <code><a href="../reference/export_vcf.html">export_vcf()</a></code>, is available to export <code>multidog</code> objects to a VCF file.</li>
+<li>A new experimental function, <code><a href="../reference/export_vcf.html">export_vcf()</a></code>, is in the works to export <code>multidog</code> objects to a VCF file. This is not yet exported because I still have a few bugs to fix.</li>
 <li>
 <code><a href="../reference/plot.multidog.html">plot.multidog()</a></code> will now plot the parent read-counts in F1 and S1 populations.</li>
 <li>Internally, <code><a href="../reference/multidog.html">multidog()</a></code> now uses iterators through the <a href="https://cran.r-project.org/package=iterators"><code>iterators</code></a> package to send only subsets of the data to each R process.</li>

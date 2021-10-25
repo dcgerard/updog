@@ -664,8 +664,6 @@ filter_snp <- function(x, expr) {
 #' @param obj An object of class \code{\link{multidog}()}.
 #' @param filename A string, the path to save the VCF file.
 #'
-#' @export
-#'
 #' @examples
 #' \dontrun{
 #' library(VariantAnnotation)
