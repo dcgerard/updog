@@ -7,7 +7,7 @@
 [![codecov](https://codecov.io/gh/dcgerard/updog/branch/master/graph/badge.svg?token=zjDBKZWjCs)](https://app.codecov.io/gh/dcgerard/updog)
 [![License: GPL
 v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/updog)](https://cran.r-project.org/package=updog)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/updog)](https://cran.r-project.org/package=updog)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/updog)](https://cran.r-project.org/package=updog)
 
 Updog provides a suite of methods for genotyping polyploids from
@@ -17,10 +17,10 @@ sequencing error. It is named updog for “Using Parental Data for
 Offspring Genotyping” because we originally developed the method for
 full-sib populations, but it works now for more general populations. The
 method is described in detail Gerard et. al. (2018)
-&lt;[doi:10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468)&gt;.
+\<[doi:10.1534/genetics.118.301468](https://doi.org/10.1534/genetics.118.301468)\>.
 Additional details concerning prior specification are described in
 Gerard and Ferrão (2020)
-&lt;[doi:10.1093/bioinformatics/btz852](https://doi.org/10.1093/bioinformatics/btz852)&gt;.
+\<[doi:10.1093/bioinformatics/btz852](https://doi.org/10.1093/bioinformatics/btz852)\>.
 
 The main functions are `flexdog()` and `multidog()`, which provide many
 options for the distribution of the genotypes in your sample. A novel
@@ -54,8 +54,7 @@ The original `updog` package is now named `updogAlpha` and may be found
 
 See also [ebg](https://github.com/pblischak/polyploid-genotyping),
 [fitPoly](https://cran.r-project.org/package=fitPoly), and
-[TET](https://www.g3journal.org/content/suppl/2017/01/19/g3.117.039008.DC1),
-and [polyRAD](https://cran.r-project.org/package=polyRAD). Our best
+[polyRAD](https://cran.r-project.org/package=polyRAD). Our best
 “competitor” is probably
 [fitPoly](https://cran.r-project.org/package=fitPoly), though
 [polyRAD](https://cran.r-project.org/package=polyRAD) has some nice
