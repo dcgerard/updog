@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -73,7 +69,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/dcgerard/updog/">
+  <a href="https://github.com/dcgerard/updog/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,41 +84,41 @@
 
       
 
-      </header><script src="simulate_ngs_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simulate Next-Generation Sequencing Data</h1>
-                        <h4 class="author">David Gerard</h4>
+                        <h4 data-toc-skip class="author">David Gerard</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/dcgerard/updog/blob/master/vignettes/simulate_ngs.Rmd"><code>vignettes/simulate_ngs.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/dcgerard/updog/blob/HEAD/vignettes/simulate_ngs.Rmd" class="external-link"><code>vignettes/simulate_ngs.Rmd</code></a></small>
       <div class="hidden name"><code>simulate_ngs.Rmd</code></div>
 
     </div>
 
     
     
-<div id="abstract" class="section level1">
-<h1 class="hasAnchor">
-<a href="#abstract" class="anchor"></a>Abstract</h1>
+<div class="section level2">
+<h2 id="abstract">Abstract<a class="anchor" aria-label="anchor" href="#abstract"></a>
+</h2>
 <p>We demonstrate how to simulate NGS data under various genotype distributions, then fit these data using <code>flexdog</code>. The genotyping methods are described in Gerard et al. (2018).</p>
 </div>
-<div id="analysis" class="section level1">
-<h1 class="hasAnchor">
-<a href="#analysis" class="anchor"></a>Analysis</h1>
+<div class="section level2">
+<h2 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a>
+</h2>
 <p>Let’s suppose that we have 100 hexaploid individuals, with varying levels of read-depth.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dcgerard/updog/">updog</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dcgerard/updog/" class="external-link">updog</a></span><span class="op">)</span>
 <span class="va">nind</span>    <span class="op">&lt;-</span> <span class="fl">100</span>
 <span class="va">ploidy</span>  <span class="op">&lt;-</span> <span class="fl">6</span>
-<span class="va">sizevec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span>n   <span class="op">=</span> <span class="va">nind</span>, 
+<span class="va">sizevec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n   <span class="op">=</span> <span class="va">nind</span>, 
                               min <span class="op">=</span> <span class="fl">50</span>, 
                               max <span class="op">=</span> <span class="fl">200</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>We can simulate their read-counts under various genotype distributions, allele biases, overdispersions, and sequencing error rates using the <code>rgeno</code> and <code>rflexdog</code> functions.</p>
-<div id="f1-population" class="section level2">
-<h2 class="hasAnchor">
-<a href="#f1-population" class="anchor"></a>F1 Population</h2>
+<div class="section level3">
+<h3 id="f1-population">F1 Population<a class="anchor" aria-label="anchor" href="#f1-population"></a>
+</h3>
 <p>Suppose these individuals are all siblings where the first parent has 4 copies of the reference allele and the second parent has 5 copies of the reference allele. Then the following code, using <code>rgeno</code>, will simulate the individuals’ genotypes.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">true_geno</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rgeno.html">rgeno</a></span><span class="op">(</span>n      <span class="op">=</span> <span class="va">nind</span>, 
@@ -181,7 +177,7 @@
 <span class="co">#&gt; Done!</span></code></pre></div>
 <p><code>flexdog</code> gives us reasonable genotyping, and it accurately estimates the proportion of individuals mis-genotyped.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fout</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fout</span><span class="op">)</span></code></pre></div>
 <p><img src="simulate_ngs_files/figure-html/unnamed-chunk-6-1.png" width="432"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
@@ -190,12 +186,12 @@
 <span class="co">#&gt; [1] 0.07011089</span>
 
 <span class="co">## Actual proportion misgenotyped</span>
-<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">fout</span><span class="op">$</span><span class="va">geno</span> <span class="op">!=</span> <span class="va">true_geno</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">fout</span><span class="op">$</span><span class="va">geno</span> <span class="op">!=</span> <span class="va">true_geno</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.05</span></code></pre></div>
 </div>
-<div id="hwe-population" class="section level2">
-<h2 class="hasAnchor">
-<a href="#hwe-population" class="anchor"></a>HWE Population</h2>
+<div class="section level3">
+<h3 id="hwe-population">HWE Population<a class="anchor" aria-label="anchor" href="#hwe-population"></a>
+</h3>
 <p>Now run the same simulations assuming the individuals are in Hardy-Weinberg population with an allele frequency of 0.75.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">true_geno</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rgeno.html">rgeno</a></span><span class="op">(</span>n      <span class="op">=</span> <span class="va">nind</span>,
@@ -238,7 +234,7 @@
 <span class="co">#&gt; Keeping old fit.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Done!</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fout</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fout</span><span class="op">)</span></code></pre></div>
 <p><img src="simulate_ngs_files/figure-html/unnamed-chunk-7-1.png" width="432"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
@@ -247,7 +243,7 @@
 <span class="co">#&gt; [1] 0.07625987</span>
 
 <span class="co">## Actual proportion misgenotyped</span>
-<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">fout</span><span class="op">$</span><span class="va">geno</span> <span class="op">!=</span> <span class="va">true_geno</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">fout</span><span class="op">$</span><span class="va">geno</span> <span class="op">!=</span> <span class="va">true_geno</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.07</span>
 
 <span class="co">## Estimated allele frequency close to true allele frequency</span>
@@ -255,10 +251,10 @@
 <span class="co">#&gt; [1] 0.7473264</span></code></pre></div>
 </div>
 </div>
-<div id="references" class="section level1">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
-<p>Gerard, David, Luís Felipe Ventorim Ferrão, Antonio Augusto Franco Garcia, and Matthew Stephens. 2018. “Genotyping Polyploids from Messy Sequencing Data.” <em>Genetics</em> 210 (3). Genetics: 789–807. <a href="https://doi.org/10.1534/genetics.118.301468" class="uri">https://doi.org/10.1534/genetics.118.301468</a>.</p>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Gerard, David, Luís Felipe Ventorim Ferrão, Antonio Augusto Franco Garcia, and Matthew Stephens. 2018. “Genotyping Polyploids from Messy Sequencing Data.” <em>Genetics</em> 210 (3). Genetics: 789–807. <a href="https://doi.org/10.1534/genetics.118.301468" class="external-link uri">https://doi.org/10.1534/genetics.118.301468</a>.</p>
 </div>
   </div>
 
@@ -273,11 +269,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by David Gerard.</p>
+  <p></p>
+<p>Developed by David Gerard.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -285,6 +283,8 @@
 
   
 
+
+  
 
   </body>
 </html>

@@ -97,7 +97,8 @@ test_that("qbetabinom works", {
 
   myway2 <- qbetabinom(p = probseq, size = 2, mu = 0.5, rho = 0)
 
-  expect_equal(rway, myway, myway2)
+  expect_equal(rway, myway)
+  expect_equal(rway, myway2)
 
   if (requireNamespace("SuppDists", quietly = TRUE)) {
 
@@ -116,7 +117,8 @@ test_that("qbetabinom works", {
     }
 
     myway2 <- qbetabinom(p = pvec, size = 2, mu = 0.5, rho = 0.1)
-    expect_equal(suppway, myway, myway2)
+    expect_equal(suppway, myway)
+    expect_equal(suppway, myway2)
 
 
     # microbenchmark::microbenchmark(

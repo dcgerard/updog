@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">updog</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -73,7 +69,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/dcgerard/updog/">
+  <a href="https://github.com/dcgerard/updog/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,28 +84,28 @@
 
       
 
-      </header><script src="oracle_calculations_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Oracle Calculations</h1>
-                        <h4 class="author">David Gerard</h4>
+                        <h4 data-toc-skip class="author">David Gerard</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/dcgerard/updog/blob/master/vignettes/oracle_calculations.Rmd"><code>vignettes/oracle_calculations.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/dcgerard/updog/blob/HEAD/vignettes/oracle_calculations.Rmd" class="external-link"><code>vignettes/oracle_calculations.Rmd</code></a></small>
       <div class="hidden name"><code>oracle_calculations.Rmd</code></div>
 
     </div>
 
     
     
-<div id="abstract" class="section level1">
-<h1 class="hasAnchor">
-<a href="#abstract" class="anchor"></a>Abstract</h1>
+<div class="section level2">
+<h2 id="abstract">Abstract<a class="anchor" aria-label="anchor" href="#abstract"></a>
+</h2>
 <p>We provide some example usage of the oracle calculations available in <code>updog</code>. These are particularly useful for read-depth determination. These calculations are described in detail in Gerard et al. (2018).</p>
 </div>
-<div id="controlling-misclassification-error" class="section level1">
-<h1 class="hasAnchor">
-<a href="#controlling-misclassification-error" class="anchor"></a>Controlling Misclassification Error</h1>
+<div class="section level2">
+<h2 id="controlling-misclassification-error">Controlling Misclassification Error<a class="anchor" aria-label="anchor" href="#controlling-misclassification-error"></a>
+</h2>
 <p>Suppose we have a sample of tetraploid individuals derived from an S1 cross (a single generation of selfing). Using domain expertise (either from previous studies or a pilot analysis), we’ve determined that our sequencing technology will produce relatively clean data. That is, the sequencing error rate will not be too large (say, ~0.001), the bias will be moderate (say, ~0.7 at the most extreme), and the majority of SNPs will have reasonable levels of overdispersion (say, less than 0.01). We want to know how deep we need to sequence.</p>
 <p>Using <code>oracle_mis</code>, we can see how deep we need to sequence under the worst-case scenario we want to control (sequencing error rate = 0.001, bias = 0.7, overdispersion = 0.01) in order to obtain a misclassification error rate of at most, say, 0.05.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -119,19 +115,19 @@
 <span class="va">maxerr</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></code></pre></div>
 <p>Before we do this, we also need the distribution of the offspring genotypes. We can get this distribution assuming various parental genotypes using the <code>get_q_array</code> function. Typically, error rates will be larger when the allele-frequency is closer to 0.5. So we’ll start in the worst-case scenario of assuming that the parent has 2 copies of the reference allele.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dcgerard/updog/">updog</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dcgerard/updog/" class="external-link">updog</a></span><span class="op">)</span>
 <span class="va">ploidy</span> <span class="op">&lt;-</span> <span class="fl">4</span>
 <span class="va">pgeno</span> <span class="op">&lt;-</span> <span class="fl">2</span>
 <span class="va">gene_dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_q_array.html">get_q_array</a></span><span class="op">(</span>ploidy <span class="op">=</span> <span class="va">ploidy</span><span class="op">)</span><span class="op">[</span><span class="va">pgeno</span> <span class="op">+</span> <span class="fl">1</span>, <span class="va">pgeno</span> <span class="op">+</span> <span class="fl">1</span>, <span class="op">]</span></code></pre></div>
 <p>This is what the genotype distribution for the offspring looks like:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-<span class="va">distdf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="va">ploidy</span>, y <span class="op">=</span> <span class="fl">0</span>, yend <span class="op">=</span> <span class="va">gene_dist</span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">distdf</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, xend <span class="op">=</span> <span class="va">x</span>, yend <span class="op">=</span> <span class="va">yend</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html">geom_segment</a></span><span class="op">(</span>lineend <span class="op">=</span> <span class="st">"round"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Allele Dosage"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Probability"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="va">distdf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="va">ploidy</span>, y <span class="op">=</span> <span class="fl">0</span>, yend <span class="op">=</span> <span class="va">gene_dist</span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">distdf</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, xend <span class="op">=</span> <span class="va">x</span>, yend <span class="op">=</span> <span class="va">yend</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">geom_segment</a></span><span class="op">(</span>lineend <span class="op">=</span> <span class="st">"round"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Allele Dosage"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Probability"</span><span class="op">)</span></code></pre></div>
 <p><img src="oracle_calculations_files/figure-html/unnamed-chunk-3-1.png" width="432"></p>
 <p>Now, we are ready to iterate through read-depth’s until we reach one with an error rate less than 0.05.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -151,9 +147,9 @@
 <p>Looks like we need a depth of 90 in order to get a misclassification error rate under 0.05.</p>
 <p>Note that <code>oracle_mis</code> returns the <strong>best misclassification error rate possible</strong> under these conditions (<code>ploidy</code> = 4, <code>bias</code> = 0.7, <code>seq</code> = 0.001, <code>od</code> = 0.01, and <code>pgeno</code> = 2). In your actual analysis, you will have a worse misclassification error rate than that returned by <code>oracle_mis</code>. However, if you have a lot of individuals in your sample, then this will act as a reasonable approximation to the error rate. In general though, you should sequence a little deeper than suggested by <code>oracle_mis</code>.</p>
 </div>
-<div id="visualizing-the-joint-distribution" class="section level1">
-<h1 class="hasAnchor">
-<a href="#visualizing-the-joint-distribution" class="anchor"></a>Visualizing the Joint Distribution</h1>
+<div class="section level2">
+<h2 id="visualizing-the-joint-distribution">Visualizing the Joint Distribution<a class="anchor" aria-label="anchor" href="#visualizing-the-joint-distribution"></a>
+</h2>
 <p>Suppose we only have a budget to sequence to a depth of 30. Then what errors can we expect? We can use <code>oracle_joint</code> and <code>oracle_plot</code> to visualize the errors we can expect.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">depth</span> <span class="op">&lt;-</span> <span class="fl">30</span>
@@ -177,10 +173,10 @@
 <span class="va">ocorr</span>
 <span class="co">#&gt; [1] 0.8935101</span></code></pre></div>
 </div>
-<div id="references" class="section level1">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
-<p>Gerard, David, Luís Felipe Ventorim Ferrão, Antonio Augusto Franco Garcia, and Matthew Stephens. 2018. “Genotyping Polyploids from Messy Sequencing Data.” <em>Genetics</em> 210 (3). Genetics: 789–807. <a href="https://doi.org/10.1534/genetics.118.301468" class="uri">https://doi.org/10.1534/genetics.118.301468</a>.</p>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Gerard, David, Luís Felipe Ventorim Ferrão, Antonio Augusto Franco Garcia, and Matthew Stephens. 2018. “Genotyping Polyploids from Messy Sequencing Data.” <em>Genetics</em> 210 (3). Genetics: 789–807. <a href="https://doi.org/10.1534/genetics.118.301468" class="external-link uri">https://doi.org/10.1534/genetics.118.301468</a>.</p>
 </div>
   </div>
 
@@ -195,11 +191,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by David Gerard.</p>
+  <p></p>
+<p>Developed by David Gerard.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -207,6 +205,8 @@
 
   
 
+
+  
 
   </body>
 </html>

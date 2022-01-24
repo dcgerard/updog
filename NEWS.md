@@ -1,3 +1,9 @@
+# updog 2.1.2
+
+- Fixed a bug in my use of `testthat::expect_equal()`. See 21 Jan 2022 [R-devel/NEWS](https://developer.r-project.org/blosxom.cgi/R-devel/NEWS) where it states:
+
+    >  `all.equal.numeric()` gains a sanity check on its `tolerance` argument - calling `all.equal(a, b, c)` for three numeric vectors is a surprisingly common error. 
+
 # updog 2.1.1
 
 1. Added an upper bound to the sequencing error rate in `flexdog_full()` (and, hence, `flexdog()` and `multidog()`). This protects against some poor behavior observed in a corner case. Specifically, F1 populations where the offspring are all the same genotype and is sequenced at moderate to low depth.
