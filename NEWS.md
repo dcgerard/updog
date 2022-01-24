@@ -1,6 +1,6 @@
 # updog 2.1.2
 
-- Fixed a bug in my use of `testthat::expect_equal()`. See 21 Jan 2022 [R-devel/NEWS](https://developer.r-project.org/blosxom.cgi/R-devel/NEWS) where it states:
+- Fixed a bug in my use of `assertthat::are_equal()` and `testthat::expect_equal()`. See 21 Jan 2022 [R-devel/NEWS](https://developer.r-project.org/blosxom.cgi/R-devel/NEWS) where it states:
 
     >  `all.equal.numeric()` gains a sanity check on its `tolerance` argument - calling `all.equal(a, b, c)` for three numeric vectors is a surprisingly common error. 
 

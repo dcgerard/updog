@@ -55,8 +55,12 @@ oracle_cor <- function(n,
                        od,
                        dist) {
   ## Check input --------------------------------
-  assertthat::are_equal(length(n), length(ploidy), length(seq),
-                        length(bias), length(od), 1)
+  assertthat::are_equal(1, length(n))
+  assertthat::are_equal(1, length(ploidy))
+  assertthat::are_equal(1, length(n))
+  assertthat::are_equal(1, length(seq))
+  assertthat::are_equal(1, length(bias))
+  assertthat::are_equal(1, length(od))
   assertthat::assert_that(n > 0)
   assertthat::assert_that(ploidy > 0)
   assertthat::assert_that(seq >= 0, seq <= 1)

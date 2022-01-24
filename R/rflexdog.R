@@ -277,7 +277,10 @@ rflexdog <- function(sizevec,
                      od = 0.001) {
   ## Check input -----------------------------------------------------------------------
   assertthat::are_equal(length(sizevec), length(geno))
-  assertthat::are_equal(length(ploidy), length(seq), length(bias), length(od), 1)
+  assertthat::are_equal(1, length(ploidy))
+  assertthat::are_equal(1, length(seq))
+  assertthat::are_equal(1, length(bias))
+  assertthat::are_equal(1, length(od))
   assertthat::assert_that(ploidy >= 0)
   assertthat::are_equal(ploidy %% 1, 0)
   stopifnot(geno <= ploidy)

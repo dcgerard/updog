@@ -529,12 +529,17 @@ flexdog_full <- function(refvec,
   assertthat::are_equal(length(refvec), length(sizevec))
   assertthat::assert_that(all(sizevec >= refvec, na.rm = TRUE))
   assertthat::assert_that(all(refvec >= 0, na.rm = TRUE))
-  assertthat::are_equal(1, length(verbose), length(mean_bias),
-                        length(var_bias), length(mean_seq),
-                        length(var_seq), length(seq),
-                        length(bias), length(od),
-                        length(mean_od), length(var_od),
-                        length(seq_upper))
+  assertthat::are_equal(1, length(verbose))
+  assertthat::are_equal(1, length(mean_bias))
+  assertthat::are_equal(1, length(var_bias))
+  assertthat::are_equal(1, length(mean_seq))
+  assertthat::are_equal(1, length(var_seq))
+  assertthat::are_equal(1, length(seq))
+  assertthat::are_equal(1, length(bias))
+  assertthat::are_equal(1, length(od))
+  assertthat::are_equal(1, length(mean_od))
+  assertthat::are_equal(1, length(var_od))
+  assertthat::are_equal(1, length(seq_upper))
   assertthat::assert_that(var_bias > 0)
   assertthat::assert_that(var_seq > 0)
   assertthat::assert_that(seq >= 0, seq <= 1)
@@ -964,7 +969,8 @@ initialize_pivec <- function(ploidy,
                                        "flex",
                                        "uniform",
                                        "custom")) {
-  assertthat::are_equal(1, length(ploidy), length(mode))
+  assertthat::are_equal(1, length(ploidy))
+  assertthat::are_equal(1, length(mode))
   assertthat::are_equal(ploidy %% 1, 0)
 
   model <- match.arg(model)
