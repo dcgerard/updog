@@ -141,16 +141,16 @@ NumericVector dbetabinom(IntegerVector x, IntegerVector size,
 
   int n = x.length();
 
-  if ((n != size.length()) & (1 != size.length())) {
+  if ((n != size.length()) && (1 != size.length())) {
     Rcpp::stop("dbetabinom: size must either be of length 1 or the same length as x.");
   }
-  if ((n != mu.length()) & (1 != mu.length())) {
+  if ((n != mu.length()) && (1 != mu.length())) {
     Rcpp::stop("dbetabinom: mu must either be of length 1 or the same length as x.");
   }
-  if ((n != rho.length()) & (1 != rho.length())) {
+  if ((n != rho.length()) && (1 != rho.length())) {
     Rcpp::stop("dbetabinom: rho must either be of length 1 or the same length as x.");
   }
-  if ((n != log.length()) & (1 != log.length())) {
+  if ((n != log.length()) && (1 != log.length())) {
     Rcpp::stop("dbetabinom: log must either be of length 1 or the same length as x.");
   }
 
@@ -264,16 +264,16 @@ NumericVector pbetabinom(IntegerVector q, IntegerVector size,
 
   int n = q.length();
 
-  if ((n != size.length()) & (1 != size.length())) {
+  if ((n != size.length()) && (1 != size.length())) {
     Rcpp::stop("pbetabinom: size must either be of length 1 or the same length as q.");
   }
-  if ((n != mu.length()) & (1 != mu.length())) {
+  if ((n != mu.length()) && (1 != mu.length())) {
     Rcpp::stop("pbetabinom: mu must either be of length 1 or the same length as q.");
   }
-  if ((n != rho.length()) & (1 != rho.length())) {
+  if ((n != rho.length()) && (1 != rho.length())) {
     Rcpp::stop("pbetabinom: rho must either be of length 1 or the same length as q.");
   }
-  if ((n != log_p.length()) & (1 != log_p.length())) {
+  if ((n != log_p.length()) && (1 != log_p.length())) {
     Rcpp::stop("pbetabinom: log_p must either be of length 1 or the same length as q.");
   }
 
@@ -382,13 +382,13 @@ IntegerVector qbetabinom(NumericVector p, IntegerVector size,
   // Check input ------------------------------------------
   int n = p.length();
 
-  if ((n != size.length()) & (1 != size.length())){
+  if ((n != size.length()) && (1 != size.length())){
     Rcpp::stop("qbetabinom: size must be either of lenght 1 or the same length as p.");
   }
-  if ((n != mu.length()) & (1 != mu.length())) {
+  if ((n != mu.length()) && (1 != mu.length())) {
     Rcpp::stop("qbetabinom: mu must either be of length 1 or the same length as p.");
   }
-  if ((n != rho.length()) & (1 != rho.length())) {
+  if ((n != rho.length()) && (1 != rho.length())) {
     Rcpp::stop("qbetabinom: rho must either be of length 1 or the same length as p.");
   }
 
@@ -457,13 +457,13 @@ int rbetabinom_int(int size, double mu, double rho) {
 IntegerVector rbetabinom(int n, IntegerVector size,
                          NumericVector mu, NumericVector rho) {
   // Check input ------------------------------------------
-  if ((n != size.length()) & (1 != size.length())){
+  if ((n != size.length()) && (1 != size.length())){
     Rcpp::stop("qbetabinom: size must be either of length 1 or n.");
   }
-  if ((n != mu.length()) & (1 != mu.length())) {
+  if ((n != mu.length()) && (1 != mu.length())) {
     Rcpp::stop("qbetabinom: mu must either be of length 1 or n.");
   }
-  if ((n != rho.length()) & (1 != rho.length())) {
+  if ((n != rho.length()) && (1 != rho.length())) {
     Rcpp::stop("qbetabinom: rho must either be of length 1 or n.");
   }
 

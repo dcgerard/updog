@@ -43,7 +43,7 @@ double eta_double(double p, double eps) {
 // [[Rcpp::export]]
 NumericVector eta_fun(NumericVector p, NumericVector eps) {
   int n = p.length();
-  if ((eps.length() != n) & (eps.length() != 1)) {
+  if ((eps.length() != n) && (eps.length() != 1)) {
     Rcpp::stop("eta_fun: eps must either have length 1 or be the same length as p.");
   }
 
@@ -107,10 +107,10 @@ double xi_double(double p, double eps, double h) {
 // [[Rcpp::export]]
 NumericVector xi_fun(NumericVector p, NumericVector eps, NumericVector h) {
   int n = p.length();
-  if ((eps.length() != n) & (eps.length() != 1)) {
+  if ((eps.length() != n) && (eps.length() != 1)) {
     Rcpp::stop("xi_fun: eps must either have length 1 or the same length as x.");
   }
-  if ((h.length() != n) & (h.length() != 1)) {
+  if ((h.length() != n) && (h.length() != 1)) {
     Rcpp::stop("xi_fun: h must either have length 1 or the same length as x.");
   }
 

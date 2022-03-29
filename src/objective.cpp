@@ -460,7 +460,7 @@ double obj_for_eps(NumericVector parvec,
 
   for (int i = 0; i < nind; i++) {
     for (int k = 0; k <= ploidy; k++) {
-      if (!R_IsNA(refvec(i)) & !R_IsNA(sizevec(i))) {
+      if (!R_IsNA(refvec(i)) && !R_IsNA(sizevec(i))) {
 	xi_current = xi_double((double)k / (double)ploidy, eps, h);
 	obj_val = obj_val + wmat(i, k) * dbetabinom_double(refvec(i), sizevec(i), xi_current, tau, true);
       }

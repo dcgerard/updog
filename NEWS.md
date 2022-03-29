@@ -1,3 +1,7 @@
+# updog 2.1.3
+
+- Bug fix: Use `&&` instead of `&` in C++.
+
 # updog 2.1.2
 
 - Fixed a bug in my use of `assertthat::are_equal()` and `testthat::expect_equal()`. See 21 Jan 2022 [R-devel/NEWS](https://developer.r-project.org/blosxom.cgi/R-devel/NEWS) where it states:

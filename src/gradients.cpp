@@ -59,11 +59,11 @@ NumericVector grad_for_mu_sigma2(arma::Col<double> mu, arma::Col<double> sigma2,
         current_weight = d1 / std::sqrt(sigma2(i)) - d2 / std::sqrt(sigma2(i));
         grad(i) = grad(i) + current_weight * log_bb_dense(i, k);
 
-        if ((q1 != R_PosInf) & (q1 != R_NegInf) & (q2 != R_PosInf) & (q2 != R_NegInf)) {
+        if ((q1 != R_PosInf) && (q1 != R_NegInf) && (q2 != R_PosInf) && (q2 != R_NegInf)) {
           current_sigma_weight = d1 * q1 / (2.0 * sigma2(i)) - d2 * q2 / (2.0 * sigma2(i));
-        } else if ((q1 == R_NegInf) & (q2 != R_NegInf) & (q2 != R_PosInf)) {
+        } else if ((q1 == R_NegInf) && (q2 != R_NegInf) && (q2 != R_PosInf)) {
           current_sigma_weight = -d2 * q2 / (2.0 * sigma2(i));
-        } else if ((q1 != R_NegInf) & (q1 != R_PosInf) & (q2 == R_PosInf)){
+        } else if ((q1 != R_NegInf) && (q1 != R_PosInf) && (q2 == R_PosInf)){
           current_sigma_weight = d1 * q1 / (2.0 * sigma2(i));
         } else {
           current_sigma_weight = 0.0;
@@ -406,7 +406,7 @@ NumericVector grad_for_eps(NumericVector parvec,
 
   double p;
   for (int i = 0; i < nind; i++) {
-    if (!R_IsNA(refvec(i)) & !R_IsNA(sizevec(i))) {
+    if (!R_IsNA(refvec(i)) && !R_IsNA(sizevec(i))) {
       for (int k = 0; k <= ploidy; k++) {
         p = (double)k / (double)ploidy;
         grad(0) = grad(0) + wmat(i, k) * dlbeta_deps(refvec(i), sizevec(i), p, eps, h, tau);

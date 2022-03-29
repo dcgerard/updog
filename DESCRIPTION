@@ -1,6 +1,6 @@
 Package: updog
 Title: Flexible Genotyping for Polyploids
-Version: 2.1.2
+Version: 2.1.3
 Authors@R: person("David", 
                   "Gerard",
                   email = "gerard.1787@gmail.com", 

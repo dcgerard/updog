@@ -139,7 +139,7 @@ arma::vec wem(arma::vec weight_vec,
   arma::vec pivec_n1(nclass);
   arma::vec pivec_n2(nclass);
 
-  while ((index < itermax) & (err > obj_tol)) {
+  while ((index < itermax) && (err > obj_tol)) {
     old_obj = obj;
     pivec_n2 = pivec;
 
