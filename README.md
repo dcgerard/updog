@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# updog
+# updog <img src="man/figures/logo.png" align="right" height="139" />
 
 [![R-CMD-check](https://github.com/dcgerard/updog/workflows/R-CMD-check/badge.svg)](https://github.com/dcgerard/updog/actions)
 [![codecov](https://codecov.io/gh/dcgerard/updog/branch/master/graph/badge.svg?token=zjDBKZWjCs)](https://app.codecov.io/gh/dcgerard/updog)
