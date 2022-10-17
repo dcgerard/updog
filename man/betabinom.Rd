@@ -68,15 +68,15 @@ and
 }
 \section{Functions}{
 \itemize{
-\item \code{dbetabinom}: Density function.
+\item \code{dbetabinom()}: Density function.
 
-\item \code{pbetabinom}: Distribution function.
+\item \code{pbetabinom()}: Distribution function.
 
-\item \code{qbetabinom}: Quantile function.
+\item \code{qbetabinom()}: Quantile function.
 
-\item \code{rbetabinom}: Random generation.
+\item \code{rbetabinom()}: Random generation.
+
 }}
-
 \examples{
 x <- rbetabinom(n = 10, size = 10, mu = 0.1, rho = 0.01)
 dbetabinom(x = 1, size = 10, mu = 0.1, rho = 0.01, log = FALSE)
