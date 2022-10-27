@@ -1156,7 +1156,7 @@ flex_update_pivec <- function(weight_vec,
                               gr         = grad_for_weighted_lnorm,
                               method     = "L-BFGS-B",
                               lower      = c(-1, 10 ^ -8),
-                              upper      = c(ploidy + 1, Inf),
+                              upper      = c(ploidy + 1, 1000),
                               weight_vec = weight_vec,
                               ploidy     = ploidy,
                               control    = list(fnscale = -1))

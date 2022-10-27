@@ -204,4 +204,10 @@ test_that("genotype likelihoods and posteriors are consistent", {
   )
 })
 
-
+test_that("norm update in flexdog works in corner case", {
+  weight_vec <- c(2.79902011681762e-207, 3.66585787795242e-95, 6.66552283179956e-28, 3, 1.20347911947116e-197)
+  control <- list(mu = 2.00745734748745,
+                  sigma = 0.999993048471895,
+                  pivec = c(0.0615730322441616, 0.248135688999703, 0.37498957281657, 0.25186431090365, 0.0634373950359155))
+  expect_error(flex_update_pivec(weight_vec = weight_vec, model = "norm", control = control), NA)
+})
