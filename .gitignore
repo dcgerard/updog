@@ -10,9 +10,7 @@ src-x64/
 *~
 *.Rproj
 inst/doc
-*.html
 doc
 Meta
 codecov.yml
 *.gcno
-docs
