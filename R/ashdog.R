@@ -657,6 +657,13 @@ flexdog_full <- function(refvec,
   pgeno_list$p2geno <- NA_real_
   pgeno_list$p2ref <- ifelse(is.null(p2ref), NA_real_, p2ref)
   pgeno_list$p2size <- ifelse(is.null(p2size), NA_real_, p2size)
+  if (!is.null(p1ref) && !is.null(p1size) && p1size > 0) {
+    pgeno_list$p1geno <- ploidy * p1ref / p1size ## the likelihood (not the prior) can take proportional parental genotypes
+  }
+  if (!is.null(p2ref) && !is.null(p2size) && p2size > 0) {
+    pgeno_list$p2geno <- ploidy * p2ref / p2size ## the likelihood (not the prior) can take proportional parental genotypes
+  }
+
 
   pivec <- initialize_pivec(ploidy = ploidy, mode = mode, model = model)
   if (model == "custom") { ## hack to get around passing more arguments to initialize_pivec
