@@ -639,6 +639,7 @@ flexdog_full <- function(refvec,
     control$fs1_alpha <- fs1_alpha
   } else if (model == "f1pp" | model == "s1pp") {
     control$fs1_alpha <- fs1_alpha
+    pgeno_list <- list()
   } else if (model == "bb") {
     control$alpha <- mode ## initialize allele frequency for bb
     control$tau   <- boundary_tol ## initialize od for bb
@@ -648,6 +649,14 @@ flexdog_full <- function(refvec,
   } else if (model == "custom") {
     control$prior_vec <- prior_vec
   }
+
+  pgeno_list <- list()
+  pgeno_list$p1geno <- NA_real_
+  pgeno_list$p1ref <- ifelse(is.null(p1ref), NA_real_, p1ref)
+  pgeno_list$p1size <- ifelse(is.null(p1size), NA_real_, p1size)
+  pgeno_list$p2geno <- NA_real_
+  pgeno_list$p2ref <- ifelse(is.null(p2ref), NA_real_, p2ref)
+  pgeno_list$p2size <- ifelse(is.null(p2size), NA_real_, p2size)
 
   pivec <- initialize_pivec(ploidy = ploidy, mode = mode, model = model)
   if (model == "custom") { ## hack to get around passing more arguments to initialize_pivec
@@ -693,7 +702,13 @@ flexdog_full <- function(refvec,
                          wmat        = wik_mat,
                          update_seq  = update_seq,
                          update_bias = update_bias,
-                         update_od   = update_od)
+                         update_od   = update_od,
+                         p1geno      = pgeno_list$p1geno,
+                         p1ref       = pgeno_list$p1ref,
+                         p1size      = pgeno_list$p1size,
+                         p2geno      = pgeno_list$p2geno,
+                         p2ref       = pgeno_list$p2ref,
+                         p2size      = pgeno_list$p2size)
     seq  <- oout$par[1]
     bias <- oout$par[2]
     od   <- oout$par[3]
@@ -729,7 +744,7 @@ flexdog_full <- function(refvec,
       ## do nothing
     }
 
-    ## Update pivec ----------------
+    ## Update pivec ------------------------------------------------------------
     weight_vec <- colSums(wik_mat)
     fupdate_out <- flex_update_pivec(weight_vec = weight_vec,
                                      model      = model,
@@ -737,13 +752,21 @@ flexdog_full <- function(refvec,
     pivec <- fupdate_out$pivec
     control$pivec <- pivec
 
-    ## New initialization parameters for priors that use gradient ascent.
+    ## New initialization parameters for priors that use gradient ascent -------
     if (model == "bb") {
       control$alpha <- fupdate_out$par$alpha
       control$tau   <- fupdate_out$par$tau
     } else if (model == "norm") {
       control$mu    <- fupdate_out$par$mu
       control$sigma <- fupdate_out$par$sigma
+    }
+
+    ## Update of parental genotypes -------------------------------------------
+    if (model == "s1" || model == "s1pp") {
+      pgeno_list$p1geno <- fupdate_out$par$pgeno
+    } else if (model == "f1" || model == "f1pp") {
+      pgeno_list$p1geno <- fupdate_out$par$p1geno
+      pgeno_list$p2geno <- fupdate_out$par$p2geno
     }
 
     ## Fix pivec from small numerical deviations -------------------------------
@@ -766,6 +789,33 @@ flexdog_full <- function(refvec,
                          mean_od   = mean_od,
                          var_od    = var_od)
 
+    ## Add parental data ------------------------------------------------
+    if (model == "f1" || model == "f1pp") {
+      if (!is.null(p1ref) && !is.null(p1size)) {
+        llike <- llike + dbetabinom(x    = p1ref,
+                                    size = p1size,
+                                    mu   = xi_fun(p = pgeno_list$p1geno / ploidy, eps = seq, h = bias),
+                                    rho  = od,
+                                    log  = TRUE)
+      }
+      if (!is.null(p2ref) && !is.null(p2size)) {
+        llike <- llike + dbetabinom(x    = p2ref,
+                                    size = p2size,
+                                    mu   = xi_fun(p = pgeno_list$p2geno / ploidy, eps = seq, h = bias),
+                                    rho  = od,
+                                    log  = TRUE)
+      }
+    } else if (model == "s1" || model == "s1pp") {
+      if (!is.null(p1ref) && !is.null(p1size)) {
+      llike <- llike + dbetabinom(x    = p1ref,
+                                  size = p1size,
+                                  mu   = xi_fun(p = pgeno_list$p1geno / ploidy, eps = seq, h = bias),
+                                  rho  = od,
+                                  log  = TRUE)
+      }
+    }
+
+    ## calculate difference in likelihoods -------------------------------------
     err        <- abs(llike - llike_old)
     iter_index <- iter_index + 1
 

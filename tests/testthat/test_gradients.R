@@ -170,11 +170,17 @@ test_that("grad_for_eps works", {
   refvec[1]  <- NA
   sizevec[2] <- NA
 
-  dout <- grad_for_eps(parvec = parvec, refvec = refvec, sizevec = sizevec,
-                       ploidy = ploidy, mean_bias = mean_bias,
-                       var_bias = var_bias, mean_seq = mean_seq,
-                       var_seq = var_seq, mean_od = mean_od,
-                       var_od = var_od, wmat = wmat)
+  dout <- grad_for_eps(parvec = parvec,
+                       refvec = refvec,
+                       sizevec = sizevec,
+                       ploidy = ploidy,
+                       mean_bias = mean_bias,
+                       var_bias = var_bias,
+                       mean_seq = mean_seq,
+                       var_seq = var_seq,
+                       mean_od = mean_od,
+                       var_od = var_od,
+                       wmat = wmat)
 
   myenv <- new.env()
   assign(x = "parvec", value = parvec, envir = myenv)
@@ -193,6 +199,95 @@ test_that("grad_for_eps works", {
                                                 var_od = var_od, wmat = wmat)),
                               "parvec", myenv)
   expect_equal(c(attr(nout, "gradient")), dout, tol = 10 ^ -4)
+
+
+
+  ## About twice as fast.
+  # microbenchmark::microbenchmark(
+  #   dout <- grad_for_eps(parvec = parvec, refvec = refvec, sizevec = sizevec,
+  #                        ploidy = ploidy, mean_bias = mean_bias,
+  #                        var_bias = var_bias, mean_seq = mean_seq,
+  #                        var_seq = var_seq, wmat = wmat),
+  #   nout <- stats::numericDeriv(quote(obj_for_eps(parvec = parvec, refvec = refvec, sizevec = sizevec,
+  #                                                 ploidy = ploidy, mean_bias = mean_bias,
+  #                                                 var_bias = var_bias, mean_seq = mean_seq,
+  #                                                 var_seq = var_seq, wmat = wmat)),
+  #                               "parvec", myenv)
+  # )
+}
+)
+
+test_that("grad_for_eps works using parental data", {
+  skip_on_os(os = "mac", arch = "aarch64")
+
+  set.seed(1)
+  parvec  <- c(0.02, 1.5, 0.01)
+  sizevec <- rpois(n = 11, lambda = 20)
+  refvec  <- rbinom(n = 11, size = sizevec, prob = 0.4)
+  p1geno <- 2
+  p1ref <- 20
+  p1size <- 45
+  p2geno <- 2
+  p2ref <- 50
+  p2size <- 101
+  ploidy <- 4
+  mean_bias <- 0
+  var_bias <- 1
+  mean_seq <- -4.7
+  var_seq <- 1
+  mean_od <- -5.5
+  var_od <- 0.6
+  wmat <- matrix(abs(rnorm(11 * (ploidy + 1))), nrow = 11)
+  wmat <- wmat / rowSums(wmat)
+
+  refvec[1]  <- NA
+  sizevec[2] <- NA
+
+  dout <- grad_for_eps(parvec = parvec,
+                       refvec = refvec,
+                       sizevec = sizevec,
+                       ploidy = ploidy,
+                       mean_bias = mean_bias,
+                       var_bias = var_bias,
+                       mean_seq = mean_seq,
+                       var_seq = var_seq,
+                       mean_od = mean_od,
+                       var_od = var_od,
+                       wmat = wmat,
+                       p1geno = p1geno,
+                       p1ref = p1ref,
+                       p1size = p1size,
+                       p2geno = p2geno,
+                       p2ref = p2ref,
+                       p2size = p2size)
+
+  myenv <- new.env()
+  assign(x = "parvec", value = parvec, envir = myenv)
+  assign(x = "refvec", value = refvec, envir = myenv)
+  assign(x = "sizevec", value = sizevec, envir = myenv)
+  assign(x = "ploidy", value = ploidy, envir = myenv)
+  assign(x = "mean_bias", value = mean_bias, envir = myenv)
+  assign(x = "var_bias", value = var_bias, envir = myenv)
+  assign(x = "mean_seq", value = mean_seq, envir = myenv)
+  assign(x = "var_seq", value = var_seq, envir = myenv)
+  assign(x = "wmat", value = wmat, envir = myenv)
+  assign(x = "p1geno", value = p1geno, envir = myenv)
+  assign(x = "p1ref", value = p1ref, envir = myenv)
+  assign(x = "p1size", value = p1size, envir = myenv)
+  assign(x = "p2geno", value = p2geno, envir = myenv)
+  assign(x = "p2ref", value = p2ref, envir = myenv)
+  assign(x = "p2size", value = p2size, envir = myenv)
+  nout <- stats::numericDeriv(quote(obj_for_eps(parvec = parvec, refvec = refvec, sizevec = sizevec,
+                                                ploidy = ploidy, mean_bias = mean_bias,
+                                                var_bias = var_bias, mean_seq = mean_seq,
+                                                var_seq = var_seq, mean_od = mean_od,
+                                                var_od = var_od, wmat = wmat, p1geno = p1geno,
+                                                p1ref = p1ref, p1size = p1size, p2geno = p2geno,
+                                                p2ref = p2ref, p2size = p2size)),
+                              "parvec", myenv)
+  expect_equal(c(attr(nout, "gradient")), dout, tol = 10 ^ -4)
+
+
 
   ## About twice as fast.
   # microbenchmark::microbenchmark(

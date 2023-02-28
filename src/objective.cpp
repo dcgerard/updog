@@ -431,7 +431,13 @@ double obj_for_eps(NumericVector parvec,
 		   NumericMatrix wmat,
 		   bool update_bias = true,
 		   bool update_seq = true,
-		   bool update_od = true) {
+		   bool update_od = true,
+		   double p1geno = NA_REAL,
+		   double p1ref = NA_REAL,
+		   double p1size = NA_REAL,
+		   double p2geno = NA_REAL,
+		   double p2ref = NA_REAL,
+		   double p2size = NA_REAL) {
   // Check input -------------------------------------------------------
   int nind = wmat.nrow();
 
@@ -461,12 +467,23 @@ double obj_for_eps(NumericVector parvec,
   for (int i = 0; i < nind; i++) {
     for (int k = 0; k <= ploidy; k++) {
       if (!R_IsNA(refvec(i)) && !R_IsNA(sizevec(i))) {
-	xi_current = xi_double((double)k / (double)ploidy, eps, h);
-	obj_val = obj_val + wmat(i, k) * dbetabinom_double(refvec(i), sizevec(i), xi_current, tau, true);
+        xi_current = xi_double((double)k / (double)ploidy, eps, h);
+        obj_val = obj_val + wmat(i, k) * dbetabinom_double(refvec(i), sizevec(i), xi_current, tau, true);
       }
     }
   }
 
+  // add parental data if available
+  if (!R_IsNA(p1geno) && !R_IsNA(p1ref) && !R_IsNA(p1size)) {
+    double xi_p1 = xi_double(p1geno / (double)ploidy, eps, h);
+    obj_val = obj_val + dbetabinom_double(p1ref, p1size, xi_p1, tau, true);
+  }
+  if (!R_IsNA(p2geno) && !R_IsNA(p2ref) && !R_IsNA(p2size)) {
+    double xi_p2 = xi_double(p2geno / (double)ploidy, eps, h);
+    obj_val = obj_val + dbetabinom_double(p2ref, p2size, xi_p2, tau, true);
+  }
+
+  // add penalties for likelihood parameters -----
   obj_val = obj_val +
     pen_bias(h, mean_bias, var_bias) +
     pen_seq_error(eps, mean_seq, var_seq) +

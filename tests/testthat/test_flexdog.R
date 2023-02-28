@@ -126,7 +126,6 @@ test_that("fs1_alpha works", {
                      verbose = FALSE)
   )
 
-
   expect_equal(fout1$par$alpha, 10^-4)
 })
 
@@ -137,7 +136,7 @@ test_that("actually using parent data", {
   sizevec <- 40:21
   ploidy  <- 6
 
-  mcount <- 100000
+  mcount <- 10000
   fout1 <- flexdog(refvec = refvec,
                    sizevec = sizevec,
                    ploidy = ploidy,
@@ -211,3 +210,4 @@ test_that("norm update in flexdog works in corner case", {
                   pivec = c(0.0615730322441616, 0.248135688999703, 0.37498957281657, 0.25186431090365, 0.0634373950359155))
   expect_error(flex_update_pivec(weight_vec = weight_vec, model = "norm", control = control), NA)
 })
+

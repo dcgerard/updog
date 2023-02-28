@@ -381,7 +381,13 @@ NumericVector grad_for_eps(NumericVector parvec,
                    NumericMatrix wmat,
                    bool update_bias = true,
                    bool update_seq = true,
-                   bool update_od = true) {
+                   bool update_od = true,
+            		   double p1geno = NA_REAL,
+            		   double p1ref = NA_REAL,
+            		   double p1size = NA_REAL,
+            		   double p2geno = NA_REAL,
+            		   double p2ref = NA_REAL,
+            		   double p2size = NA_REAL) {
   // check input --------------------------------------------------------
   int nind = refvec.length();
   if (sizevec.length() != nind) {
@@ -414,6 +420,20 @@ NumericVector grad_for_eps(NumericVector parvec,
         grad(2) = grad(2) + wmat(i, k) * dlbeta_dtau(refvec(i), sizevec(i), p, eps, h, tau);
       }
     }
+  }
+
+  // contribution by parental data
+  if (!R_IsNA(p1geno) && !R_IsNA(p1ref) && !R_IsNA(p1size)) {
+    p = p1geno / (double)ploidy;
+    grad(0) = grad(0) + dlbeta_deps(p1ref, p1size, p, eps, h, tau);
+    grad(1) = grad(1) + dlbeta_dh(p1ref, p1size, p, eps, h, tau);
+    grad(2) = grad(2) + dlbeta_dtau(p1ref, p1size, p, eps, h, tau);
+  }
+  if (!R_IsNA(p2geno) && !R_IsNA(p2ref) && !R_IsNA(p2size)) {
+    p = p2geno / (double)ploidy;
+    grad(0) = grad(0) + dlbeta_deps(p2ref, p2size, p, eps, h, tau);
+    grad(1) = grad(1) + dlbeta_dh(p2ref, p2size, p, eps, h, tau);
+    grad(2) = grad(2) + dlbeta_dtau(p2ref, p2size, p, eps, h, tau);
   }
 
   // contribution by penalties

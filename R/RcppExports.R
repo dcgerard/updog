@@ -483,8 +483,8 @@ dlbeta_deps <- function(x, n, p, eps, h, tau) {
 #' @inheritParams obj_for_eps
 #'
 #' @author David Gerard
-grad_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od, wmat, update_bias = TRUE, update_seq = TRUE, update_od = TRUE) {
-    .Call('_updog_grad_for_eps', PACKAGE = 'updog', parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od, wmat, update_bias, update_seq, update_od)
+grad_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od, wmat, update_bias = TRUE, update_seq = TRUE, update_od = TRUE, p1geno = NA_real_, p1ref = NA_real_, p1size = NA_real_, p2geno = NA_real_, p2ref = NA_real_, p2size = NA_real_) {
+    .Call('_updog_grad_for_eps', PACKAGE = 'updog', parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od, wmat, update_bias, update_seq, update_od, p1geno, p1ref, p1size, p2geno, p2ref, p2size)
 }
 
 #' Gradient for \code{\link{obj_for_weighted_lbb}}.
@@ -714,8 +714,8 @@ obj_for_alpha <- function(mu, sigma2, alpha, rho, log_bb_dense, ploidy) {
 #'
 #' @keywords internal
 #' @noRd
-obj_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od, wmat, update_bias = TRUE, update_seq = TRUE, update_od = TRUE) {
-    .Call('_updog_obj_for_eps', PACKAGE = 'updog', parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od, wmat, update_bias, update_seq, update_od)
+obj_for_eps <- function(parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od, wmat, update_bias = TRUE, update_seq = TRUE, update_od = TRUE, p1geno = NA_real_, p1ref = NA_real_, p1size = NA_real_, p2geno = NA_real_, p2ref = NA_real_, p2size = NA_real_) {
+    .Call('_updog_obj_for_eps', PACKAGE = 'updog', parvec, refvec, sizevec, ploidy, mean_bias, var_bias, mean_seq, var_seq, mean_od, var_od, wmat, update_bias, update_seq, update_od, p1geno, p1ref, p1size, p2geno, p2ref, p2size)
 }
 
 #' Objective function when updating mu and sigma2.
