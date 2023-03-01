@@ -1,64 +1,11 @@
 ### plotting for mupdog object
 
 
-#' Make a genotype plot.
+#' Make a genotype plot using ggplot2
 #'
-#' The x-axis is the counts of the non-reference allele,
-#' and the y-axis is the counts of the reference allele.
-#' Transparency is controlled by the \code{maxpostprob}
-#' vector. These types of plots are used in Gerard et. al. (2018) and
-#' Gerard and Ferrão (2020).
+#' This function is now deprecated. The goal is to remove ggplot2 dependence.
 #'
-#' If parental genotypes are provided (\code{p1geno} and \code{p2geno}) then
-#' they will be colored the same as the offspring. Since they are often hard to see,
-#' a small black dot will also indicate their position.
-#'
-#' @param refvec A vector of non-negative integers. The number of
-#'     reference reads observed in the individuals
-#' @param sizevec A vector of positive integers. The total number of
-#'     reads in the individuals.
-#' @param p1ref A vector of non-negative integers. The number of
-#'     reference reads observed in parent 1 (if the individuals are
-#'     all siblings).
-#' @param p1size A vector of positive integers. The total number of
-#'     reads in parent 1 (if the individuals are
-#'     all siblings).
-#' @param p2ref A vector of non-negative integers. The number of
-#'     reference reads observed in parent 2 (if the individuals are
-#'     all siblings).
-#' @param p2size A vector of positive integers. The total number of
-#'     reads in parent 2 (if the individuals are
-#'     all siblings).
-#' @param ploidy A non-negative integer. The ploidy of the species.
-#' @param geno The individual genotypes.
-#' @param seq The sequencing error rate.
-#' @param bias The bias parameter.
-#' @param maxpostprob A vector of the posterior probabilities of being at
-#'     the modal genotype.
-#' @param p1geno Parent 1's genotype.
-#' @param p2geno Parent 2's genotype.
-#' @param use_colorblind A logical. Should we use a colorblind safe palette (\code{TRUE}),
-#'     or not (\code{FALSE})? Only allowed if \code{ploidy <= 6}.
-#'
-#' @export
-#'
-#' @references
-#' \itemize{
-#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. \doi{10.1534/genetics.118.301468}.}
-#'   \item{Gerard, David, and Luís Felipe Ventorim Ferrão. "Priors for genotyping polyploids." Bioinformatics 36, no. 6 (2020): 1795-1800. \doi{10.1093/bioinformatics/btz852}.}
-#' }
-#'
-#' @author David Gerard
-#'
-#' @return A \code{\link[ggplot2]{ggplot}} object for the genotype plot.
-#'
-#' @examples
-#' data("snpdat")
-#' refvec  <- snpdat$counts[snpdat$snp == "SNP1"]
-#' sizevec <- snpdat$size[snpdat$snp == "SNP1"]
-#' ploidy  <- 6
-#' plot_geno(refvec = refvec, sizevec = sizevec, ploidy = ploidy)
-#'
+#' @inherit plot_geno_base
 plot_geno <- function(refvec,
                       sizevec,
                       ploidy,
@@ -195,5 +142,161 @@ plot_geno <- function(refvec,
   return(pl)
 }
 
+#' Make a genotype plot.
+#'
+#' The x-axis is the counts of the non-reference allele,
+#' and the y-axis is the counts of the reference allele.
+#' Transparency is controlled by the \code{maxpostprob}
+#' vector. These types of plots are used in Gerard et. al. (2018) and
+#' Gerard and Ferrão (2020).
+#'
+#' If parental genotypes are provided (\code{p1geno} and \code{p2geno}) then
+#' they will be colored the same as the offspring. Since they are often hard to see,
+#' a small black dot will also indicate their position.
+#'
+#' @param refvec A vector of non-negative integers. The number of
+#'     reference reads observed in the individuals
+#' @param sizevec A vector of positive integers. The total number of
+#'     reads in the individuals.
+#' @param p1ref A vector of non-negative integers. The number of
+#'     reference reads observed in parent 1 (if the individuals are
+#'     all siblings).
+#' @param p1size A vector of positive integers. The total number of
+#'     reads in parent 1 (if the individuals are
+#'     all siblings).
+#' @param p2ref A vector of non-negative integers. The number of
+#'     reference reads observed in parent 2 (if the individuals are
+#'     all siblings).
+#' @param p2size A vector of positive integers. The total number of
+#'     reads in parent 2 (if the individuals are
+#'     all siblings).
+#' @param ploidy A non-negative integer. The ploidy of the species.
+#' @param geno The individual genotypes.
+#' @param seq The sequencing error rate.
+#' @param bias The bias parameter.
+#' @param maxpostprob A vector of the posterior probabilities of being at
+#'     the modal genotype.
+#' @param p1geno Parent 1's genotype.
+#' @param p2geno Parent 2's genotype.
+#' @param use_colorblind A logical. Should we use a colorblind safe palette (\code{TRUE}),
+#'     or not (\code{FALSE})? Only allowed if \code{ploidy <= 6}.
+#'
+#' @export
+#'
+#' @references
+#' \itemize{
+#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. \doi{10.1534/genetics.118.301468}.}
+#'   \item{Gerard, David, and Luís Felipe Ventorim Ferrão. "Priors for genotyping polyploids." Bioinformatics 36, no. 6 (2020): 1795-1800. \doi{10.1093/bioinformatics/btz852}.}
+#' }
+#'
+#' @author David Gerard
+#'
+#' @return A \code{\link[ggplot2]{ggplot}} object for the genotype plot.
+#'
+#' @examples
+#' data("snpdat")
+#' refvec  <- snpdat$counts[snpdat$snp == "SNP1"]
+#' sizevec <- snpdat$size[snpdat$snp == "SNP1"]
+#' ploidy  <- 6
+#' plot_geno_base(refvec = refvec, sizevec = sizevec, ploidy = ploidy)
+#'
+plot_geno_base <- function(refvec,
+                           sizevec,
+                           ploidy,
+                           p1ref          = NULL,
+                           p1size         = NULL,
+                           p2ref          = NULL,
+                           p2size         = NULL,
+                           geno           = NULL,
+                           seq            = 0,
+                           bias           = 1,
+                           maxpostprob    = NULL,
+                           p1geno         = NULL,
+                           p2geno         = NULL) {
+
+  stopifnot(refvec >= 0, na.rm = TRUE)
+  stopifnot(sizevec >= refvec, na.rm = TRUE)
+  stopifnot(ploidy >= 1)
+  stopifnot(seq >= 0)
+
+  ## Create plot data ----
+  if (ploidy <= 8) {
+    palvec <- palette.colors(n = ploidy + 1, palette = "Okabe-Ito")
+  } else {
+    palvec <- seq_len(ploidy + 1)
+  }
+
+  pk <- xi_fun(p = (0:ploidy) / ploidy, eps = seq, h = bias)
+
+  dfdat <- data.frame(A = refvec, a = sizevec - refvec)
+  maxcount <- max(max(dfdat$A, na.rm = TRUE), max(dfdat$a, na.rm = TRUE)) + 1
+  if (!is.null(geno)) {
+    stopifnot(length(geno) == length(refvec))
+    dfdat$genotype <- addNA(factor(geno, levels = 0:ploidy))
+    colvec <- palvec[dfdat$genotype]
+  } else {
+    colvec <- rep("#000000", length(refvec))
+  }
+
+  if (!is.null(maxpostprob)) {
+    stopifnot(all(maxpostprob >= 0, na.rm = TRUE))
+    stopifnot(all(maxpostprob <= 1, na.rm = TRUE))
+    dfdat$maxpostprob <- maxpostprob
+
+    colvec <- paste0(
+      colvec,
+      as.hexmode(as.numeric(cut(maxpostprob, breaks = seq(-0.001, 1.001, length.out = 254))))
+    )
+  }
+
+  slopevec <- pk / (1 - pk)
+  xend <- pmin(rep(maxcount, ploidy + 1), maxcount / slopevec)
+  yend <- pmin(rep(maxcount, ploidy + 1), maxcount * slopevec)
+  df_lines <- data.frame(x = rep(0, ploidy + 1), y = rep(0, ploidy + 1),
+                         xend = xend, yend = yend)
+
+  ## Create plot ----
+  if (!is.null(geno)) {
+    oldpar <- graphics::par(pch = 16,
+                            mar = c(3, 3, 0.5, 5),
+                            xpd = TRUE,
+                            mgp = c(1.8, 0.4, 0),
+                            tcl = -0.25)
+  } else {
+    oldpar <- graphics::par(pch = 16,
+                            mar = c(3, 3, 0.5, 0.5),
+                            mgp = c(1.8, 0.4, 0),
+                            tcl = -0.25)
+  }
+  on.exit(graphics::par(oldpar), add = TRUE)
+
+  graphics::plot(x = NULL,
+                 xlim = c(0, maxcount),
+                 ylim = c(0, maxcount),
+                 xlab = "a",
+                 ylab = "A")
+  for (i in seq_len(nrow(df_lines))) {
+    graphics::segments(x0 = df_lines$x[[i]],
+                       y0 = df_lines$y[[i]],
+                       x1 = df_lines$xend[[i]],
+                       y1 = df_lines$yend[[i]],
+                       lty = 2,
+                       col = "grey")
+  }
+  graphics::points(x = sizevec - refvec,
+                   y = refvec,
+                   col = colvec,
+                   pch = 16,
+                   cex = 0.8)
+  if (!is.null(geno)) {
+    graphics::legend("topright",
+                     inset=c(-0.25, 0),
+                     legend = 0:ploidy,
+                     pch = 16,
+                     col = palvec[0:ploidy + 1],
+                     title = "Genotype",
+                     bty = "n")
+  }
+}
 
 
