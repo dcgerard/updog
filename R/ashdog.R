@@ -55,7 +55,8 @@
 #'                    model    = "s1",
 #'                    p1ref    = refvec[1],
 #'                    p1size   = sizevec[1])
-#' plot(fout)
+#' plot(fout, method = "base")
+#' plot(fout, method = "ggplot2")
 #'
 #' }
 #'
@@ -476,6 +477,7 @@ flexdog <- function(refvec,
 #'                         ploidy  = ploidy,
 #'                         model   = "norm")
 #' plot(fout)
+#' plot(fout, method = "base")
 #'
 #' @export
 flexdog_full <- function(refvec,
@@ -873,6 +875,8 @@ flexdog_full <- function(refvec,
 #' @param use_colorblind Should we use a colorblind-safe palette
 #'     (\code{TRUE}) or not (\code{FALSE})? \code{TRUE} is only allowed
 #'     if the ploidy is less than or equal to 6.
+#' @param method Should we use ggplot2 graphics (\code{"ggplot2"}) or base
+#'     R graphics (\code{"base"})?
 #' @param ... Not used.
 #'
 #' @author David Gerard
@@ -892,8 +896,12 @@ flexdog_full <- function(refvec,
 #' @return A \code{\link[ggplot2]{ggplot}} object for the genotype plot.
 #'
 #' @export
-plot.flexdog <- function(x, use_colorblind = TRUE, ...) {
+plot.flexdog <- function(x,
+                         use_colorblind = TRUE,
+                         method = c("ggplot2", "base"),
+                         ...) {
   assertthat::assert_that(is.flexdog(x))
+  method <- match.arg(method)
   if (x$input$model == "s1") {
     p1geno <- x$par$pgeno
     p2geno <- NULL
@@ -905,20 +913,37 @@ plot.flexdog <- function(x, use_colorblind = TRUE, ...) {
     p2geno <- NULL
   }
 
-  pl <- plot_geno(refvec         = x$input$refvec,
-                  sizevec        = x$input$sizevec,
-                  ploidy         = x$input$ploidy,
-                  geno           = x$geno,
-                  seq            = x$seq,
-                  bias           = x$bias,
-                  maxpostprob    = x$maxpostprob,
-                  p1ref          = x$input$p1ref,
-                  p1size         = x$input$p1size,
-                  p2ref          = x$input$p2ref,
-                  p2size         = x$input$p2size,
-                  p1geno         = p1geno,
-                  p2geno         = p2geno,
-                  use_colorblind = use_colorblind)
+  if (method == "ggplot2") {
+    pl <- plot_geno(refvec         = x$input$refvec,
+                    sizevec        = x$input$sizevec,
+                    ploidy         = x$input$ploidy,
+                    geno           = x$geno,
+                    seq            = x$seq,
+                    bias           = x$bias,
+                    maxpostprob    = x$maxpostprob,
+                    p1ref          = x$input$p1ref,
+                    p1size         = x$input$p1size,
+                    p2ref          = x$input$p2ref,
+                    p2size         = x$input$p2size,
+                    p1geno         = p1geno,
+                    p2geno         = p2geno,
+                    use_colorblind = use_colorblind)
+  } else {
+    pl <- NULL
+    plot_geno_base(refvec         = x$input$refvec,
+                   sizevec        = x$input$sizevec,
+                   ploidy         = x$input$ploidy,
+                   geno           = x$geno,
+                   seq            = x$seq,
+                   bias           = x$bias,
+                   maxpostprob    = x$maxpostprob,
+                   p1ref          = x$input$p1ref,
+                   p1size         = x$input$p1size,
+                   p2ref          = x$input$p2ref,
+                   p2size         = x$input$p2size,
+                   p1geno         = p1geno,
+                   p2geno         = p2geno)
+  }
   return(pl)
 }
 

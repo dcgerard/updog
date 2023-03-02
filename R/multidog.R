@@ -487,6 +487,8 @@ is.multidog <- function(x) {
 #'
 #' @param x The output of \code{\link{multidog}}.
 #' @param indices A vector of integers. The indices of the SNPs to plot.
+#' @param method Should we use ggplot2 graphics (\code{"ggplot2"}) or base
+#'     R graphics (\code{"base"})?
 #' @param ... not used.
 #'
 #' @author David Gerard
@@ -501,8 +503,12 @@ is.multidog <- function(x) {
 #'   \item{Gerard, David, and Luís Felipe Ventorim Ferrão. "Priors for genotyping polyploids." Bioinformatics 36, no. 6 (2020): 1795-1800. \doi{10.1093/bioinformatics/btz852}.}
 #' }
 #'
-plot.multidog <- function(x, indices = seq(1, min(5, nrow(x$snpdf))), ...) {
+plot.multidog <- function(x,
+                          indices = seq(1, min(5, nrow(x$snpdf))),
+                          method = c("ggplot2", "base"),
+                          ...) {
   assertthat::assert_that(is.multidog(x))
+  method <- match.arg(method)
 
   all(indices <= nrow(x$snpdf))
 
@@ -535,19 +541,33 @@ plot.multidog <- function(x, indices = seq(1, min(5, nrow(x$snpdf))), ...) {
       p2_size <- x$snpdf$p2size[[current_index]]
     }
 
-    pllist[[i]] <- plot_geno(refvec         = refvec,
-                             sizevec        = sizevec,
-                             ploidy         = ploidy,
-                             geno           = geno,
-                             seq            = seq,
-                             bias           = bias,
-                             maxpostprob    = maxpostprob,
-                             use_colorblind = ploidy <= 6,
-                             p1ref          = p1_ref,
-                             p1size         = p1_size,
-                             p2ref          = p2_ref,
-                             p2size         = p2_size) +
-      ggplot2::ggtitle(current_snp)
+    if (method == "ggplot2") {
+      pllist[[i]] <- plot_geno(refvec         = refvec,
+                               sizevec        = sizevec,
+                               ploidy         = ploidy,
+                               geno           = geno,
+                               seq            = seq,
+                               bias           = bias,
+                               maxpostprob    = maxpostprob,
+                               use_colorblind = ploidy <= 6,
+                               p1ref          = p1_ref,
+                               p1size         = p1_size,
+                               p2ref          = p2_ref,
+                               p2size         = p2_size) +
+        ggplot2::ggtitle(current_snp)
+    } else {
+      plot_geno_base(refvec         = refvec,
+                     sizevec        = sizevec,
+                     ploidy         = ploidy,
+                     geno           = geno,
+                     seq            = seq,
+                     bias           = bias,
+                     maxpostprob    = maxpostprob,
+                     p1ref          = p1_ref,
+                     p1size         = p1_size,
+                     p2ref          = p2_ref,
+                     p2size         = p2_size)
+    }
   }
 
   return(pllist)

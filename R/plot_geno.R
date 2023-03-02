@@ -214,8 +214,8 @@ plot_geno_base <- function(refvec,
                            p1geno         = NULL,
                            p2geno         = NULL) {
 
-  stopifnot(refvec >= 0, na.rm = TRUE)
-  stopifnot(sizevec >= refvec, na.rm = TRUE)
+  stopifnot(refvec[!is.na(refvec)] >= 0)
+  stopifnot(sizevec[!is.na(refvec)] >= refvec[!is.na(refvec)])
   stopifnot(ploidy >= 1)
   stopifnot(seq >= 0)
 
@@ -234,6 +234,7 @@ plot_geno_base <- function(refvec,
     stopifnot(length(geno) == length(refvec))
     dfdat$genotype <- addNA(factor(geno, levels = 0:ploidy))
     colvec <- palvec[dfdat$genotype]
+    colvec[is.na(colvec)] <- "#808080"
   } else {
     colvec <- rep("#000000", length(refvec))
   }
@@ -242,10 +243,11 @@ plot_geno_base <- function(refvec,
     stopifnot(all(maxpostprob >= 0, na.rm = TRUE))
     stopifnot(all(maxpostprob <= 1, na.rm = TRUE))
     dfdat$maxpostprob <- maxpostprob
+    dfdat$maxpostprob[is.na(dfdat$maxpostprob)] <- 0
 
     colvec <- paste0(
       colvec,
-      as.hexmode(as.numeric(cut(maxpostprob, breaks = seq(-0.001, 1.001, length.out = 254))))
+      format(as.hexmode(as.numeric(cut(dfdat$maxpostprob, breaks = seq(-0.001, 1.001, length.out = 254)))), width = 2)
     )
   }
 
@@ -296,6 +298,44 @@ plot_geno_base <- function(refvec,
                      col = palvec[0:ploidy + 1],
                      title = "Genotype",
                      bty = "n")
+  }
+
+  ## Add parent data
+  if (!is.null(p1ref) && !is.null(p1size)) {
+    scaled_p1 <- FALSE
+    if (p1ref > maxcount || p1size - p1ref > maxcount) {
+      scaled_p1 <- TRUE
+      parent_mult <- (maxcount - 1) / max(p1ref, p1size - p1ref)
+      p1ref <- parent_mult * p1ref
+      p1size <- parent_mult * p1size
+    }
+    if (!is.null(p1geno)) {
+      p1col <- palvec[[p1geno + 1]]
+    } else {
+      p1col <- "#000000"
+    }
+    graphics::points(x = p1size - p1ref, y = p1ref, pch = 3, col = p1col)
+    if (scaled_p1) {
+      graphics::text(x = p1size - p1ref, y = p1ref, labels = "(scaled)", col = "#80808080")
+    }
+  }
+  if (!is.null(p2ref) && !is.null(p2size)) {
+    scaled_p2 <- FALSE
+    if (p2ref > maxcount || p2size - p2ref > maxcount) {
+      scaled_p2 <- TRUE
+      parent_mult <- (maxcount - 1) / max(p2ref, p2size - p2ref)
+      p2ref <- parent_mult * p2ref
+      p2size <- parent_mult * p2size
+    }
+    if (!is.null(p2geno)) {
+      p2col <- palvec[[p2geno + 1]]
+    } else {
+      p2col <- "#000000"
+    }
+    graphics::points(x = p2size - p2ref, y = p2ref, pch = 3, col = p2col)
+    if (scaled_p2) {
+      graphics::text(x = p2size - p2ref, y = p2ref, labels = "(scaled)", col = "#80808080")
+    }
   }
 }
 
