@@ -769,11 +769,16 @@ flexdog_full <- function(refvec,
     }
 
     ## Update of parental genotypes -------------------------------------------
-    if (model == "s1" || model == "s1pp") {
+    if (model == "s1") {
       pgeno_list$p1geno <- fupdate_out$par$pgeno
-    } else if (model == "f1" || model == "f1pp") {
+    } else if (model == "f1") {
       pgeno_list$p1geno <- fupdate_out$par$p1geno
       pgeno_list$p2geno <- fupdate_out$par$p2geno
+    } else if (model == "s1pp") {
+      pgeno_list$p1geno <- fupdate_out$par$ell1
+    } else if (model == "f1pp") {
+      pgeno_list$p1geno <- fupdate_out$par$ell1
+      pgeno_list$p2geno <- fupdate_out$par$ell2
     }
 
     ## Fix pivec from small numerical deviations -------------------------------
