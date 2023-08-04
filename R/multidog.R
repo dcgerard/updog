@@ -690,6 +690,9 @@ export_vcf <- function(obj, filename) {
       requireNamespace("S4Vectors", quietly = TRUE) &&
       requireNamespace("IRanges", quietly = TRUE)) {
 
+    ## Get sample neames
+    indvec <- colnames(format_multidog(x = obj, varname = "postmean"))
+
     ploidy <- unique(obj$snpdf$ploidy)
     stopifnot(length(ploidy) == 1)
     obj$inddf$alt <- obj$inddf$size - obj$inddf$ref
@@ -738,11 +741,11 @@ export_vcf <- function(obj, filename) {
         strand=NULL,
         seqinfo = NULL,
         names = obj$snpdf$snp),
-      colData = as(matrix(nrow = nind, ncol = 0), "DataFrame"),
+      colData = DataFrame(row.names = indvec),
       exptData = list(
         header = VariantAnnotation::VCFHeader(
           reference = character(),
-          samples = character(),
+          samples = indvec,
           header = IRanges::DataFrameList(
             fileformat = S4Vectors::DataFrame(row.names = "fileformat", Value = "VCFv4.3"),
             fileDate = S4Vectors::DataFrame(row.names = "fileDate", Value = gsub("-", "", Sys.Date())),
@@ -777,4 +780,3 @@ export_vcf <- function(obj, filename) {
                    " \"GenomicRanges\", \"S4Vectors\", \"IRanges\"))\n"))
   }
 }
-
