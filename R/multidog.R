@@ -751,7 +751,7 @@ export_vcf <- function(obj, filename) {
             fileDate = S4Vectors::DataFrame(row.names = "fileDate", Value = gsub("-", "", Sys.Date())),
             source = S4Vectors::DataFrame(row.names = "source", Value = paste0("updogv", utils::packageVersion("updog"))),
             FORMAT = S4Vectors::DataFrame(row.names = c("AD", "DP", "DS", "GP", "GL"),
-                                          Number = c("R", "1", "1", "G", "G"),
+                                          Number = c("R", "1", "1", as.character(ploidy + 1), as.character(ploidy + 1)),
                                           Type = c("Integer", "Integer", "Float", "Float", "Float"),
                                           Description = c("Read depth for each allele",
                                                           "Read depth",
