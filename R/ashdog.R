@@ -85,6 +85,7 @@ flexdog <- function(refvec,
                                     "s1pp",
                                     "f1",
                                     "f1pp",
+                                    "rm",
                                     "flex",
                                     "uniform",
                                     "custom"),
@@ -194,6 +195,7 @@ flexdog <- function(refvec,
 #'       and preferential pairing in an F1 population of tretraploids.}
 #'   \item{\code{"s1pp"}}{This prior allows for double reduction
 #'       and preferential pairing in an S1 population of tretraploids.}
+#'   \item{\code{"rm"}}{Assume the population is undergoing random mating.}
 #'   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
 #'       this works well if you have a lot of individuals. In practice, it seems to
 #'       be much less robust to violations in modeling assumptions.}
@@ -402,6 +404,7 @@ flexdog <- function(refvec,
 #'               of \code{fs1_alpha} in \code{\link{flexdog_full}()}.}
 #'         }
 #'       }
+#'       \item{\code{model = "rm"}:}{A vector of gamete frequencies.}
 #'       \item{\code{model = "flex"}:}{\code{par} is an empty list.}
 #'       \item{\code{model = "uniform"}:}{\code{par} is an empty list.}
 #'       \item{\code{model = "custom"}:}{\code{par} is an empty list.}
@@ -488,6 +491,7 @@ flexdog_full <- function(refvec,
                                          "s1pp",
                                          "f1",
                                          "f1pp",
+                                         "rm",
                                          "flex",
                                          "uniform",
                                          "custom"),
@@ -647,6 +651,8 @@ flexdog_full <- function(refvec,
     control$sigma <- sqrt(ploidy * mode * (1 - mode)) ## initialize sd of normal
   } else if (model == "custom") {
     control$prior_vec <- prior_vec
+  } else if (model == "rm") {
+    control$gam <- rep(0, ploidy / 2) ## initialize gamete frequencies
   }
 
   pivec <- initialize_pivec(ploidy = ploidy, mode = mode, model = model)
@@ -670,7 +676,7 @@ flexdog_full <- function(refvec,
                            ploidy    = ploidy,
                            seq       = seq,
                            bias      = bias,
-                           od = od)
+                           od        = od)
 
     ## Update seq, bias, and od ----
     oout <- stats::optim(par         = c(seq, bias, od),
@@ -744,6 +750,8 @@ flexdog_full <- function(refvec,
     } else if (model == "norm") {
       control$mu    <- fupdate_out$par$mu
       control$sigma <- fupdate_out$par$sigma
+    } else if (model == "rm") {
+      control$gam <- fupdate_out$par$gam
     }
 
     ## Fix pivec from small numerical deviations -------------------------------
@@ -789,6 +797,10 @@ flexdog_full <- function(refvec,
   }
 
   ## End EM ------------------------------------------------------------------
+  if (model == "rm") {
+    ## Convert to gamete frequencies for more interpretability
+    fupdate_out$par$gam <- real_to_simplex(fupdate_out$par$gam)
+  }
 
   ## Initialize return list
   return_list <- list(bias      = bias,
@@ -966,6 +978,7 @@ initialize_pivec <- function(ploidy,
                                        "f1pp",
                                        "s1",
                                        "s1pp",
+                                       "rm",
                                        "flex",
                                        "uniform",
                                        "custom")) {
@@ -976,7 +989,7 @@ initialize_pivec <- function(ploidy,
   model <- match.arg(model)
   if (model == "flex" | model == "uniform") {
     pivec <- rep(x = 1 / (ploidy + 1), length = ploidy + 1)
-  } else if (model == "hw" | model == "f1" | model == "s1" | model == "f1pp" | model == "s1pp" | model == "bb" | model == "norm" |  model == "custom") {
+  } else if (model == "hw" | model == "f1" | model == "s1" | model == "f1pp" | model == "s1pp" | model == "bb" | model == "norm" |  model == "custom" | model == "rm") {
     if (mode < 0 | mode > 1) {
       stop(paste0("initialize_pivec: initialization should be between 0 and 1.",
                   "\nIt is the initialization of the allele frequency."))
@@ -1015,6 +1028,7 @@ flex_update_pivec <- function(weight_vec,
                                         "f1pp",
                                         "s1",
                                         "s1pp",
+                                        "rm",
                                         "flex",
                                         "uniform",
                                         "custom"),
@@ -1171,11 +1185,28 @@ flex_update_pivec <- function(weight_vec,
   } else if (model == "custom") {
     return_list$pivec <- control$prior_vec
     return_list$par <- list()
+  } else if (model == "rm") {
+    optim_out <- stats::optim(
+      par = control$gam,
+      fn = obj_rm,
+      method = "L-BFGS-B",
+      weight_vec = weight_vec,
+      control = list(fnscale = -1)
+    )
+    pvec <- real_to_simplex(y = optim_out$par)
+    qvec <- stats::convolve(pvec, rev(pvec), type = "open")
+    qvec[qvec < 0] <- 0
+    qvec[qvec > 1] <- 1
+    qvec <- qvec / sum(qvec)
+    return_list$pivec <- qvec
+    return_list$par <- list(gam = optim_out$par)
   } else {
     stop("flex_update_pivec: how did you get here?")
   }
   return(return_list)
 }
+
+
 
 
 #' Return the probabilities of an offspring's genotype given its

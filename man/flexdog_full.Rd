@@ -8,7 +8,8 @@ flexdog_full(
   refvec,
   sizevec,
   ploidy,
-  model = c("norm", "hw", "bb", "s1", "s1pp", "f1", "f1pp", "flex", "uniform", "custom"),
+  model = c("norm", "hw", "bb", "s1", "s1pp", "f1", "f1pp", "rm", "flex", "uniform",
+    "custom"),
   verbose = TRUE,
   mean_bias = 0,
   var_bias = 0.7^2,
@@ -215,6 +216,7 @@ An object of class \code{flexdog}, which consists
               of \code{fs1_alpha} in \code{\link{flexdog_full}()}.}
         }
       }
+      \item{\code{model = "rm"}:}{A vector of gamete frequencies.}
       \item{\code{model = "flex"}:}{\code{par} is an empty list.}
       \item{\code{model = "uniform"}:}{\code{par} is an empty list.}
       \item{\code{model = "custom"}:}{\code{par} is an empty list.}
@@ -287,6 +289,7 @@ Possible values of the genotype distribution (values of \code{model}) are:
       and preferential pairing in an F1 population of tretraploids.}
   \item{\code{"s1pp"}}{This prior allows for double reduction
       and preferential pairing in an S1 population of tretraploids.}
+  \item{\code{"rm"}}{Assume the population is undergoing random mating.}
   \item{\code{"flex"}}{Generically any categorical distribution. Theoretically,
       this works well if you have a lot of individuals. In practice, it seems to
       be much less robust to violations in modeling assumptions.}
