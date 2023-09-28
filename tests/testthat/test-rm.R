@@ -36,6 +36,15 @@ test_that("finite rm values", {
     control = list(fnscale = -1)
   )
 
+  phwep <- rm_em(weight_vec = weight_vec, pvec = c(1/3, 1/3, 1/3))
+  pgrad <- real_to_simplex(optim_out$par)
+  expect_equal(phwep, pgrad, tol = 0.001)
+  expect_equal(
+    rm_llike(weight_vec = weight_vec, pvec = phwep),
+    rm_llike(weight_vec = weight_vec, pvec = pgrad),
+    tol = 1e-5
+  )
+
   # bound <- 20
   # ploidy <- 3
   # real_to_simplex(y = rep(bound, ploidy - 1))
