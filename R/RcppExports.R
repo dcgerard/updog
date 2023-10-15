@@ -1009,6 +1009,74 @@ oracle_joint <- function(n, ploidy, seq, bias, od, dist) {
     .Call('_updog_oracle_joint', PACKAGE = 'updog', n, ploidy, seq, bias, od, dist)
 }
 
+#' Convert real line to simplex using Stan technique
+#'
+#' @param y A vector of numbers of length K-1
+#'
+#' @return A vector on the simplex of length K
+#'
+#' @author David Gerard
+#'
+#' @noRd
+real_to_simplex <- function(y) {
+    .Call('_updog_real_to_simplex', PACKAGE = 'updog', y)
+}
+
+#' Objective function for random mating m step in EM
+#'
+#' @param y The real-valued parameterization of the simplex
+#' @param weight_vec The current weights
+#'
+#' @author David Gerard
+#'
+#' @noRd
+obj_rm <- function(y, weight_vec) {
+    .Call('_updog_obj_rm', PACKAGE = 'updog', y, weight_vec)
+}
+
+#' Derivative of \code{\link{real_to_simplex}()} with respect to \code{y}.
+#'
+#' @param y A numeric matrix.
+#'
+#' @author David Gerard
+#'
+#' @noRd
+dreal_to_simplex_dy <- function(y) {
+    .Call('_updog_dreal_to_simplex_dy', PACKAGE = 'updog', y)
+}
+
+#' Derivative of q = \code{stats::convolve(p, rev(p), type = "open")}
+#' with respect to p.
+#'
+#' @param p The gamete frequencies
+#'
+#' @author David Gerard
+#'
+#' @noRd
+dq_dp <- function(p) {
+    .Call('_updog_dq_dp', PACKAGE = 'updog', p)
+}
+
+#' Derivative of \code{\link{rm_llike}()} with respect to q.
+#'
+#' @param q The genotype frequencies
+#'
+#' @noRd
+drmlike_dq <- function(q, weight_vec) {
+    .Call('_updog_drmlike_dq', PACKAGE = 'updog', q, weight_vec)
+}
+
+#' Derivative of obj_rm() with respect to y
+#'
+#' @inheritParams obj_rm
+#'
+#' @author David Gerard
+#'
+#' @noRd
+dobjrm_dy <- function(y, weight_vec) {
+    .Call('_updog_dobjrm_dy', PACKAGE = 'updog', y, weight_vec)
+}
+
 #' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
 #'
 #' @param p The allele dosage.

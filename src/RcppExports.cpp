@@ -1069,6 +1069,75 @@ RcppExport SEXP _updog_oracle_joint(SEXP nSEXP, SEXP ploidySEXP, SEXP seqSEXP, S
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// real_to_simplex
+arma::vec real_to_simplex(const arma::vec y);
+RcppExport SEXP _updog_real_to_simplex(SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(real_to_simplex(y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// obj_rm
+double obj_rm(arma::vec y, arma::vec weight_vec);
+RcppExport SEXP _updog_obj_rm(SEXP ySEXP, SEXP weight_vecSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type y(ySEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
+    rcpp_result_gen = Rcpp::wrap(obj_rm(y, weight_vec));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dreal_to_simplex_dy
+arma::mat dreal_to_simplex_dy(const arma::vec y);
+RcppExport SEXP _updog_dreal_to_simplex_dy(SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(dreal_to_simplex_dy(y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dq_dp
+arma::mat dq_dp(const arma::vec p);
+RcppExport SEXP _updog_dq_dp(SEXP pSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec >::type p(pSEXP);
+    rcpp_result_gen = Rcpp::wrap(dq_dp(p));
+    return rcpp_result_gen;
+END_RCPP
+}
+// drmlike_dq
+arma::vec drmlike_dq(arma::vec q, arma::vec weight_vec);
+RcppExport SEXP _updog_drmlike_dq(SEXP qSEXP, SEXP weight_vecSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type q(qSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
+    rcpp_result_gen = Rcpp::wrap(drmlike_dq(q, weight_vec));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dobjrm_dy
+arma::vec dobjrm_dy(arma::vec y, arma::vec weight_vec);
+RcppExport SEXP _updog_dobjrm_dy(SEXP ySEXP, SEXP weight_vecSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type y(ySEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
+    rcpp_result_gen = Rcpp::wrap(dobjrm_dy(y, weight_vec));
+    return rcpp_result_gen;
+END_RCPP
+}
 // eta_double
 double eta_double(double p, double eps);
 static SEXP _updog_eta_double_try(SEXP pSEXP, SEXP epsSEXP) {
@@ -1456,6 +1525,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_updog_oracle_mis", (DL_FUNC) &_updog_oracle_mis, 6},
     {"_updog_oracle_mis_vec", (DL_FUNC) &_updog_oracle_mis_vec, 6},
     {"_updog_oracle_joint", (DL_FUNC) &_updog_oracle_joint, 6},
+    {"_updog_real_to_simplex", (DL_FUNC) &_updog_real_to_simplex, 1},
+    {"_updog_obj_rm", (DL_FUNC) &_updog_obj_rm, 2},
+    {"_updog_dreal_to_simplex_dy", (DL_FUNC) &_updog_dreal_to_simplex_dy, 1},
+    {"_updog_dq_dp", (DL_FUNC) &_updog_dq_dp, 1},
+    {"_updog_drmlike_dq", (DL_FUNC) &_updog_drmlike_dq, 2},
+    {"_updog_dobjrm_dy", (DL_FUNC) &_updog_dobjrm_dy, 2},
     {"_updog_eta_double", (DL_FUNC) &_updog_eta_double, 2},
     {"_updog_eta_fun", (DL_FUNC) &_updog_eta_fun, 2},
     {"_updog_xi_double", (DL_FUNC) &_updog_xi_double, 3},

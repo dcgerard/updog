@@ -1,5 +1,7 @@
 ## Random mating functions
 
+
+
 #' Objective used for random mating prior on simplex scale
 #'
 #' @param weight_vec vector of weights
@@ -22,7 +24,7 @@ rm_llike <- function(weight_vec, pvec) {
 #' @param gam vector of unconstrained parameterization on gamete frequency simplex
 #'
 #' @noRd
-obj_rm <- function(weight_vec, gam) {
+obj_rm_r <- function(weight_vec, gam) {
   pvec <- real_to_simplex(y = gam)
   return(rm_llike(weight_vec = weight_vec, pvec = pvec))
 }
@@ -32,7 +34,7 @@ obj_rm <- function(weight_vec, gam) {
 #' \url{https://mc-stan.org/docs/2_19/reference-manual/simplex-transform-section.html}
 #'
 #' @noRd
-real_to_simplex <- function(y) {
+real_to_simplex_r <- function(y) {
   expit <- function(x) 0.5 + 0.5 * tanh(x / 2)
 
   K <- length(y)

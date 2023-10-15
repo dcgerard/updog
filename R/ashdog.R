@@ -1186,7 +1186,7 @@ flex_update_pivec <- function(weight_vec,
     return_list$pivec <- control$prior_vec
     return_list$par <- list()
   } else if (model == "rm") {
-    bound <- 10
+    bound <- 3
     optim_out <- stats::optim(
       par = control$gam,
       fn = obj_rm,
