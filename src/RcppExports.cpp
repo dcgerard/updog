@@ -1138,6 +1138,33 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rm_em_obj
+double rm_em_obj(arma::vec p, arma::vec weight_vec);
+RcppExport SEXP _updog_rm_em_obj(SEXP pSEXP, SEXP weight_vecSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type p(pSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
+    rcpp_result_gen = Rcpp::wrap(rm_em_obj(p, weight_vec));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rm_em
+arma::vec rm_em(arma::vec weight_vec, arma::vec pvec, double tol, int itermax, bool verbose);
+RcppExport SEXP _updog_rm_em(SEXP weight_vecSEXP, SEXP pvecSEXP, SEXP tolSEXP, SEXP itermaxSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type weight_vec(weight_vecSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type pvec(pvecSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< int >::type itermax(itermaxSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(rm_em(weight_vec, pvec, tol, itermax, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
 // eta_double
 double eta_double(double p, double eps);
 static SEXP _updog_eta_double_try(SEXP pSEXP, SEXP epsSEXP) {
@@ -1531,6 +1558,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_updog_dq_dp", (DL_FUNC) &_updog_dq_dp, 1},
     {"_updog_drmlike_dq", (DL_FUNC) &_updog_drmlike_dq, 2},
     {"_updog_dobjrm_dy", (DL_FUNC) &_updog_dobjrm_dy, 2},
+    {"_updog_rm_em_obj", (DL_FUNC) &_updog_rm_em_obj, 2},
+    {"_updog_rm_em", (DL_FUNC) &_updog_rm_em, 5},
     {"_updog_eta_double", (DL_FUNC) &_updog_eta_double, 2},
     {"_updog_eta_fun", (DL_FUNC) &_updog_eta_fun, 2},
     {"_updog_xi_double", (DL_FUNC) &_updog_xi_double, 3},

@@ -652,7 +652,7 @@ flexdog_full <- function(refvec,
   } else if (model == "custom") {
     control$prior_vec <- prior_vec
   } else if (model == "rm") {
-    control$gam <- rep(0, ploidy / 2) ## initialize gamete frequencies
+    control$pvec <- rep(1 / (ploidy / 2 + 1), ploidy / 2 + 1) ## initialize gamete frequencies
   }
 
   pivec <- initialize_pivec(ploidy = ploidy, mode = mode, model = model)
@@ -751,7 +751,7 @@ flexdog_full <- function(refvec,
       control$mu    <- fupdate_out$par$mu
       control$sigma <- fupdate_out$par$sigma
     } else if (model == "rm") {
-      control$gam <- fupdate_out$par$gam
+      control$pvec <- fupdate_out$par$pvec
     }
 
     ## Fix pivec from small numerical deviations -------------------------------
@@ -797,11 +797,6 @@ flexdog_full <- function(refvec,
   }
 
   ## End EM ------------------------------------------------------------------
-  if (model == "rm") {
-    ## Convert to gamete frequencies for more interpretability
-    fupdate_out$par$gam <- real_to_simplex(fupdate_out$par$gam)
-  }
-
   ## Initialize return list
   return_list <- list(bias      = bias,
                       seq       = seq,
@@ -1187,22 +1182,13 @@ flex_update_pivec <- function(weight_vec,
     return_list$par <- list()
   } else if (model == "rm") {
     bound <- 3
-    optim_out <- stats::optim(
-      par = control$gam,
-      fn = obj_rm,
-      method = "L-BFGS-B",
-      lower = rep(-bound, length.out = length(control$gam)),
-      upper = rep(bound, length.out = length(control$gam)),
-      weight_vec = weight_vec,
-      control = list(fnscale = -1)
-    )
-    pvec <- real_to_simplex(y = optim_out$par)
+    pvec <- c(rm_em(weight_vec = weight_vec, pvec = control$pvec))
     qvec <- stats::convolve(pvec, rev(pvec), type = "open")
     qvec[qvec < 0] <- 0
     qvec[qvec > 1] <- 1
     qvec <- qvec / sum(qvec)
     return_list$pivec <- qvec
-    return_list$par <- list(gam = optim_out$par)
+    return_list$par <- list(pvec = pvec)
   } else {
     stop("flex_update_pivec: how did you get here?")
   }

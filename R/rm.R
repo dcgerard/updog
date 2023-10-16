@@ -67,7 +67,7 @@ real_to_simplex_r <- function(y) {
 #' @param maxit maximum number of iterations
 #'
 #' @noRd
-rm_em <- function(weight_vec,
+rm_em_r <- function(weight_vec,
                   pvec,
                   tol = 10^-3,
                   maxit = 100) {

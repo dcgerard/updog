@@ -42,6 +42,14 @@ double obj_rm(arma::vec y, arma::vec weight_vec) {
   arma::vec p = real_to_simplex(y);
   arma::vec q = arma::conv(p, p);
   arma::vec lvec = weight_vec % arma::log(q);
+
+  int n = weight_vec.n_elem;
+  for (int i = 0; i < n; i++) {
+    if (weight_vec(i) < TOL) {
+      lvec(i) = 0.0;
+    }
+  }
+
   double obj = arma::sum(lvec);
   return obj;
 }
@@ -141,10 +149,128 @@ arma::vec dobjrm_dy(arma::vec y, arma::vec weight_vec) {
   // gradient ----
   arma::vec jacob = j_dp_dy.t() * j_dq_dp.t() * j_df_dq;
 
-  Rcpp::Rcout << jacob << std::endl;
-
   return jacob;
 }
 
 
+// EM algorithm ---------------------------------------------------------------
 
+//' Objective function for random mating m step in EM
+//'
+//' @param p gamete frequencies
+//' @param weight_vec The current weights
+//'
+//' @author David Gerard
+//'
+//' @noRd
+// [[Rcpp::export]]
+double rm_em_obj(arma::vec p, arma::vec weight_vec) {
+  arma::vec q = arma::conv(p, p);
+  arma::vec lvec = weight_vec % arma::log(q);
+
+  int n = weight_vec.n_elem;
+  for (int i = 0; i < n; i++) {
+    if (weight_vec(i) < TOL) {
+      lvec(i) = 0.0;
+    }
+  }
+
+  double obj = arma::sum(lvec);
+  return obj;
+}
+
+//' EM algorithm for random mating based on weights
+//'
+//' @param weight_vec The weight vectors
+//' @param pvec The intialized pvec
+//' @param tol The stopping tolerance
+//' @param itermax The maximum number of iterations
+//' @param verbose A logical. Print more or less?
+//'
+//' @author David Gerard
+//'
+//' @noRd
+// [[Rcpp::export]]
+arma::vec rm_em(
+    arma::vec weight_vec,
+    arma::vec pvec,
+    double tol = 1e-3,
+    int itermax = 100,
+    bool verbose = false) {
+
+  int K = weight_vec.n_elem - 1; // ploidy
+  int khalf = pvec.n_elem;
+  if (khalf != (K / 2 + 1)) {
+    Rcpp::stop("weight_vec and pvec not appropriate dims");
+  }
+  arma::mat wmat(khalf, khalf, arma::fill::zeros); // probability of parent genotype classes
+  arma::vec wmat_dsum(K + 1, arma::fill::zeros); // offdiagonal sums of wmat
+  double ll = R_NegInf; // current log-likelihood
+  double llold = R_NegInf; // old log-likelihood
+  int iter = 0; // current interation
+  double err = R_PosInf; // error
+
+  while ((err > tol) && (iter < itermax)) {
+    // E-step ----
+    wmat_dsum.zeros();
+    for (int j = 0; j < khalf; j++) {
+      for (int k = j; k < khalf; k++) {
+        wmat(j, k) = pvec(j) * pvec(k);
+        if (j != k) {
+          wmat(j, k) = wmat(j, k) * 2.0;
+        }
+        wmat_dsum(j + k) += wmat(j, k);
+      }
+    }
+
+    for (int j = 0; j < khalf; j++) {
+      for (int k = j; k < khalf; k++) {
+        wmat(j, k) = wmat(j, k) / wmat_dsum(j + k);
+      }
+    }
+
+    // M-step ----
+    pvec.zeros();
+    for (int j = 0; j < khalf; j++) {
+      for (int k = j; k < khalf; k++) {
+        pvec(j) += weight_vec(j + k) * wmat(j, k);
+        pvec(k) += weight_vec(j + k) * wmat(j, k);
+      }
+    }
+    pvec = arma::normalise(pvec, 1);
+
+    // Check stopping criterion ----
+    ll = rm_em_obj(pvec, weight_vec);
+    err = ll - llold;
+    iter++;
+
+    if (verbose) {
+      Rcpp::Rcout
+      << "Iteration: "
+      << iter
+      << std::endl
+      << "LL: "
+      << ll
+      << std::endl
+      << "err: "
+      << err
+      << std::endl
+      << "W:"
+      << std::endl
+      << wmat
+      << std::endl
+      << "p:"
+      << std::endl
+      << pvec
+      << std::endl;
+    }
+
+    if (ll < llold - std::sqrt(TOL)) {
+      Rcpp::stop("rm_em: Likelihood not increasing");
+    }
+
+    llold = ll;
+  }
+
+  return pvec;
+}
