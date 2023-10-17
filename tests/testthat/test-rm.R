@@ -86,6 +86,20 @@ test_that("finite rm values", {
   weight_vec <- c(0, 0, 0, 0, 10)
   pvec <- c(0, 0, 1)
   expect_true(!all(is.nan(rm_em(weight_vec = weight_vec, pvec = pvec))))
+
+  ## Try out corner cases ----
+  wmat <- as.matrix(
+    expand.grid(w0 = c(0, 1),
+                w1 = c(0, 1),
+                w2 = c(0, 1),
+                w3 = c(0, 1),
+                w4 = c(0, 1))
+  )
+
+  for (i in seq_len(nrow(wmat))) {
+    weight_vec <- wmat[i, ]
+    expect_true(!any(is.nan(rm_em(weight_vec = weight_vec, pvec = rep(1/3, 3)))))
+  }
 })
 
 test_that("EM and gradient ascient work on easy case", {
