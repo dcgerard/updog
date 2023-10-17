@@ -225,7 +225,9 @@ arma::vec rm_em(
 
     for (int j = 0; j < khalf; j++) {
       for (int k = j; k < khalf; k++) {
-        wmat(j, k) = wmat(j, k) / wmat_dsum(j + k);
+        if (wmat_dsum(j + k) > TOL) {
+          wmat(j, k) = wmat(j, k) / wmat_dsum(j + k);
+        }
       }
     }
 

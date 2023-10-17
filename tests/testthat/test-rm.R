@@ -82,6 +82,10 @@ test_that("finite rm values", {
   expect_no_error({
     em1 <- rm_em(weight_vec = weight_vec, pvec = rep(1/3, 3))
   })
+
+  weight_vec <- c(0, 0, 0, 0, 10)
+  pvec <- c(0, 0, 1)
+  expect_true(!all(is.nan(rm_em(weight_vec = weight_vec, pvec = pvec))))
 })
 
 test_that("EM and gradient ascient work on easy case", {
