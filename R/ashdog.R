@@ -653,6 +653,7 @@ flexdog_full <- function(refvec,
     control$prior_vec <- prior_vec
   } else if (model == "rm") {
     control$pvec <- rep(1 / (ploidy / 2 + 1), ploidy / 2 + 1) ## initialize gamete frequencies
+    control$pen <- 0.001 ## penalty on gamete frequencies
   }
 
   pivec <- initialize_pivec(ploidy = ploidy, mode = mode, model = model)
@@ -773,6 +774,13 @@ flexdog_full <- function(refvec,
                          var_seq   = var_seq,
                          mean_od   = mean_od,
                          var_od    = var_od)
+
+    ## Add rm prior ----
+    if (model == "rm") {
+      if (control$pen > sqrt(.Machine$double.eps)) {
+        llike <- llike + control$pen * sum(log(control$pvec))
+      }
+    }
 
     err        <- abs(llike - llike_old)
     iter_index <- iter_index + 1
@@ -1182,7 +1190,7 @@ flex_update_pivec <- function(weight_vec,
     return_list$par <- list()
   } else if (model == "rm") {
     bound <- 3
-    pvec <- c(rm_em(weight_vec = weight_vec, pvec = control$pvec))
+    pvec <- c(rm_em(weight_vec = weight_vec, pvec = control$pvec, pen = control$pen))
     qvec <- stats::convolve(pvec, rev(pvec), type = "open")
     qvec[qvec < 0] <- 0
     qvec[qvec > 1] <- 1

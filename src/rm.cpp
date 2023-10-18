@@ -159,12 +159,14 @@ arma::vec dobjrm_dy(arma::vec y, arma::vec weight_vec) {
 //'
 //' @param p gamete frequencies
 //' @param weight_vec The current weights
+//' @param pen The dirichlet prior on the gamete frequencies (not the
+//'     genotype frequencies). >= 0
 //'
 //' @author David Gerard
 //'
 //' @noRd
 // [[Rcpp::export]]
-double rm_em_obj(arma::vec p, arma::vec weight_vec) {
+double rm_em_obj(arma::vec p, arma::vec weight_vec, double pen = 0.0) {
   arma::vec q = arma::conv(p, p);
   arma::vec lvec = weight_vec % arma::log(q);
 
@@ -176,6 +178,12 @@ double rm_em_obj(arma::vec p, arma::vec weight_vec) {
   }
 
   double obj = arma::sum(lvec);
+
+  // add prior
+  if (pen > TOL) {
+    obj += pen * arma::sum(log(p));
+  }
+
   return obj;
 }
 
@@ -186,6 +194,8 @@ double rm_em_obj(arma::vec p, arma::vec weight_vec) {
 //' @param tol The stopping tolerance
 //' @param itermax The maximum number of iterations
 //' @param verbose A logical. Print more or less?
+//' @param pen The dirichlet prior on the gamete frequencies (not the
+//'     genotype frequencies). >= 0
 //'
 //' @author David Gerard
 //'
@@ -196,7 +206,8 @@ arma::vec rm_em(
     arma::vec pvec,
     double tol = 1e-3,
     int itermax = 100,
-    bool verbose = false) {
+    bool verbose = false,
+    double pen = 0.0) {
 
   int K = weight_vec.n_elem - 1; // ploidy
   int khalf = pvec.n_elem;
@@ -239,10 +250,11 @@ arma::vec rm_em(
         pvec(k) += weight_vec(j + k) * wmat(j, k);
       }
     }
+    pvec = pvec + pen;
     pvec = arma::normalise(pvec, 1);
 
     // Check stopping criterion ----
-    ll = rm_em_obj(pvec, weight_vec);
+    ll = rm_em_obj(pvec, weight_vec, pen);
     err = ll - llold;
     iter++;
 

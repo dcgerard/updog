@@ -1081,12 +1081,14 @@ dobjrm_dy <- function(y, weight_vec) {
 #'
 #' @param p gamete frequencies
 #' @param weight_vec The current weights
+#' @param pen The dirichlet prior on the gamete frequencies (not the
+#'     genotype frequencies). >= 0
 #'
 #' @author David Gerard
 #'
 #' @noRd
-rm_em_obj <- function(p, weight_vec) {
-    .Call('_updog_rm_em_obj', PACKAGE = 'updog', p, weight_vec)
+rm_em_obj <- function(p, weight_vec, pen = 0.0) {
+    .Call('_updog_rm_em_obj', PACKAGE = 'updog', p, weight_vec, pen)
 }
 
 #' EM algorithm for random mating based on weights
@@ -1096,12 +1098,14 @@ rm_em_obj <- function(p, weight_vec) {
 #' @param tol The stopping tolerance
 #' @param itermax The maximum number of iterations
 #' @param verbose A logical. Print more or less?
+#' @param pen The dirichlet prior on the gamete frequencies (not the
+#'     genotype frequencies). >= 0
 #'
 #' @author David Gerard
 #'
 #' @noRd
-rm_em <- function(weight_vec, pvec, tol = 1e-3, itermax = 100L, verbose = FALSE) {
-    .Call('_updog_rm_em', PACKAGE = 'updog', weight_vec, pvec, tol, itermax, verbose)
+rm_em <- function(weight_vec, pvec, tol = 1e-3, itermax = 100L, verbose = FALSE, pen = 0.0) {
+    .Call('_updog_rm_em', PACKAGE = 'updog', weight_vec, pvec, tol, itermax, verbose, pen)
 }
 
 #' Adjusts allele dosage \code{p} by the sequencing error rate \code{eps}.
