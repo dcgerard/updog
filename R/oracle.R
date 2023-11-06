@@ -269,6 +269,7 @@ oracle_mis_vec_from_joint <- function(jd) {
 #' print(pl)
 #'
 oracle_plot <- function(jd) {
+  .data <- NULL ## stupid work around for ggplot2 and R CMD check
   mat_text <- format(round(jd, digits = 2), digits = 2)
   probability_text <- c(sub("0\\.", "\\.", sub("0.00", "0", mat_text)))
 
@@ -279,9 +280,9 @@ oracle_plot <- function(jd) {
   omiss <- oracle_mis_from_joint(jd = jd)
   ocorr <- oracle_cor_from_joint(jd = jd)
 
-  ggplot2::ggplot(data = dfdat, mapping = ggplot2::aes_string(x = "x", y = "y", fill = "Probability")) +
+  ggplot2::ggplot(data = dfdat, mapping = ggplot2::aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["Probability"]])) +
     ggplot2::geom_tile() +
-    ggplot2::geom_text(ggplot2::aes_string(label = "probability_text")) +
+    ggplot2::geom_text(ggplot2::aes(label = .data[["probability_text"]])) +
     ggplot2::xlab("Estimated Genotype") +
     ggplot2::ylab("True Genotype") +
     ggplot2::ggtitle(paste0("Misclassification Error Rate: ",

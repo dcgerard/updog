@@ -3,7 +3,7 @@
 
 # updog <img src="man/figures/logo.png" align="right" height="139" />
 
-[![R-CMD-check](https://github.com/dcgerard/updog/workflows/R-CMD-check/badge.svg)](https://github.com/dcgerard/updog/actions)
+[![R-CMD-check](https://github.com/dcgerard/updog/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dcgerard/updog/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/dcgerard/updog/branch/master/graph/badge.svg?token=zjDBKZWjCs)](https://app.codecov.io/gh/dcgerard/updog)
 [![License: GPL
 v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
@@ -32,22 +32,21 @@ the data.
 
 Also provided are:
 
--   `filter_snp()`: filter out SNPs based on the output of `multidog()`.
--   `format_multidog()`: format the output of `multidog()` in terms of a
-    multidimensional array.
--   Plot methods. Both `flexdog()` and `multidog()` have plot methods.
-    See the help files of `plot.flexdog()` and `plot.multidog()` for
-    details.
--   Functions to simulate genotypes (`rgeno()`) and read-counts
-    (`rflexdog()`). These support all of the models available in
-    `flexdog()`.
--   Functions to evaluate oracle genotyping performance:
-    `oracle_joint()`, `oracle_mis()`, `oracle_mis_vec()`, and
-    `oracle_cor()`. We mean “oracle” in the sense that we assume that
-    the entire data generation process is known (i.e. the genotype
-    distribution, sequencing error rate, allele bias, and overdispersion
-    are all known). These are good approximations when there are a lot
-    of individuals (but not necessarily large read-depth).
+- `filter_snp()`: filter out SNPs based on the output of `multidog()`.
+- `format_multidog()`: format the output of `multidog()` in terms of a
+  multidimensional array.
+- Plot methods. Both `flexdog()` and `multidog()` have plot methods. See
+  the help files of `plot.flexdog()` and `plot.multidog()` for details.
+- Functions to simulate genotypes (`rgeno()`) and read-counts
+  (`rflexdog()`). These support all of the models available in
+  `flexdog()`.
+- Functions to evaluate oracle genotyping performance: `oracle_joint()`,
+  `oracle_mis()`, `oracle_mis_vec()`, and `oracle_cor()`. We mean
+  “oracle” in the sense that we assume that the entire data generation
+  process is known (i.e. the genotype distribution, sequencing error
+  rate, allele bias, and overdispersion are all known). These are good
+  approximations when there are a lot of individuals (but not
+  necessarily large read-depth).
 
 The original `updog` package is now named `updogAlpha` and may be found
 [here](https://github.com/dcgerard/updogAlpha).
