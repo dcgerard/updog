@@ -741,7 +741,7 @@ export_vcf <- function(obj, filename) {
         strand=NULL,
         seqinfo = NULL,
         names = obj$snpdf$snp),
-      colData = DataFrame(row.names = indvec),
+      colData = S4Vectors::DataFrame(row.names = indvec),
       exptData = list(
         header = VariantAnnotation::VCFHeader(
           reference = character(),
