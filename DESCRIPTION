@@ -34,7 +34,6 @@ Imports:
     RcppArmadillo,
     assertthat,
     ggplot2,
-    ggthemes,
     reshape2,
     foreach,
     future,
