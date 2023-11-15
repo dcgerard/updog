@@ -1,3 +1,8 @@
+# updog 2.1.4
+
+- Removed `{ggthemes}` dependency.
+- Removed usage of `ggplot2::aes_string()`, since it is deprecated, and replaced it with tidy evaluation idioms.
+
 # updog 2.1.3
 
 - Bug fix: Use `&&` instead of `&` in C++.
