@@ -4,6 +4,9 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/CONDUCT.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
@@ -22,9 +25,6 @@
     <loc>/authors.html</loc>
   </url>
   <url>
-    <loc>/CONDUCT.html</loc>
-  </url>
-  <url>
     <loc>/index.html</loc>
   </url>
   <url>
@@ -32,9 +32,6 @@
   </url>
   <url>
     <loc>/reference/betabinom.html</loc>
-  </url>
-  <url>
-    <loc>/reference/export_vcf.html</loc>
   </url>
   <url>
     <loc>/reference/filter_snp.html</loc>
