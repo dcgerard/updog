@@ -683,7 +683,7 @@ filter_snp <- function(x, expr) {
 #' spvcf <- readVcf("./sweet_potato.vcf")
 #' }
 #'
-#'
+#' @noRd
 export_vcf <- function(obj, filename) {
   if (requireNamespace("VariantAnnotation", quietly = TRUE) &&
       requireNamespace("GenomicRanges", quietly = TRUE) &&
