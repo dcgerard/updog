@@ -125,13 +125,6 @@ dim(mout_cleaned$snpdf)
 dim(mout_cleaned$inddf)
 ```
 
-An experimental function is provided to export the `multidog()` output to a VCF file. You need to make sure you have the the following Bioconductor packages installed to use it: `VariantAnnotation`, `GenomicRanges`, `S4Vectors`, and `IRanges`.
-```{r, eval = FALSE}
-# install.packages("BiocManager")
-# BiocManager::install(c("VariantAnnotation", "GenomicRanges", "S4Vectors", "IRanges"))
-export_vcf(obj = mout, filename = "./multidog_fit.vcf")
-```
-
 # References
 
 Gerard, David, and Luís Felipe Ventorim Ferrão. "Priors for genotyping polyploids." *Bioinformatics* 36, no. 6 (2020): 1795-1800. <https://doi.org/10.1093/bioinformatics/btz852>.

@@ -77,7 +77,6 @@
 #' @importFrom RcppArmadillo armadillo_version
 #' @importFrom ggplot2 ggplot
 #' @importFrom assertthat assert_that
-#' @importFrom ggthemes colorblind_pal
 #' @importFrom foreach %dopar%
 #' @importFrom doRNG %dorng%
 #' @import doFuture
