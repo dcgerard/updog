@@ -214,7 +214,7 @@ future::plan(future::sequential)
 
 }
 \seealso{
-\itemize{
+\describe{
   \item{\code{\link{flexdog}()}:}{For the underlying genotyping function.}
   \item{\code{\link{format_multidog}()}:}{For converting the output
       of \code{multidog()} to a matrix.}
