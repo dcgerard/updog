@@ -166,7 +166,7 @@ combine_flex <- function(...) {
 #' @author David Gerard
 #'
 #' @seealso
-#' \itemize{
+#' \describe{
 #'   \item{\code{\link{flexdog}()}:}{For the underlying genotyping function.}
 #'   \item{\code{\link{format_multidog}()}:}{For converting the output
 #'       of \code{multidog()} to a matrix.}
@@ -626,7 +626,7 @@ format_multidog <- function(x, varname = "geno") {
 #' }
 #'
 #' @seealso
-#' \itemize{
+#' \describe{
 #'   \item{\code{\link{multidog}()}:}{For the variables in \code{x$snpdf}
 #'       which you can filter by.}
 #' }

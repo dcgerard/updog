@@ -33,7 +33,7 @@ mout2 <- filter_snp(mout, bias < 0.8 & od < 0.003)
 
 }
 \seealso{
-\itemize{
+\describe{
   \item{\code{\link{multidog}()}:}{For the variables in \code{x$snpdf}
       which you can filter by.}
 }
