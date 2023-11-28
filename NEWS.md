@@ -1,3 +1,7 @@
+# updog 2.1.5
+
+- Used updated Rcpp to generate RcppExports to fix a CRAN warning.
+
 # updog 2.1.4
 
 - Removed `{ggthemes}` dependency.
