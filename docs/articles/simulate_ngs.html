@@ -78,10 +78,12 @@
 
 
 
-<script src="simulate_ngs_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Simulate Next-Generation Sequencing Data</h1>
-                        <h4 data-toc-skip class="author">David Gerard</h4>
+                        <h4 data-toc-skip class="author">David
+Gerard</h4>
             
       
       <small class="dont-index">Source: <a href="https://github.com/dcgerard/updog/blob/HEAD/vignettes/simulate_ngs.Rmd" class="external-link"><code>vignettes/simulate_ngs.Rmd</code></a></small>
@@ -93,12 +95,15 @@
 <div class="section level2">
 <h2 id="abstract">Abstract<a class="anchor" aria-label="anchor" href="#abstract"></a>
 </h2>
-<p>We demonstrate how to simulate NGS data under various genotype distributions, then fit these data using <code>flexdog</code>. The genotyping methods are described in Gerard et al. (2018).</p>
+<p>We demonstrate how to simulate NGS data under various genotype
+distributions, then fit these data using <code>flexdog</code>. The
+genotyping methods are described in Gerard et al. (2018).</p>
 </div>
 <div class="section level2">
 <h2 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a>
 </h2>
-<p>Let’s suppose that we have 100 hexaploid individuals, with varying levels of read-depth.</p>
+<p>Let’s suppose that we have 100 hexaploid individuals, with varying
+levels of read-depth.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dcgerard/updog/" class="external-link">updog</a></span><span class="op">)</span></span>
@@ -107,18 +112,29 @@
 <span><span class="va">sizevec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n   <span class="op">=</span> <span class="va">nind</span>, </span>
 <span>                              min <span class="op">=</span> <span class="fl">50</span>, </span>
 <span>                              max <span class="op">=</span> <span class="fl">200</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>We can simulate their read-counts under various genotype distributions, allele biases, overdispersions, and sequencing error rates using the <code>rgeno</code> and <code>rflexdog</code> functions.</p>
+<p>We can simulate their read-counts under various genotype
+distributions, allele biases, overdispersions, and sequencing error
+rates using the <code>rgeno</code> and <code>rflexdog</code>
+functions.</p>
 <div class="section level3">
 <h3 id="f1-population">F1 Population<a class="anchor" aria-label="anchor" href="#f1-population"></a>
 </h3>
-<p>Suppose these individuals are all siblings where the first parent has 4 copies of the reference allele and the second parent has 5 copies of the reference allele. Then the following code, using <code>rgeno</code>, will simulate the individuals’ genotypes.</p>
+<p>Suppose these individuals are all siblings where the first parent has
+4 copies of the reference allele and the second parent has 5 copies of
+the reference allele. Then the following code, using <code>rgeno</code>,
+will simulate the individuals’ genotypes.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">true_geno</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rgeno.html">rgeno</a></span><span class="op">(</span>n      <span class="op">=</span> <span class="va">nind</span>, </span>
 <span>                   ploidy <span class="op">=</span> <span class="va">ploidy</span>,</span>
 <span>                   model  <span class="op">=</span> <span class="st">"f1"</span>, </span>
 <span>                   p1geno <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>                   p2geno <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
-<p>Once we have their genotypes, we can simulate their read-counts using <code>rflexdog</code>. Let’s suppose that there is a moderate level of allelic bias (0.7) and a small level of overdispersion (0.005). Generally, in the real data that I’ve seen, the bias will range between 0.5 and 2 and the overdispersion will range between 0 and 0.02, with only a few extremely overdispersed SNPs above 0.02.</p>
+<p>Once we have their genotypes, we can simulate their read-counts using
+<code>rflexdog</code>. Let’s suppose that there is a moderate level of
+allelic bias (0.7) and a small level of overdispersion (0.005).
+Generally, in the real data that I’ve seen, the bias will range between
+0.5 and 2 and the overdispersion will range between 0 and 0.02, with
+only a few extremely overdispersed SNPs above 0.02.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">refvec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rflexdog.html">rflexdog</a></span><span class="op">(</span>sizevec <span class="op">=</span> <span class="va">sizevec</span>, </span>
 <span>                   geno    <span class="op">=</span> <span class="va">true_geno</span>, </span>
@@ -167,7 +183,8 @@
 <span><span class="co">#&gt; Keeping old fit.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Done!</span></span></code></pre></div>
-<p><code>flexdog</code> gives us reasonable genotyping, and it accurately estimates the proportion of individuals mis-genotyped.</p>
+<p><code>flexdog</code> gives us reasonable genotyping, and it
+accurately estimates the proportion of individuals mis-genotyped.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fout</span><span class="op">)</span></span></code></pre></div>
 <p><img src="simulate_ngs_files/figure-html/unnamed-chunk-6-1.png" width="432"></p>
@@ -184,7 +201,8 @@
 <div class="section level3">
 <h3 id="hwe-population">HWE Population<a class="anchor" aria-label="anchor" href="#hwe-population"></a>
 </h3>
-<p>Now run the same simulations assuming the individuals are in Hardy-Weinberg population with an allele frequency of 0.75.</p>
+<p>Now run the same simulations assuming the individuals are in
+Hardy-Weinberg population with an allele frequency of 0.75.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">true_geno</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rgeno.html">rgeno</a></span><span class="op">(</span>n      <span class="op">=</span> <span class="va">nind</span>,</span>
 <span>                   ploidy <span class="op">=</span> <span class="va">ploidy</span>,</span>
@@ -246,7 +264,9 @@
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<p>Gerard, David, Luís Felipe Ventorim Ferrão, Antonio Augusto Franco Garcia, and Matthew Stephens. 2018. “Genotyping Polyploids from Messy Sequencing Data.” <em>Genetics</em> 210 (3). Genetics: 789–807. <a href="https://doi.org/10.1534/genetics.118.301468" class="external-link uri">https://doi.org/10.1534/genetics.118.301468</a>.</p>
+<p>Gerard, David, Luís Felipe Ventorim Ferrão, Antonio Augusto Franco
+Garcia, and Matthew Stephens. 2018. “Genotyping Polyploids from Messy
+Sequencing Data.” <em>Genetics</em> 210 (3). Genetics: 789–807. <a href="https://doi.org/10.1534/genetics.118.301468" class="external-link uri">https://doi.org/10.1534/genetics.118.301468</a>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

@@ -1,4 +1,4 @@
-pandoc: 2.9.2.1
+pandoc: 3.1.1
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
@@ -6,5 +6,5 @@ articles:
   oracle_calculations: oracle_calculations.html
   simulate_ngs: simulate_ngs.html
   smells_like_updog: smells_like_updog.html
-last_built: 2023-11-28T16:57Z
+last_built: 2023-11-28T17:46Z
 
