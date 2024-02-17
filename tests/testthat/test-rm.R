@@ -133,3 +133,21 @@ test_that("Difficult SNPs work", {
     mout <- multidog(refmat = refmat, sizemat = sizemat, ploidy = 4, model = "rm")
   )
 })
+
+test_that("rm prior is symmetric", {
+  ploidy <- 4L
+  genovec1 <- c(2L, 0L, 0L, 0L, 0L, 0L, 0L, 1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 1L, 0L, 0L, 0L, 2L, 1L, 2L)
+  genovec2 <- 4L - genovec1
+  refvec1 <- c(21L, 0L, 0L, 1L, 0L, 1L, 0L, 14L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 1L, 0L, 12L, 0L, 0L, 1L, 22L, 12L, 16L)
+  refvec2 <- 45L - refvec1
+  sizevec <- rep(45L, 25)
+
+  uout1 <- flexdog(refvec = refvec1, sizevec = sizevec, ploidy = ploidy, model = "rm", var_bias = Inf)
+  uout2 <- flexdog(refvec = refvec2, sizevec = sizevec, ploidy = ploidy, model = "rm", var_bias = Inf)
+
+  4 - uout2$geno
+  uout1$geno
+
+  log(uout1$bias)
+  log(uout2$bias)
+})
