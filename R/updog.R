@@ -83,12 +83,11 @@
 #' @importFrom foreach foreach
 #' @importFrom methods as
 #'
-#' @docType package
 #' @name updog-package
 #' @aliases updog
 #'
 #' @author David Gerard
-NULL
+"_PACKAGE"
 
 #' The Beta-Binomial Distribution
 #'

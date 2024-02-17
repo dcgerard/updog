@@ -83,6 +83,14 @@ issue at \url{https://github.com/dcgerard/updog/issues}.
   \item{Gerard, David, and Luís Felipe Ventorim Ferrão. "Priors for genotyping polyploids." Bioinformatics 36, no. 6 (2020): 1795-1800. \doi{10.1093/bioinformatics/btz852}.}
 }
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/dcgerard/updog/}
+  \item Report bugs at \url{https://github.com/dcgerard/updog/issues}
+}
+
+}
 \author{
 David Gerard
 }

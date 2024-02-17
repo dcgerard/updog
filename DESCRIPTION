@@ -26,7 +26,7 @@ BugReports: https://github.com/dcgerard/updog/issues
 URL: https://github.com/dcgerard/updog/
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 LinkingTo: Rcpp,
     RcppArmadillo
 Imports: 
