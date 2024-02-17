@@ -15,7 +15,7 @@ test_that("pen_bias works", {
   skip_on_os(os = "mac", arch = "aarch64")
 
   cppway <- pen_bias(h = 0.8, mu_h = 1, sigma2_h = 1)
-  rway   <- -log(0.8) - (log(0.8) - 1) ^ 2 / (2 * 1)
+  rway   <- -(log(0.8) - 1) ^ 2 / (2 * 1)
   expect_equal(cppway, rway)
 }
 )

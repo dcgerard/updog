@@ -1192,7 +1192,6 @@ flex_update_pivec <- function(weight_vec,
     pvec <- c(rm_em(weight_vec = weight_vec, pvec = control$pvec, pen = control$pen))
     qvec <- stats::convolve(pvec, rev(pvec), type = "open")
     qvec[qvec < 0] <- 0
-    # qvec[qvec > 1] <- 1
     qvec <- qvec / sum(qvec)
     return_list$pivec <- qvec
     return_list$par <- list(pvec = pvec)

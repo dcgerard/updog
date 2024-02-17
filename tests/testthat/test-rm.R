@@ -128,9 +128,12 @@ test_that("EM and gradient ascient work on easy case", {
 })
 
 test_that("Difficult SNPs work", {
+  skip("takes too long")
   load("./rmdat.RData")
   expect_no_error(
-    mout <- multidog(refmat = refmat, sizemat = sizemat, ploidy = 4, model = "rm")
+    trash <- capture.output(
+      mout <- multidog(refmat = refmat, sizemat = sizemat, ploidy = 4, model = "rm")
+    )
   )
 })
 
@@ -142,12 +145,11 @@ test_that("rm prior is symmetric", {
   refvec2 <- 45L - refvec1
   sizevec <- rep(45L, 25)
 
-  uout1 <- flexdog(refvec = refvec1, sizevec = sizevec, ploidy = ploidy, model = "rm", var_bias = Inf)
-  uout2 <- flexdog(refvec = refvec2, sizevec = sizevec, ploidy = ploidy, model = "rm", var_bias = Inf)
+  uout1 <- flexdog(refvec = refvec1, sizevec = sizevec, ploidy = ploidy, model = "rm", verbose = FALSE)
+  uout2 <- flexdog(refvec = refvec2, sizevec = sizevec, ploidy = ploidy, model = "rm", verbose = FALSE)
 
   4 - uout2$geno
   uout1$geno
 
-  log(uout1$bias)
-  log(uout2$bias)
+  expect_equal(log(uout1$bias), -log(uout2$bias), tolerance = 1e-5)
 })

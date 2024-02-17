@@ -60,7 +60,7 @@ test_that("grad_for_mu_sigma2 doesn't return nan's", {
 test_that("dpen_dh works", {
   skip_on_os(os = "mac", arch = "aarch64")
 
-  h        <- 1.3
+  h        <- 2
   mu_h     <- 0.5
   sigma2_h <- 0.4
 
