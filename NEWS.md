@@ -1,3 +1,9 @@
+# Updog 2.2.0
+
+- Added a prior for random mating in `flexdog()` and `multidog()`. Use `model = "rm"` to implement.
+- Added a method to use genotype likelihoods to estimate the site-frequency spectrum using the algorithm of Li (2011) <doi:10.1093/bioinformatics/btr509>
+- Updated the penalty on the bias parameter to result in more symmetric
+
 # updog 2.1.5
 
 - Used updated Rcpp to generate RcppExports to fix a CRAN warning.
