@@ -4,7 +4,7 @@
 #'     and the columns index the genotypes.
 #'
 #' @return A vector of log-likelihoods for the non-reference allele counts at a
-#'     single site
+#'     single site (so-called SAF likelihood).
 #'
 #' @examples
 #' data("uitdewilligen", package = "updog")
@@ -32,7 +32,39 @@ sfs_ll <- function(gl) {
     }
   }
 
-  return(zmat[nind + 1, ])
+  ll <- zmat[nind + 1, ] - lchoose(n = nind * ploidy, k = 0:(nind * ploidy))
+  return(ll)
+}
+
+#' Naive calculation of SAF likelihoods
+#'
+#' Uses Equation (13) of Li (2011). Only use this for samples of
+#' size less than 5. This is just used for debugging.
+#'
+#' @author David Gerard
+#'
+#' @noRd
+saf_naive <- function(gl) {
+  ploidy <- ncol(gl) - 1
+  nind <- nrow(gl)
+
+  ilist <- rep(list(0:ploidy), nind)
+  names(ilist) <- paste0("Ind", 1:nind)
+  genodf <- expand.grid(ilist)
+  genodf$k <- rowSums(genodf)
+  genodf$sumand <- 0
+  for (i in seq_len(nrow(genodf))) {
+    for (j in seq_len(nind)) {
+      gi <- genodf[i, j]
+      genodf$sumand[[i]] <- genodf$sumand[[i]] + gl[j, gi + 1] + lchoose(ploidy, gi)
+    }
+  }
+
+  ll <- rep(NA_real_, nind * ploidy + 1)
+  for (k in 0:(nind * ploidy)) {
+    ll[[k + 1]] <- log_sum_exp(genodf$sumand[genodf$k == k]) - lchoose(nind * ploidy, k)
+  }
+  return(ll)
 }
 
 #' Reference allele count log-likelihood for all loci
@@ -40,8 +72,8 @@ sfs_ll <- function(gl) {
 #' @param glarray An array of genotype log-likelihoods. Rows index SNPs,
 #'     columns index individuals, faces index genotypes
 #'
-#' @return A matrix of allele count likelihoods. The columns index the SNPs
-#'     and the rows index the allele counts.
+#' @return A matrix of allele count likelihoods (the so called SAF likelihoods).
+#'     The columns index the SNPs and the rows index the allele counts.
 #'
 #' @examples
 #' data("uitdewilligen", package = "updog")
