@@ -9,7 +9,7 @@ sfs_pm(postarray)
 \arguments{
 \item{postarray}{A 3-dimensional array of genotype posterior probabilities
 (not log-probabilities). The rows index the SNPs, the columns
-index the individuals, and the faces index the genotypes.}
+index the individuals, and the slices index the genotypes.}
 }
 \value{
 The posterior mean SFS.

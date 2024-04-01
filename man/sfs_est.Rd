@@ -8,7 +8,7 @@ sfs_est(glarray, tol = 1e-05, itermax = 1000)
 }
 \arguments{
 \item{glarray}{An array of genotype log-likelihoods. Rows index SNPs,
-columns index individuals, faces index genotypes}
+columns index individuals, slices index genotypes}
 
 \item{tol}{The stopping tolerance for the EM algorithm}
 

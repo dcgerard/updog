@@ -75,7 +75,7 @@ saf_naive <- function(gl) {
 #' Site-allele frequency log-likelihoods for all loci
 #'
 #' @param glarray An array of genotype log-likelihoods. Rows index SNPs,
-#'     columns index individuals, faces index genotypes
+#'     columns index individuals, slices index genotypes
 #'
 #' @return A matrix of allele count likelihoods (the so called SAF likelihoods).
 #'     The columns index the SNPs and the rows index the allele counts.
@@ -160,7 +160,7 @@ sfs_em <- function(llmat, itermax = 1000, tol = 1e-5, verbose = FALSE) {
 #' 2.3.8 to estimate the site frequency spectrum.
 #'
 #' @param glarray An array of genotype log-likelihoods. Rows index SNPs,
-#'     columns index individuals, faces index genotypes
+#'     columns index individuals, slices index genotypes
 #' @param tol The stopping tolerance for the EM algorithm
 #' @param itermax The maximum number of EM iterations.
 #'
@@ -246,7 +246,7 @@ convolve_m <- function(x) {
 #'
 #' @param postarray A 3-dimensional array of genotype posterior probabilities
 #'    (not log-probabilities). The rows index the SNPs, the columns
-#'    index the individuals, and the faces index the genotypes.
+#'    index the individuals, and the slices index the genotypes.
 #'
 #' @return The posterior mean SFS.
 #'
