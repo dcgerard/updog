@@ -11,7 +11,25 @@ test_that("SAF calculation", {
     "logL_1", "logL_2", "logL_3", "logL_4")))
 
   saf1 <- saf_naive(gl)
-  saf2 <- sfs_ll(gl)
+  saf2 <- saf_ll(gl)
 
   expect_equal(saf1, saf2)
+})
+
+
+test_that("matrix convolution works", {
+  A <- matrix(1:12, nrow = 4)
+
+  c1 <- convolve_m(A[1:2, ])
+  c2 <- convolve(A[1, ], rev(A[2, ]), type = "open")
+  expect_equal(c1, c2)
+
+  c3 <- convolve_m(A[1:3, ])
+  c4 <- convolve(c2, rev(A[3, ]), type = "open")
+  expect_equal(c3, c4)
+
+  c5 <- convolve_m(A[1:4, ])
+  c6 <- convolve(c4, rev(A[4, ]), type = "open")
+  expect_equal(c5, c6)
+
 })

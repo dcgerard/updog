@@ -1,4 +1,4 @@
-#' Reference allele count log-likelihood
+#' Site allele-frequency log-likelihood
 #'
 #' @param gl The genotype log-likelihoods. The rows index the individuals
 #'     and the columns index the genotypes.
@@ -14,12 +14,17 @@
 #'   ploidy = 4)
 #' glarray <- format_multidog(x = mout, varname = paste0("logL_", 0:4))
 #' gl <- glarray[1, , ]
-#' sfs_ll(gl)
+#' saf_ll(gl)
 #'
 #' @author David Gerard
 #'
+#' @references
+#' \itemize{
+#'   \item Li, H. (2011). A statistical framework for SNP calling, mutation discovery, association mapping and population genetical parameter estimation from sequencing data. Bioinformatics, 27(21), 2987-2993.
+#' }
+#'
 #' @noRd
-sfs_ll <- function(gl) {
+saf_ll <- function(gl) {
   ploidy <- ncol(gl) - 1
   nind <- nrow(gl)
   zmat <- matrix(-Inf, nrow = nind + 1, ncol = nind * ploidy + 1)
@@ -36,7 +41,7 @@ sfs_ll <- function(gl) {
   return(ll)
 }
 
-#' Naive calculation of SAF likelihoods
+#' Naive calculation of SAF log-likelihoods
 #'
 #' Uses Equation (13) of Li (2011). Only use this for samples of
 #' size less than 5. This is just used for debugging.
@@ -67,7 +72,7 @@ saf_naive <- function(gl) {
   return(ll)
 }
 
-#' Reference allele count log-likelihood for all loci
+#' Site-allele frequency log-likelihoods for all loci
 #'
 #' @param glarray An array of genotype log-likelihoods. Rows index SNPs,
 #'     columns index individuals, faces index genotypes
@@ -83,12 +88,19 @@ saf_naive <- function(gl) {
 #'   ploidy = 4)
 #' glarray <- format_multidog(x = mout, varname = paste0("logL_", 0:4))
 #' gl <- glarray[1, , ]
-#' sfs_ll(gl)
+#' saf_ll(gl)
 #'
 #' @author David Gerard
 #'
+#' @seealso [saf_ll()]
+#'
+#' @references
+#' \itemize{
+#'   \item Li, H. (2011). A statistical framework for SNP calling, mutation discovery, association mapping and population genetical parameter estimation from sequencing data. Bioinformatics, 27(21), 2987-2993.
+#' }
+#'
 #' @noRd
-sfs_ll_multi <- function(glarray) {
+saf_ll_multi <- function(glarray) {
   stopifnot(length(dim(glarray)) == 3)
   nsnps <- dim(glarray)[[1]]
   nind <- dim(glarray)[[2]]
@@ -97,7 +109,7 @@ sfs_ll_multi <- function(glarray) {
   llmat <- matrix(NA_real_, ncol = nsnps, nrow = nind * ploidy + 1)
 
   for (i in seq_len(nsnps)) {
-    llmat[, i] <- sfs_ll(gl = glarray[i, , ])
+    llmat[, i] <- saf_ll(gl = glarray[i, , ])
   }
 
   return(llmat)
@@ -106,12 +118,17 @@ sfs_ll_multi <- function(glarray) {
 #' EM algorithm of Li (2011) Section 2.3.8 to get estimate sfs
 #'
 #' @param llmat Allele-count log-likelihood matrix from
-#'    \code{\link{sfs_ll_multi}()}
+#'    \code{\link{saf_ll_multi}()}
 #' @param itermax Maximum number of iterations to run em
 #' @param tol The stopping tolerance
 #' @param verbose Should we print more or less?
 #'
 #' @author David Gerard
+#'
+#' @references
+#' \itemize{
+#'   \item Li, H. (2011). A statistical framework for SNP calling, mutation discovery, association mapping and population genetical parameter estimation from sequencing data. Bioinformatics, 27(21), 2987-2993.
+#' }
 #'
 #' @noRd
 sfs_em <- function(llmat, itermax = 1000, tol = 1e-5, verbose = FALSE) {
@@ -139,8 +156,8 @@ sfs_em <- function(llmat, itermax = 1000, tol = 1e-5, verbose = FALSE) {
 #' Estimate SFS using algorithm of Li (2011)
 #'
 #' We use the dynamic algorithm of Section 2.3.5 to obtain the site allele
-#' frequency likelihood for all SNPs, then use the EM algorithm of section
-#' 2.3.8 to get the site frequency spectrum.
+#' frequency likelihood for all SNPs, then use the EM algorithm of Section
+#' 2.3.8 to estimate the site frequency spectrum.
 #'
 #' @param glarray An array of genotype log-likelihoods. Rows index SNPs,
 #'     columns index individuals, faces index genotypes
@@ -188,8 +205,81 @@ sfs_em <- function(llmat, itermax = 1000, tol = 1e-5, verbose = FALSE) {
 #'
 #' @export
 sfs_est <- function(glarray, tol = 1e-5, itermax = 1000) {
-  llmat <- sfs_ll_multi(glarray = glarray)
+  llmat <- saf_ll_multi(glarray = glarray)
   phihat <- sfs_em(llmat = llmat, tol = tol, itermax = itermax)
   names(phihat) <- 0:(length(phihat) - 1)
   return(phihat)
+}
+
+
+## Bayes way -----------------------------------------------------------------
+
+#' Convolve rows a matrix
+#'
+#' @param x A matrix. The rows are the vectors to convolve.
+#'
+#' @author David Gerard
+#'
+#' @noRd
+convolve_m <- function(x) {
+  nc <- ncol(x)
+  nr <- nrow(x)
+  zmat <- matrix(0, nrow = nr + 1, ncol = nr * (nc - 1) + 1)
+  zmat[1, 1] <- 1
+
+  for (j in 1:nr) {
+    for (ell in 0:(j * (nc - 1))) {
+      poss <- 0:min(ell, (nc - 1))
+      zmat[j + 1, ell + 1] <- sum(zmat[j, ell - poss + 1] * x[j, poss + 1])
+    }
+  }
+
+  cvec <- zmat[nr + 1, ]
+  return(cvec)
+}
+
+#' Bayesian estimate of the SFS
+#'
+#' This function will calculate the posterior distribution of the
+#' number of non-reference counts at each locus, then sum these
+#' probabilities over loci to get the posterior mean of the SFS.
+#'
+#' @param postarray A 3-dimensional array of genotype posterior probabilities
+#'    (not log-probabilities). The rows index the SNPs, the columns
+#'    index the individuals, and the faces index the genotypes.
+#'
+#' @return The posterior mean SFS.
+#'
+#' @author David Gerard
+#'
+#' @examples
+#' \dontrun{
+#' data("uitdewilligen", package = "updog")
+#' mout <- multidog(
+#'   refmat = uitdewilligen$refmat,
+#'   sizemat = uitdewilligen$sizemat,
+#'   ploidy = 4)
+#'
+#' postarray <- format_multidog(x = mout, varname = paste0("Pr_", 0:4))
+#'
+#' sfs <- sfs_pm(postarray)
+#'
+#' }
+#'
+#'
+#' @export
+sfs_pm <- function(postarray) {
+  nsnps <- dim(postarray)[[1]]
+  nind <- dim(postarray)[[2]]
+  ploidy <- dim(postarray)[[3]] - 1
+
+  ## site-allele posteriors
+  sap <- matrix(NA_real_, nrow = nsnps, ncol = nind * ploidy + 1)
+
+  for (i in seq_len(nsnps)) {
+    sap[i, ] <- convolve_m(postarray[i, , ])
+  }
+
+  sfs <- colMeans(sap)
+  return(sfs)
 }

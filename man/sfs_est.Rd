@@ -19,8 +19,8 @@ The estimated SFS.
 }
 \description{
 We use the dynamic algorithm of Section 2.3.5 to obtain the site allele
-frequency likelihood for all SNPs, then use the EM algorithm of section
-2.3.8 to get the site frequency spectrum.
+frequency likelihood for all SNPs, then use the EM algorithm of Section
+2.3.8 to estimate the site frequency spectrum.
 }
 \examples{
 \dontrun{
