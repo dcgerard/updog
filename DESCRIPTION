@@ -1,6 +1,6 @@
 Package: updog
 Title: Flexible Genotyping for Polyploids
-Version: 2.1.5
+Version: 2.2.0
 Authors@R: person("David", 
                   "Gerard",
                   email = "gerard.1787@gmail.com", 
@@ -20,7 +20,7 @@ Description: Implements empirical Bayes approaches to genotype
        Gerard et al. (2018) <doi:10.1534/genetics.118.301468> and
        Gerard and Ferrao (2020) <doi:10.1093/bioinformatics/btz852> for details 
        on the implemented methods.
-Depends: R (>= 3.4.0)
+Depends: R (>= 3.5.0)
 License: GPL-3
 BugReports: https://github.com/dcgerard/updog/issues
 URL: https://github.com/dcgerard/updog/
