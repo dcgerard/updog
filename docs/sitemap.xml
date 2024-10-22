@@ -1,120 +1,44 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/multidog.html</loc>
-  </url>
-  <url>
-    <loc>/articles/oracle_calculations.html</loc>
-  </url>
-  <url>
-    <loc>/articles/simulate_ngs.html</loc>
-  </url>
-  <url>
-    <loc>/articles/smells_like_updog.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/betabinom.html</loc>
-  </url>
-  <url>
-    <loc>/reference/filter_snp.html</loc>
-  </url>
-  <url>
-    <loc>/reference/flexdog.html</loc>
-  </url>
-  <url>
-    <loc>/reference/flexdog_full.html</loc>
-  </url>
-  <url>
-    <loc>/reference/format_multidog.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_q_array.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/is.flexdog.html</loc>
-  </url>
-  <url>
-    <loc>/reference/is.multidog.html</loc>
-  </url>
-  <url>
-    <loc>/reference/log_sum_exp.html</loc>
-  </url>
-  <url>
-    <loc>/reference/log_sum_exp_2.html</loc>
-  </url>
-  <url>
-    <loc>/reference/multidog.html</loc>
-  </url>
-  <url>
-    <loc>/reference/oracle_cor.html</loc>
-  </url>
-  <url>
-    <loc>/reference/oracle_cor_from_joint.html</loc>
-  </url>
-  <url>
-    <loc>/reference/oracle_joint.html</loc>
-  </url>
-  <url>
-    <loc>/reference/oracle_mis.html</loc>
-  </url>
-  <url>
-    <loc>/reference/oracle_mis_from_joint.html</loc>
-  </url>
-  <url>
-    <loc>/reference/oracle_mis_vec.html</loc>
-  </url>
-  <url>
-    <loc>/reference/oracle_mis_vec_from_joint.html</loc>
-  </url>
-  <url>
-    <loc>/reference/oracle_plot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.flexdog.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.multidog.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_geno.html</loc>
-  </url>
-  <url>
-    <loc>/reference/rflexdog.html</loc>
-  </url>
-  <url>
-    <loc>/reference/rgeno.html</loc>
-  </url>
-  <url>
-    <loc>/reference/snpdat.html</loc>
-  </url>
-  <url>
-    <loc>/reference/uitdewilligen.html</loc>
-  </url>
-  <url>
-    <loc>/reference/updog-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/wem.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/CONDUCT.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/multidog.html</loc></url>
+<url><loc>/articles/oracle_calculations.html</loc></url>
+<url><loc>/articles/simulate_ngs.html</loc></url>
+<url><loc>/articles/smells_like_updog.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/betabinom.html</loc></url>
+<url><loc>/reference/filter_snp.html</loc></url>
+<url><loc>/reference/flexdog.html</loc></url>
+<url><loc>/reference/flexdog_full.html</loc></url>
+<url><loc>/reference/format_multidog.html</loc></url>
+<url><loc>/reference/get_q_array.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/is.flexdog.html</loc></url>
+<url><loc>/reference/is.multidog.html</loc></url>
+<url><loc>/reference/log_sum_exp.html</loc></url>
+<url><loc>/reference/log_sum_exp_2.html</loc></url>
+<url><loc>/reference/multidog.html</loc></url>
+<url><loc>/reference/oracle_cor.html</loc></url>
+<url><loc>/reference/oracle_cor_from_joint.html</loc></url>
+<url><loc>/reference/oracle_joint.html</loc></url>
+<url><loc>/reference/oracle_mis.html</loc></url>
+<url><loc>/reference/oracle_mis_from_joint.html</loc></url>
+<url><loc>/reference/oracle_mis_vec.html</loc></url>
+<url><loc>/reference/oracle_mis_vec_from_joint.html</loc></url>
+<url><loc>/reference/oracle_plot.html</loc></url>
+<url><loc>/reference/plot.flexdog.html</loc></url>
+<url><loc>/reference/plot.multidog.html</loc></url>
+<url><loc>/reference/plot_geno.html</loc></url>
+<url><loc>/reference/rflexdog.html</loc></url>
+<url><loc>/reference/rgeno.html</loc></url>
+<url><loc>/reference/sfs_est.html</loc></url>
+<url><loc>/reference/sfs_pm.html</loc></url>
+<url><loc>/reference/snpdat.html</loc></url>
+<url><loc>/reference/uitdewilligen.html</loc></url>
+<url><loc>/reference/updog-package.html</loc></url>
+<url><loc>/reference/wem.html</loc></url>
 </urlset>
+
