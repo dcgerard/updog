@@ -23,7 +23,7 @@ frequency likelihood for all SNPs, then use the EM algorithm of Section
 2.3.8 to estimate the site frequency spectrum.
 }
 \examples{
-\dontrun{
+\donttest{
 data("uitdewilligen", package = "updog")
 mout <- multidog(
   refmat = uitdewilligen$refmat,

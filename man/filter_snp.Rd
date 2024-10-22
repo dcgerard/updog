@@ -19,7 +19,7 @@ names in \code{x$snpdf}. This function filters both \code{x$snpdf}
 and \code{x$inddf}.
 }
 \examples{
-\dontrun{
+\donttest{
 data("uitdewilligen")
 mout <- multidog(refmat = t(uitdewilligen$refmat),
                  sizemat = t(uitdewilligen$sizemat),

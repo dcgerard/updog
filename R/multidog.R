@@ -687,7 +687,7 @@ format_multidog <- function(x, varname = "geno") {
 #'     \code{TRUE} are kept.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data("uitdewilligen")
 #' mout <- multidog(refmat = t(uitdewilligen$refmat),
 #'                  sizemat = t(uitdewilligen$sizemat),

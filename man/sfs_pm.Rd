@@ -20,7 +20,7 @@ number of non-reference counts at each locus, then sum these
 probabilities over loci to get the posterior mean of the SFS.
 }
 \examples{
-\dontrun{
+\donttest{
 data("uitdewilligen", package = "updog")
 mout <- multidog(
   refmat = uitdewilligen$refmat,

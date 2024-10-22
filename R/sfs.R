@@ -172,7 +172,7 @@ sfs_em <- function(llmat, itermax = 1000, tol = 1e-5, verbose = FALSE) {
 #' }
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data("uitdewilligen", package = "updog")
 #' mout <- multidog(
 #'   refmat = uitdewilligen$refmat,
@@ -253,7 +253,7 @@ convolve_m <- function(x) {
 #' @author David Gerard
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data("uitdewilligen", package = "updog")
 #' mout <- multidog(
 #'   refmat = uitdewilligen$refmat,
