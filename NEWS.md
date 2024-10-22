@@ -3,6 +3,7 @@
 - Added a prior for random mating in `flexdog()` and `multidog()`. Use `model = "rm"` to implement.
 - Added a method to use genotype likelihoods to estimate the site-frequency spectrum using the algorithm of Li (2011) <doi:10.1093/bioinformatics/btr509>
 - Updated the penalty on the bias parameter to result in more symmetric genotyping in edge cases.
+- Allowed for pre-specifying the `od`, `seq`, and `bias` parameters in `multidog()` for every locus.
 
 # updog 2.1.5
 
