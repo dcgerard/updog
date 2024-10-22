@@ -15,6 +15,8 @@ multidog(
   p2_id = NULL,
   bias_init = exp(c(-1, -0.5, 0, 0.5, 1)),
   prior_vec = NULL,
+  seq = 0.005,
+  od = 0.001,
   ...
 )
 }
@@ -63,6 +65,12 @@ over the multiple runs of \code{\link{flexdog_full}()}.}
 \code{model = "custom"} and must otherwise be \code{NULL}. If specified,
 then it should be a vector of length \code{ploidy + 1} with
 non-negative elements that sum to 1.}
+
+\item{seq}{The starting value(s) for the sequencing error rate during
+the optimization.}
+
+\item{od}{The starting value(s) for the overdispersion during
+the optimization.}
 
 \item{...}{Additional parameters to pass to \code{\link{flexdog_full}()}.}
 }
@@ -186,24 +194,47 @@ running \code{multidog()} with \code{nc = NA}. See the examples below.
 }
 
 \examples{
-\dontrun{
+\donttest{
 data("uitdewilligen")
+refmat <- t(uitdewilligen$refmat)
+sizemat <- t(uitdewilligen$sizemat)
+ploidy <- uitdewilligen$ploidy
 
 ## Run multiple R sessions using the `nc` variable.
-mout <- multidog(refmat = t(uitdewilligen$refmat),
-                 sizemat = t(uitdewilligen$sizemat),
-                 ploidy = uitdewilligen$ploidy,
+mout <- multidog(refmat = refmat,
+                 sizemat = sizemat,
+                 ploidy = ploidy,
                  nc = 2)
 mout$inddf
 mout$snpdf
+
+## Prespecify the seq, bias, and od
+seq <- seq(0.01, 0.05, length.out = nrow(refmat)) ## made up, don't copy
+names(seq) <- rownames(refmat)
+bias <- seq(0.9, 1.1, length.out = nrow(refmat)) ## made up, don't copy
+names(bias) <- rownames(refmat)
+od <- seq(0.001, 0.01, length.out = nrow(refmat)) ## made up, don't copy
+names(od) <- rownames(refmat)
+mout <- multidog(refmat = refmat,
+                 sizemat = sizemat,
+                 ploidy = ploidy,
+                 seq = seq,
+                 bias_init = bias,
+                 od = od,
+                 update_seq = FALSE,
+                 update_od = FALSE,
+                 update_bias = FALSE)
+all(mout$snpdf$seq == seq)
+all(mout$snpdf$od == od)
+all(mout$snpdf$bias == bias)
 
 ## Run multiple external R sessions on the local machine.
 ## Note that we set `nc = NA`.
 cl <- parallel::makeCluster(2, timeout = 60)
 future::plan(future::cluster, workers = cl)
-mout <- multidog(refmat = t(uitdewilligen$refmat),
-                 sizemat = t(uitdewilligen$sizemat),
-                 ploidy = uitdewilligen$ploidy,
+mout <- multidog(refmat = refmat,
+                 sizemat = sizemat,
+                 ploidy = ploidy,
                  nc = NA)
 mout$inddf
 mout$snpdf

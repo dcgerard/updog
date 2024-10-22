@@ -109,6 +109,10 @@ combine_flex <- function(...) {
 #' @param p2_id The ID of the second parent. This should be a character of
 #'     length 1. This should correspond to a single column name in \code{refmat}
 #'     and \code{sizemat}.
+#' @param seq The starting value(s) for the sequencing error rate during
+#'     the optimization.
+#' @param od The starting value(s) for the overdispersion during
+#'     the optimization.
 #'
 #' @return A list-like object of two data frames.
 #' \describe{
@@ -175,24 +179,47 @@ combine_flex <- function(...) {
 #' }
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data("uitdewilligen")
+#' refmat <- t(uitdewilligen$refmat)
+#' sizemat <- t(uitdewilligen$sizemat)
+#' ploidy <- uitdewilligen$ploidy
 #'
 #' ## Run multiple R sessions using the `nc` variable.
-#' mout <- multidog(refmat = t(uitdewilligen$refmat),
-#'                  sizemat = t(uitdewilligen$sizemat),
-#'                  ploidy = uitdewilligen$ploidy,
+#' mout <- multidog(refmat = refmat,
+#'                  sizemat = sizemat,
+#'                  ploidy = ploidy,
 #'                  nc = 2)
 #' mout$inddf
 #' mout$snpdf
+#'
+#' ## Prespecify the seq, bias, and od
+#' seq <- seq(0.01, 0.05, length.out = nrow(refmat)) ## made up, don't copy
+#' names(seq) <- rownames(refmat)
+#' bias <- seq(0.9, 1.1, length.out = nrow(refmat)) ## made up, don't copy
+#' names(bias) <- rownames(refmat)
+#' od <- seq(0.001, 0.01, length.out = nrow(refmat)) ## made up, don't copy
+#' names(od) <- rownames(refmat)
+#' mout <- multidog(refmat = refmat,
+#'                  sizemat = sizemat,
+#'                  ploidy = ploidy,
+#'                  seq = seq,
+#'                  bias_init = bias,
+#'                  od = od,
+#'                  update_seq = FALSE,
+#'                  update_od = FALSE,
+#'                  update_bias = FALSE)
+#' all(mout$snpdf$seq == seq)
+#' all(mout$snpdf$od == od)
+#' all(mout$snpdf$bias == bias)
 #'
 #' ## Run multiple external R sessions on the local machine.
 #' ## Note that we set `nc = NA`.
 #' cl <- parallel::makeCluster(2, timeout = 60)
 #' future::plan(future::cluster, workers = cl)
-#' mout <- multidog(refmat = t(uitdewilligen$refmat),
-#'                  sizemat = t(uitdewilligen$sizemat),
-#'                  ploidy = uitdewilligen$ploidy,
+#' mout <- multidog(refmat = refmat,
+#'                  sizemat = sizemat,
+#'                  ploidy = ploidy,
 #'                  nc = NA)
 #' mout$inddf
 #' mout$snpdf
@@ -222,6 +249,8 @@ multidog <- function(refmat,
                      p2_id = NULL,
                      bias_init = exp(c(-1, -0.5, 0, 0.5, 1)),
                      prior_vec = NULL,
+                     seq = 0.005,
+                     od = 0.001,
                      ...) {
 
   cat(paste0(  "    |                                   *.#,%    ",
@@ -281,6 +310,33 @@ multidog <- function(refmat,
     p2_id <- NULL
   }
 
+  if (length(seq) == 1) {
+    seq <- rep(seq, length.out = nrow(refmat))
+    names(seq) <- rownames(refmat)
+  } else if (length(seq) == nrow(refmat)) {
+    stopifnot(names(seq) == rownames(refmat))
+  } else {
+    stop("seq must be either length 1 or the number of loci")
+  }
+
+  if (length(od) == 1) {
+    od <- rep(od, length.out = nrow(refmat))
+    names(od) <- rownames(refmat)
+  } else if (length(od) == nrow(refmat)) {
+    stopifnot(names(od) == rownames(refmat))
+  } else {
+    stop("od must be either length 1 or the number of loci")
+  }
+
+  if (length(bias_init) == nrow(refmat)) {
+    stopifnot(names(bias_init) == rownames(refmat))
+    bias_init <- matrix(bias_init, ncol = 1)
+    rownames(bias_init) <- rownames(refmat)
+  } else {
+    bias_init <- matrix(rep(bias_init, times = nrow(refmat)), nrow = nrow(refmat), byrow = TRUE)
+    rownames(bias_init) <- rownames(refmat)
+  }
+
   ## Get list of individuals ---------------------------------------------------
   indlist <- colnames(refmat)
 
@@ -307,6 +363,9 @@ multidog <- function(refmat,
     }
     sizemat <- sizemat[!(rownames(sizemat) %in% bad_snps), , drop = FALSE]
     refmat  <- refmat[!(rownames(refmat) %in% bad_snps), , drop = FALSE]
+    seq <- seq[!names(seq) %in% bad_snps]
+    od <- od[!names(od) %in% bad_snps]
+    bias_init <- bias_init[!rownames(bias_init) %in% bad_snps, , drop = FALSE]
   }
 
   ## Get list of SNPs ---------------------------------------------------------
@@ -332,6 +391,13 @@ multidog <- function(refmat,
   refmat <- refmat[, indlist, drop = FALSE]
   sizemat <- sizemat[, indlist, drop = FALSE]
 
+  ## Sanity check ----
+  stopifnot(rownames(refmat) == rownames(sizemat),
+            rownames(refmat) == rownames(bias_init),
+            rownames(refmat) == names(seq),
+            rownames(refmat) == names(od))
+  stopifnot(colnames(refmat) == colnames(sizemat))
+
   ## Register doFuture  -------------------------------------------------------
   oldDoPar <- doFuture::registerDoFuture()
   on.exit(with(oldDoPar, foreach::setDoPar(fun=fun, data=data, info=info)), add = TRUE)
@@ -352,6 +418,9 @@ multidog <- function(refmat,
   p1_size <- NULL
   p2_ref <- NULL
   p2_size <- NULL
+  od_now <- NULL
+  seq_now <- NULL
+  bias_now <- NULL
   retlist <- foreach::foreach(current_snp   = iterators::iter(snplist),
                               refvec        = iterators::iter(refmat, by = "row"),
                               sizevec       = iterators::iter(sizemat, by = "row"),
@@ -359,6 +428,9 @@ multidog <- function(refmat,
                               p1_size       = iterators::iter(p1_sizevec),
                               p2_ref        = iterators::iter(p2_refvec),
                               p2_size       = iterators::iter(p2_sizevec),
+                              od_now        = iterators::iter(od),
+                              seq_now       = iterators::iter(seq),
+                              bias_now      = iterators::iter(bias_init, by = "row"),
                               .export       = c("flexdog"),
                               .combine      = combine_flex,
                               .multicombine = TRUE) %dorng% {
@@ -382,9 +454,11 @@ multidog <- function(refmat,
                                                 p2ref     = p2_ref,
                                                 p2size    = p2_size,
                                                 snpname   = current_snp,
-                                                bias_init = bias_init,
+                                                bias_init = bias_now,
                                                 verbose   = FALSE,
                                                 prior_vec = prior_vec,
+                                                od = od_now,
+                                                seq = seq_now,
                                                 ...
                                                 )
 
@@ -449,7 +523,7 @@ multidog <- function(refmat,
   attr(retlist, "doRNG_version") <- NULL
   class(retlist) <- "multidog"
 
-  cat("done!")
+  cat("done!\n")
 
   return(retlist)
 }
