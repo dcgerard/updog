@@ -1,9 +1,12 @@
-pandoc: '3.5'
-pkgdown: 2.1.1
+pandoc: '3.8'
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   multidog: multidog.html
   oracle_calculations: oracle_calculations.html
   simulate_ngs: simulate_ngs.html
   smells_like_updog: smells_like_updog.html
-last_built: 2024-10-22T17:31Z
+last_built: 2025-09-23T15:50Z
+urls:
+  reference: https://dcgerard.github.io/updog/reference
+  article: https://dcgerard.github.io/updog/articles

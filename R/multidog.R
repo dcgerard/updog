@@ -740,7 +740,7 @@ filter_snp <- function(x, expr) {
 #' @param filename A string, the path to save the VCF file.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(VariantAnnotation)
 #' data("snpdat")
 #' refmat <- reshape2::acast(data = snpdat,

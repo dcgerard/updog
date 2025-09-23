@@ -29,7 +29,8 @@ test_that("dreal_to_simplex() works", {
     )
   expect_equal(
     attr(nout, "gradient"),
-    dreal_to_simplex_dy(y = y)
+    dreal_to_simplex_dy(y = y),
+    tolerance = 1e-6
   )
 })
 

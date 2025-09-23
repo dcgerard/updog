@@ -125,7 +125,7 @@ NumericVector grad_for_mu_sigma2_wrapper(arma::Col<double> muSigma2, NumericMatr
 // [[Rcpp::export]]
 double dpen_dh(double h, double mu_h, double sigma2_h) {
   double deriv;
-  if (arma::is_finite(sigma2_h)) {
+  if (std::isfinite(sigma2_h)) {
     deriv = -1.0 * ((std::log(h) - mu_h) / sigma2_h) / h;
   } else {
     deriv = 0.0;
@@ -153,7 +153,7 @@ double dpen_dh(double h, double mu_h, double sigma2_h) {
 double dpen_deps(double eps, double mu_eps, double sigma2_eps) {
   double deriv;
 
-  if (arma::is_finite(sigma2_eps)) {
+  if (std::isfinite(sigma2_eps)) {
     deriv = -1.0 * (1.0 - 2.0 * eps + (logit(eps) - mu_eps) / sigma2_eps) / (eps * (1.0 - eps));
   } else {
     deriv = 0.0;
