@@ -1,6 +1,8 @@
 # updog 2.1.6
 
 - Updated C++ to account for changes in RcppArmadillo.
+- Small modification to bias penalty to work better in small samples.
+- Use new version of testthat.
 
 # updog 2.1.5
 
