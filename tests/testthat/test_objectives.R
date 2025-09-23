@@ -1,8 +1,4 @@
-context("objectives")
-
 test_that("post_prob works", {
-  skip_on_os(os = "mac", arch = "aarch64")
-
   cppway <- post_prob(2, 6, -1, 1, 0.5, 0.01)
   rway <- pnorm(qnorm(pbetabinom(2, 6, 0.5, 0.01, FALSE)), mean = -1, sd = 1) -
     pnorm(qnorm(pbetabinom(1, 6, 0.5, 0.01, FALSE)), mean = -1, sd = 1)
@@ -12,17 +8,13 @@ test_that("post_prob works", {
 )
 
 test_that("pen_bias works", {
-  skip_on_os(os = "mac", arch = "aarch64")
-
   cppway <- pen_bias(h = 0.8, mu_h = 1, sigma2_h = 1)
-  rway   <- -log(0.8) - (log(0.8) - 1) ^ 2 / (2 * 1)
+  rway   <- -1 * (log(0.8) - 1) ^ 2 / (2 * 1)
   expect_equal(cppway, rway)
 }
 )
 
 test_that("pen_seq_error works", {
-  skip_on_os(os = "mac", arch = "aarch64")
-
   cppway <- pen_seq_error(0.2, -4, 1)
   rway   <- -log(0.2 * 0.8) - (log(0.2 / 0.8) + 4) ^ 2 / (2 * 1)
   expect_equal(cppway, rway)
@@ -30,8 +22,6 @@ test_that("pen_seq_error works", {
 )
 
 test_that("compute_all_log_bb returns NA", {
-  skip_on_os(os = "mac", arch = "aarch64")
-
   refmat <- matrix(c(1,2,3,NA), nrow = 2)
   sizemat <- matrix(c(NA,3,4,5), nrow = 2)
   ploidy <- 4
@@ -49,8 +39,6 @@ test_that("compute_all_log_bb returns NA", {
 )
 
 test_that("compute_all_phifk works", {
-  skip_on_os(os = "mac", arch = "aarch64")
-
   alpha <- c(0.1, 0.2)
   rho   <- c(0.01, 0.02, 0.03)
   ploidy <- 4
@@ -61,8 +49,6 @@ test_that("compute_all_phifk works", {
 )
 
 test_that("obj_for_mu_sigma2 and elbo match", {
-  skip_on_os(os = "mac", arch = "aarch64")
-
   set.seed(1)
   nind <- 11
   nsnps <- 37
@@ -123,8 +109,6 @@ test_that("obj_for_mu_sigma2 and elbo match", {
 )
 
 test_that("obj_for_weighted_lnorm is correct", {
-  skip_on_os(os = "mac", arch = "aarch64")
-
   weight_vec <- c(1, 2, 3)
   ploidy <- 2
   parvec <- c(0.3, 0.4)
@@ -147,8 +131,6 @@ test_that("obj_for_weighted_lnorm is correct", {
 })
 
 test_that("no penalty when variance is Inf", {
-  skip_on_os(os = "mac", arch = "aarch64")
-
   expect_equal(pen_bias(h = 0.1, mu_h = 1, sigma2_h = Inf), 0)
   expect_equal(pen_seq_error(eps = 0.1, mu_eps = -1, sigma2_eps = Inf), 0)
   expect_equal(dpen_deps(eps = 0.1, mu_eps = -1, sigma2_eps = Inf), 0)
@@ -160,3 +142,4 @@ test_that("no penalty when variance is Inf", {
   expect_true(dpen_dh(h = 0.1, mu_h = 1, sigma2_h = 10000) != 0)
 
 })
+

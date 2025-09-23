@@ -126,7 +126,7 @@ NumericVector grad_for_mu_sigma2_wrapper(arma::Col<double> muSigma2, NumericMatr
 double dpen_dh(double h, double mu_h, double sigma2_h) {
   double deriv;
   if (std::isfinite(sigma2_h)) {
-    deriv = -1.0 * (1.0 + (std::log(h) - mu_h) / sigma2_h) / h;
+    deriv = -1.0 * ((std::log(h) - mu_h) / sigma2_h) / h;
   } else {
     deriv = 0.0;
   }

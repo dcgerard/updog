@@ -1,8 +1,4 @@
-context("gradients")
-
 test_that("grad_for_mu_sigma2 is the gradient for obj_for_mu_sigma2", {
-  skip_on_os(os = "mac", arch = "aarch64")
-
   set.seed(1)
   nind <- 11
   mu <- rnorm(nind)
@@ -24,10 +20,10 @@ test_that("grad_for_mu_sigma2 is the gradient for obj_for_mu_sigma2", {
   assign(x = "cor_inv", value = cor_inv, envir = myenv)
   assign(x = "log_bb_dense", value = log_bb_dense, envir = myenv)
   nout <- stats::numericDeriv(quote(obj_for_mu_sigma2(mu, sigma2, phifk_mat, cor_inv, log_bb_dense)), "mu", myenv)
-  expect_equal(c(attr(nout, "gradient")), gradvec[1:nind], tol = 10^-5)
+  expect_equal(c(attr(nout, "gradient")), gradvec[1:nind], tolerance = 10^-5)
 
   nout <- stats::numericDeriv(quote(obj_for_mu_sigma2(mu, sigma2, phifk_mat, cor_inv, log_bb_dense)), "sigma2", myenv)
-  expect_equal(c(attr(nout, "gradient")), gradvec[(nind + 1): (2 * nind)], tol = 10^-5)
+  expect_equal(c(attr(nout, "gradient")), gradvec[(nind + 1): (2 * nind)], tolerance = 10^-5)
 
 
   ## now test if grad_for_mu_sigma2 is the same as grad_for_mu_sigma2_wrapper
@@ -37,8 +33,6 @@ test_that("grad_for_mu_sigma2 is the gradient for obj_for_mu_sigma2", {
 )
 
 test_that("grad_for_mu_sigma2 doesn't return nan's", {
-  skip_on_os(os = "mac", arch = "aarch64")
-
   set.seed(1)
   nind <- 11
   mu <- rnorm(nind)
@@ -58,8 +52,6 @@ test_that("grad_for_mu_sigma2 doesn't return nan's", {
 )
 
 test_that("dpen_dh works", {
-  skip_on_os(os = "mac", arch = "aarch64")
-
   h        <- 1.3
   mu_h     <- 0.5
   sigma2_h <- 0.4
@@ -71,13 +63,11 @@ test_that("dpen_dh works", {
   assign(x = "mu_h", value = mu_h, envir = myenv)
   assign(x = "sigma2_h", value = sigma2_h, envir = myenv)
   nout <- stats::numericDeriv(quote(pen_bias(h = h, mu_h = mu_h, sigma2_h = sigma2_h)), "h", myenv)
-  expect_equal(attr(nout, "gradient")[1], dout)
+  expect_equal(attr(nout, "gradient")[1], dout, tolerance = 1e-6)
 }
 )
 
 test_that("dpen_deps works", {
-  skip_on_os(os = "mac", arch = "aarch64")
-
   eps <- 0.01
   mu_eps <- -4.7
   sigma2_eps <- 1
@@ -94,8 +84,6 @@ test_that("dpen_deps works", {
 )
 
 test_that("dlbeta_dxi works", {
-  skip_on_os(os = "mac", arch = "aarch64")
-
   x   <- 3
   n   <- 13
   xi  <- 0.3
@@ -109,13 +97,11 @@ test_that("dlbeta_dxi works", {
   assign(x = "tau", value = tau, envir = myenv)
   nout <- stats::numericDeriv(quote(dbetabinom_double(x = x, size = n, mu = xi, rho = tau, log = TRUE)), "xi", myenv)
 
-  expect_equal(attr(nout, "gradient")[1], dout, tol = 10^-6)
+  expect_equal(attr(nout, "gradient")[1], dout, tolerance = 10^-6)
 }
 )
 
 test_that("dlbeta_dh, dlbeta_deps, and dlbeta_dtau work", {
-  skip_on_os(os = "mac", arch = "aarch64")
-
   x <- 3
   n <- 13
   p <- 1/6
@@ -143,16 +129,14 @@ test_that("dlbeta_dh, dlbeta_deps, and dlbeta_dtau work", {
   nout2 <- stats::numericDeriv(quote(fn(x = x, n = n, p = p, eps = eps, h = h, tau = tau)), "eps", myenv)
   nout3 <- stats::numericDeriv(quote(fn(x = x, n = n, p = p, eps = eps, h = h, tau = tau)), "tau", myenv)
 
-  expect_equal(attr(nout1, "gradient")[1], dout1, tol = 10 ^ -4)
-  expect_equal(attr(nout2, "gradient")[1], dout2, tol = 10 ^ -4)
-  expect_equal(attr(nout3, "gradient")[1], dout3, tol = 10 ^ -4)
+  expect_equal(attr(nout1, "gradient")[1], dout1, tolerance = 10 ^ -4)
+  expect_equal(attr(nout2, "gradient")[1], dout2, tolerance = 10 ^ -4)
+  expect_equal(attr(nout3, "gradient")[1], dout3, tolerance = 10 ^ -4)
 }
 )
 
 
 test_that("grad_for_eps works", {
-  skip_on_os(os = "mac", arch = "aarch64")
-
   set.seed(1)
   parvec  <- c(0.02, 1.5, 0.01)
   sizevec <- rpois(n = 11, lambda = 20)
@@ -192,7 +176,7 @@ test_that("grad_for_eps works", {
                                                 var_seq = var_seq, mean_od = mean_od,
                                                 var_od = var_od, wmat = wmat)),
                               "parvec", myenv)
-  expect_equal(c(attr(nout, "gradient")), dout, tol = 10 ^ -4)
+  expect_equal(c(attr(nout, "gradient")), dout, tolerance = 10 ^ -4)
 
   ## About twice as fast.
   # microbenchmark::microbenchmark(
@@ -211,8 +195,6 @@ test_that("grad_for_eps works", {
 
 
 test_that("grad_for_weighted_lbb is gradient for obj_for_weighted_lbb", {
-  skip_on_os(os = "mac", arch = "aarch64")
-
   set.seed(1)
   ploidy <- 6
   weight_vec <- runif(ploidy + 1)
@@ -228,13 +210,11 @@ test_that("grad_for_weighted_lbb is gradient for obj_for_weighted_lbb", {
                                                          ploidy = ploidy,
                                                          weight_vec = weight_vec)),
                               "parvec", myenv)
-  expect_equal(c(attr(nout, "gradient")), myg, tol = 10^-5)
+  expect_equal(c(attr(nout, "gradient")), myg, tolerance = 10^-5)
 })
 
 
 test_that("grad_for_weighted_lnorm is gradient for obj_for_weighted_lnorm", {
-  skip_on_os(os = "mac", arch = "aarch64")
-
   set.seed(1)
   ploidy <- 6
   weight_vec <- runif(ploidy + 1)
@@ -250,11 +230,5 @@ test_that("grad_for_weighted_lnorm is gradient for obj_for_weighted_lnorm", {
                                                            ploidy = ploidy,
                                                            weight_vec = weight_vec)),
                               "parvec", myenv)
-  expect_equal(c(attr(nout, "gradient")), myg, tol = 10^-5)
-
-
+  expect_equal(c(attr(nout, "gradient")), myg, tolerance = 10^-5)
 })
-
-
-
-

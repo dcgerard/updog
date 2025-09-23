@@ -127,7 +127,7 @@ plot_geno <- function(refvec,
     ggplot2::ylab("Counts A") +
     ggplot2::xlab("Counts a")  +
     ggplot2::geom_segment(data = df_lines, mapping = ggplot2::aes(x = .data[["x"]], y = .data[["y"]], xend = .data[["xend"]], yend = .data[["yend"]]),
-                          lty = 2, alpha = 1/2, color = "black", size = 0.5)
+                          lty = 2, alpha = 1/2, color = "black", linewidth = 0.5)
 
   ## add parents if we have them
   if (!is.null(p1size) & !is.null(p1ref)) {
