@@ -1,3 +1,7 @@
+# updog 2.1.6
+
+- Updated C++ to account for changes in RcppArmadillo.
+
 # updog 2.1.5
 
 - Used updated Rcpp to generate RcppExports to fix a CRAN warning.
