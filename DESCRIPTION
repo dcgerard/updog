@@ -21,7 +21,7 @@ Description: Implements empirical Bayes approaches to genotype
        Gerard and Ferrao (2020) <doi:10.1093/bioinformatics/btz852> for details 
        on the implemented methods.
 Depends: R (>= 3.4.0)
-License: GPL-3
+License: GPL (>= 3)
 BugReports: https://github.com/dcgerard/updog/issues
 URL: https://dcgerard.github.io/updog/
 Encoding: UTF-8
