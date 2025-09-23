@@ -3,6 +3,7 @@
 - Updated C++ to account for changes in RcppArmadillo.
 - Small modification to bias penalty to work better in small samples.
 - Use new version of testthat.
+- Update ggplot2 api (e.g. use linewidth instead of size).
 
 # updog 2.1.5
 
