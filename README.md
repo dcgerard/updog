@@ -89,8 +89,8 @@ You can install the current (unstable) version of updog from GitHub
 with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("dcgerard/updog")
+# install.packages("pak")
+pak::pak("github::dcgerard/updog")
 ```
 
 ## How to Cite

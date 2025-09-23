@@ -222,7 +222,7 @@ double pen_bias(double h, double mu_h, double sigma2_h) {
 
   double pen;
   if (std::isfinite(sigma2_h)) {
-    pen = -1.0 * std::pow(std::log(h) - mu_h, 2) / (2.0 * sigma2_h);
+    pen = -1.0 * std::pow(std::log(h) - mu_h, 2.0) / (2.0 * sigma2_h);
   } else {
     pen = 0.0;
   }
