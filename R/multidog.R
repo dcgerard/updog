@@ -175,7 +175,7 @@ combine_flex <- function(...) {
 #' }
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data("uitdewilligen")
 #'
 #' ## Run multiple R sessions using the `nc` variable.
@@ -612,7 +612,7 @@ format_multidog <- function(x, varname = "geno") {
 #'     \code{TRUE} are kept.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data("uitdewilligen")
 #' mout <- multidog(refmat = t(uitdewilligen$refmat),
 #'                  sizemat = t(uitdewilligen$sizemat),
@@ -665,7 +665,7 @@ filter_snp <- function(x, expr) {
 #' @param filename A string, the path to save the VCF file.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(VariantAnnotation)
 #' data("snpdat")
 #' refmat <- reshape2::acast(data = snpdat,

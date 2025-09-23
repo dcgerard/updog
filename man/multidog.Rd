@@ -185,7 +185,7 @@ running \code{multidog()} with \code{nc = NA}. See the examples below.
 }
 
 \examples{
-\dontrun{
+\donttest{
 data("uitdewilligen")
 
 ## Run multiple R sessions using the `nc` variable.

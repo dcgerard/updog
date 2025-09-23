@@ -13,7 +13,7 @@ Implements empirical Bayes approaches to genotype polyploids from next generatio
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/dcgerard/updog/}
+  \item \url{https://dcgerard.github.io/updog/}
   \item Report bugs at \url{https://github.com/dcgerard/updog/issues}
 }
 
