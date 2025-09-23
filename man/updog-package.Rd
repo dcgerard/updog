@@ -2,86 +2,13 @@
 % Please edit documentation in R/updog.R
 \docType{package}
 \name{updog-package}
-\alias{updog-package}
 \alias{updog}
-\title{\code{updog} Flexible Genotyping for Polyploids}
+\alias{updog-package}
+\title{updog: Flexible Genotyping for Polyploids}
 \description{
-Implements empirical Bayes approaches to genotype
-polyploids from next generation sequencing data while
-accounting for allele bias, overdispersion, and sequencing
-error. The main functions are \code{\link{flexdog}()}
-and \code{\link{multidog}()}, which allow the specification
-of many different genotype distributions. Also provided
-are functions to simulate genotypes, \code{\link{rgeno}()},
-and read-counts, \code{\link{rflexdog}()}, as well as
-functions to calculate oracle genotyping error rates,
-\code{\link{oracle_mis}()}, and correlation with the true
-genotypes, \code{\link{oracle_cor}()}. These latter two
-functions are useful for read depth calculations. Run
-\code{browseVignettes(package = "updog")} in R for example usage. See
-Gerard et al. (2018)
-<\doi{10.1534/genetics.118.301468}>
-and Gerard and Ferrao (2020)
-<\doi{10.1093/bioinformatics/btz852}>
-for details on the implemented methods.
-}
-\details{
-The package is named \code{updog} for "Using
-Parental Data for Offspring Genotyping" because
-we originally developed the
-method for full-sib populations, but it works
-now for more general populations.
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Our best competitor is probably the \code{fitPoly} package,
-which you can check out at
-\url{https://cran.r-project.org/package=fitPoly}. Though, we think
-that \code{updog} returns better calibrated measures of uncertainty
-when you have next-generation sequencing data.
-
-If you find a bug or want an enhancement, please submit an
-issue at \url{https://github.com/dcgerard/updog/issues}.
-}
-\section{\code{updog} Functions}{
-
-\describe{
-  \item{\code{\link{flexdog}()}}{The main function that
-      fits an empirical Bayes approach to genotype polyploids
-      from next generation sequencing data.}
-  \item{\code{\link{multidog}()}}{A convenience function for running
-      \code{\link{flexdog}()} over many SNPs. This function provides
-      support for parallel computing.}
-  \item{\code{\link{format_multidog}()}}{Return arrayicized elements from the output of \code{\link{multidog}()}.}
-  \item{\code{\link{filter_snp}()}}{Filter SNPs based on the output of \code{\link{multidog}()}}
-  \item{\code{\link{rgeno}()}}{simulate the genotypes of a sample
-      from one of the models allowed in \code{\link{flexdog}()}.}
-  \item{\code{\link{rflexdog}()}}{Simulate read-counts from the
-      \code{\link{flexdog}()} model.}
-  \item{\code{\link{plot.flexdog}()}}{Plotting the output of
-      \code{\link{flexdog}()}.}
-  \item{\code{\link{plot.multidog}()}}{Plotting the output of
-      \code{\link{multidog}()}.}
-  \item{\code{\link{oracle_joint}()}}{The joint distribution of the true genotype
-      and an oracle estimator.}
-  \item{\code{\link{oracle_plot}()}}{Visualize the output of \code{\link{oracle_joint}()}.}
-  \item{\code{\link{oracle_mis}()}}{The oracle misclassification error rate (Bayes rate).}
-  \item{\code{\link{oracle_cor}()}}{Correlation between the true genotype and the oracle estimated genotype.}
-}
-}
-
-\section{\code{updog} Datasets}{
-
-\describe{
-  \item{\code{\link{snpdat}}}{A small example dataset for using
-      \code{\link{flexdog}}.}
-  \item{\code{\link{uitdewilligen}}}{A small example dataset}
-}
-}
-
-\references{
-\itemize{
-  \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., & Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. \doi{10.1534/genetics.118.301468}.}
-  \item{Gerard, David, and Luís Felipe Ventorim Ferrão. "Priors for genotyping polyploids." Bioinformatics 36, no. 6 (2020): 1795-1800. \doi{10.1093/bioinformatics/btz852}.}
-}
+Implements empirical Bayes approaches to genotype polyploids from next generation sequencing data while accounting for allele bias, overdispersion, and sequencing error. The main functions are flexdog() and multidog(), which allow the specification of many different genotype distributions. Also provided are functions to simulate genotypes, rgeno(), and read-counts, rflexdog(), as well as functions to calculate oracle genotyping error rates, oracle_mis(), and correlation with the true genotypes, oracle_cor(). These latter two functions are useful for read depth calculations. Run browseVignettes(package = "updog") in R for example usage. See Gerard et al. (2018) \doi{10.1534/genetics.118.301468} and Gerard and Ferrao (2020) \doi{10.1093/bioinformatics/btz852} for details on the implemented methods.
 }
 \seealso{
 Useful links:
@@ -92,5 +19,7 @@ Useful links:
 
 }
 \author{
-David Gerard
+\strong{Maintainer}: David Gerard \email{gerard.1787@gmail.com} (\href{https://orcid.org/0000-0001-9450-5023}{ORCID})
+
 }
+\keyword{internal}
