@@ -8,8 +8,6 @@
 [![R-CMD-check](https://github.com/dcgerard/updog/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dcgerard/updog/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/dcgerard/updog/graph/badge.svg)](https://app.codecov.io/gh/dcgerard/updog)
-[![License: GPL
-v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/updog)](https://cran.r-project.org/package=updog)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/updog)](https://cran.r-project.org/package=updog)
 <!-- badges: end -->
