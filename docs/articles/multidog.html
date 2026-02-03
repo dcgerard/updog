@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">updog</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -112,7 +112,7 @@ and column names. These names identify the loci and the individuals.</p>
 <p>If we want to do parallel computing, we should check that we have the
 proper number of cores:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://parallelly.futureverse.org/reference/availableCores.html" class="external-link">availableCores</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu">parallelly</span><span class="fu">::</span><span class="fu"><a href="https://parallelly.futureverse.org/reference/availableCores.html" class="external-link">availableCores</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; system </span></span>
 <span><span class="co">#&gt;     16</span></span></code></pre></div>
 <p>Now let’s run <code><a href="../reference/multidog.html">multidog()</a></code>:</p>
@@ -165,13 +165,13 @@ using forked R processes:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mout</span>, indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [[1]]</span></span></code></pre></div>
-<p><img src="multidog_files/figure-html/unnamed-chunk-8-1.png" width="432"></p>
+<p><img src="multidog_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="432"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[2]]</span></span></code></pre>
-<p><img src="multidog_files/figure-html/unnamed-chunk-8-2.png" width="432"></p>
+<p><img src="multidog_files/figure-html/unnamed-chunk-8-2.png" class="r-plt" alt="" width="432"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[3]]</span></span></code></pre>
-<p><img src="multidog_files/figure-html/unnamed-chunk-8-3.png" width="432"></p>
+<p><img src="multidog_files/figure-html/unnamed-chunk-8-3.png" class="r-plt" alt="" width="432"></p>
 <p>The output of multidog contains two data frame. The first contains
 properties of the SNPs, such as estimated allele bias and estimated
 sequencing error rate.</p>
@@ -285,7 +285,7 @@ Public Library of Science: 1–14. <a href="https://doi.org/10.1371/journal.pone
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

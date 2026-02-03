@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# updog <img src="man/figures/logo.png" align="right" height="139" />
+# updog <img src="man/figures/logo.png" align="right" height="139" alt="Updog logo"/>
 
 <!-- badges: start -->
 
@@ -9,7 +9,8 @@
 [![Codecov test
 coverage](https://codecov.io/gh/dcgerard/updog/graph/badge.svg)](https://app.codecov.io/gh/dcgerard/updog)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/updog)](https://cran.r-project.org/package=updog)
-[![](https://cranlogs.r-pkg.org/badges/grand-total/updog)](https://cran.r-project.org/package=updog)
+[![Grand Total
+Downloads](https://cranlogs.r-pkg.org/badges/grand-total/updog)](https://cran.r-project.org/package=updog)
 <!-- badges: end -->
 
 Updog provides a suite of methods for genotyping polyploids from

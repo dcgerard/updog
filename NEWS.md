@@ -1,3 +1,7 @@
+# updog 2.1.7
+
+- future::availableCores() -> parallelly::availableCores()
+
 # updog 2.1.6
 
 - Updated C++ to account for changes in RcppArmadillo.

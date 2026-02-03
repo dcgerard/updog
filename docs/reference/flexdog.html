@@ -17,7 +17,7 @@ multidog() for running flexdog on multiple SNPs in parallel."><meta property="og
 
     <a class="navbar-brand me-2" href="../index.html">updog</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +55,7 @@ sequencing (NGS) data while assuming the genotype distribution is one of
 several forms. <code>flexdog</code> does this while accounting for allele bias,
 overdispersion, sequencing error. The method is described
 in detail in Gerard et. al. (2018) and Gerard and Ferrão (2020). See
-<code><a href="multidog.html">multidog</a>()</code> for running flexdog on multiple SNPs in parallel.</p>
+<code><a href="multidog.html">multidog()</a></code> for running flexdog on multiple SNPs in parallel.</p>
     </div>
 
     <div class="section level2">
@@ -128,7 +128,7 @@ This is just returned in the <code>input</code> list for your reference.</p></dd
 
 <dt id="arg-bias-init">bias_init<a class="anchor" aria-label="anchor" href="#arg-bias-init"></a></dt>
 <dd><p>A vector of initial values for the bias parameter
-over the multiple runs of <code><a href="flexdog_full.html">flexdog_full</a>()</code>.</p></dd>
+over the multiple runs of <code><a href="flexdog_full.html">flexdog_full()</a></code>.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -144,7 +144,7 @@ non-negative elements that sum to 1.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Additional parameters to pass to <code><a href="flexdog_full.html">flexdog_full</a>()</code>.</p></dd>
+<dd><p>Additional parameters to pass to <code><a href="flexdog_full.html">flexdog_full()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -208,7 +208,7 @@ non-negative elements that sum to 1.</p></dd>
           <dt><code>tau</code>:</dt>
 <dd><p>The overdispersion parameter. See the
               description of <code>rho</code> in the Details of
-              <code><a href="betabinom.html">betabinom</a>()</code>.</p></dd>
+              <code><a href="betabinom.html">betabinom()</a></code>.</p></dd>
 
 
 </dl><p></p></dd>
@@ -221,7 +221,7 @@ non-negative elements that sum to 1.</p></dd>
 <dd><p>The mixture proportion of the discrete
               uniform (included and fixed at a small value mostly for
               numerical stability reasons). See the description
-              of <code>fs1_alpha</code> in <code><a href="flexdog_full.html">flexdog_full</a>()</code>.</p></dd>
+              of <code>fs1_alpha</code> in <code><a href="flexdog_full.html">flexdog_full()</a></code>.</p></dd>
 
 
 </dl><p></p></dd>
@@ -237,7 +237,7 @@ non-negative elements that sum to 1.</p></dd>
 <dd><p>The mixture proportion of the discrete
               uniform (included and fixed at a small value mostly for
               numerical stability reasons). See the description
-              of <code>fs1_alpha</code> in <code><a href="flexdog_full.html">flexdog_full</a>()</code>.</p></dd>
+              of <code>fs1_alpha</code> in <code><a href="flexdog_full.html">flexdog_full()</a></code>.</p></dd>
 
 
 </dl><p></p></dd>
@@ -260,7 +260,7 @@ non-negative elements that sum to 1.</p></dd>
 <dd><p>The mixture proportion of the discrete
               uniform (included and fixed at a small value mostly for
               numerical stability reasons). See the description
-              of <code>fs1_alpha</code> in <code><a href="flexdog_full.html">flexdog_full</a>()</code>.</p></dd>
+              of <code>fs1_alpha</code> in <code><a href="flexdog_full.html">flexdog_full()</a></code>.</p></dd>
 
 
 </dl><p></p></dd>
@@ -296,7 +296,7 @@ non-negative elements that sum to 1.</p></dd>
 <dd><p>The mixture proportion of the discrete
               uniform (included and fixed at a small value mostly for
               numerical stability reasons). See the description
-              of <code>fs1_alpha</code> in <code><a href="flexdog_full.html">flexdog_full</a>()</code>.</p></dd>
+              of <code>fs1_alpha</code> in <code><a href="flexdog_full.html">flexdog_full()</a></code>.</p></dd>
 
 
 </dl><p></p></dd>
@@ -460,7 +460,7 @@ using WASP (<a href="https://doi.org/10.1101/011221" class="external-link">doi:1
 in removing the allelic bias (because its only source was the read-mapping
 step), then setting <code>update_bias = FALSE</code> and <code>bias_init = 1</code>
 would be reasonable. You can visually inspect SNPs for bias by
-using <code><a href="plot_geno.html">plot_geno</a>()</code>.</p>
+using <code><a href="plot_geno.html">plot_geno()</a></code>.</p>
 <p><code>flexdog()</code>, like most methods, is invariant to which allele you
 label as the "reference" and which you label as the "alternative".
 That is, if you set <code>refvec</code> with the number of alternative
@@ -478,33 +478,33 @@ will be the estimated allele dosage of the alternative allele.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Run <code>browseVignettes(package = "updog")</code> in R for example usage.
-    Other useful functions include:</p><dl><dt><code><a href="multidog.html">multidog</a>()</code></dt>
+    Other useful functions include:</p><dl><dt><code><a href="multidog.html">multidog()</a></code></dt>
 <dd><p>For running <code>flexdog()</code> on multiple
           SNPs in parallel.</p></dd>
 
-    <dt><code><a href="flexdog_full.html">flexdog_full</a>()</code></dt>
+    <dt><code><a href="flexdog_full.html">flexdog_full()</a></code></dt>
 <dd><p>For additional parameter options
           when running <code>flexdog()</code>.</p></dd>
 
-    <dt><code><a href="rgeno.html">rgeno</a>()</code></dt>
+    <dt><code><a href="rgeno.html">rgeno()</a></code></dt>
 <dd><p>For simulating genotypes under the allowable
           prior models in <code>flexdog()</code>.</p></dd>
 
-    <dt><code><a href="rflexdog.html">rflexdog</a>()</code></dt>
+    <dt><code><a href="rflexdog.html">rflexdog()</a></code></dt>
 <dd><p>For simulating read-counts under the
           assumed likelihood model in <code>flexdog()</code>.</p></dd>
 
-    <dt><code><a href="plot.flexdog.html">plot.flexdog</a>()</code></dt>
+    <dt><code><a href="plot.flexdog.html">plot.flexdog()</a></code></dt>
 <dd><p>For plotting the output of
           <code>flexdog()</code>.</p></dd>
 
-    <dt><code><a href="oracle_mis.html">oracle_mis</a>()</code></dt>
+    <dt><code><a href="oracle_mis.html">oracle_mis()</a></code></dt>
 <dd><p>For calculating the oracle genotyping
           error rates. This is useful for read-depth calculations
           <em>before</em> collecting data. After you have data, using
           the value of <code>prop_mis</code> is better.</p></dd>
 
-    <dt><code><a href="oracle_cor.html">oracle_cor</a>()</code></dt>
+    <dt><code><a href="oracle_cor.html">oracle_cor()</a></code></dt>
 <dd><p>For calculating the correlation
           between the true genotypes and an oracle estimator
           (useful for read-depth calculations <em>before</em>
@@ -620,7 +620,7 @@ will be the estimated allele dosage of the alternative allele.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

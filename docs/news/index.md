@@ -1,0 +1,249 @@
+# Changelog
+
+## updog 2.1.7
+
+- future::availableCores() -\> parallelly::availableCores()
+
+## updog 2.1.6
+
+CRAN release: 2025-09-24
+
+- Updated C++ to account for changes in RcppArmadillo.
+- Small modification to bias penalty to work better in small samples.
+- Use new version of testthat.
+- Update ggplot2 api (e.g. use linewidth instead of size).
+
+## updog 2.1.5
+
+CRAN release: 2023-11-29
+
+- Used updated Rcpp to generate RcppExports to fix a CRAN warning.
+
+## updog 2.1.4
+
+CRAN release: 2023-11-17
+
+- Removed [ggthemes](https://jrnold.github.io/ggthemes/) dependency.
+- Removed usage of
+  [`ggplot2::aes_string()`](https://ggplot2.tidyverse.org/reference/aes_.html),
+  since it is deprecated, and replaced it with tidy evaluation idioms.
+
+## updog 2.1.3
+
+CRAN release: 2022-10-18
+
+- Bug fix: Use `&&` instead of `&` in C++.
+
+## updog 2.1.2
+
+CRAN release: 2022-01-24
+
+- Fixed a bug in my use of
+  [`assertthat::are_equal()`](https://rdrr.io/pkg/assertthat/man/are_equal.html)
+  and
+  [`testthat::expect_equal()`](https://testthat.r-lib.org/reference/equality-expectations.html).
+  See 21 Jan 2022
+  [R-devel/NEWS](https://developer.r-project.org/blosxom.cgi/R-devel/NEWS)
+  where it states:
+
+  > [`all.equal.numeric()`](https://rdrr.io/r/base/all.equal.html) gains
+  > a sanity check on its `tolerance` argument - calling
+  > `all.equal(a, b, c)` for three numeric vectors is a surprisingly
+  > common error.
+
+## updog 2.1.1
+
+CRAN release: 2021-10-25
+
+1.  Added an upper bound to the sequencing error rate in
+    [`flexdog_full()`](https://dcgerard.github.io/updog/reference/flexdog_full.md)
+    (and, hence,
+    [`flexdog()`](https://dcgerard.github.io/updog/reference/flexdog.md)
+    and
+    [`multidog()`](https://dcgerard.github.io/updog/reference/multidog.md)).
+    This protects against some poor behavior observed in a corner case.
+    Specifically, F1 populations where the offspring are all the same
+    genotype and is sequenced at moderate to low depth.
+2.  Fixed some stale URLs, fixed some style issues found by lintr.
+
+## updog 2.1.0
+
+1.  The parallel backend in
+    [`multidog()`](https://dcgerard.github.io/updog/reference/multidog.md)
+    is now handled by the
+    [`future`](https://cran.r-project.org/package=future) package. If
+    you use the `nc` argument in
+    [`multidog()`](https://dcgerard.github.io/updog/reference/multidog.md),
+    it should still run in parallel using multiple R sessions on your
+    local machine. However, you can now use the functionality of
+    `future` to choose your own evaluation strategy, after setting
+    `nc = NA`. This will also allow you to use schedulers in high
+    performance computing environments through the
+    [`future.batchtools`](https://cran.r-project.org/package=future.batchtools)
+    package. See the
+    [`multidog()`](https://dcgerard.github.io/updog/reference/multidog.md)
+    function documentation for more details.
+2.  The vignette “Genotyping Many SNPs with multidog()” goes through an
+    example of using the `future` package.
+3.  A new experimental function, `export_vcf()`, is in the works to
+    export `multidog` objects to a VCF file. This is not yet exported
+    because I still have a few bugs to fix.
+4.  [`plot.multidog()`](https://dcgerard.github.io/updog/reference/plot.multidog.md)
+    will now plot the parent read-counts in F1 and S1 populations.
+5.  Internally,
+    [`multidog()`](https://dcgerard.github.io/updog/reference/multidog.md)
+    now uses iterators through the
+    [`iterators`](https://cran.r-project.org/package=iterators) package
+    to send only subsets of the data to each R process.
+6.  A new internal `.combine` function is used in the `foreach()` call
+    of
+    [`multidog()`](https://dcgerard.github.io/updog/reference/multidog.md)
+    in order to decrease the memory usage of
+    [`multidog()`](https://dcgerard.github.io/updog/reference/multidog.md).
+
+## updog 2.0.2
+
+CRAN release: 2020-07-21
+
+This is a massive edit of the updog software. Major changes include:
+
+1.  No more support of `model = "ash"`. It seemed that `model = "norm"`
+    was always better and faster, so I just got rid of the `"ash"`
+    option. This also extremely simplified the code.
+2.  Removal of `mupdog()`. I think this was a good idea, but the
+    computation was way too slow to be usable.
+3.  Revision of `model = "f1pp"` and `model = "s1pp"`. These now include
+    interpretable parameterizations that are meant to be identified via
+    another R package. But support is only for tetraploids right now.
+4.  [`multidog()`](https://dcgerard.github.io/updog/reference/multidog.md)
+    now prints some nice ASCII art when it’s run.
+5.  [`format_multidog()`](https://dcgerard.github.io/updog/reference/format_multidog.md)
+    now allows you to format multiple variables in terms of a
+    multidimensional array.
+6.  Fixes a bug where
+    [`format_multidog()`](https://dcgerard.github.io/updog/reference/format_multidog.md)
+    was reordering the SNP dimensions. This was fine as long as folks
+    used dimnames properly, but now it should allow folks to also use
+    dim positions.
+7.  Updog now returns genotype log-likelihoods.
+
+## updog 1.2.1
+
+- Adds
+  [`filter_snp()`](https://dcgerard.github.io/updog/reference/filter_snp.md)
+  for filtering the output of
+  [`multidog()`](https://dcgerard.github.io/updog/reference/multidog.md)
+  based on predicates in terms of the variables in `snpdf`.
+- Removes stringr from Imports. I was only using it in one place so I
+  replaced that code with base R code.
+- Removes Rmpfr from Suggests. No longer needed since CVXR is no longer
+  suggested.
+
+## updog 1.2.0
+
+CRAN release: 2020-01-28
+
+- Adds
+  [`multidog()`](https://dcgerard.github.io/updog/reference/multidog.md)
+  for genotyping multiple SNPs using parallel computing.
+- Adds
+  [`plot.multidog()`](https://dcgerard.github.io/updog/reference/plot.multidog.md)
+  for plotting the output of
+  [`multidog()`](https://dcgerard.github.io/updog/reference/multidog.md).
+- Adds
+  [`format_multidog()`](https://dcgerard.github.io/updog/reference/format_multidog.md)
+  for formatting the output of
+  [`multidog()`](https://dcgerard.github.io/updog/reference/multidog.md)
+  to be a matrix.
+- Removes dependency on CVXR. This makes install and maintenance a
+  little easier. The defaults for this specific problem were a little
+  faster anyway.
+- No longer changes the color scale in
+  [`plot_geno()`](https://dcgerard.github.io/updog/reference/plot_geno.md)
+  based on what genotypes are present.
+- In .cpp files, we now coerce objects to be unsigned before comparing.
+  This gets rid of some warnings during install.
+
+## updog 1.1.3
+
+CRAN release: 2019-11-21
+
+- Updates documentation to include the Bioinformatics publication,
+  Gerard and Ferrão (2020)
+  \<[doi:10.1093/bioinformatics/btz852](https://doi.org/10.1093/bioinformatics/btz852)\>.
+- Adds the “internal” keyword to functions that most users don’t need.
+- Removes the tidyverse from the Suggests field. I was only using this
+  in the vignettes, so I changed it to base R (except for ggplot2).
+
+## updog 1.1.1
+
+CRAN release: 2019-09-09
+
+- Updates documentation to include Gerard and Ferrão (2020)
+  \<[doi:10.1101/751784](https://doi.org/10.1101/751784)\> as a
+  reference.
+- Minor fixes to documentation.
+
+## updog 1.1.0
+
+CRAN release: 2019-07-31
+
+- Introduces more flexible priors for more general populations.
+- Places a normal prior distribution on the logit of the overdispersion
+  parameter. This might change genotype calls from previous versions of
+  updog. To reproduce the genotype calls from previous versions of
+  updog, simply set `mean_od = 0` and `var_od = Inf` in
+  [`flexdog()`](https://dcgerard.github.io/updog/reference/flexdog.md).
+- Adds the `method = "custom"` option to
+  [`flexdog()`](https://dcgerard.github.io/updog/reference/flexdog.md).
+  This lets users choose the genotype distribution if it is completely
+  known a priori.
+- Documentation updates.
+
+## updog 1.0.1
+
+CRAN release: 2018-07-27
+
+- Fixes a bug with option `model = "s1pp"` in
+  [`flexdog()`](https://dcgerard.github.io/updog/reference/flexdog.md).
+  I was originally not constraining the levels of preferential pairing
+  to be the same in both segregations of the same parent. This is now
+  fixed. But the downside is that `model = "s1pp"` is now only supported
+  for `ploidy = 4` or `ploidy = 6`. This is because the optimization
+  becomes more difficult for larger ploidy levels.
+
+- I fixed some documentation. Perhaps the biggest error comes from this
+  snippet from the original documentation of `flexdog`:
+
+  > The value of `prop_mis` is a very intuitive measure for the quality
+  > of the SNP. `prop_mis` is the posterior proportion of individuals
+  > mis-genotyped. So if you want only SNPS that accurately genotype,
+  > say, 95% of the individuals, you could discard all SNPs with a
+  > `prop_mis` under 0.95.
+
+  This now says
+
+  > The value of prop_mis is a very intuitive measure for the quality of
+  > the SNP. prop_mis is the posterior proportion of individuals
+  > mis-genotyped. So if you want only SNPS that accurately genotype,
+  > say, 95% of the individuals, you could discard all SNPs with a
+  > prop_mis **over 0.05**.
+
+- I’ve now exported some C++ functions that I think are useful. You can
+  call them in the usual way.
+
+## updog 0.99.0
+
+- This is a complete re-working of the code in `updog`. The old version
+  may be found in the [`updogAlpha`
+  package](https://github.com/dcgerard/updogAlpha).
+- The main function is now
+  [`flexdog()`](https://dcgerard.github.io/updog/reference/flexdog.md).
+- An experimental approach `mupdog()` is now live. We provide no
+  guarantees about `mupdog()`’s performance.
+- Oracle misclassification error rates may be calculated in
+  [`oracle_mis()`](https://dcgerard.github.io/updog/reference/oracle_mis.md).
+- Genotypes can be simulated using
+  [`rgeno()`](https://dcgerard.github.io/updog/reference/rgeno.md).
+- Next-generation sequencing data can be simulated using
+  [`rflexdog()`](https://dcgerard.github.io/updog/reference/rflexdog.md).
