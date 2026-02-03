@@ -10,6 +10,7 @@
 #' @import doFuture
 #' @importFrom foreach foreach
 #' @importFrom methods as
+#' @importFrom parallelly availableCores
 "_PACKAGE"
 
 #' The Beta-Binomial Distribution
