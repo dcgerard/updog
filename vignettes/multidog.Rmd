@@ -52,7 +52,7 @@ setdiff(rownames(sizemat), rownames(refmat))
 If we want to do parallel computing, we should check that we have the
 proper number of cores:
 ```{r}
-future::availableCores()
+parallelly::availableCores()
 ```
 
 Now let's run `multidog()`:

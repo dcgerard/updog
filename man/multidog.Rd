@@ -45,7 +45,7 @@ See Details for possible values.}
     The value of \code{nc} should never be
     more than the number of cores available in your computing environment.
     You can determine the maximum number of available cores by running
-    \code{future::availableCores()} in R.}
+    \code{parallelly::availableCores()} in R.}
 
 \item{p1_id}{The ID of the first parent. This should be a character of
 length 1. This should correspond to a single column name in \code{refmat}
@@ -164,7 +164,7 @@ If you are just running \code{multidog()} on a local machine, then you
 can use the \code{nc} argument to specify the parallelization. Any value
 of \code{nc} greater than 1 will result in multiple background R sessions to
 genotype all of the SNPs. The maximum value of \code{nc} you should
-try can be found by running \code{future::availableCores()}. Running
+try can be found by running \code{parallelly::availableCores()}. Running
 \code{multidog()} using \code{nc} is equivalent to setting the future
 plan with \code{future::plan(future::multisession, workers = nc)}.
 
