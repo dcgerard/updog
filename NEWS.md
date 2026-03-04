@@ -1,6 +1,7 @@
 # updog 2.1.7
 
 - future::availableCores() -> parallelly::availableCores()
+- Allowed for pre-specifying the `od`, `seq`, and `bias_init` parameters in `multidog()` for every locus. This can improve efficiency by warm-starting the optimization.
 
 # updog 2.1.6
 
