@@ -15,3 +15,4 @@
 ^_pkgdown\.yml$
 ^pkgdown$
 ^LICENSE\.md$
+^revdep$
