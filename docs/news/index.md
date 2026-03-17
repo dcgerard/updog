@@ -2,7 +2,11 @@
 
 ## updog 2.1.7
 
-- future::availableCores() -\> parallelly::availableCores()
+- [`future::availableCores()`](https://parallelly.futureverse.org/reference/availableCores.html)
+  -\>
+  [`parallelly::availableCores()`](https://parallelly.futureverse.org/reference/availableCores.html)
+- Used updated Rcpp to generate RcppExports, `Rf_error(...)` -\>
+  `(Rf_error)(...)`. See <https://github.com/RcppCore/Rcpp/issues/1247>
 
 ## updog 2.1.6
 

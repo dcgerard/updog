@@ -140,10 +140,10 @@ David Gerard
 ## and parent 2 has 4 copies of the reference allele.
 ploidy <- 6
 rgeno(n = 10, ploidy = ploidy, model = "f1", p1geno = 1, p2geno = 4)
-#>  [1] 3 4 1 3 3 3 2 1 4 3
+#>  [1] 2 3 3 4 1 3 3 3 2 1
 
 ## A population in Hardy-Weinberge equilibrium with an
 ## allele frequency of 0.75
 rgeno(n = 10, ploidy = ploidy, model = "hw", allele_freq = 0.75)
-#>  [1] 3 5 5 4 4 4 5 4 6 5
+#>  [1] 3 4 3 5 5 4 4 4 5 4
 ```
